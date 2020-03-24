@@ -17,6 +17,7 @@
 /**
  * External dependencies
  */
+import { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
 /**
@@ -25,6 +26,7 @@ import styled from 'styled-components';
 import { elementFillContent } from '../shared';
 import { getMediaSizePositionProps } from '../media';
 import StoryPropTypes from '../../types';
+import useCanvas from '../../components/canvas/useCanvas';
 import { getBackgroundStyle, videoWithScale } from './util';
 
 const Element = styled.div`
@@ -41,7 +43,7 @@ const Video = styled.video`
 
 function VideoDisplay({
   box: { width, height },
-  element: { resource, isBackground, scale, focalX, focalY, loop },
+  element: { id, resource, isBackground, scale, focalX, focalY, loop },
 }) {
   let style = {};
   if (isBackground) {
@@ -52,6 +54,10 @@ function VideoDisplay({
     };
   }
 
+  const {
+    actions: { setVideoForElement },
+  } = useCanvas();
+
   const videoProps = getMediaSizePositionProps(
     resource,
     width,
@@ -60,9 +66,22 @@ function VideoDisplay({
     focalX,
     focalY
   );
+  const videoRef = useRef();
+
+  useEffect(() => {
+    setVideoForElement(id, videoRef.current);
+  }, [id, videoRef, setVideoForElement]);
+
   return (
     <Element>
-      <Video poster={resource.poster} style={style} {...videoProps} loop={loop}>
+      <Video
+        id={`video-${id}`}
+        ref={videoRef}
+        poster={resource.poster}
+        style={style}
+        {...videoProps}
+        loop={loop}
+      >
         <source src={resource.src} type={resource.mimeType} />
       </Video>
     </Element>

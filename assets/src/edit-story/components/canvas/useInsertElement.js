@@ -27,6 +27,7 @@ import { createNewElement, getDefinitionForType } from '../../elements';
 import { dataPixels } from '../../units';
 import { useMedia, useStory } from '../../app';
 import { DEFAULT_MASK } from '../../masks';
+// import useCanvas from './useCanvas';
 
 const RESIZE_WIDTH_DIRECTION = [1, 0];
 
@@ -38,6 +39,9 @@ function useInsertElement() {
   const {
     actions: { uploadVideoPoster },
   } = useMedia();
+  // const {
+  //   state: { videosById },
+  // } = useCanvas();
 
   /**
    * @param {Object} resource The resource to verify/update.
@@ -74,6 +78,15 @@ function useInsertElement() {
       if (resource) {
         backfillResource(resource, elementId);
       }
+
+      // Just for #ID test
+      // if (type === 'video') {
+      //   setTimeout(() => {
+      //     const videoEl = document.getElementById(`video-${elementId}`)
+      //     videoEl.play()
+      //   }, 0)
+      // }
+
       return element;
     },
     [addElement, setBackgroundElement, currentPage, backfillResource]

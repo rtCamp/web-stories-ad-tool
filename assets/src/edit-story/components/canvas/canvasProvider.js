@@ -30,6 +30,7 @@ import {
 } from '../../constants';
 import { UnitsProvider } from '../../units';
 import useEditingElement from './useEditingElement';
+import useVideoElement from './useVideoElement';
 import useCanvasSelectionCopyPaste from './useCanvasSelectionCopyPaste';
 import Context from './context';
 
@@ -42,6 +43,8 @@ function CanvasProvider({ children }) {
     height: DEFAULT_EDITOR_PAGE_HEIGHT,
   });
   const [pageContainer, setPageContainer] = useState(null);
+
+  const { videosById, setVideoForElement } = useVideoElement();
 
   const {
     nodesById,
@@ -137,6 +140,7 @@ function CanvasProvider({ children }) {
     state: {
       pageContainer,
       nodesById,
+      videosById,
       editingElement,
       editingElementState,
       isEditing: Boolean(editingElement),
@@ -146,6 +150,7 @@ function CanvasProvider({ children }) {
     actions: {
       setPageContainer,
       setNodeForElement,
+      setVideoForElement,
       setEditingElement: setEditingElementWithoutState,
       setEditingElementWithState,
       clearEditing,

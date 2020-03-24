@@ -15,13 +15,107 @@
  */
 
 /**
+ * External dependencies
+ */
+import { useState, useEffect, useCallback } from 'react';
+import styled from 'styled-components';
+
+/**
  * Internal dependencies
  */
 import StoryPropTypes from '../../types';
 import MediaFrame from '../media/frame';
+import { elementFillContent } from '../shared';
+import useCanvas from '../../components/canvas/useCanvas';
+import { useStory } from '../../app/story';
+
+const Wrapper = styled.div`
+  ${elementFillContent}
+`;
 
 function VideoFrame({ element }) {
-  return <MediaFrame element={element} />;
+  const { id } = element;
+  const [playing, setPlaying] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const {
+    state: { videosById },
+  } = useCanvas();
+
+  const videoElement = videosById[id];
+
+  const {
+    state: { selectedElementIds },
+  } = useStory();
+
+  const isElementSelected = selectedElementIds.includes(element.id);
+
+  useEffect(() => {
+    if (!isElementSelected && videoElement) {
+      videoElement.pause();
+      videoElement.currentTime = 0;
+      setPlaying(false);
+    }
+  }, [isElementSelected, videoElement]);
+
+  const onVideoEnd = useCallback(() => {
+    setPlaying(false);
+    videoElement.currentTime = 0;
+  }, [videoElement]);
+
+  useEffect(() => {
+    if (videoElement) {
+      videoElement.addEventListener('ended', onVideoEnd);
+    }
+    return () => {
+      if (videoElement) {
+        videoElement.removeEventListener('ended', onVideoEnd);
+      }
+    };
+  }, [onVideoEnd, videoElement]);
+
+  const handlePlay = () => {
+    if (videoElement) {
+      if (videoElement.paused) {
+        const playPromise = videoElement.play();
+        if (playPromise) {
+          playPromise
+            .then(() => {
+              setPlaying(true);
+            })
+            .catch(() => {});
+        }
+      } else {
+        videoElement.pause();
+        setPlaying(false);
+      }
+    }
+  };
+
+  return (
+    <Wrapper
+      onPointerEnter={() => setHovered(true)}
+      onPointerLeave={() => setHovered(false)}
+      hovered={hovered}
+    >
+      <MediaFrame element={element} />
+      {hovered && (
+        <button
+          onClick={handlePlay}
+          style={{
+            position: 'absolute',
+            background: '#fff',
+            padding: '1px 6px',
+            borderRadius: 3,
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%,-50%)',
+          }}
+        >
+          {playing ? 'PAUSE' : 'PLAY'}
+        </button>
+      )}
+    </Wrapper>
+  );
 }
 
 VideoFrame.propTypes = {
