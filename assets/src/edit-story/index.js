@@ -24,7 +24,10 @@ import { render } from 'react-dom';
  * Internal dependencies
  */
 import App from './app';
+import { foo, bar, fizz, buzz } from './indexFile';
 import './style.css'; // This way the general editor styles are loaded before all the component styles.
+
+console.log({ foo, bar, fizz, buzz });
 
 /**
  * Initializes the web stories editor.
