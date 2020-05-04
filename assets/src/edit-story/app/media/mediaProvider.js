@@ -18,7 +18,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useEffect, useCallback } from 'react';
+import {useEffect, useCallback, useMemo} from 'react';
 
 /**
  * Internal dependencies
@@ -155,9 +155,23 @@ function MediaProvider({ children }) {
 
   useEffect(generatePoster, [media, mediaType, searchTerm]);
 
-  const context = {
-    state: { ...state, isUploading },
-    actions: {
+  const context = useMemo(
+    () => ({
+      state: { ...state, isUploading },
+      actions: {
+        setNextPage,
+        setMediaType,
+        setSearchTerm,
+        fetchMedia,
+        resetFilters,
+        uploadMedia,
+        resetWithFetch,
+        uploadVideoPoster,
+      },
+    }),
+    [
+      state,
+      isUploading,
       setNextPage,
       setMediaType,
       setSearchTerm,
@@ -165,9 +179,9 @@ function MediaProvider({ children }) {
       resetFilters,
       uploadMedia,
       resetWithFetch,
-      uploadVideoPoster,
-    },
-  };
+      uploadVideoPoster
+    ]
+  );
 
   return <Context.Provider value={context}>{children}</Context.Provider>;
 }

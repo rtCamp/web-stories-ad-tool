@@ -44,12 +44,12 @@ function LibraryUploadDropTarget({ children }) {
     [uploadMedia]
   );
   return (
-    <UploadDropTarget onDrop={onDropHandler} labelledBy={MESSAGE_ID}>
+    <UploadDropTarget onDrop={null} labelledBy={MESSAGE_ID}>
       {children}
-      <UploadDropTargetMessage
-        id={MESSAGE_ID}
-        message={__('Upload to media library', 'web-stories')}
-      />
+      {/*<UploadDropTargetMessage*/}
+      {/*  id={MESSAGE_ID}*/}
+      {/*  message={'Upload to media library'}*/}
+      {/*/>*/}
     </UploadDropTarget>
   );
 }

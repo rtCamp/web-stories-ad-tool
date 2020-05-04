@@ -26,6 +26,7 @@ import { useStory } from '../../app';
 import useCanvas from './useCanvas';
 import DisplayElement from './displayElement';
 import { Layer, PageArea } from './layout';
+import SelectionCanvas from './selectionCanvas';
 
 const DisplayPageArea = styled(PageArea).attrs({
   className: 'container web-stories-content',
@@ -72,4 +73,4 @@ function DisplayLayer() {
   );
 }
 
-export default DisplayLayer;
+export default React.memo(DisplayLayer);

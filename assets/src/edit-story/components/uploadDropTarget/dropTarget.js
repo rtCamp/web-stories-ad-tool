@@ -130,4 +130,7 @@ UploadDropTarget.defaultProps = {
   onDrop: null,
 };
 
-export default UploadDropTarget;
+// A pure component (React.memo) here prevents re-rendering of:
+// UploadDropTarget, DropTargetComponent and Content.
+// TODO: Find a way to avoid rendering without memoizing {children}.
+export default React.memo(UploadDropTarget);

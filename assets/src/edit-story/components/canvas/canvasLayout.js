@@ -43,8 +43,8 @@ const Background = styled.div`
 function CanvasLayout() {
   const backgroundRef = useRef(null);
 
-  useLayoutParams(backgroundRef);
-  const layoutParamsCss = useLayoutParamsCssVars();
+  //useLayoutParams(backgroundRef);
+  const layoutParamsCss = {};//useLayoutParamsCssVars();
 
   return (
     <Background ref={backgroundRef} style={layoutParamsCss}>
@@ -62,4 +62,4 @@ function CanvasLayout() {
   );
 }
 
-export default CanvasLayout;
+export default React.memo(CanvasLayout);

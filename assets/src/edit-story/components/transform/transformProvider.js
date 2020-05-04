@@ -18,7 +18,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useCallback, useRef } from 'react';
+import {useCallback, useMemo, useRef} from 'react';
 
 /**
  * Internal dependencies
@@ -45,13 +45,16 @@ function TransformProvider({ children }) {
     }
   }, []);
 
-  const state = {
-    state: {},
-    actions: {
-      registerTransformHandler,
-      pushTransform,
-    },
-  };
+  const state = useMemo(
+    () => ({
+      state: {},
+      actions: {
+        registerTransformHandler,
+        pushTransform,
+      },
+    }),
+    [registerTransformHandler, pushTransform]
+  );
 
   return <Context.Provider value={state}>{children}</Context.Provider>;
 }

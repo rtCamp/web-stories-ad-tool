@@ -82,7 +82,7 @@ function useInsertElement() {
       focusCanvas();
       return element;
     },
-    [addElement, backfillResource, focusCanvas]
+    [],//addElement, backfillResource, focusCanvas]
   );
 
   return insertElement;

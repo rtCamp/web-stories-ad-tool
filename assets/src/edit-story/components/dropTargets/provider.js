@@ -69,13 +69,13 @@ function DropTargetsProvider({ children }) {
     });
   }, []);
 
-  const isDropSource = (type) => {
+  const isDropSource = useCallback((type) => {
     return DROP_SOURCE_ALLOWED_TYPES.includes(type);
-  };
+  }, []);
 
-  const isDropTarget = (type) => {
+  const isDropTarget = useCallback((type) => {
     return DROP_TARGET_ALLOWED_TYPES.includes(type);
-  };
+  }, []);
 
   const activeDropTarget = useMemo(
     () => currentPage?.elements.find((el) => el.id === activeDropTargetId),
@@ -182,22 +182,36 @@ function DropTargetsProvider({ children }) {
     ]
   );
 
-  const state = {
-    state: {
+  const state = useMemo(
+    () => ({
+      state: {
+        dropTargets,
+        activeDropTargetId,
+        draggingResource,
+      },
+      actions: {
+        registerDropTarget,
+        unregisterDropTarget,
+        isDropSource,
+        isDropTarget,
+        handleDrag,
+        handleDrop,
+        setDraggingResource,
+      },
+    }),
+    [
       dropTargets,
       activeDropTargetId,
       draggingResource,
-    },
-    actions: {
       registerDropTarget,
       unregisterDropTarget,
       isDropSource,
       isDropTarget,
       handleDrag,
       handleDrop,
-      setDraggingResource,
-    },
-  };
+      setDraggingResource
+    ]
+  );
 
   return <Context.Provider value={state}>{children}</Context.Provider>;
 }

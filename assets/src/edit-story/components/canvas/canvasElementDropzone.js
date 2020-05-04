@@ -88,7 +88,7 @@ function CanvasElementDropzone({ children }) {
   );
 
   return (
-    <Container onDrop={onDropHandler} onDragOver={onDragOverHandler}>
+    <Container onDrop={null} onDragOver={onDragOverHandler}>
       {children}
     </Container>
   );

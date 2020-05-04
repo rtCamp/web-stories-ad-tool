@@ -202,17 +202,7 @@ function useLayoutParamsCssVars() {
 }
 
 const PageArea = forwardRef(({ children, showDangerZone }, ref) => {
-  return (
-    <PageAreaFullbleedContainer>
-      <PageAreaSafeZone ref={ref}>{children}</PageAreaSafeZone>
-      {showDangerZone && (
-        <>
-          <PageAreaDangerZoneTop />
-          <PageAreaDangerZoneBottom />
-        </>
-      )}
-    </PageAreaFullbleedContainer>
-  );
+  return <PageAreaSafeZone ref={ref}>{children}</PageAreaSafeZone>;
 });
 
 PageArea.propTypes = {

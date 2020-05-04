@@ -42,21 +42,18 @@ function CanvasUploadDropTarget({ children }) {
   const uploadWithPreview = useUploadWithPreview();
 
   return (
-    <UploadDropTarget onDrop={uploadWithPreview} labelledBy={MESSAGE_ID}>
+    <UploadDropTarget onDrop={null} labelledBy={MESSAGE_ID}>
       {children}
-      <UploadDropTargetOverlay>
-        <CanvasLayer>
-          <PageArea>
-            <UploadDropTargetMessage
-              id={MESSAGE_ID}
-              message={__(
-                'Upload to media library and add to the page.',
-                'web-stories'
-              )}
-            />
-          </PageArea>
-        </CanvasLayer>
-      </UploadDropTargetOverlay>
+      {/*<UploadDropTargetOverlay>*/}
+      {/*  <CanvasLayer>*/}
+      {/*    <PageArea>*/}
+            {/*<UploadDropTargetMessage*/}
+            {/*  id={MESSAGE_ID}*/}
+            {/*  message={'Upload to media library and add to the page.'}*/}
+            {/*/>*/}
+          {/*</PageArea>*/}
+        {/*</CanvasLayer>*/}
+      {/*</UploadDropTargetOverlay>*/}
     </UploadDropTarget>
   );
 }

@@ -37,6 +37,9 @@ export const INITIAL_STATE = {
 function reducer(state, { type, payload }) {
   switch (type) {
     case types.FETCH_MEDIA_START: {
+      if (!state.isMediaLoaded && state.isMediaLoading) {
+        return state;
+      }
       return {
         ...state,
         isMediaLoaded: false,
@@ -48,7 +51,7 @@ function reducer(state, { type, payload }) {
       const { media, mediaType, searchTerm, pagingNum, totalPages } = payload;
       if (mediaType === state.mediaType && searchTerm === state.searchTerm) {
         const hasMore = pagingNum < totalPages;
-        return {
+        const newState = {
           ...state,
           media: [...state.media, ...media],
           pagingNum,
@@ -57,6 +60,9 @@ function reducer(state, { type, payload }) {
           isMediaLoaded: true,
           isMediaLoading: false,
         };
+        if (state != newState) {
+          return newState;
+        }
       }
       return state;
     }
@@ -107,15 +113,22 @@ function reducer(state, { type, payload }) {
     }
 
     case types.SET_NEXT_PAGE: {
+      const pagingNum = state.pagingNum + 1;
+      if (pagingNum === state.pagingNum) {
+        return state;
+      }
       return {
         ...state,
-        pagingNum: state.pagingNum + 1,
+        pagingNum,
       };
     }
 
     case types.SET_MEDIA: {
       const { media } = payload;
 
+      if (media === state.media) {
+        return state;
+      }
       return {
         ...state,
         media,

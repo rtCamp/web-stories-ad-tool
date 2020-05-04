@@ -18,7 +18,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useCallback, useState, useRef, useEffect } from 'react';
+import {useCallback, useState, useRef, useEffect, useMemo} from 'react';
 
 /**
  * Internal dependencies
@@ -111,29 +111,41 @@ function InspectorProvider({ children }) {
     }
   }, [isUsersLoading, users.length, getAllUsers]);
 
-  const state = {
-    state: {
+  const state = useMemo(
+    () => ({
+      state: {
+        tab,
+        users,
+        statuses,
+        inspectorContentHeight,
+        isUsersLoading,
+      },
+      actions: {
+        setTab,
+        loadStatuses,
+        loadUsers,
+        setInspectorContentNode,
+      },
+      data: {
+        tabs: {
+          DESIGN,
+          DOCUMENT,
+          PREPUBLISH,
+        },
+      },
+    }),
+    [
       tab,
       users,
       statuses,
       inspectorContentHeight,
       isUsersLoading,
-    },
-    actions: {
       setTab,
       loadStatuses,
       loadUsers,
-      setInspectorContentNode,
-    },
-    data: {
-      tabs: {
-        DESIGN,
-        DOCUMENT,
-        PREPUBLISH,
-      },
-    },
-  };
-
+      setInspectorContentNode
+    ]
+  );
   return <Context.Provider value={state}>{children}</Context.Provider>;
 }
 

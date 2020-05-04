@@ -117,8 +117,31 @@ function StoryProvider({ storyId, children }) {
   });
   const { deleteStory } = useDeleteStory({ storyId });
 
-  const state = {
-    state: {
+  const state = useMemo(
+    () => ({
+      state: {
+        pages,
+        currentPageId,
+        currentPageIndex,
+        currentPageNumber,
+        currentPage,
+        selectedElementIds,
+        selectedElements,
+        hasSelection,
+        story,
+        capabilities,
+        meta: {
+          isSaving: isSaving || isAutoSaving,
+        },
+      },
+      actions: {
+        ...api,
+        autoSave,
+        saveStory,
+        deleteStory,
+      },
+    }),
+    [
       pages,
       currentPageId,
       currentPageIndex,
@@ -129,17 +152,13 @@ function StoryProvider({ storyId, children }) {
       hasSelection,
       story,
       capabilities,
-      meta: {
-        isSaving: isSaving || isAutoSaving,
-      },
-    },
-    actions: {
-      ...api,
+      isSaving,
+      isAutoSaving,
+      api,
       autoSave,
       saveStory,
       deleteStory,
-    },
-  };
+    ]);
 
   return <Context.Provider value={state}>{children}</Context.Provider>;
 }
