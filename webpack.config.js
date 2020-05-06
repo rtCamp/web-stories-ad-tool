@@ -171,3 +171,4 @@ const dashboard = {
 };
 
 module.exports = [storiesEditor, dashboard];
+module.exports.storiesEditor = storiesEditor;
