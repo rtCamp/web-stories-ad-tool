@@ -18,6 +18,7 @@
  * Internal dependencies
  */
 import App from '../../../assets/src/edit-story/app';
+import { createStory } from './_utils';
 
 export default {
   title: 'Playground|Stories Editor',
@@ -33,9 +34,12 @@ const config = {
   allowedFileTypes: ['png', 'jpeg', 'jpg', 'gif', 'mp4'],
   storyId: 1234,
   api: {
-    stories: '',
+    stories: (storyId) => window.getStoryById(storyId),
     media: '',
     fonts: '',
+    link: '',
+    users: () => window.loadUsers(),
+    statuses: '',
   },
   metadata: {
     publisher: {
@@ -49,3 +53,33 @@ const config = {
 export const _default = () => {
   return <App config={config} />;
 };
+
+
+
+
+// This obviously doesn't belong in this file, and would require its own
+// webpack to inject a custom 'config' that includes the window functions
+// (as per above).
+describe('Puppeteer test', () => {
+  let getStoryById;
+  let loadUsers;
+
+  beforeEach(() => {
+    getStoryById = jest.fn();
+    loadUsers = jest.fn();
+    getStoryById.mockImplementation((id) => createStory({ id }));
+  });
+
+  const stubAPIMocks = async (page) => {
+    await page.exposeFunction('getStoryById', getStoryById);
+    await page.exposeFunction('loadUsers', loadUsers);
+    // ...
+  };
+
+  it('demo', async () => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await stubAPIMocks(page);
+    // ...
+  })
+});
