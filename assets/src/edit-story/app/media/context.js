@@ -17,6 +17,6 @@
 /**
  * External dependencies
  */
-import { createContext } from 'react';
+import { createContext } from 'use-context-selector';
 
 export default createContext({ state: {}, actions: {} });

@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { useContext } from 'react';
+import { useContext } from 'use-context-selector';
 
 /**
  * Internal dependencies
