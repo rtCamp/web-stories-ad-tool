@@ -34,20 +34,21 @@ describe('Background Drop-Target integration', () => {
     fixture.restore();
   });
 
-  it('should by default have white background', async () => {
+  fit('should by default have white background', async () => {
     const bgElement = await getCanvasBackgroundElement(fixture);
     // Verify that it's empty
     expect(bgElement).toBeEmpty();
     // And that background color is white:
     expect(bgElement).toHaveStyle('backgroundColor', 'rgb(255, 255, 255)');
-  });
+
+    await new Promise(() => {});
+  }, 100000);
 
   describe('when there is an image on the canvas', () => {
     let imageData;
 
     beforeEach(async () => {
       imageData = await addDummyImage(fixture);
-      jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000000;
     });
 
     it('should correctly handle image dropped on edge', async () => {

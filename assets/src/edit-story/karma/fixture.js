@@ -29,6 +29,7 @@ import APIContext from '../app/api/context';
 import { TEXT_ELEMENT_DEFAULT_FONT } from '../app/font/defaultFonts';
 import Layout from '../app/layout';
 import FixtureEvents from './fixtureEvents';
+import getMediaResponse from './db/getMediaResponse.json';
 
 const DEFAULT_CONFIG = {
   storyId: 1,
@@ -275,23 +276,29 @@ class APIProviderFixture {
         []
       );
 
-      const getAllFonts = useCallback(() => {
+      const getAllFonts = useCallback(
         // @todo: put actual data to __db__/
-        return asyncResponse(
-          [TEXT_ELEMENT_DEFAULT_FONT].map((font) => ({
-            name: font.family,
-            value: font.family,
-            ...font,
-          }))
-        );
-      }, []);
+        () =>
+          asyncResponse(
+            [TEXT_ELEMENT_DEFAULT_FONT].map((font) => ({
+              name: font.family,
+              value: font.family,
+              ...font,
+            }))
+          ),
+        []
+      );
 
-      // eslint-disable-next-line no-unused-vars
-      const getMedia = useCallback(({ mediaType, searchTerm, pagingNum }) => {
+      const getMedia = useCallback(
         // @todo: arg support
-        // @todo: put actual data to __db__/
-        return asyncResponse({ data: [], headers: {} });
-      }, []);
+        // eslint-disable-next-line no-unused-vars
+        ({ mediaType, searchTerm, pagingNum }) =>
+          asyncResponse({
+            data: getMediaResponse,
+            headers: { get: () => 1 },
+          }),
+        []
+      );
       const uploadMedia = useCallback(
         () => jasmine.createSpy('uploadMedia'),
         []
