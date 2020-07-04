@@ -431,7 +431,7 @@ class Story_Post_Type {
 				 * Issue: #2044
 				 * Creation date: 2020-06-04
 				 */
-				'showTextMagicAndHelperMode'   => false,
+				'showTextMagicAndHelperMode'   => true,
 				/**
 				 * Description: Flag for hiding/enabling the search input on the text and shapes panes.
 				 * Author: @dmmulroy

@@ -48,6 +48,7 @@ describe('Panels/StylePreset/utils', () => {
     backgroundTextMode: BACKGROUND_TEXT_MODE.FILL,
     backgroundColor: TEST_COLOR,
     font: TEXT_ELEMENT_DEFAULT_FONT,
+    overrideTextMagic: true,
   };
   it('should return matching color object', () => {
     const stylePresets = {
@@ -115,6 +116,7 @@ describe('Panels/StylePreset/utils', () => {
         },
       },
       font: TEXT_ELEMENT_DEFAULT_FONT,
+      overrideTextMagic: true,
     };
     expect(findMatchingStylePreset(stylePreset, stylePresets)).toStrictEqual(
       stylePreset
@@ -142,6 +144,7 @@ describe('Panels/StylePreset/utils', () => {
         },
       },
       font: TEXT_ELEMENT_DEFAULT_FONT,
+      overrideTextMagic: true,
     };
     expect(
       findMatchingStylePreset(stylePreset, stylePresets)
@@ -167,6 +170,7 @@ describe('Panels/StylePreset/utils', () => {
           horizontal: 0,
         },
         content: '<span style="color: rgb(1,1,1)">Content</span>',
+        overrideTextMagic: true,
       },
       {
         type: 'text',
@@ -194,6 +198,7 @@ describe('Panels/StylePreset/utils', () => {
         font: TEXT_ELEMENT_DEFAULT_FONT,
         content:
           '<span style="color: rgb(1,1,1)">O</span><span style="color: rgb(2,1,1)">K</span>',
+        overrideTextMagic: true,
       },
     ];
     const stylePresets = {
@@ -257,6 +262,7 @@ describe('Panels/StylePreset/utils', () => {
         font: TEXT_ELEMENT_DEFAULT_FONT,
         foo: 'bar',
         content: '<span style="color: rgb(1,1,1)">Content</span>',
+        overrideTextMagic: true,
         padding: {
           vertical: 0,
           horizontal: 0,

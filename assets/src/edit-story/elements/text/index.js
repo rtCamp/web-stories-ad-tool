@@ -39,6 +39,7 @@ export const defaultAttributes = {
   backgroundColor: createSolid(196, 196, 196),
   lineHeight: 1.3,
   textAlign: 'initial',
+  overrideTextMagic: false,
   padding: {
     vertical: 0,
     horizontal: 0,

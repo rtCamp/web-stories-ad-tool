@@ -114,6 +114,7 @@ describe('Panels/StylePreset', () => {
   const BACKGROUND_PROPS = {
     backgroundTextMode: BACKGROUND_TEXT_MODE.FILL,
     backgroundColor: TEST_COLOR,
+    overrideTextMagic: true,
   };
 
   it('should render <StylePresetPanel /> panel', () => {
@@ -178,6 +179,7 @@ describe('Panels/StylePreset', () => {
             content: '<span style="color: rgb(2, 2, 2)">Content</span>',
             backgroundTextMode: BACKGROUND_TEXT_MODE.NONE,
             font: TEXT_ELEMENT_DEFAULT_FONT,
+            overrideTextMagic: true,
           },
         ],
       };

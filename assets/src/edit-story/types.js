@@ -225,6 +225,7 @@ const StoryTextElementPropTypes = {
   lineHeight: PropTypes.number,
   padding: PaddingPropType,
   textAlign: PropTypes.string,
+  overrideTextMagic: PropTypes.bool,
 };
 
 StoryPropTypes.textContent = PropTypes.shape({

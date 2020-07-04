@@ -95,7 +95,14 @@ const FillElement = styled.p`
 `;
 
 function TextDisplay({
-  element: { id, content, backgroundColor, backgroundTextMode, ...rest },
+  element: {
+    id,
+    content,
+    backgroundColor,
+    backgroundTextMode,
+    overrideTextMagic,
+    ...rest
+  },
   box: { width },
 }) {
   const ref = useRef(null);

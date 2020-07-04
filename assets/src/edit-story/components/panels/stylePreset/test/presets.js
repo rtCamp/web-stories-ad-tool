@@ -69,6 +69,7 @@ describe('stylePresets/Presets', () => {
     backgroundTextMode: BACKGROUND_TEXT_MODE.FILL,
     backgroundColor: TEST_COLOR,
     font: TEXT_ELEMENT_DEFAULT_FONT,
+    overrideTextMagic: true,
   };
 
   // Disable reason: functionality removed from beta.

@@ -104,7 +104,10 @@ function ColorControls({ selectedElements, pushUpdate }) {
       if (next < 0 || next > BUTTONS.length - 1) {
         return;
       }
-      pushUpdate({ backgroundTextMode: BUTTONS[next].mode }, true);
+      pushUpdate(
+        { backgroundTextMode: BUTTONS[next].mode, overrideTextMagic: true },
+        true
+      );
     },
     [backgroundTextMode, pushUpdate]
   );
@@ -139,6 +142,7 @@ function ColorControls({ selectedElements, pushUpdate }) {
               pushUpdate(
                 {
                   backgroundTextMode: mode,
+                  overrideTextMagic: true,
                 },
                 true
               )
@@ -158,6 +162,7 @@ function ColorControls({ selectedElements, pushUpdate }) {
               pushUpdate(
                 {
                   backgroundColor: value,
+                  overrideTextMagic: true,
                 },
                 true
               )
