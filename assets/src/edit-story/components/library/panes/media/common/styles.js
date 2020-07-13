@@ -37,10 +37,7 @@ export const PaneHeader = styled.div`
 `;
 
 export const MediaGalleryContainer = styled.div`
-  display: grid;
-  grid-area: infinitescroll;
   overflow: auto;
-  grid-template-columns: 1fr;
   padding: 0 24px;
   margin-top: 1em;
   position: relative;
