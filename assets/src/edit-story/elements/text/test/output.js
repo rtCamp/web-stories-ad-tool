@@ -74,7 +74,7 @@ describe('TextOutput', () => {
     expect(output.innerHTML).toBe('Content');
     expect(output.className).toBe('fill');
     expect(output.style).toMatchObject({
-      whiteSpace: 'pre-wrap',
+      whiteSpace: 'pre-line',
       padding: '0% 0%',
       margin: '0px',
       backgroundColor: 'rgba(255, 0, 0, 0.3)',

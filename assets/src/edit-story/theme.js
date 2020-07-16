@@ -74,6 +74,10 @@ export const GlobalStyle = createGlobalStyle`
     border: 2px solid transparent;
     background-clip: content-box;
   }
+  
+  .public-DraftEditor-content {
+    white-space: pre-line !important;
+  }
 `;
 
 export function useTheme(selector) {

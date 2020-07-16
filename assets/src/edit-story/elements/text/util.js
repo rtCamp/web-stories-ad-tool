@@ -31,7 +31,7 @@ export function generateParagraphTextStyle(
   dataToFontSizeY = dataToStyleY
 ) {
   return {
-    whiteSpace: 'pre-wrap',
+    whiteSpace: 'pre-line',
     overflowWrap: 'break-word',
     wordBreak: 'break-word',
     margin: 0,

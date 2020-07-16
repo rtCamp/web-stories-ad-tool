@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { Editor } from 'draft-js';
+import { Editor, Modifier, EditorState } from 'draft-js';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 
@@ -79,10 +79,30 @@ function RichTextEditor({ content, onChange }, ref) {
   // Handle basic key commands such as bold, italic and underscore.
   const handleKeyCommand = getHandleKeyCommand();
 
+  // Ignore this for now
+  const handleBeforeInput = (char) => {
+    if (char === ' ') {
+      const content = Modifier.insertText(
+        editorState.getCurrentContent(),
+        editorState.getSelection(),
+        String.fromCharCode(0xa0)
+      );
+      const newState = EditorState.push(
+        editorState,
+        content,
+        'insert-characters'
+      );
+      updateEditorState(newState);
+      return 'handled';
+    }
+    return 'not-handled';
+  };
+
   return (
     <Editor
       ref={editorRef}
       onChange={updateEditorState}
+      // handleBeforeInput={handleBeforeInput}
       editorState={editorState}
       handleKeyCommand={handleKeyCommand}
       customStyleFn={customInlineDisplay}
