@@ -262,6 +262,7 @@ const MediaElement = ({
     showVideoDetail,
     dropTargetsBindings,
   });
+  console.info(resource);
   const attribution = active && resource.attribution?.author && (
     <Attribution
       author={resource.attribution.author.displayName}
@@ -369,12 +370,14 @@ function getInnerElement(
     );
   } else if (type === 'video') {
     const { lengthFormatted, poster, mimeType } = resource;
+    const src2 = src;//"https://stream.mux.com/Y5RaHMvC502h001U003e3YbypqDJdjEMOaT/high.mp4?token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InQ5UHZucm9ZY0hQNjhYSmlRQnRHTEVVSkVSSXJ0UXhKIn0.eyJleHAiOjE1OTcxMjk4MjksImF1ZCI6InYiLCJzdWIiOiJZNVJhSE12QzUwMmgwMDFVMDAzZTNZYnlwcURKZGpFTU9hVCJ9.RGxAQHJeZP_VCP5JOnswFE-U7KLEI3CLQBmtNXh8_O9wQ3SbZ5AcGCKQK9o65_Zm6WTfG6qjyZ0aIxRyb23d7oJvx8-Alc-HcErfLcucRI1mAqGQ_sRIUvsmR6WooJHvGFaaxgKJjQNry6OmB-uT5lN_eOSuYqM8XVZsvxpFbCQ2YAxNGvOJF7Q6buQV1KrC9sxuKEW65P7o7_KLXHRJShSvzyRz0QIotBuYFqSRLtwALzzomo5ExpXeGtqFg5EMREgh9ThYzr7RBRYRDEoV5C9raaTKkaEXwRErI3K0b7guP0CmEO6cVYWeavb6XvzbooB5Px60jaHlse8m7JDcyQ";
+    const poster2 = poster;//"https://image.mux.com/mGiyxU5qOWcqkgntvl37tuUYDIlVwXCZ/thumbnail.jpg?token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InQ5UHZucm9ZY0hQNjhYSmlRQnRHTEVVSkVSSXJ0UXhKIn0.eyJ0aW1lIjowLCJleHAiOjE1OTk3MTExMzAsImF1ZCI6InQiLCJzdWIiOiJtR2l5eFU1cU9XY3FrZ250dmwzN3R1VVlESWxWd1hDWiJ9.mkV0uMnI8NWSfzjZS9fFE9K7GYZqGpexMLszBvNFV6GOphWBCSB3I4VN45ZVB17rErhEz_L7Bijokms0x86xhL2cJ85qdh_5il9EObLsxogtXDW2ArmgCtPGSFITxRtwThBU1TqOd0JoF7CyyGW0NL-0sOg_7Jr6BRGcgPxx_GkzkLAB6nVRXy4ipR4J1tvKx2EN6rC-fg4Mg4Wzy5XIaTjPeS1RW4QW4FnshhYT2ArXYiTGJMf0ipP3gY9EzHrG7Eo80zNmBX23olz-Bgbm4VJSvxEv1G-fu3PKyXH1OmCNfwUmMezpOvsB8DiOPERq1vJwHoHSFUv-RvRAPekzvA";
     return (
       <>
         <Video
-          key={src}
+          key={src2}
           ref={ref}
-          poster={poster}
+          poster={poster2}
           width={width}
           height={height}
           preload="none"
@@ -383,11 +386,11 @@ function getInnerElement(
           onClick={onClick}
           {...dropTargetsBindings}
         >
-          <source src={src} type={mimeType} />
+          <source src={src2} type={mimeType} />
         </Video>
         {/* This hidden image allows us to fade in the poster image in the
         gallery as there's no event when a video's poster loads. */}
-        <HiddenPosterImage src={poster} onLoad={makeImageVisible} />
+        <HiddenPosterImage src={poster2} onLoad={makeImageVisible} />
         {showVideoDetail && <Duration>{lengthFormatted}</Duration>}
       </>
     );

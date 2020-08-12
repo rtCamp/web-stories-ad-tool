@@ -75,7 +75,7 @@ export const PROVIDERS = {
   },
   [ProviderType.COVERR]: {
     displayName: 'Coverr',
-    featureName: 'showCoverrTab',
+    //featureName: 'showCoverrTab',
     supportedContentTypes: [ContentType.VIDEO],
     supportsCategories: false,
     requiresAuthorAttribution: false,

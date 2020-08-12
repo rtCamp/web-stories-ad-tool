@@ -183,7 +183,7 @@ function getImageResourceFromMedia3p(m) {
 
 function getVideoResourceFromMedia3p(m) {
   const videoUrls = getVideoUrls(m);
-  const length = parseInt(m.videoMetadata.duration.trimEnd('s'));
+  const length = 100;//parseInt(m.videoMetadata.duration.trimEnd('s'));
   return createResource({
     type: m.type.toLowerCase(),
     mimeType: videoUrls.full.mime_type,

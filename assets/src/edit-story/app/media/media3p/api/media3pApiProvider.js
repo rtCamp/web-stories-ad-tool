@@ -23,10 +23,17 @@ import PropTypes from 'prop-types';
  * Internal dependencies
  */
 import getResourceFromMedia3p from '../../utils/getResourceFromMedia3p';
-import { ProviderType } from '../../providerType';
-import { PROVIDERS } from '../providerConfiguration';
 import apiFetcher from './apiFetcher';
 import Context from './context';
+
+/**
+ * The supported providers.
+ *
+ * @enum {string}
+ */
+const Providers = {
+  UNSPLASH: 'unsplash',
+};
 
 /** @typedef {import('react').ProviderProps} ProviderProps */
 
@@ -60,17 +67,10 @@ function Media3pApiProvider({ children }) {
     selectedCategoryId,
     mediaType,
   }) {
-    if (!Object.keys(PROVIDERS).includes(provider)) {
-      throw new Error(`Unsupported provider: ${provider}`);
-    }
-
-    // TODO(#3712): Temporary hack alert!: Convert coverr to unsplash for
-    // testing until Coverr backend is implemented.
-    if (provider === ProviderType.COVERR) {
-      provider = ProviderType.UNSPLASH;
-      searchTerm = 'small ' + searchTerm;
-    }
-
+    console.info('====----', provider);
+    // if (provider.toLowerCase() !== Providers.UNSPLASH) {
+    //   throw new Error(`Unsupported provider: ${provider}`);
+    // }
     if (selectedCategoryId && searchTerm) {
       throw new Error(
         `searchTerm and selectedCategoryId are mutually exclusive.`
@@ -102,13 +102,15 @@ function Media3pApiProvider({ children }) {
    * @return {Promise<{nextPageToken: *, media: *}>} An object with the media
    * resources and a next page token.
    */
-  function listMedia({ provider, searchTerm, orderBy, mediaType, pageToken }) {
+  async function listMedia({ provider, searchTerm, orderBy, mediaType, pageToken }) {
     const filter = constructFilter({ provider, searchTerm, mediaType });
-    return listFilterMedia({
+    const x = await listFilterMedia({
       filter,
       orderBy,
       pageToken,
     });
+    console.warn('---====', x);
+    return x;
   }
 
   /**
@@ -161,7 +163,7 @@ function Media3pApiProvider({ children }) {
       pageToken,
     });
     return {
-      media: (response.media || []).map(getResourceFromMedia3p),
+      media: response.media.map(getResourceFromMedia3p),
       nextPageToken: response.nextPageToken,
     };
   }

@@ -53,7 +53,7 @@ function LibraryProvider({ children }) {
   const tabs = useMemo(
     () => [
       { icon: MediaIcon, Pane: MediaPane, id: TAB_IDS.MEDIA },
-      ...(media3pTab
+      ...(true
         ? [
             {
               icon: Media3pIcon,
