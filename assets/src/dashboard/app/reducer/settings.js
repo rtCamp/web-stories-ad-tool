@@ -40,6 +40,10 @@ function settingsReducer(state, action) {
 
     case ACTION_TYPES.UPDATE_SETTINGS_SUCCESS:
     case ACTION_TYPES.FETCH_SETTINGS_SUCCESS: {
+      let { publisherLogoIds } = action.payload;
+      if (!publisherLogoIds || !Array.isArray(publisherLogoIds)) {
+        publisherLogoIds = [];
+      }
       return {
         ...state,
         activePublisherLogoId: action.payload.activePublisherLogoId,
@@ -48,7 +52,7 @@ function settingsReducer(state, action) {
         publisherLogoIds: [
           ...new Set([
             action.payload.activePublisherLogoId,
-            ...action.payload.publisherLogoIds,
+            ...publisherLogoIds,
           ]),
         ],
       };
