@@ -64,6 +64,8 @@ import {
   Title,
 } from './components';
 
+const noop = () => {};
+
 function TemplateDetails() {
   const [template, setTemplate] = useState(null);
   const [relatedTemplates, setRelatedTemplates] = useState([]);
@@ -262,7 +264,7 @@ function TemplateDetails() {
     switchToTemplateByOffset,
   ]);
 
-  const handleBookmarkClickSelected = useCallback(() => {}, []);
+  const handleBookmarkClickSelected = noop;
 
   const onHandleCta = useCallback(async () => {
     await trackEvent('use_template', 'dashboard', template.title, template.id);

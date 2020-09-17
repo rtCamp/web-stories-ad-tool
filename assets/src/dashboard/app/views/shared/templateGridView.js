@@ -62,6 +62,8 @@ function TemplateGridView({ pageSize, templates, templateActions }) {
 
   const [activeGridItemId, setActiveGridItemId] = useState(null);
 
+  const { createStoryFromTemplate } = templateActions;
+
   const targetAction = useCallback(
     (template) => {
       return async () => {
@@ -71,10 +73,10 @@ function TemplateGridView({ pageSize, templates, templateActions }) {
           template.title,
           template.id
         );
-        templateActions.createStoryFromTemplate(template);
+        createStoryFromTemplate(template);
       };
     },
-    [templateActions]
+    [createStoryFromTemplate]
   );
 
   useGridViewKeys({

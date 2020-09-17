@@ -236,7 +236,7 @@ const useTemplateApi = (dataAdapter, config) => {
       }
       return Promise.reject(new Error());
     },
-    [state]
+    [state.templates]
   );
 
   const bookmarkTemplateById = useCallback((templateId, shouldBookmark) => {

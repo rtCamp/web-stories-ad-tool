@@ -162,7 +162,7 @@ const TypeaheadInput = ({
 
   const focusInput = useCallback(() => {
     inputRef.current.focus();
-  }, [inputRef]);
+  }, []);
 
   const handleFocusOut = useCallback(() => {
     setShowMenu(false);

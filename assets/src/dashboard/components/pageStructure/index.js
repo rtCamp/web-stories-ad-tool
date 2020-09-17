@@ -122,7 +122,7 @@ export function LeftRail() {
       }
       toggleSideBar();
     },
-    [toggleSideBar, leftRailRef, upperContentRef]
+    [toggleSideBar]
   );
 
   const enabledPaths = useMemo(() => {
