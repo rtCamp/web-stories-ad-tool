@@ -49,7 +49,7 @@ function TextPane(props) {
     insertElement: state.actions.insertElement,
   }));
 
-  const { showTextSets, showTextAndShapesSearchInput } = useFeatures();
+  const { showTextAndShapesSearchInput } = useFeatures();
 
   const insertPreset = useInsertPreset();
 
@@ -81,7 +81,7 @@ function TextPane(props) {
           />
         ))}
       </Section>
-      {showTextSets && <TextSets />}
+      <TextSets />
     </Pane>
   );
 }
