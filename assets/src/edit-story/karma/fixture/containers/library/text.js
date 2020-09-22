@@ -17,24 +17,26 @@
 /**
  * Internal dependencies
  */
-import { Fixture } from '../../../../../../karma/fixture';
+import { Container } from '../container';
 
-describe('CUJ: Text Sets (Text and Shape Combinations): Inserting Text Sets', () => {
-  let fixture;
-  beforeEach(async () => {
-    fixture = new Fixture();
-    await fixture.render();
-  });
+export default class Text extends Container {
+  constructor(node, path) {
+    super(node, path);
+  }
 
-  afterEach(() => {
-    fixture.restore();
-  });
+  preset(name) {
+    return this.getByRole('button', { name });
+  }
 
-  // Disable reason: not implemented yet.
-  // eslint-disable-next-line jasmine/no-disabled-tests
-  xit('should display text sets', async () => {});
+  textSetList() {
+    return this.getByRole('list', { name: /Text Sets/ });
+  }
 
-  // Disable reason: not implemented yet.
-  // eslint-disable-next-line jasmine/no-disabled-tests
-  xit('should allow inserting text sets', () => {});
-});
+  textSets() {
+    return this.getAllByRole('listitem');
+  }
+
+  textSetFilter(name) {
+    return this.getByRole('option', { name });
+  }
+}
