@@ -38,6 +38,8 @@ export const _default = () => {
         duration: 500,
         delay: id % 2 ? 100 : 0,
         label: `Animation ${id}`,
+        easingCurveLabel: 'Auto Ease',
+        animationType: 'Fade In',
       };
       return acc;
     }, {})
@@ -52,20 +54,24 @@ export const _default = () => {
   }, []);
 
   return (
-    <AnimationTimeline
-      animations={Object.values(animations)}
-      duration={1500}
-      onUpdateAnimation={handleUpdateAnimation}
-    />
+    <div style={{ marginTop: 300 }}>
+      <AnimationTimeline
+        animations={Object.values(animations)}
+        duration={1500}
+        onUpdateAnimation={handleUpdateAnimation}
+      />
+    </div>
   );
 };
 
 export const noAnimations = () => {
   return (
-    <AnimationTimeline
-      animations={[]}
-      duration={5000}
-      onUpdateAnimation={() => {}}
-    />
+    <div style={{ marginTop: 300 }}>
+      <AnimationTimeline
+        animations={[]}
+        duration={5000}
+        onUpdateAnimation={() => {}}
+      />
+    </div>
   );
 };

@@ -20,6 +20,7 @@
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { useLayoutEffect, useCallback, useState, useRef } from 'react';
+
 /**
  * Internal dependencies
  */
@@ -62,7 +63,7 @@ const Container = styled.div.attrs(
   left: 0px;
   top: 0px;
   position: fixed;
-  z-index: 2;
+  z-index: ${({ zIndex }) => zIndex};
 
   /*
    * Custom gray scrollbars for Chromium & Firefox.
@@ -101,6 +102,7 @@ function Popup({
   isOpen,
   fillWidth = false,
   fillHeight = false,
+  zIndex = 2,
   onPositionUpdate = () => {},
 }) {
   const [popupState, setPopupState] = useState(null);
@@ -149,6 +151,7 @@ function Popup({
           fillWidth={fillWidth}
           fillHeight={fillHeight}
           placement={placement}
+          zIndex={zIndex}
         >
           {renderContents
             ? renderContents({ propagateDimensionChange: positionPopup })

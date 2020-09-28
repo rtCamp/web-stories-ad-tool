@@ -29,8 +29,11 @@ import {
   TimelineTimingContainer,
   TimelineTitleBar,
   TimelineRow,
+  TimelineKeyRow,
+  TimelineRowName,
 } from './components';
 import AnimationRuler from './ruler';
+import { AnimationTypeButton } from './animationTypeButton';
 import TimingBar from './timingBar';
 
 export default function AnimationTimeline({
@@ -43,10 +46,13 @@ export default function AnimationTimeline({
       <TimelineLegend>
         <TimelineTitleBar />
         {animations.map((animation, index) => (
-          <TimelineRow
+          <TimelineKeyRow
             key={`timeline-animation-item-${animation.id}-legend`}
             alternating={Boolean(index % 2)}
-          />
+          >
+            <TimelineRowName>{animation.label}</TimelineRowName>
+            <AnimationTypeButton animation={animation} />
+          </TimelineKeyRow>
         ))}
       </TimelineLegend>
       <TimelineTimingContainer>
@@ -60,7 +66,7 @@ export default function AnimationTimeline({
             alternating={Boolean(index % 2)}
           >
             <TimingBar
-              label={animation.label}
+              label={animation.easingCurveLabel}
               delay={animation.delay}
               duration={animation.duration}
               maxDuration={duration}

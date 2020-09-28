@@ -21,9 +21,20 @@ import propTypes from 'prop-types';
 import styled from 'styled-components';
 import { rgba } from 'polished';
 
+/**
+ * Internal dependencies
+ */
+import { ReactComponent as ArrowDownSvg } from '../../icons/arrow_down.svg';
+
 const ROW_HEIGHT = 35;
 const LEGEND_WIDTH = 246;
 const TIMELINE_HEIGHT = 180;
+
+export const ArrowDownIcon = styled(ArrowDownSvg)`
+  width: 8px;
+  height: 4px;
+  margin: 0 0 0 5px;
+`;
 
 export const TimelineContainer = styled.div`
   display: flex;
@@ -72,6 +83,23 @@ export const TimelineRow = styled.div`
     alternating && {
       backgroundColor: rgba(theme.colors.fg.white, 0.1),
     }}
+`;
+
+export const TimelineKeyRow = styled(TimelineRow)`
+  justify-content: space-between;
+  padding: 0 16px;
+`;
+
+export const TimelineRowName = styled.span`
+  font-size: 12px;
+`;
+
+export const TimelineRowAnimationType = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
 `;
 
 TimelineRow.propTypes = {
