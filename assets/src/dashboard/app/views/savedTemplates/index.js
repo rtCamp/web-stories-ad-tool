@@ -101,6 +101,11 @@ function Content({ stories, view, page }) {
               <SavedTemplatesGridView view={view} stories={stories} />
               <InfiniteScroller
                 allDataLoadedMessage={__('No more templates.', 'web-stories')}
+                allDataLoadedAriaMessage={__(
+                  'All templates are loaded',
+                  'web-stories'
+                )}
+                loadingAriaMessage={__('Loading more templates', 'web-stories')}
                 isLoading={false}
                 canLoadMore={false}
                 onLoadMore={page.requestNextPage}
