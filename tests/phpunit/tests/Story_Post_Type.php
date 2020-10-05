@@ -17,6 +17,8 @@
 
 namespace Google\Web_Stories\Tests;
 
+use DOMDocument;
+
 /**
  * @coversDefaultClass \Google\Web_Stories\Story_Post_Type
  */
@@ -44,6 +46,9 @@ class Story_Post_Type extends \WP_UnitTestCase {
 	 */
 	protected static $story_id;
 
+	/**
+	 * @param \WP_UnitTest_Factory $factory
+	 */
 	public static function wpSetUpBeforeClass( $factory ) {
 		self::$admin_id      = $factory->user->create(
 			[ 'role' => 'administrator' ]
@@ -93,6 +98,8 @@ class Story_Post_Type extends \WP_UnitTestCase {
 		$this->assertSame( PHP_INT_MAX, has_filter( 'template_include', [ $story_post_type, 'filter_template_include' ] ) );
 		$this->assertSame( 10, has_filter( 'option_amp-options', [ $story_post_type, 'filter_amp_options' ] ) );
 		$this->assertSame( 10, has_filter( 'amp_supportable_post_types', [ $story_post_type, 'filter_supportable_post_types' ] ) );
+		$this->assertSame( 10, has_filter( 'amp_validation_error_sanitized', [ $story_post_type, 'filter_amp_story_element_validation_error_sanitized' ] ) );
+		$this->assertSame( 10, has_filter( 'amp_to_amp_linking_element_excluded', [ $story_post_type, 'filter_amp_to_amp_linking_element_excluded' ] ) );
 		$this->assertSame( 10, has_filter( '_wp_post_revision_fields', [ $story_post_type, 'filter_revision_fields' ] ) );
 		$this->assertSame( 10, has_filter( 'jetpack_sitemap_post_types', [ $story_post_type, 'add_to_jetpack_sitemap' ] ) );
 		$this->assertSame( 10, has_filter( 'the_content_feed', [ $story_post_type, 'embed_image' ] ) );
@@ -328,7 +335,7 @@ class Story_Post_Type extends \WP_UnitTestCase {
 	 * @covers ::redirect_post_type_archive_urls
 	 */
 	public function test_redirect_post_type_archive_urls_permalinks() {
-		$this->set_permalink_structure( '/%post_name%/' );
+		$this->set_permalink_structure( '/%postname%/' );
 
 		$story_post_type = new \Google\Web_Stories\Story_Post_Type( $this->createMock( \Google\Web_Stories\Experiments::class ) );
 		$query           = new \WP_Query();
@@ -339,23 +346,47 @@ class Story_Post_Type extends \WP_UnitTestCase {
 	/**
 	 * @covers ::redirect_post_type_archive_urls
 	 */
-	public function test_redirect_post_type_archive_urls_page_set() {
-		$this->set_permalink_structure( '/%post_name%/' );
+	public function test_redirect_post_type_archive_urls_page() {
+		$this->set_permalink_structure( '/%postname%/' );
 
-		add_filter( 'post_type_archive_link', '__return_false' );
 		$story_post_type = new \Google\Web_Stories\Story_Post_Type( $this->createMock( \Google\Web_Stories\Experiments::class ) );
-		$query           = new \WP_Query();
-		$query->set( 'pagename', 'stories' );
+
+		$query = new \WP_Query();
+		$query->set( 'name', 'stories' );
+		$query->set( 'page', self::$story_id );
+
+		add_filter( 'post_type_link', '__return_false' );
+		add_filter( 'post_type_archive_link', '__return_false' );
 		$result = $story_post_type->redirect_post_type_archive_urls( false, $query );
-		$this->assertFalse( $result );
+		remove_filter( 'post_type_link', '__return_false' );
 		remove_filter( 'post_type_archive_link', '__return_false' );
+
+		$this->assertFalse( $result );
 	}
 
 	/**
 	 * @covers ::redirect_post_type_archive_urls
 	 */
-	public function test_redirect_post_type_archive_urls_page_feed() {
-		$this->set_permalink_structure( '/%post_name%/' );
+	public function test_redirect_post_type_archive_urls_pagename_set() {
+		$this->set_permalink_structure( '/%postname%/' );
+
+		$story_post_type = new \Google\Web_Stories\Story_Post_Type( $this->createMock( \Google\Web_Stories\Experiments::class ) );
+
+		$query = new \WP_Query();
+		$query->set( 'pagename', 'stories' );
+
+		add_filter( 'post_type_archive_link', '__return_false' );
+		$result = $story_post_type->redirect_post_type_archive_urls( false, $query );
+		remove_filter( 'post_type_archive_link', '__return_false' );
+
+		$this->assertFalse( $result );
+	}
+
+	/**
+	 * @covers ::redirect_post_type_archive_urls
+	 */
+	public function test_redirect_post_type_archive_urls_pagename_feed() {
+		$this->set_permalink_structure( '/%postname%/' );
 
 		$story_post_type = new \Google\Web_Stories\Story_Post_Type( $this->createMock( \Google\Web_Stories\Experiments::class ) );
 		$story_post_type->init();
@@ -367,7 +398,53 @@ class Story_Post_Type extends \WP_UnitTestCase {
 		add_filter( 'post_type_archive_feed_link', '__return_false' );
 		$result = $story_post_type->redirect_post_type_archive_urls( false, $query );
 		remove_filter( 'post_type_archive_feed_link', '__return_false' );
+
 		$this->assertFalse( $result );
+	}
+
+	public function data_test_filter_amp_to_amp_linking_element_excluded() {
+		$doc = new DOMDocument( '1.0', 'utf-8' );
+
+		$anchor        = $doc->createElement( 'a' );
+		$player_anchor = $doc->createElement( 'a' );
+		$div_anchor    = $doc->createElement( 'a' );
+		$player        = $doc->createElement( 'amp-story-player' );
+		$div           = $doc->createElement( 'div' );
+		$player->appendChild( $player_anchor );
+		$div->appendChild( $div_anchor );
+
+		$doc->appendChild( $player );
+		$doc->appendChild( $div );
+
+		return [
+			'No instance of DOMElement' => [
+				[ false, '', [], null ],
+				false,
+			],
+			'No parent node'            => [
+				[ false, '', [], $anchor ],
+				false,
+			],
+			'Wrong parent node'         => [
+				[ false, '', [], $div_anchor ],
+				false,
+			],
+			'Corecct node'              => [
+				[ false, '', [], $player_anchor ],
+				true,
+			],
+		];
+	}
+
+	/**
+	 * @covers ::filter_amp_to_amp_linking_element_excluded
+	 * @dataProvider data_test_filter_amp_to_amp_linking_element_excluded
+	 */
+	public function test_filter_amp_to_amp_linking_element_excluded( $args, $expected ) {
+		$story_post_type = new \Google\Web_Stories\Story_Post_Type( $this->createMock( \Google\Web_Stories\Experiments::class ) );
+
+		$actual = call_user_func_array( [ $story_post_type, 'filter_amp_to_amp_linking_element_excluded' ], $args );
+		$this->assertSame( $actual, $expected );
 	}
 
 	/**

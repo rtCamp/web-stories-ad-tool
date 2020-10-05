@@ -37,18 +37,27 @@ describe('CUJ: Text Sets (Text and Shape Combinations): Using Text Sets', () => 
     fixture.restore();
   });
 
+  async function getTextElements() {
+    const {
+      state: {
+        currentPage: { elements },
+      },
+    } = await fixture.renderHook(() => useStory());
+    return elements.filter((e) => e.type === 'text');
+  }
+
   it('should display text sets', async () => {
     expect(fixture.editor.library.text.textSetList()).toBeTruthy();
     await waitFor(() =>
-      expect(fixture.editor.library.text.textSets().length).toEqual(3)
+      expect(fixture.editor.library.text.textSets().length).toBeGreaterThan(0)
     );
   });
 
   it('should allow inserting text sets', async () => {
     await waitFor(() =>
-      expect(fixture.editor.library.text.textSets().length).toBeTruthy()
+      expect(fixture.editor.library.text.textSets.length).toBeTruthy()
     );
-    const textSets = fixture.editor.library.text.textSets();
+    const textSets = fixture.editor.library.text.textSets;
     await fixture.events.click(textSets[1]);
 
     const storyContext = await fixture.renderHook(() => useStory());
@@ -56,6 +65,26 @@ describe('CUJ: Text Sets (Text and Shape Combinations): Using Text Sets', () => 
     expect(selection.length).toEqual(2);
     expect(selection[0].content).toContain('Good design is aesthetic');
     expect(selection[1].content).toContain('The possibilities for innovation');
+  });
+
+  it('should allow user to drag and drop text set onto page', async () => {
+    const textSet = fixture.editor.library.text.textSets[0];
+
+    const page = fixture.editor.canvas.fullbleed.container;
+
+    // The page should start off with no text elements
+    expect((await getTextElements()).length).toBe(0);
+
+    await fixture.events.mouse.moveRel(textSet, 25, 25);
+    await fixture.events.mouse.down();
+
+    await fixture.events.mouse.moveRel(page, 50, 100);
+    await fixture.snapshot('Text set dragged');
+    await fixture.events.mouse.up();
+
+    // After text set has been added, there should some text elements
+    await fixture.snapshot('Text set added');
+    expect((await getTextElements()).length).toBeGreaterThan(0);
   });
 
   it('should allow filtering text sets by category', async () => {
