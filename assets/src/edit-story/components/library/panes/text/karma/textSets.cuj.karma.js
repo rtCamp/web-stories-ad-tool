@@ -49,15 +49,15 @@ describe('CUJ: Text Sets (Text and Shape Combinations): Using Text Sets', () => 
   it('should display text sets', async () => {
     expect(fixture.editor.library.text.textSetList).toBeTruthy();
     await waitFor(() =>
-      expect(fixture.editor.library.text.textSets().length).toBeGreaterThan(0)
+      expect(fixture.editor.library.text.textSets.length).toBeGreaterThan(0)
     );
   });
 
   it('should allow inserting text sets', async () => {
     await waitFor(() =>
-      expect(fixture.editor.library.text.textSets().length).toBeTruthy()
+      expect(fixture.editor.library.text.textSets.length).toBeTruthy()
     );
-    const textSets = fixture.editor.library.text.textSets();
+    const textSets = fixture.editor.library.text.textSets;
     await fixture.events.click(textSets[1]);
 
     const storyContext = await fixture.renderHook(() => useStory());
@@ -68,9 +68,9 @@ describe('CUJ: Text Sets (Text and Shape Combinations): Using Text Sets', () => 
 
   it('should allow user to drag and drop text set onto page', async () => {
     await waitFor(() =>
-      expect(fixture.editor.library.text.textSets()).toBeTruthy()
+      expect(fixture.editor.library.text.textSets).toBeTruthy()
     );
-    const textSet = fixture.editor.library.text.textSets()[0];
+    const textSet = fixture.editor.library.text.textSets[0];
 
     const page = fixture.editor.canvas.fullbleed.container;
 
@@ -100,14 +100,14 @@ describe('CUJ: Text Sets (Text and Shape Combinations): Using Text Sets', () => 
     await fixture.events.click(
       fixture.editor.library.text.textSetFilter('Editorial')
     );
-    expect(fixture.editor.library.text.textSets().length).toBe(16);
+    expect(fixture.editor.library.text.textSets.length).toBe(16);
   });
 
   it('should position the text sets as expected by category', async () => {
     await fixture.events.click(
       fixture.editor.library.text.textSetFilter('Editorial')
     );
-    let textSets = fixture.editor.library.text.textSets();
+    let textSets = fixture.editor.library.text.textSets;
     await fixture.events.click(textSets[0]);
     await fixture.snapshot('Editorial text set positioning');
 
@@ -115,7 +115,7 @@ describe('CUJ: Text Sets (Text and Shape Combinations): Using Text Sets', () => 
     await fixture.events.click(
       fixture.editor.library.text.textSetFilter('Header')
     );
-    textSets = fixture.editor.library.text.textSets();
+    textSets = fixture.editor.library.text.textSets;
     await fixture.events.click(textSets[0]);
     await fixture.snapshot('List text set positioning');
 
@@ -123,7 +123,7 @@ describe('CUJ: Text Sets (Text and Shape Combinations): Using Text Sets', () => 
     await fixture.events.click(
       fixture.editor.library.text.textSetFilter('Steps')
     );
-    textSets = fixture.editor.library.text.textSets();
+    textSets = fixture.editor.library.text.textSets;
     await fixture.events.click(textSets[0]);
     await fixture.snapshot('Steps text set positioning');
   });
