@@ -47,7 +47,7 @@ describe('CUJ: Text Sets (Text and Shape Combinations): Using Text Sets', () => 
   }
 
   it('should display text sets', async () => {
-    expect(fixture.editor.library.text.textSetList()).toBeTruthy();
+    expect(fixture.editor.library.text.textSetList).toBeTruthy();
     await waitFor(() =>
       expect(fixture.editor.library.text.textSets().length).toBeGreaterThan(0)
     );
@@ -55,20 +55,22 @@ describe('CUJ: Text Sets (Text and Shape Combinations): Using Text Sets', () => 
 
   it('should allow inserting text sets', async () => {
     await waitFor(() =>
-      expect(fixture.editor.library.text.textSets.length).toBeTruthy()
+      expect(fixture.editor.library.text.textSets().length).toBeTruthy()
     );
-    const textSets = fixture.editor.library.text.textSets;
+    const textSets = fixture.editor.library.text.textSets();
     await fixture.events.click(textSets[1]);
 
     const storyContext = await fixture.renderHook(() => useStory());
     const selection = storyContext.state.selectedElements;
-    expect(selection.length).toEqual(2);
-    expect(selection[0].content).toContain('Good design is aesthetic');
-    expect(selection[1].content).toContain('The possibilities for innovation');
+    // Text sets contain at least 2 elements.
+    expect(selection.length).toBeGreaterThan(1);
   });
 
   it('should allow user to drag and drop text set onto page', async () => {
-    const textSet = fixture.editor.library.text.textSets[0];
+    await waitFor(() =>
+      expect(fixture.editor.library.text.textSets()).toBeTruthy()
+    );
+    const textSet = fixture.editor.library.text.textSets()[0];
 
     const page = fixture.editor.canvas.fullbleed.container;
 
@@ -84,7 +86,9 @@ describe('CUJ: Text Sets (Text and Shape Combinations): Using Text Sets', () => 
 
     // After text set has been added, there should some text elements
     await fixture.snapshot('Text set added');
-    expect((await getTextElements()).length).toBeGreaterThan(0);
+    await waitFor(() => {
+      expect(getTextElements().length).toBeGreaterThan(0);
+    });
   });
 
   it('should allow filtering text sets by category', async () => {
@@ -96,13 +100,7 @@ describe('CUJ: Text Sets (Text and Shape Combinations): Using Text Sets', () => 
     await fixture.events.click(
       fixture.editor.library.text.textSetFilter('Editorial')
     );
-    expect(fixture.editor.library.text.textSets().length).toBe(3);
-
-    // @todo Add other filters, too.
-    await fixture.events.click(
-      fixture.editor.library.text.textSetFilter('Steps')
-    );
-    expect(fixture.editor.library.text.textSets().length).toBe(8);
+    expect(fixture.editor.library.text.textSets().length).toBe(16);
   });
 
   it('should position the text sets as expected by category', async () => {
@@ -113,13 +111,15 @@ describe('CUJ: Text Sets (Text and Shape Combinations): Using Text Sets', () => 
     await fixture.events.click(textSets[0]);
     await fixture.snapshot('Editorial text set positioning');
 
+    await fixture.events.click(fixture.editor.canvas.framesLayer.addPage);
     await fixture.events.click(
-      fixture.editor.library.text.textSetFilter('List')
+      fixture.editor.library.text.textSetFilter('Header')
     );
     textSets = fixture.editor.library.text.textSets();
     await fixture.events.click(textSets[0]);
     await fixture.snapshot('List text set positioning');
 
+    await fixture.events.click(fixture.editor.canvas.framesLayer.addPage);
     await fixture.events.click(
       fixture.editor.library.text.textSetFilter('Steps')
     );

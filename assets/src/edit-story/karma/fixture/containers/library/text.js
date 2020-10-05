@@ -28,11 +28,11 @@ export default class Text extends Container {
     return this.getByRole('button', { name });
   }
 
-  textSetList() {
+  get textSetList() {
     return this.getByRole('list', { name: /Text Sets/ });
   }
 
-  get textSets() {
+  textSets() {
     return this.getAllByRole('listitem');
   }
 
