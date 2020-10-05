@@ -34,7 +34,7 @@ import { useLayout } from '../../../../../app/layout';
 import { PAGE_RATIO, TEXT_SET_SIZE } from '../../../../../constants';
 import { KEYBOARD_USER_SELECTOR } from '../../../../../utils/keyboardOnlyOutline';
 import useLibrary from '../../../useLibrary';
-import { dataToEditorX, dataToEditorY } from '../../../../../units/dimensions';
+import { dataToEditorX, dataToEditorY } from '../../../../../units';
 import TextSetElements from './textSetElements';
 
 const TextSetItem = styled.button`

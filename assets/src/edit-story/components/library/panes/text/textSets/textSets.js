@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -68,12 +68,19 @@ function TextSets() {
   const [selectedCat, setSelectedCat] = useState(null);
   const ref = useRef();
 
-  const getFilteredTextSets = useCallback(() => {
-    if (selectedCat && textSets[selectedCat]) {
-      return textSets[selectedCat];
-    }
-    return Object.values(textSets).flat();
-  }, [selectedCat, textSets]);
+  const allTextSets = useMemo(() => Object.values(textSets).flat(), [textSets]);
+  const filteredTextSets = useMemo(
+    () => (selectedCat ? textSets[selectedCat] : allTextSets),
+    [selectedCat, textSets, allTextSets]
+  );
+  const categories = useMemo(
+    () =>
+      Object.keys(textSets).map((cat) => ({
+        id: cat,
+        label: CATEGORIES[cat] ?? cat,
+      })),
+    [textSets]
+  );
 
   useEffect(() => {
     getTextSets().then(setTextSets);
@@ -87,10 +94,7 @@ function TextSets() {
     <Section id={sectionId} title={title}>
       <CategoryWrapper>
         <PillGroup
-          items={Object.keys(textSets).map((cat) => ({
-            id: cat,
-            label: CATEGORIES[cat] ? CATEGORIES[cat] : cat,
-          }))}
+          items={categories}
           selectedItemId={selectedCat}
           selectItem={setSelectedCat}
           deselectItem={() => setSelectedCat(null)}
@@ -103,7 +107,7 @@ function TextSets() {
             height: TEXT_SET_SIZE / PAGE_RATIO,
           }}
         >
-          {getFilteredTextSets().map(
+          {filteredTextSets.map(
             (elements, index) =>
               elements.length > 0 && <TextSet key={index} elements={elements} />
           )}
