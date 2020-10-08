@@ -28,6 +28,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
+import { useEffect, useRef, useState } from 'react';
 import { Section, MainButton, SearchInput } from '../../common';
 import { FontPreview } from '../../text';
 import useLibrary from '../../useLibrary';
@@ -38,13 +39,15 @@ import useInsertPreset from './useInsertPreset';
 import TextSets from './textSets';
 
 const Pane = styled(SharedPane)`
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 100%;
 `;
 
 const TYPE = 'text';
 
 function TextPane(props) {
+  const paneRef = useRef();
+  const [, forceUpdate] = useState();
   const { insertElement } = useLibrary((state) => ({
     insertElement: state.actions.insertElement,
   }));
@@ -53,8 +56,12 @@ function TextPane(props) {
 
   const insertPreset = useInsertPreset();
 
+  useEffect(() => {
+    forceUpdate(Math.random());
+  }, []);
+
   return (
-    <Pane id={paneId} {...props}>
+    <Pane ref={paneRef} id={paneId} {...props}>
       {showTextAndShapesSearchInput && (
         <SearchInput
           initialValue={''}
@@ -81,7 +88,7 @@ function TextPane(props) {
           />
         ))}
       </Section>
-      {showTextSets && <TextSets />}
+      {showTextSets && paneRef.current && <TextSets ref={paneRef} />}
     </Pane>
   );
 }

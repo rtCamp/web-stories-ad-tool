@@ -17,9 +17,10 @@
 /**
  * External dependencies
  */
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useState, useMemo, useCallback, forwardRef } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+import { useVirtual } from 'react-virtual';
 
 /**
  * WordPress dependencies
@@ -39,11 +40,9 @@ import useLibrary from '../../../useLibrary';
 import TextSet from './textSet';
 
 const TextSetContainer = styled.div`
-  display: grid;
-  /* grid-template-columns: 1fr 1fr; */
-  grid-template-columns: 1fr;
-  row-gap: 12px;
-  column-gap: 12px;
+  height: ${({ height }) => `${height}px`};
+  /* position: relative; */
+  width: 100%;
   margin-top: 28px;
 `;
 
@@ -64,7 +63,7 @@ const CATEGORIES = {
   quote: __('Quote', 'web-stories'),
 };
 
-function TextSets() {
+const TextSets = forwardRef((props, paneRef) => {
   const [selectedCat, setSelectedCat] = useState(null);
   const ref = useRef();
   const { textSets } = useLibrary(({ state: { textSets } }) => ({ textSets }));
@@ -85,10 +84,17 @@ function TextSets() {
 
   useRovingTabIndex({ ref });
 
-  const sectionId = `section-${uuidv4()}`;
-  const title = __('Text Sets', 'web-stories');
+  const sectionId = useMemo(() => `section-${uuidv4()}`, []);
+
+  const rowVirtualizer = useVirtual({
+    size: Math.ceil(filteredTextSets.length / 2),
+    parentRef: paneRef,
+    estimateSize: useCallback(() => TEXT_SET_SIZE / PAGE_RATIO + 12, []),
+    overscan: 5,
+  });
+
   return (
-    <Section id={sectionId} title={title}>
+    <Section id={sectionId} title={__('Text Sets', 'web-stories')}>
       <CategoryWrapper>
         <PillGroup
           items={categories}
@@ -97,21 +103,56 @@ function TextSets() {
           deselectItem={() => setSelectedCat(null)}
         />
       </CategoryWrapper>
-      <TextSetContainer ref={ref} role="list" aria-labelledby={sectionId}>
+      <TextSetContainer
+        ref={ref}
+        role="list"
+        aria-labelledby={sectionId}
+        height={rowVirtualizer.totalSize}
+      >
         <UnitsProvider
           pageSize={{
             width: TEXT_SET_SIZE,
             height: TEXT_SET_SIZE / PAGE_RATIO,
           }}
         >
-          {filteredTextSets.map(
+          {rowVirtualizer.virtualItems.map((virtualRow) => (
+            <div
+              key={virtualRow.index}
+              style={{
+                // position: 'relative',
+                // top: 0,
+                // left: 0,
+                // width: '100%',
+                // height: `${virtualRow.size}px`,
+                // transform: `translateY(${virtualRow.start}px)`,
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                // gridTemplateColumns: '1fr',
+                // rowGap: '12px',
+                columnGap: '12px',
+                marginBottom: '12px',
+              }}
+            >
+              <TextSet
+                key={virtualRow.index * 2}
+                elements={filteredTextSets[virtualRow.index * 2]}
+              />
+              {filteredTextSets[virtualRow.index * 2 + 1] && (
+                <TextSet
+                  key={virtualRow.index * 2 + 1}
+                  elements={filteredTextSets[virtualRow.index * 2 + 1]}
+                />
+              )}
+            </div>
+          ))}
+          {/* {filteredTextSets.map(
             (elements, index) =>
               elements.length > 0 && <TextSet key={index} elements={elements} />
-          )}
+          )} */}
         </UnitsProvider>
       </TextSetContainer>
     </Section>
   );
-}
+});
 
 export default TextSets;

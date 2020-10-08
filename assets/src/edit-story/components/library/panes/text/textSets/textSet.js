@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { rgba } from 'polished';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -63,9 +63,11 @@ const DragContainer = styled.div`
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
   background-color: ${({ theme }) => rgba(theme.colors.bg.white, 0.2)};
+  visibility: ${({ dragging }) => (dragging ? 'visible' : 'hidden')};
 `;
 
 function TextSet({ elements }) {
+  const [dragging, setDragging] = useState(false);
   const { insertTextSet } = useLibrary((state) => ({
     insertTextSet: state.actions.insertTextSet,
   }));
@@ -91,6 +93,7 @@ function TextSet({ elements }) {
           elements,
         })
       );
+      setDragging(true);
     },
     [elements]
   );
@@ -102,7 +105,12 @@ function TextSet({ elements }) {
 
   return (
     <DragWrapper>
-      <DragContainer ref={elementRef} width={dragWidth} height={dragHeight}>
+      <DragContainer
+        ref={elementRef}
+        width={dragWidth}
+        height={dragHeight}
+        dragging={dragging}
+      >
         <TextSetElements
           elements={elements}
           pageSize={{
