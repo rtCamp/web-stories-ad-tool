@@ -19,99 +19,138 @@ const themeFonts = {
   primary: "'Google Sans', sans-serif",
 };
 
+export const TYPOGRAPHY_PRESET_SIZES = {
+  XX_LARGE: 'xxlarge',
+  X_LARGE: 'xlarge',
+  LARGE: 'large',
+  MEDIUM: 'medium',
+  SMALL: 'small',
+  X_SMALL: 'xsmall',
+  XX_SMALL: 'xxsmall',
+};
+
+export const TEXT_SIZES = [
+  TYPOGRAPHY_PRESET_SIZES.X_LARGE,
+  TYPOGRAPHY_PRESET_SIZES.LARGE,
+  TYPOGRAPHY_PRESET_SIZES.MEDIUM,
+  TYPOGRAPHY_PRESET_SIZES.SMALL,
+  TYPOGRAPHY_PRESET_SIZES.X_SMALL,
+];
+
+export const DISPLAY_SIZES = [
+  TYPOGRAPHY_PRESET_SIZES.LARGE,
+  TYPOGRAPHY_PRESET_SIZES.MEDIUM,
+  TYPOGRAPHY_PRESET_SIZES.SMALL,
+];
+
+export const HEADLINE_SIZES = [
+  TYPOGRAPHY_PRESET_SIZES.XX_LARGE,
+  TYPOGRAPHY_PRESET_SIZES.X_LARGE,
+  TYPOGRAPHY_PRESET_SIZES.LARGE,
+  TYPOGRAPHY_PRESET_SIZES.MEDIUM,
+  TYPOGRAPHY_PRESET_SIZES.SMALL,
+  TYPOGRAPHY_PRESET_SIZES.X_SMALL,
+  TYPOGRAPHY_PRESET_SIZES.XX_SMALL,
+];
+
 export const typography = {
   family: { ...themeFonts },
+  weight: {
+    bold: 500,
+    regular: 400,
+    light: 300,
+  },
   presets: {
     display: {
-      large: {
+      [TYPOGRAPHY_PRESET_SIZES.LARGE]: {
         weight: 700,
         size: 122,
         lineHeight: 124,
         letterSpacing: -2.4,
       },
-      medium: {
+      [TYPOGRAPHY_PRESET_SIZES.MEDIUM]: {
         weight: 700,
         size: 58,
         lineHeight: 64,
         letterSpacing: -1.4,
       },
-      small: {
+      [TYPOGRAPHY_PRESET_SIZES.SMALL]: {
         weight: 700,
         size: 36,
         lineHeight: 40,
         letterSpacing: -1,
       },
     },
-    heading: {
-      xxlarge: {
+    headline: {
+      [TYPOGRAPHY_PRESET_SIZES.XX_LARGE]: {
         weight: 500,
         size: 42,
         lineHeight: 56,
         letterSpacing: 0,
       },
-      xlarge: {
+      [TYPOGRAPHY_PRESET_SIZES.X_LARGE]: {
         weight: 500,
         size: 36,
         lineHeight: 44,
         letterSpacing: 0,
       },
-      large: {
+      [TYPOGRAPHY_PRESET_SIZES.LARGE]: {
         weight: 500,
         size: 32,
         lineHeight: 40,
         letterSpacing: 0,
       },
-      medium: {
+      [TYPOGRAPHY_PRESET_SIZES.MEDIUM]: {
         weight: 500,
         size: 28,
         lineHeight: 36,
         letterSpacing: 0,
       },
-      small: {
+      [TYPOGRAPHY_PRESET_SIZES.SMALL]: {
         weight: 500,
         size: 24,
         lineHeight: 32,
         letterSpacing: 0,
       },
-      xsmall: {
+      [TYPOGRAPHY_PRESET_SIZES.X_SMALL]: {
         weight: 500,
         size: 20,
         lineHeight: 24,
         letterSpacing: 0,
       },
-      xxsmall: {
+      [TYPOGRAPHY_PRESET_SIZES.XX_SMALL]: {
         weight: 500,
         size: 14,
         lineHeight: 20,
         letterSpacing: 0,
       },
     },
-    paragraph: {
-      xlarge: {
+    text: {
+      [TYPOGRAPHY_PRESET_SIZES.X_LARGE]: {
         weight: 400,
         size: 24,
         lineHeight: 32,
         letterSpacing: -0.02,
       },
-      large: {
+      [TYPOGRAPHY_PRESET_SIZES.LARGE]: {
         weight: 400,
         size: 18,
         lineHeight: 24,
         letterSpacing: 0,
       },
-      medium: {
+      [TYPOGRAPHY_PRESET_SIZES.MEDIUM]: {
         weight: 400,
         size: 16,
         lineHeight: 24,
         letterSpacing: 0,
       },
-      small: {
+      [TYPOGRAPHY_PRESET_SIZES.SMALL]: {
         weight: 400,
         size: 14,
         lineHeight: 20,
         letterSpacing: 0,
       },
-      xsmall: {
+      [TYPOGRAPHY_PRESET_SIZES.X_SMALL]: {
         weight: 400,
         size: 12,
         lineHeight: 20,

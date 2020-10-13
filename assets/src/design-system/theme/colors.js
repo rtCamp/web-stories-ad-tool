@@ -31,40 +31,42 @@ const standard = {
   white: '#FFF',
 };
 
-export const colors = {
+export const dark = {
   standard,
   accent: { ...accent },
   status: { ...status },
-  light: {
-    fg: {
-      primary: '#181D1C',
-      secondary: '#5E615C',
-      tertiary: '#767570',
-      gray24: '#A1A09B',
-      gray16: '#D1D1CC',
-      gray8: '#EFEFEF',
-    },
-    bg: {
-      primary: standard.white,
-      workspace: '#FCFCFC',
-      panel: '#F7F8F7',
-      divider: '#1B1D1C',
-    },
+  fg: {
+    primary: '#EDEFEC',
+    secondary: '#A1A09B',
+    tertiary: '#767570',
+    gray24: '#5E615C',
+    gray16: '#414442',
+    gray8: '#2F3131',
   },
-  dark: {
-    fg: {
-      primary: '#EDEFEC',
-      secondary: '#A1A09B',
-      tertiary: '#767570',
-      gray24: '#5E615C',
-      gray16: '#414442',
-      gray8: '#2F3131',
-    },
-    bg: {
-      primary: standard.black,
-      workspace: '#1B1D1C',
-      panel: '#282A2A',
-      divider: standard.white,
-    },
+  bg: {
+    primary: standard.black,
+    workspace: '#1B1D1C',
+    panel: '#282A2A',
+    divider: standard.white,
+  },
+};
+
+export const light = {
+  standard,
+  accent: { ...accent },
+  status: { ...status },
+  fg: {
+    primary: '#181D1C',
+    secondary: '#5E615C',
+    tertiary: '#767570',
+    gray24: '#A1A09B',
+    gray16: '#D1D1CC',
+    gray8: '#EFEFEF',
+  },
+  bg: {
+    primary: standard.white,
+    workspace: '#FCFCFC',
+    panel: '#F7F8F7',
+    divider: '#1B1D1C',
   },
 };

@@ -17,13 +17,16 @@
 /**
  * Internal dependencies
  */
-import { dark as darkMode, light as lightMode } from './colors';
-import { typography } from './typography';
-export { THEME_CONSTANTS } from './constants';
+import {
+  TYPOGRAPHY_PRESET_SIZES,
+  TEXT_SIZES,
+  HEADLINE_SIZES,
+  DISPLAY_SIZES,
+} from './typography';
 
-export const theme = {
-  typography,
-  colors: { ...darkMode },
+export const THEME_CONSTANTS = {
+  TYPOGRAPHY_PRESET_SIZES,
+  TEXT_SIZES,
+  HEADLINE_SIZES,
+  DISPLAY_SIZES,
 };
-
-export { lightMode };
