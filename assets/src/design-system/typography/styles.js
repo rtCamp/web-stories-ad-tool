@@ -13,3 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies
+ */
+import { css } from 'styled-components';
+
+export const defaultTypographyStyle = ({ theme }) => css`
+  font-family: ${theme.typography.family.primary};
+  color: ${theme.colors.fg.primary};
+  margin: 0;
+  padding: 0;
+`;

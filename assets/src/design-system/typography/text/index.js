@@ -26,24 +26,33 @@ import PropTypes from 'prop-types';
 import { THEME_CONSTANTS } from '../../theme';
 import { defaultTypographyStyle } from '../styles';
 
-export const Display = styled.h1`
+export const Text = styled.p`
   ${defaultTypographyStyle}
-  ${({ size, theme }) => {
-    const { display } = theme.typography.presets;
+  ${({ as, isBold, size, theme }) => {
+    const { text } = theme.typography.presets;
+    const asLink = as === 'a' && {
+      color: theme.colors.accent.secondary,
+      textDecoration: 'none',
+      cursor: 'pointer',
+    };
 
     return {
-      fontSize: `${display[size].size}px`,
-      fontWeight: display[size].weight,
-      lineHeight: `${display[size].lineHeight}px`,
-      letterSpacing: `${display[size].letterSpacing}px`,
+      fontSize: `${text[size].size}px`,
+      fontWeight: isBold ? theme.typography.weight.bold : text[size].weight,
+      lineHeight: `${text[size].lineHeight}px`,
+      letterSpacing: `${text[size].letterSpacing}em`,
+      ...asLink,
     };
   }}
 `;
 
-Display.propTypes = {
-  as: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']).isRequired,
-  size: PropTypes.oneOf(THEME_CONSTANTS.DISPLAY_SIZES),
+Text.propTypes = {
+  as: PropTypes.oneOf(['p', 'a', 'span']),
+  isBold: PropTypes.bool,
+  size: PropTypes.oneOf(THEME_CONSTANTS.TEXT_SIZES),
 };
-Display.defaultProps = {
+Text.defaultProps = {
+  as: 'p',
+  isBold: false,
   size: THEME_CONSTANTS.TYPOGRAPHY_PRESET_SIZES.MEDIUM,
 };

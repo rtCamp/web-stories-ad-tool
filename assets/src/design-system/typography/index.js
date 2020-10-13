@@ -13,3 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+export { Display } from './display';
+export { Headline } from './headline';
+export { Text } from './text';
