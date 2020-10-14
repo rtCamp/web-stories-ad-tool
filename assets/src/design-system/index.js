@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 
-export { theme, lightMode } from './theme';
+export { THEME_CONSTANTS, theme, lightMode } from './theme';
+export { Display, Headline, Text } from './typography';
