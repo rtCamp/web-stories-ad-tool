@@ -104,6 +104,8 @@ function useRichTextFormatting(selectedElements, pushUpdate) {
   );
 
   const handlers = useMemo(() => {
+    const htmlFormatters = getHTMLFormatters();
+
     if (hasCurrentEditor) {
       return {
         // This particular function ignores the flag argument.
@@ -112,6 +114,9 @@ function useRichTextFormatting(selectedElements, pushUpdate) {
         handleClickBold: () => selectionActions.toggleBoldInSelection(),
         // All these keep their arguments:
         handleSelectFontWeight: selectionActions.setFontWeightInSelection,
+        handleResetFontWeight: (weight) => {
+          push(htmlFormatters.setFontWeight, weight);
+        },
         handleClickItalic: selectionActions.toggleItalicInSelection,
         handleClickUnderline: selectionActions.toggleUnderlineInSelection,
         handleSetLetterSpacing: selectionActions.setLetterSpacingInSelection,
@@ -119,12 +124,14 @@ function useRichTextFormatting(selectedElements, pushUpdate) {
       };
     }
 
-    const htmlFormatters = getHTMLFormatters();
-
     return {
       handleClickBold: (flag) => push(htmlFormatters.toggleBold, flag),
-      handleSelectFontWeight: (weight) =>
-        push(htmlFormatters.setFontWeight, weight),
+      handleSelectFontWeight: (weight) => {
+        push(htmlFormatters.setFontWeight, weight);
+      },
+      handleResetFontWeight: (weight) => {
+        push(htmlFormatters.setFontWeight, weight);
+      },
       handleClickItalic: (flag) => push(htmlFormatters.toggleItalic, flag),
       handleClickUnderline: (flag) =>
         push(htmlFormatters.toggleUnderline, flag),
