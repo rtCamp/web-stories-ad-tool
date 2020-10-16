@@ -107,20 +107,40 @@ StoryPropTypes.page = PropTypes.shape({
   backgroundOverlay: PropTypes.oneOf(Object.values(OverlayType)),
 });
 
+StoryPropTypes.resourceSize = PropTypes.shape({
+  file: PropTypes.string,
+  source_url: PropTypes.string.isRequired,
+  mime_type: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+});
+
+StoryPropTypes.imageResourceSizes = PropTypes.shape({
+  full: StoryPropTypes.resourceSize,
+  large: StoryPropTypes.resourceSize,
+  web_stories_thumbnail: StoryPropTypes.resourceSize,
+});
+
+StoryPropTypes.videoResourceSizes = PropTypes.shape({
+  full: StoryPropTypes.resourceSize,
+  preview: StoryPropTypes.resourceSize,
+});
+
 StoryPropTypes.imageResource = PropTypes.shape({
   type: PropTypes.string.isRequired,
-  id: PropTypes.number,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   mimeType: PropTypes.string.isRequired,
   src: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   alt: PropTypes.string,
   title: PropTypes.string,
+  sizes: StoryPropTypes.imageResourceSizes,
 });
 
 StoryPropTypes.videoResource = PropTypes.shape({
   type: PropTypes.string.isRequired,
-  id: PropTypes.number,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   mimeType: PropTypes.string.isRequired,
   src: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
@@ -129,20 +149,27 @@ StoryPropTypes.videoResource = PropTypes.shape({
   posterId: PropTypes.number,
   alt: PropTypes.string,
   title: PropTypes.string,
+  sizes: StoryPropTypes.videoResourceSizes,
 });
 
 StoryPropTypes.gifResource = PropTypes.shape({
   type: PropTypes.string.isRequired,
-  id: PropTypes.number,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   mimeType: PropTypes.string.isRequired,
   src: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  alt: PropTypes.string,
   title: PropTypes.string,
+  alt: PropTypes.string,
+  local: PropTypes.bool,
+  sizes: PropTypes.imageResourceSizes,
   output: PropTypes.shape({
     mimeType: PropTypes.string.isRequired,
     src: PropTypes.string.isRequired,
+    sizes: PropTypes.shape({
+      mp4: StoryPropTypes.videoResourceSizes,
+      webm: StoryPropTypes.videoResourceSizes,
+    }),
   }),
 });
 
