@@ -1,12 +1,12 @@
 | **CUJ**                                                           | **Action**                                       | **Completion**           |
 | ----------------------------------------------------------------- | ------------------------------------------------ | ------------------------ |
-| Creator Can Add A Link                                            | Apply a link to any element                      | 🚨 **0.00%** *(0 / 12)*  |
+| Creator Can Add A Link                                            | Apply a link to any element                      | 🚨 **8.33%** *(1 / 12)*  |
 |                                                                   | Apply a link to multi-selection                  | 🚨 **0.00%** *(0 / 1)*   |
 |                                                                   | Edit brand icon                                  | 🚨 **0.00%** *(0 / 2)*   |
 |                                                                   | Edit description                                 | 🚨 **0.00%** *(0 / 1)*   |
 |                                                                   | Link with Page Attachment                        | 🚨 **0.00%** *(0 / 2)*   |
 |                                                                   | Remove applied link                              | 🚨 **0.00%** *(0 / 3)*   |
-|                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 21)*  |
+|                                                                   | *[total]*                                        | 🚨 **4.76%** *(1 / 21)*  |
 | Creator Can Add Image/Video to Page                               | Drag image/video from desktop to canvas          | 🚨 **0.00%** *(0 / 1)*   |
 |                                                                   | Search media                                     | 🚨 **0.00%** *(0 / 1)*   |
 |                                                                   | Upload media via upload button                   | 🚨 **0.00%** *(0 / 3)*   |
@@ -23,8 +23,8 @@
 |                                                                   | Set kerning                                      | 🚨 **0.00%** *(0 / 5)*   |
 |                                                                   | Set line height                                  | 🚨 **0.00%** *(0 / 1)*   |
 |                                                                   | Set text color                                   | 🚨 **0.00%** *(0 / 5)*   |
-|                                                                   | Use font picker                                  | 🚨 **7.69%** *(1 / 13)*  |
-|                                                                   | *[total]*                                        | 🚨 **2.86%** *(1 / 35)*  |
+|                                                                   | Use font picker                                  | 🚨 **0.00%** *(0 / 13)*  |
+|                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 35)*  |
 | Creator can Add a Page Attachment                                 | Add Page Attachment                              | 🚨 **0.00%** *(0 / 2)*   |
 |                                                                   | Adding link to element in Attachment area        | 🚨 **0.00%** *(0 / 1)*   |
 |                                                                   | Remove Page Attachment                           | 🚨 **0.00%** *(0 / 1)*   |
@@ -45,18 +45,21 @@
 |                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 2)*   |
 | Creator can Preview & Publish Their Story                         | Publish story                                    | 🚨 **0.00%** *(0 / 1)*   |
 |                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 1)*   |
+| Creator can Select an Element                                     | Transforming element                             | 🚨 **0.00%** *(0 / 2)*   |
+|                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 2)*   |
 | Creator can Transform an Element                                  | Align element to on another                      | 🚨 **0.00%** *(0 / 10)*  |
 |                                                                   | Align element to page                            | 🚨 **0.00%** *(0 / 9)*   |
 |                                                                   | Resize                                           | 🚨 **0.00%** *(0 / 1)*   |
 |                                                                   | Rotate                                           | 🚨 **0.00%** *(0 / 1)*   |
 |                                                                   | Selection integration                            | 🚨 **0.00%** *(0 / 6)*   |
-|                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 27)*  |
+|                                                                   | Set height and width                             | 🚨 **0.00%** *(0 / 2)*   |
+|                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 29)*  |
 | Creator can View and Modify Document Settings                     | Navigating without changes                       | 🚨 **0.00%** *(0 / 1)*   |
 |                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 1)*   |
 | Creator can transform an element                                  | Snap to place                                    | 🚨 **0.00%** *(0 / 1)*   |
 |                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 1)*   |
-| Text Sets (Text and Shape Combinations)                           | Inserting Text Sets                              | 🚨 **0.00%** *(0 / 3)*   |
-|                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 3)*   |
+| Text Sets (Text and Shape Combinations)                           | Using Text Sets                                  | 🚨 **0.00%** *(0 / 5)*   |
+|                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 5)*   |
 | User can interact with menu using keyboard                        | Tab to menu                                      | 🚨 **0.00%** *(0 / 5)*   |
 |                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 5)*   |
 |                                                                   | enter to open                                    | 🚨 **0.00%** *(0 / 5)*   |
@@ -64,4 +67,4 @@
 | User can interact with menu using mouse                           | Click toggle button to open                      | 🚨 **0.00%** *(0 / 4)*   |
 |                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 4)*   |
 |                                                                   | click close button to close menu                 | 🚨 **0.00%** *(0 / 4)*   |
-| *\[total\]*                                                       | *\[total\]*                                      | 🚨 **0.58%** *(2 / 346)* |
+| *\[total\]*                                                       | *\[total\]*                                      | 🚨 **0.56%** *(2 / 358)* |
