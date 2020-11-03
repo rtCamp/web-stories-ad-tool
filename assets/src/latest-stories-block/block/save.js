@@ -24,12 +24,10 @@
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/block-edit-save/
  *
- * @param {Object} props Props.
- * @param {Object} props.attributes Block attributes.
  * @return {null|*} Rendered block.
  */
 function save() {
-	return null;
+  return null;
 }
 
 export default save;
