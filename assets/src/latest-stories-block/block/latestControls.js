@@ -18,6 +18,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { cloneDeep } from 'lodash'; // @TODO: Remove lodash and it's functions.
 
 /**
@@ -48,6 +49,7 @@ import {
 import AuthorSelection from './authorSelection';
 
 /* From https://material.io/tools/icons */
+// eslint-disable-next-line no-unused-vars
 const carouselIcon = (
   <SVG
     xmlns="http://www.w3.org/2000/svg"
