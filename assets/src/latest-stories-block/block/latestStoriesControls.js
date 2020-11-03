@@ -62,7 +62,7 @@ const carouselIcon = (
   </SVG>
 );
 
-const LatestControls = (props) => {
+const LatestStoriesControls = (props) => {
   const {
     viewType,
     numOfStories,
@@ -314,7 +314,7 @@ const LatestControls = (props) => {
   );
 };
 
-LatestControls.propTypes = {
+LatestStoriesControls.propTypes = {
   viewType: PropTypes.string,
   numOfStories: PropTypes.number,
   numOfColumns: PropTypes.number,
@@ -331,4 +331,4 @@ LatestControls.propTypes = {
   listViewImageAlignment: PropTypes.string,
 };
 
-export default LatestControls;
+export default LatestStoriesControls;

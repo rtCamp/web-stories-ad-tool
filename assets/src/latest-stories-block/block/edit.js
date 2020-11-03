@@ -27,7 +27,7 @@ import ServerSideRender from '@wordpress/server-side-render';
 /**
  * Internal dependencies
  */
-import LatestControls from './latestControls';
+import LatestStoriesControls from './latestStoriesControls';
 
 import './edit.css';
 
@@ -54,7 +54,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         block="web-stories/latest-stories"
         attributes={attributes}
       />
-      <LatestControls
+      <LatestStoriesControls
         viewType={viewType}
         numOfStories={numOfStories}
         numOfColumns={numOfColumns}
