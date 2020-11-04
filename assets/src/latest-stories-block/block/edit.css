@@ -72,13 +72,13 @@
 }
 
 .wp-block-web-stories-latest-stories .latest-stories__story-wrapper {
-  max-width: 300px;
+  max-width: 285px;
   position: relative;
 }
 
 .wp-block-web-stories-latest-stories amp-story-player,
 .wp-block-web-stories-latest-stories .latest-stories__story-wrapper.has-poster {
-  max-width: 300px;
+  max-width: 285px;
   height: auto;
 }
 
@@ -96,7 +96,7 @@
 .wp-block-web-stories-latest-stories.is-view-type-grid
   .latest-stories__story-wrapper {
   width: 100%;
-  min-height: 430px;
+  height: 430px;
 }
 
 /* List View Styles */
@@ -135,8 +135,9 @@
 }
 
 .wp-block-web-stories-latest-stories .latest-stories__story-placeholder {
+  /* stylelint-disable-line no-descending-specificity */
   background-size: cover;
-  background-position: center; /* stylelint-disable-line no-descending-specificity */
+  background-position: center;
   height: 430px;
 }
 
