@@ -26,6 +26,7 @@ import classNames from 'classnames';
 import { useEffect, useState, useRef } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
+import { addQueryArgs } from '@wordpress/url';
 
 /**
  * Internal dependencies
@@ -54,6 +55,19 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   } = attributes;
 
   const [fetchedStories, setFetchedStories] = useState([]);
+  const [fetchedAuthors, setFetchedAuthors] = useState([]);
+
+  useEffect(() => {
+    apiFetch({
+      path: addQueryArgs('/wp/v2/users', { per_page: -1 }),
+    })
+      .then((data) => {
+        setFetchedAuthors(data);
+      })
+      .catch(() => {
+        setFetchedAuthors([]);
+      });
+  }, [fetchedStories]);
 
   useEffect(() => {
     let order,
@@ -77,16 +91,14 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     }
 
     const latestPostsQuery = {
-      author: authors,
+      author: authors.map((author) => author.id),
       order,
       orderby: orderBy,
       per_page: numOfStories,
     };
 
     apiFetch({
-      path: `/web-stories/v1/web-story?${new URLSearchParams(
-        latestPostsQuery
-      )}`,
+      path: addQueryArgs('/web-stories/v1/web-story', latestPostsQuery),
     })
       .then((stories) => {
         setFetchedStories(stories);
@@ -115,15 +127,15 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
     refs.current = refs.current.slice(0, fetchedStories.length);
 
-    refs.current.forEach((el, index) => {
-      if (global.AmpStoryPlayer) {
+    if (refs.current && global.AmpStoryPlayer) {
+      fetchedStories.forEach((story, index) => {
         refs.current[index] = new global.AmpStoryPlayer(
           global,
           refs.current[index]
         );
         refs.current[index].load();
-      }
-    });
+      });
+    }
   }, [fetchedStories, willShowStoryPoster]);
 
   const blockClasses = classNames(
@@ -158,14 +170,18 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
           <div className={blockClasses} style={blockStyles}>
             {Object.keys(fetchedStories).map((index) => {
               const storyData = fetchedStories[index];
+              const author = fetchedAuthors.find(
+                (singleAuthorObj) => storyData.author === singleAuthorObj.id
+              );
 
               return (
                 <StoryPlayer
-                  key={index}
+                  key={storyData.id}
                   ref={(el) => (refs.current[index] = el)}
                   url={storyData.link}
                   title={storyData.title.rendered}
-                  date={storyData.date}
+                  date={storyData.date_gmt}
+                  author={author.name}
                   poster={storyData.featured_media_url}
                   isShowingStoryPoster={willShowStoryPoster}
                   listViewImageAlignment={listViewImageAlignment}
