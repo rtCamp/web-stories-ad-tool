@@ -93,6 +93,43 @@ class Embed {
 				<amp-story-player width="<?php echo esc_attr( $args['width'] ); ?>" height="<?php echo esc_attr( $args['height'] ); ?>" style="<?php echo esc_attr( $player_style ); ?>">
 					<a href="<?php echo esc_url( $url ); ?>" style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $title ); ?></a>
 				</amp-story-player>
+				<?php if ( true === $has_content_overlay ) : ?>
+				<div
+					class="story-content-overlay"
+				>
+					<?php if ( ! empty( $args['title'] ) ) : ?>
+					<div class="story-content-overlay__title">
+						<?php if ( ! empty( $url ) ) : ?>
+							<a href="<?php echo( esc_url( $url ) ); ?>">
+						<?php endif; ?>
+							<?php
+							echo( esc_html( $args['title'] ) );
+							?>
+						<?php if ( ! empty( $url ) ) : ?>
+							</a>
+						<?php endif; ?>
+					</div>
+					<?php endif; ?>
+					<div class="story-content-overlay__author-date">
+					<?php if ( ! empty( $args['author'] ) ) : ?>
+						<div>
+							<?php
+							_e( 'By', 'web-stories' );
+							echo( esc_html( ' ' . $args['author'] ) );
+							?>
+							</div>
+						<?php endif; ?>
+						<?php if ( ! empty( $args['date'] ) ) : ?>
+						<time class="story-content-content-overlay__date">
+							<?php
+							_e( 'On', 'web-stories' );
+							echo( esc_html( ' ' . $args['date'] ) );
+							?>
+						</time>
+						<?php endif; ?>
+					</div>
+				</div>
+				<?php endif; ?>
 			</div>
 			<?php
 
