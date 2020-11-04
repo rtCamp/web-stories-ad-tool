@@ -23,7 +23,8 @@ import classNames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { forwardRef } from '@wordpress/element';
+import { forwardRef, RawHTML } from '@wordpress/element';
+import { dateI18n, format, __experimentalGetSettings } from '@wordpress/date';
 
 function StoryPlayer(
   {
@@ -47,6 +48,7 @@ function StoryPlayer(
     [`image-align-${listViewImageAlignment}`]: listViewImageAlignment,
   });
   const hasContentOverlay = isShowingTitle || isShowingAuthor || isShowingDate;
+  const dateFormat = __experimentalGetSettings().formats.date;
 
   if (isShowingStoryPoster) {
     return (
@@ -59,13 +61,18 @@ function StoryPlayer(
           {hasContentOverlay && (
             <div className="story-content-overlay latest-stories__story-content-overlay">
               {isShowingTitle && (
-                <div className="story-content-overlay__title">{title}</div>
+                <div className="story-content-overlay__title">
+                  {title ? <RawHTML>{title}</RawHTML> : ''}
+                </div>
               )}
               <div className="story-content-overlay__author-date">
                 {isShowingAuthor && <div>{`By ${author}`}</div>}
                 {isShowingDate && (
-                  <time className="story-content-overlay__date">
-                    {`On ${date}`}
+                  <time
+                    dateTime={format('c', date)}
+                    className="story-content-overlay__date"
+                  >
+                    {dateI18n(dateFormat, date)}
                   </time>
                 )}
               </div>
@@ -85,18 +92,23 @@ function StoryPlayer(
             ['--story-player-poster']: poster ? `url('${poster}')` : undefined,
           }}
         >
-          {title ? title : ''}
+          {title ? <RawHTML>{title}</RawHTML> : ''}
         </a>
         {hasContentOverlay && (
           <div className="story-content-overlay latest-stories__story-content-overlay">
             {isShowingTitle && (
-              <div className="story-content-overlay__title">{title}</div>
+              <div className="story-content-overlay__title">
+                {title ? <RawHTML>{title}</RawHTML> : ''}
+              </div>
             )}
             <div className="story-content-overlay__author-date">
               {isShowingAuthor && <div>{`By ${author}`}</div>}
               {isShowingDate && (
-                <time className="story-content-overlay__date">
-                  {`On ${date}`}
+                <time
+                  dateTime={format('c', date)}
+                  className="story-content-overlay__date"
+                >
+                  {dateI18n(dateFormat, date)}
                 </time>
               )}
             </div>

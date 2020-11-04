@@ -490,7 +490,7 @@ class Latest_Stories_Block extends Embed_Base {
 			get_the_author_meta( 'display_name' ) :
 			'';
 		$story_date      = ( ! $is_circles_view && ! empty( $this->block_attributes['isShowingDate'] ) && ( true === $this->block_attributes['isShowingDate'] ) ) ?
-			get_the_date( 'M j, Y' ) :
+			get_the_date( 'F j, Y' ) :
 			'';
 
 		$story_attrs['url']                  = get_post_permalink( $story_id );

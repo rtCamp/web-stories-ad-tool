@@ -52,7 +52,6 @@ const AuthorSelection = ({ authors, setAttributes }) => {
           [author.name]: {
             id: author.id,
             value: author.name,
-            avatar: author.avatar_urls,
           },
         }),
         {}
@@ -101,7 +100,7 @@ const AuthorSelection = ({ authors, setAttributes }) => {
     }
 
     apiFetch({
-      path: addQueryArgs(`/wp/v2/users`, USERS_LIST_QUERY),
+      path: addQueryArgs('/wp/v2/users', USERS_LIST_QUERY),
     })
       .then((data) => {
         if (isStillMounted.current) {
