@@ -72,7 +72,7 @@ function StoryPlayer(
                     dateTime={format('c', date)}
                     className="story-content-overlay__date"
                   >
-                    {dateI18n(dateFormat, date)}
+                    {`On ${dateI18n(dateFormat, date)}`}
                   </time>
                 )}
               </div>
@@ -85,7 +85,7 @@ function StoryPlayer(
 
   return (
     <div className={singleStoryClasses}>
-      <amp-story-player height="430px" ref={ref}>
+      <amp-story-player height="430px" width="285px" ref={ref}>
         <a
           href={url}
           style={{
@@ -108,7 +108,7 @@ function StoryPlayer(
                   dateTime={format('c', date)}
                   className="story-content-overlay__date"
                 >
-                  {dateI18n(dateFormat, date)}
+                  {`On ${dateI18n(dateFormat, date)}`}
                 </time>
               )}
             </div>
