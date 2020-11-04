@@ -181,7 +181,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
                   url={storyData.link}
                   title={storyData.title.rendered}
                   date={storyData.date_gmt}
-                  author={author.name}
+                  author={author ? author.name : ''}
                   poster={storyData.featured_media_url}
                   isShowingStoryPoster={willShowStoryPoster}
                   listViewImageAlignment={listViewImageAlignment}
