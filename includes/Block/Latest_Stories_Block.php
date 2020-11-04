@@ -64,13 +64,7 @@ class Latest_Stories_Block extends Embed_Base {
 	 * @return void
 	 */
 	public function init() {
-		wp_register_script( 'amp-runtime-script', 'https://cdn.ampproject.org/v0.js', [], 'v0', true ); // @TODO: Confirm appropriate way to register these.
-		wp_register_script( 'amp-carousel-script', 'https://cdn.ampproject.org/v0/amp-carousel-0.2.js', [ 'amp-runtime-script' ], 'v0', true );
-		wp_register_script( 'amp-story-player-script', 'https://cdn.ampproject.org/v0/amp-story-player-0.1.js', [], 'v0', true );
-
-		$block_script_dependencies = [ self::STORY_PLAYER_HANDLE, Tracking::SCRIPT_HANDLE, 'amp-runtime-script', 'amp-story-player-script' ];
-
-		$this->register_script( self::SCRIPT_HANDLE, $block_script_dependencies );
+		$this->register_script( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE, Tracking::SCRIPT_HANDLE ] );
 		$this->register_style( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE ] );
 
 		wp_localize_script(
@@ -148,7 +142,6 @@ class Latest_Stories_Block extends Embed_Base {
 				'render_callback' => [ $this, 'render_block' ],
 				'editor_script'   => self::SCRIPT_HANDLE,
 				'editor_style'    => self::SCRIPT_HANDLE,
-				'script'          => self::SCRIPT_HANDLE,
 				'style'           => self::SCRIPT_HANDLE,
 			]
 		);
@@ -407,7 +400,7 @@ class Latest_Stories_Block extends Embed_Base {
 		if ( ! empty( $story_attrs['poster'] ) ) {
 			$poster = $story_attrs['poster'];
 		} else {
-			$poster = $this->get_story_poster();
+			$poster = $this->get_fallback_story_poster();
 		}
 
 		$list_view_image_alignment = 'left';
@@ -440,7 +433,7 @@ class Latest_Stories_Block extends Embed_Base {
 							?>
 						</div>
 						<?php endif; ?>
-						<div class="story-content-content-overlay__author-date">
+						<div class="story-content-overlay__author-date">
 						<?php if ( ! empty( $story_attrs['author'] ) ) : ?>
 							<div>
 								<?php
@@ -450,7 +443,7 @@ class Latest_Stories_Block extends Embed_Base {
 								</div>
 							<?php endif; ?>
 							<?php if ( ! empty( $story_attrs['date'] ) ) : ?>
-							<time class="story-content-content-overlay__date">
+							<time class="story-content-overlay__date">
 								<?php
 								_e( 'On', 'web-stories' );
 								echo( esc_html( ' ' . $story_attrs['date'] ) );
@@ -484,7 +477,7 @@ class Latest_Stories_Block extends Embed_Base {
 
 		$story_attrs = [];
 
-		if ( empty( abs_int( $story_id ) ) || empty( $this->block_attributes ) ) {
+		if ( empty( absint( $story_id ) ) || empty( $this->block_attributes ) ) {
 			return $story_attrs;
 		}
 
@@ -525,7 +518,7 @@ class Latest_Stories_Block extends Embed_Base {
 	protected function get_post_content_filtered( $post_id = null ) {
 
 		$post_content_filtered = new \stdClass();
-		$post_obj              = get_post( abs_int( $post_id ) );
+		$post_obj              = get_post( absint( $post_id ) );
 
 		if ( empty( $post_obj ) || ! is_a( $post_obj, 'WP_Post' ) ) {
 			return $post_content_filtered;
@@ -550,7 +543,7 @@ class Latest_Stories_Block extends Embed_Base {
 	 *
 	 * @return string image source url.
 	 */
-	protected function get_story_poster() {
+	protected function get_fallback_story_poster() {
 		$thumbnail_url         = '';
 		$post_content_filtered = $this->get_post_content_filtered();
 
