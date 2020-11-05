@@ -206,6 +206,8 @@ class Plugin {
 		// Customizer.
 		$this->customizer = new Customizer();
 		add_action( 'init', [ $this->customizer, 'init' ] );
+		$this->latest_stories = new Latest_Stories();
+		add_action( 'init', [ $this->latest_stories, 'init' ] );
 
 		// Embed shortcode.
 		$this->embed_shortcode = new Embed_Shortcode();
