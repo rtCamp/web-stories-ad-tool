@@ -23,9 +23,10 @@ import classNames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { useEffect, useState, useRef } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
+import { addQueryArgs } from '@wordpress/url';
 
 /**
  * Internal dependencies
@@ -54,6 +55,19 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   } = attributes;
 
   const [fetchedStories, setFetchedStories] = useState([]);
+  const [fetchedAuthors, setFetchedAuthors] = useState([]);
+
+  useEffect(() => {
+    apiFetch({
+      path: addQueryArgs('/wp/v2/users', { per_page: -1 }),
+    })
+      .then((data) => {
+        setFetchedAuthors(data);
+      })
+      .catch(() => {
+        setFetchedAuthors([]);
+      });
+  }, [fetchedStories]);
 
   useEffect(() => {
     let order,
@@ -61,6 +75,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
     switch (orderByValue) {
       case 'old-to-new':
+        orderBy = 'date';
         order = 'asc';
         break;
       case 'alphabetical':
@@ -76,17 +91,15 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         order = 'desc';
     }
 
-    const latestPostsQuery = {
-      author: authors,
+    const latestStoriesQuery = {
+      author: authors.map((author) => author.id),
       order,
       orderby: orderBy,
       per_page: numOfStories,
     };
 
     apiFetch({
-      path: `/web-stories/v1/web-story?${new URLSearchParams(
-        latestPostsQuery
-      )}`,
+      path: addQueryArgs('/web-stories/v1/web-story', latestStoriesQuery),
     })
       .then((stories) => {
         setFetchedStories(stories);
@@ -98,33 +111,13 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
       });
   }, [authors, numOfStories, orderByValue]);
 
-  const refs = useRef([]);
   const willShowStoryPoster =
     'list' === viewType || 'circles' === viewType ? true : isShowingStoryPoster;
-  const willShowTitle = 'circles' === viewType ? false : isShowingTitle;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
   const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
   const viewAllLabel = viewAllLinkLabel
     ? viewAllLinkLabel
     : __('View All Stories', 'web-stories');
-
-  useEffect(() => {
-    if (willShowStoryPoster) {
-      return;
-    }
-
-    refs.current = refs.current.slice(0, fetchedStories.length);
-
-    refs.current.forEach((el, index) => {
-      if (global.AmpStoryPlayer) {
-        refs.current[index] = new global.AmpStoryPlayer(
-          global,
-          refs.current[index]
-        );
-        refs.current[index].load();
-      }
-    });
-  }, [fetchedStories, willShowStoryPoster]);
 
   const blockClasses = classNames(
     'wp-block-web-stories-latest-stories latest-stories',
@@ -156,22 +149,24 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
       {fetchedStories && 0 < fetchedStories.length && (
         <div>
           <div className={blockClasses} style={blockStyles}>
-            {Object.keys(fetchedStories).map((index) => {
-              const storyData = fetchedStories[index];
+            {fetchedStories.map((story) => {
+              const author = fetchedAuthors.find(
+                (singleAuthorObj) => story.author === singleAuthorObj.id
+              );
 
               return (
                 <StoryPlayer
-                  key={index}
-                  ref={(el) => (refs.current[index] = el)}
-                  url={storyData.link}
-                  title={storyData.title.rendered}
-                  date={storyData.date}
-                  poster={storyData.featured_media_url}
+                  key={story.id}
+                  url={story.link}
+                  title={story.title.rendered}
+                  date={story.date_gmt}
+                  author={author ? author.name : ''}
+                  poster={story.featured_media_url}
                   isShowingStoryPoster={willShowStoryPoster}
                   listViewImageAlignment={listViewImageAlignment}
                   isShowingAuthor={willShowAuthor}
                   isShowingDate={willShowDate}
-                  isShowingTitle={willShowTitle}
+                  isShowingTitle={isShowingTitle}
                 />
               );
             })}

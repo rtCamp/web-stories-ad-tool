@@ -81,14 +81,14 @@ const LatestStoriesControls = (props) => {
   } = props;
 
   const orderByOptions = [
-    { label: __('Newest to Oldest', 'web-stories'), value: '' },
-    { label: __('Oldest to Newest', 'web-stories'), value: 'old-to-new' },
+    { label: __('Newest to oldest', 'web-stories'), value: '' },
+    { label: __('Oldest to newest', 'web-stories'), value: 'old-to-new' },
     {
-      label: _x('A -> Z', 'Sorting Order', 'web-stories'),
+      label: _x('A -> Z', 'Sorting order', 'web-stories'),
       value: 'alphabetical',
     },
     {
-      label: _x('Z -> A', 'Sorting Order', 'web-stories'),
+      label: _x('Z -> A', 'Sorting order', 'web-stories'),
       value: 'reverse-alphabetical',
     },
   ];
@@ -117,7 +117,7 @@ const LatestStoriesControls = (props) => {
         <ToolbarGroup>
           <Button
             className="components-toolbar__control"
-            label={__('Grid View', 'web-stories')}
+            label={__('Grid view', 'web-stories')}
             icon="screenoptions"
             onClick={() => {
               toggleView('grid');
@@ -126,7 +126,7 @@ const LatestStoriesControls = (props) => {
           />
           <Button
             className="components-toolbar__control"
-            label={__('List View', 'web-stories')}
+            label={__('List view', 'web-stories')}
             icon="editor-justify"
             onClick={() => {
               toggleView('list');
@@ -135,7 +135,7 @@ const LatestStoriesControls = (props) => {
           />
           <Button
             className="components-toolbar__control"
-            label={__('Circles View', 'web-stories')}
+            label={__('Circles view', 'web-stories')}
             icon="marker"
             onClick={() => {
               toggleView('circles');
@@ -156,21 +156,16 @@ const LatestStoriesControls = (props) => {
       <InspectorControls>
         <PanelBody
           className="latest-stories-settings"
-          title={__('Story Settings', 'web-stories')}
+          title={__('Story settings', 'web-stories')}
         >
           <ToggleControl
-            className={isViewType('circles') ? 'is-disabled' : ''}
-            label={__('Show Title', 'web-stories')}
-            checked={isViewType('circles') ? false : isShowingTitle}
-            onChange={() => {
-              if (!isViewType('circles')) {
-                setAttributes({ isShowingTitle: !isShowingTitle });
-              }
-            }}
+            label={__('Show title', 'web-stories')}
+            checked={isShowingTitle}
+            onChange={() => setAttributes({ isShowingTitle: !isShowingTitle })}
           />
           <ToggleControl
             className={isViewType('circles') ? 'is-disabled' : ''}
-            label={__('Show Date', 'web-stories')}
+            label={__('Show date', 'web-stories')}
             checked={isViewType('circles') ? false : isShowingDate}
             onChange={() => {
               if (!isViewType('circles')) {
@@ -180,7 +175,7 @@ const LatestStoriesControls = (props) => {
           />
           <ToggleControl
             className={isViewType('circles') ? 'is-disabled' : ''}
-            label={__('Show Author', 'web-stories')}
+            label={__('Show author', 'web-stories')}
             checked={isViewType('circles') ? false : isShowingAuthor}
             onChange={() => {
               if (!isViewType('circles')) {
@@ -209,7 +204,7 @@ const LatestStoriesControls = (props) => {
             className={
               isViewType('circles') || isViewType('list') ? 'is-disabled' : ''
             }
-            label={__('Show Story Poster Only', 'web-stories')}
+            label={__('Show story poster only', 'web-stories')}
             checked={
               isViewType('circles') || isViewType('list')
                 ? true
@@ -240,9 +235,9 @@ const LatestStoriesControls = (props) => {
           )}
         </PanelBody>
         {isViewType('carousel') && (
-          <PanelBody title={__('Carousel Settings', 'web-stories')}>
+          <PanelBody title={__('Carousel settings', 'web-stories')}>
             <ToggleControl
-              label={__('Loop Stories', 'web-stories')}
+              label={__('Loop stories', 'web-stories')}
               checked={carouselSettings.loop}
               onChange={() => {
                 const newCarouselSettings = cloneDeep(carouselSettings);
@@ -278,7 +273,7 @@ const LatestStoriesControls = (props) => {
         )}
         <PanelBody title={__('Sorting & Filtering', 'web-stories')}>
           <RangeControl
-            label={__('Number of Stories', 'web-stories')}
+            label={__('Number of stories', 'web-stories')}
             value={numOfStories}
             onChange={(updatedNumOfStories) =>
               setAttributes({ numOfStories: updatedNumOfStories })
@@ -290,7 +285,7 @@ const LatestStoriesControls = (props) => {
           />
           {isViewType('grid') && (
             <RangeControl
-              label={__('Number of Columns', 'web-stories')}
+              label={__('Number of columns', 'web-stories')}
               value={numOfColumns}
               onChange={(updatedNumOfColumns) =>
                 setAttributes({ numOfColumns: updatedNumOfColumns })
@@ -302,7 +297,7 @@ const LatestStoriesControls = (props) => {
             />
           )}
           <SelectControl
-            label={__('Order By', 'web-stories')}
+            label={__('Order by', 'web-stories')}
             options={orderByOptions}
             value={orderByValue}
             onChange={(selection) => setAttributes({ orderByValue: selection })}
