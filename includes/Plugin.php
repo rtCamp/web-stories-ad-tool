@@ -203,6 +203,10 @@ class Plugin {
 		add_action( 'init', [ $this->embed_block, 'init' ] );
 		add_action( 'init', [ $this->latest_stories_block, 'init' ] );
 
+		// Customizer.
+		$this->customizer = new Customizer();
+		add_action( 'init', [ $this->customizer, 'init' ] );
+
 		// Embed shortcode.
 		$this->embed_shortcode = new Embed_Shortcode();
 		add_action( 'init', [ $this->embed_shortcode, 'init' ] );
