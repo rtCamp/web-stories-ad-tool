@@ -95,7 +95,7 @@ class Embed {
 				</amp-story-player>
 				<?php if ( true === $has_content_overlay ) : ?>
 				<div
-					class="story-content-overlay"
+					class="story-content-overlay latest-stories__story-content-overlay"
 				>
 					<?php if ( ! empty( $args['title'] ) ) : ?>
 					<div class="story-content-overlay__title">
@@ -146,7 +146,7 @@ class Embed {
 
 			<?php if ( true === $has_content_overlay ) : ?>
 			<div
-				class="story-content-overlay"
+				class="story-content-overlay latest-stories__story-content-overlay"
 			>
 				<?php if ( ! empty( $args['title'] ) ) : ?>
 				<div class="story-content-overlay__title">

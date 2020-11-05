@@ -498,7 +498,7 @@ class Latest_Stories_Block extends Embed_Base {
 
 		$is_circles_view = $this->is_view_type( 'circles' );
 		$image_size      = $is_circles_view ? Media::POSTER_SQUARE_IMAGE_SIZE : Media::POSTER_PORTRAIT_IMAGE_SIZE;
-		$story_title     = ( ! $is_circles_view && ! empty( $this->block_attributes['isShowingTitle'] ) && ( true === $this->block_attributes['isShowingTitle'] ) ) ?
+		$story_title     = ( ! empty( $this->block_attributes['isShowingTitle'] ) && ( true === $this->block_attributes['isShowingTitle'] ) ) ?
 			get_the_title( $story_id ) :
 			'';
 		$author_name     = ( ! $is_circles_view && ! empty( $this->block_attributes['isShowingAuthor'] ) && ( true === $this->block_attributes['isShowingAuthor'] ) ) ?
