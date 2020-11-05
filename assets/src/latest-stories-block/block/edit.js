@@ -23,7 +23,7 @@ import classNames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { useEffect, useState, useRef } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
@@ -75,6 +75,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
     switch (orderByValue) {
       case 'old-to-new':
+        orderBy = 'date';
         order = 'asc';
         break;
       case 'alphabetical':
@@ -90,7 +91,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         order = 'desc';
     }
 
-    const latestPostsQuery = {
+    const latestStoriesQuery = {
       author: authors.map((author) => author.id),
       order,
       orderby: orderBy,
@@ -98,7 +99,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     };
 
     apiFetch({
-      path: addQueryArgs('/web-stories/v1/web-story', latestPostsQuery),
+      path: addQueryArgs('/web-stories/v1/web-story', latestStoriesQuery),
     })
       .then((stories) => {
         setFetchedStories(stories);
@@ -110,33 +111,13 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
       });
   }, [authors, numOfStories, orderByValue]);
 
-  const refs = useRef([]);
   const willShowStoryPoster =
     'list' === viewType || 'circles' === viewType ? true : isShowingStoryPoster;
-  const willShowTitle = 'circles' === viewType ? false : isShowingTitle;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
   const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
   const viewAllLabel = viewAllLinkLabel
     ? viewAllLinkLabel
     : __('View All Stories', 'web-stories');
-
-  useEffect(() => {
-    if (willShowStoryPoster) {
-      return;
-    }
-
-    refs.current = refs.current.slice(0, fetchedStories.length);
-
-    if (refs.current && global.AmpStoryPlayer) {
-      fetchedStories.forEach((story, index) => {
-        refs.current[index] = new global.AmpStoryPlayer(
-          global,
-          refs.current[index]
-        );
-        refs.current[index].load();
-      });
-    }
-  }, [fetchedStories, willShowStoryPoster]);
 
   const blockClasses = classNames(
     'wp-block-web-stories-latest-stories latest-stories',
@@ -168,26 +149,24 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
       {fetchedStories && 0 < fetchedStories.length && (
         <div>
           <div className={blockClasses} style={blockStyles}>
-            {Object.keys(fetchedStories).map((index) => {
-              const storyData = fetchedStories[index];
+            {fetchedStories.map((story) => {
               const author = fetchedAuthors.find(
-                (singleAuthorObj) => storyData.author === singleAuthorObj.id
+                (singleAuthorObj) => story.author === singleAuthorObj.id
               );
 
               return (
                 <StoryPlayer
-                  key={storyData.id}
-                  ref={(el) => (refs.current[index] = el)}
-                  url={storyData.link}
-                  title={storyData.title.rendered}
-                  date={storyData.date_gmt}
+                  key={story.id}
+                  url={story.link}
+                  title={story.title.rendered}
+                  date={story.date_gmt}
                   author={author ? author.name : ''}
-                  poster={storyData.featured_media_url}
+                  poster={story.featured_media_url}
                   isShowingStoryPoster={willShowStoryPoster}
                   listViewImageAlignment={listViewImageAlignment}
                   isShowingAuthor={willShowAuthor}
                   isShowingDate={willShowDate}
-                  isShowingTitle={willShowTitle}
+                  isShowingTitle={isShowingTitle}
                 />
               );
             })}

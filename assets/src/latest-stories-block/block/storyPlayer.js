@@ -23,24 +23,21 @@ import classNames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { forwardRef, RawHTML } from '@wordpress/element';
+import { useRef, useEffect, RawHTML } from '@wordpress/element';
 import { dateI18n, format, __experimentalGetSettings } from '@wordpress/date';
 
-function StoryPlayer(
-  {
-    url,
-    title,
-    poster,
-    author,
-    date,
-    isShowingStoryPoster,
-    isShowingAuthor,
-    isShowingDate,
-    isShowingTitle,
-    listViewImageAlignment,
-  },
-  ref
-) {
+function StoryPlayer({
+  url,
+  title,
+  poster,
+  author,
+  date,
+  isShowingStoryPoster,
+  isShowingAuthor,
+  isShowingDate,
+  isShowingTitle,
+  listViewImageAlignment,
+}) {
   const singleStoryClasses = classNames('latest-stories__story-wrapper', {
     'has-poster alignnone': isShowingStoryPoster,
   });
@@ -49,6 +46,15 @@ function StoryPlayer(
   });
   const hasContentOverlay = isShowingTitle || isShowingAuthor || isShowingDate;
   const dateFormat = __experimentalGetSettings().formats.date;
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (isShowingStoryPoster) {
+      return;
+    }
+    ref.current = new global.AmpStoryPlayer(global, ref.current);
+    ref.current.load();
+  }, [isShowingStoryPoster]);
 
   if (isShowingStoryPoster) {
     return (
@@ -94,27 +100,27 @@ function StoryPlayer(
         >
           {title ? <RawHTML>{title}</RawHTML> : ''}
         </a>
-        {hasContentOverlay && (
-          <div className="story-content-overlay latest-stories__story-content-overlay">
-            {isShowingTitle && (
-              <div className="story-content-overlay__title">
-                {title ? <RawHTML>{title}</RawHTML> : ''}
-              </div>
-            )}
-            <div className="story-content-overlay__author-date">
-              {isShowingAuthor && <div>{`By ${author}`}</div>}
-              {isShowingDate && (
-                <time
-                  dateTime={format('c', date)}
-                  className="story-content-overlay__date"
-                >
-                  {`On ${dateI18n(dateFormat, date)}`}
-                </time>
-              )}
-            </div>
-          </div>
-        )}
       </amp-story-player>
+      {hasContentOverlay && (
+        <div className="story-content-overlay latest-stories__story-content-overlay">
+          {isShowingTitle && (
+            <div className="story-content-overlay__title">
+              {title ? <RawHTML>{title}</RawHTML> : ''}
+            </div>
+          )}
+          <div className="story-content-overlay__author-date">
+            {isShowingAuthor && <div>{`By ${author}`}</div>}
+            {isShowingDate && (
+              <time
+                dateTime={format('c', date)}
+                className="story-content-overlay__date"
+              >
+                {`On ${dateI18n(dateFormat, date)}`}
+              </time>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -132,6 +138,4 @@ StoryPlayer.propTypes = {
   listViewImageAlignment: PropTypes.string,
 };
 
-const StoryPlayerWithRef = forwardRef(StoryPlayer);
-
-export default StoryPlayerWithRef;
+export default StoryPlayer;
