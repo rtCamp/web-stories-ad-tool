@@ -91,6 +91,7 @@ const LatestStoriesControls = (props) => {
       label: _x('Z -> A', 'Sorting order', 'web-stories'),
       value: 'reverse-alphabetical',
     },
+    { label: __('Random Stories', 'web-stories'), value: 'random' },
   ];
 
   const toggleView = (newViewType) => {
