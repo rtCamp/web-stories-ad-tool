@@ -53,12 +53,12 @@ class Generic_Renderer extends Renderer {
 
 		$content = '';
 
-		$container_classes  = $this->attributes['class'];
-		$container_classes .= ' latest-stories';
+		$container_classes  = 'web-stories ';
+		$container_classes .= $this->attributes['class'];
 
 		$single_story_classes = ( ! empty( $this->attributes['show_story_poster'] ) && true === $this->attributes['show_story_poster'] ) ?
-			'latest-stories__story-wrapper has-poster alignnone' :
-			'latest-stories__story-wrapper';
+			'web-stories__story-wrapper has-poster alignnone' :
+			'web-stories__story-wrapper';
 
 		$container_classes .= ( ! empty( $this->attributes['view_type'] ) ) ? " is-view-type-{$this->attributes['view_type']}" : ' is-view-type-grid';
 		$container_classes .= ( ! empty( $this->attributes['align'] ) ) ? " align{$this->attributes['align']}" : ' alignnone';
@@ -145,7 +145,7 @@ class Generic_Renderer extends Renderer {
 
 			?>
 
-			<div class="latest-stories__archive-link">
+			<div class="web-stories__archive-link">
 				<a href="<?php echo( esc_url_raw( $web_stories_archive ) ); ?>">
 					<?php echo( esc_html( $this->attributes['view_all_label'] ) ); ?>
 				</a>
@@ -192,7 +192,7 @@ class Generic_Renderer extends Renderer {
 				href="<?php echo( esc_url_raw( $story_data['url'] ) ); ?>"
 			>
 				<div
-					class="latest-stories__story-placeholder"
+					class="web-stories__story-placeholder"
 					style="background-image: url(<?php echo( esc_url_raw( $poster ) ); ?>)"
 				></div>
 				<?php
@@ -266,11 +266,13 @@ class Generic_Renderer extends Renderer {
 
 	/**
 	 * Renders the content overlay markup.
+	 *
+	 * @param array $story_data Story item data. Contains information like url, height, width, etc of the story.
 	 */
 	protected function get_content_overlay( $story_data ) {
 		?>
 		<div
-			class="story-content-overlay latest-stories__story-content-overlay"
+			class="story-content-overlay web-stories__story-content-overlay"
 		>
 			<?php if ( ! empty( $story_data['title'] ) ) : ?>
 			<div class="story-content-overlay__title">
