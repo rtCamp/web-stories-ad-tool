@@ -74,6 +74,7 @@
 .wp-block-web-stories-latest-stories .latest-stories__story-wrapper {
   max-width: 285px;
   position: relative;
+  cursor: pointer;
 }
 
 .wp-block-web-stories-latest-stories amp-story-player,
@@ -149,8 +150,9 @@
 }
 
 .wp-block-web-stories-latest-stories .latest-stories__story-placeholder {
+  /* stylelint-disable-line no-descending-specificity */
   background-size: cover;
-  background-position: center; /* stylelint-disable-line no-descending-specificity */
+  background-position: center;
   height: 430px;
 }
 
@@ -169,37 +171,49 @@
   border-color: #333;
 }
 
-.components-toggle-control.is-disabled .components-form-toggle__track {
-  background-color: lightgrey;
-  border-color: lightgrey;
+/* Lightbox styles */
+.wp-block-web-stories-latest-stories .latest-stories__story-lightbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background: black;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  visibility: hidden;
+  transition: visibility 0.2s linear, opacity 0.2s linear;
+  opacity: 0;
 }
 
-.components-toggle-control.is-disabled .components-form-toggle__thumb {
+.wp-block-web-stories-latest-stories .latest-stories__story-lightbox.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.wp-block-web-stories-latest-stories .story-lightbox__close-button {
+  display: inline-block;
+  position: fixed;
   background-color: #fff;
-  border-color: #fff;
+  left: 45px;
+  top: 30px;
+  height: 30px;
+  width: 2px;
+  transform: rotateZ(45deg);
 }
 
-.components-toggle-control.is-disabled .components-form-toggle__input,
-.components-toggle-control.is-disabled .components-toggle-control__label {
-  cursor: unset;
+.wp-block-web-stories-latest-stories .story-lightbox__close-button::before {
+  content: '';
+  height: 30px;
+  width: 2px;
+  display: inline-block;
+  background-color: #fff;
+  transform: rotateZ(90deg);
 }
 
 /* Stories Archive Link Settings */
 .latest-stories__archive-link {
   margin-top: 16px;
-}
-
-/* Setting controls styles */
-.components-input-control__input {
-  text-align: center;
-}
-
-.latest-stories-settings__image-alignment .components-base-control__field {
-  display: flex;
-  align-items: center;
-}
-
-.latest-stories-settings__image-alignment .components-base-control__label {
-  margin-right: 8px;
-  margin-bottom: 0;
 }
