@@ -50,8 +50,24 @@ class Stories {
 	/**
 	 * Class constructor
 	 *
-	 * @param array $story_attributes An array of attributes.
-	 * @param array $query_arguments An array of story query arguments.
+	 * @param array $story_attributes {
+	 *     An array of story attributes.
+	 *
+	 *     @type string $view_type                 Stories View type. Default circles.
+	 *     @type int    $number_of_columns         Number of columns to show in grid view. Default 2.
+	 *     @type bool   $show_title                Whether to show story title or not. Default false.
+	 *     @type bool   $show_author               Whether to show story author or not. Default false.
+	 *     @type bool   $show_date                 Whether to show story date or not. Default false.
+	 *     @type bool   $show_story_poster         Whether to show story story poster or show story player. Default true.
+	 *     @type bool   $show_view_all_link        Whether to show view all link or not. Default false.
+	 *     @type string $view_all_label            The label for view all link. Default 'View all stories'.
+	 *     @type string $list_view_image_alignment The list mode image alignment. Default 'left'.
+	 *     @type bool   $autoplay_carousel         Whether to autoplay the carousel or not. Default false.
+	 *     @type bool   $loop_carousel             Whether to loop the carousel or not. Default false.
+	 *     @type int    $delay                     Autoplay carousel delay( in seconds ). Default 5.
+	 *     @type string $class                     Additional CSS classes for the container. Default empty string.
+	 * }
+	 * @param array $query_arguments An array of story query arguments. @see WP_Query::parse_query()
 	 */
 	public function __construct( $story_attributes = [], $query_arguments = [] ) {
 
@@ -74,7 +90,7 @@ class Stories {
 	}
 
 	/**
-	 * Instansiates the renderer classes.
+	 * Instansiates the renderer classes based on the view type.
 	 */
 	private function make_renderer() {
 		$this->renderer = new Generic_Renderer( $this );

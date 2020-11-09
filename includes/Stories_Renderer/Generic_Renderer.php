@@ -26,6 +26,7 @@
 
 namespace Google\Web_Stories\Stories_Renderer;
 
+use Google\Web_Stories\Embed_Base;
 use Google\Web_Stories\Story_Post_Type;
 
 /**
@@ -33,25 +34,10 @@ use Google\Web_Stories\Story_Post_Type;
  */
 class Generic_Renderer extends Renderer {
 
-
-	/**
-	 * Stories object
-	 *
-	 * @var Stories Stories object
-	 */
-	protected $stories;
-
-	/**
-	 * Story attributes
-	 *
-	 * @var array An array of story attributes.
-	 */
-	protected $attributes = [];
-
 	/**
 	 * Class constructor
 	 *
-	 * @param Stories $stories An array of attributes.
+	 * @param Stories $stories Stories instance.
 	 */
 	public function __construct( $stories ) {
 		$this->stories    = $stories;
@@ -59,7 +45,7 @@ class Generic_Renderer extends Renderer {
 	}
 
 	/**
-	 * Renders the block type output for given attributes.
+	 * Renders the stories output for given attributes.
 	 *
 	 * @return string Rendered stories output.
 	 */
@@ -67,66 +53,90 @@ class Generic_Renderer extends Renderer {
 
 		$content = '';
 
-		$container_classes    = $this->attributes['class'];
-		$container_classes   .= ' latest-stories';
+		$container_classes  = $this->attributes['class'];
+		$container_classes .= ' latest-stories';
+
 		$single_story_classes = ( ! empty( $this->attributes['show_story_poster'] ) && true === $this->attributes['show_story_poster'] ) ?
 			'latest-stories__story-wrapper has-poster alignnone' :
 			'latest-stories__story-wrapper';
-		$container_style      = '';
 
 		$container_classes .= ( ! empty( $this->attributes['view_type'] ) ) ? " is-view-type-{$this->attributes['view_type']}" : ' is-view-type-grid';
 		$container_classes .= ( ! empty( $this->attributes['align'] ) ) ? " align{$this->attributes['align']}" : ' alignnone';
 
-		if ( ! empty( $this->attributes['view_type'] && 'grid' === $this->attributes['view_type'] ) ) {
-			$container_style .= "grid-template-columns:repeat({$this->attributes['number_of_columns']}, 1fr);";
-		}
+		$container_style = ( true === $this->is_view_type( 'grid' ) ) ? "grid-template-columns:repeat({$this->attributes['number_of_columns']}, 1fr);" : '';
 
 		$is_circles_view = $this->is_view_type( 'circles' );
 		$is_list_view    = $this->is_view_type( 'list' );
 
 		$story_posts = $this->stories->get_stories();
 
-		if ( ! empty( $story_posts ) ) :
+		if ( empty( $story_posts ) ) {
+			return '';
+		}
 
-			ob_start();
-			?>
-			<div>
-				<div
-					class="<?php echo( esc_attr( $container_classes ) ); ?>"
-					style="<?php echo( esc_attr( $container_style ) ); ?>"
-				>
-					<?php
-					foreach ( $story_posts as $story_post ) :
-
-						$story_attrs = $this->get_story_item_data( $story_post->ID, $single_story_classes, $this->attributes );
-
-						// @todo Add code to show amp-story player in else condition.
-						if ( ( $is_list_view || $is_circles_view ) || ( ! empty( $this->attributes['show_story_poster'] && true === $this->attributes['show_story_poster'] ) ) ) :
-							echo( $this->render_story_with_poster( $story_attrs, $single_story_classes ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							endif;
-
-						endforeach;
+		ob_start();
+		?>
+		<div>
+			<div
+				class="<?php echo( esc_attr( $container_classes ) ); ?>"
+				style="<?php echo( esc_attr( $container_style ) ); ?>"
+			>
+				<?php
+				if ( $this->is_view_type( 'carousel' ) ) :
 					?>
-				</div>
-				<?php $this->maybe_render_archive_link(); ?>
+					<amp-carousel
+						width="400"
+						height="280"
+						layout="responsive"
+						type="slides"
+						role="region"
+						aria-label="Basic carousel"
+						<?php
+						if ( ! empty( $this->attributes['autoplay'] ) && ( true === $this->attributes['autoplay'] ) ) {
+							echo( 'autoplay' );
+						}
+						?>
+						<?php
+						if ( ! empty( $this->attributes['loop'] ) && ( true === $this->attributes['loop'] ) ) {
+							echo( 'loop' );
+						}
+						?>
+						delay="<?php echo( ! empty( $this->attributes['delay'] ) ) ? ( absint( $this->attributes['delay'] ) * 1000 ) : ''; ?>"
+					>
+					<?php
+				endif;
+
+				foreach ( $story_posts as $story_post ) :
+
+					$story_data = $this->get_story_item_data( $story_post->ID, $single_story_classes, $this->attributes );
+
+					if ( ( $is_list_view || $is_circles_view ) || ( true === $this->attributes['show_story_poster'] ) ) :
+						echo( $this->render_story_with_poster( $story_data, $single_story_classes ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					else :
+						echo( $this->render_story_with_story_player( $story_data, $single_story_classes ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					endif;
+
+				endforeach;
+
+				if ( $this->is_view_type( 'carousel' ) ) :
+					?>
+					</amp-carousel>
+					<?php
+				endif;
+				?>
 			</div>
-			<?php
+			<?php $this->maybe_render_archive_link(); ?>
+		</div>
+		<?php
 
-			$content = (string) ob_get_clean();
-		endif;
-
-		wp_reset_postdata();
+		$content = (string) ob_get_clean();
 
 		return $content;
 
 	}
 
 	/**
-	 * Renders stories archive link conditionally dependeing on the block attributes.
-	 *
-	 * @since
-	 *
-	 * @return void
+	 * Renders stories archive link conditionally depending on the attributes.
 	 */
 	protected function maybe_render_archive_link() {
 
@@ -150,28 +160,28 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @since
 	 *
-	 * @param array  $story_attrs          Story attributes. Contains information like url, height, width, etc of the story.
+	 * @param array  $story_data           Story item data. Contains information like url, height, width, etc of the story.
 	 * @param string $single_story_classes Single story's classes.
 	 *
 	 * @return string
 	 */
-	protected function render_story_with_poster( $story_attrs, $single_story_classes = '' ) {
+	protected function render_story_with_poster( $story_data, $single_story_classes = '' ) {
 
-		if ( empty( $story_attrs['url'] ) ) {
+		if ( empty( $story_data['url'] ) ) {
 			return '';
 		}
 
 		$has_content_overlay  = false;
 		$single_story_classes = ( ! empty( $single_story_classes ) && is_string( $single_story_classes ) ) ? $single_story_classes : '';
 
-		if ( ! empty( $story_attrs['show_content_overlay'] ) && ( true === $story_attrs['show_content_overlay'] ) ) {
+		if ( ! empty( $story_data['show_content_overlay'] ) && ( true === $story_data['show_content_overlay'] ) ) {
 			$has_content_overlay = true;
 		}
 
-		if ( ! empty( $story_attrs['poster'] ) ) {
-			$poster = $story_attrs['poster'];
+		if ( ! empty( $story_data['poster'] ) ) {
+			$poster = $story_data['poster'];
 		} else {
-			$poster = $this->get_fallback_story_poster( $story_attrs['ID'] );
+			$poster = $this->get_fallback_story_poster( $story_data['ID'] );
 		}
 
 		ob_start();
@@ -179,7 +189,7 @@ class Generic_Renderer extends Renderer {
 
 		<div class="<?php echo( esc_attr( $single_story_classes ) ); ?>">
 			<a class="<?php echo( esc_attr( "image-align-{$this->attributes['list_view_image_alignment']}" ) ); ?>"
-				href="<?php echo( esc_url_raw( $story_attrs['url'] ) ); ?>"
+				href="<?php echo( esc_url_raw( $story_data['url'] ) ); ?>"
 			>
 				<div
 					class="latest-stories__story-placeholder"
@@ -187,37 +197,7 @@ class Generic_Renderer extends Renderer {
 				></div>
 				<?php
 				if ( true === $has_content_overlay ) :
-					?>
-					<div
-						class="story-content-overlay latest-stories__story-content-overlay"
-					>
-						<?php if ( ! empty( $story_attrs['title'] ) ) : ?>
-						<div class="story-content-overlay__title">
-							<?php
-							echo( esc_html( $story_attrs['title'] ) );
-							?>
-						</div>
-						<?php endif; ?>
-						<div class="story-content-overlay__author-date">
-						<?php if ( ! empty( $story_attrs['author'] ) ) : ?>
-							<div>
-								<?php
-								_e( 'By', 'web-stories' );
-								echo( esc_html( ' ' . $story_attrs['author'] ) );
-								?>
-								</div>
-							<?php endif; ?>
-							<?php if ( ! empty( $story_attrs['date'] ) ) : ?>
-							<time class="story-content-overlay__date">
-								<?php
-								_e( 'On', 'web-stories' );
-								echo( esc_html( ' ' . $story_attrs['date'] ) );
-								?>
-							</time>
-							<?php endif; ?>
-						</div>
-					</div>
-					<?php
+					$this->get_content_overlay( $story_data );
 				endif;
 				?>
 			</a>
@@ -226,6 +206,99 @@ class Generic_Renderer extends Renderer {
 		<?php
 
 		return (string) ob_get_clean();
+	}
+
+	/**
+	 * Renders a story with story's poster image.
+	 *
+	 * @since
+	 *
+	 * @param array  $story_data          Story attributes. Contains information like url, height, width, etc of the story.
+	 * @param string $single_story_classes Single story's classes.
+	 *
+	 * @return string
+	 */
+	protected function render_story_with_story_player( $story_data, $single_story_classes = '' ) {
+
+		$is_amp_request = ( function_exists( 'amp_is_request' ) && amp_is_request() ) ||
+		( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() );
+
+		$height = 600;
+		$width  = 360;
+
+		$player_style = sprintf( 'width: %dpx;height: %dpx', $width, $height );
+
+		// Enqueue standalone amp story player scripts for non AMP pages.
+		if ( true === $is_amp_request ) {
+			$story_player_attributes = sprintf( 'height=600 width=360 style="%3$s"', $height, $width, $player_style );
+		} else {
+			$story_player_attributes = sprintf( 'style="%1$s"', $player_style );
+			wp_enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
+			wp_enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
+		}
+
+		$poster_style = ! empty( $story_data['poster'] ) ? sprintf( '--story-player-poster: url(%s)', $story_data['poster'] ) : '';
+
+		$has_content_overlay = false;
+
+		if ( ! empty( $story_data['show_content_overlay'] ) && ( true === $story_data['show_content_overlay'] ) ) {
+			$has_content_overlay = true;
+		}
+
+		ob_start();
+
+		?>
+		<div class="<?php echo( esc_attr( $single_story_classes ) ); ?>">
+			<amp-story-player <?php echo esc_attr( $story_player_attributes ); ?> >
+				<a href="<?php echo esc_url( $story_data['url'] ); ?>" style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $story_data['title'] ); ?></a>
+			</amp-story-player>
+
+			<?php
+			if ( true === $has_content_overlay ) :
+				$this->get_content_overlay( $story_data );
+				endif;
+			?>
+		</div>
+		<?php
+
+		return (string) ob_get_clean();
+	}
+
+	/**
+	 * Renders the content overlay markup.
+	 */
+	protected function get_content_overlay( $story_data ) {
+		?>
+		<div
+			class="story-content-overlay latest-stories__story-content-overlay"
+		>
+			<?php if ( ! empty( $story_data['title'] ) ) : ?>
+			<div class="story-content-overlay__title">
+				<?php
+				echo( esc_html( $story_data['title'] ) );
+				?>
+			</div>
+			<?php endif; ?>
+			<div class="story-content-overlay__author-date">
+				<?php if ( ! empty( $story_data['author'] ) ) : ?>
+				<div>
+					<?php
+					esc_html_e( 'By', 'web-stories' );
+					echo( esc_html( ' ' . $story_data['author'] ) );
+					?>
+					</div>
+				<?php endif; ?>
+				<?php if ( ! empty( $story_data['date'] ) ) : ?>
+				<time class="story-content-overlay__date">
+					<?php
+					esc_html_e( 'On', 'web-stories' );
+					echo( esc_html( ' ' . $story_data['date'] ) );
+					?>
+				</time>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php
 	}
 
 }

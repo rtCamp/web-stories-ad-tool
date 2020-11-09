@@ -1,6 +1,6 @@
 <?php
 /**
- * Renderer Base class.
+ * Stories Renderer Base class.
  *
  * @package   Google\Web_Stories
  * @copyright 2020 Google LLC
@@ -32,6 +32,20 @@ use Google\Web_Stories\Media;
  * Renderer class.
  */
 class Renderer {
+
+	/**
+	 * Stories object
+	 *
+	 * @var Stories Stories object
+	 */
+	protected $stories;
+
+	/**
+	 * Story attributes
+	 *
+	 * @var array An array of story attributes.
+	 */
+	protected $attributes = [];
 
 	/**
 	 * Returns story item data.
