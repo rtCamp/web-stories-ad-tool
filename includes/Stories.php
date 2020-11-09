@@ -48,6 +48,13 @@ class Stories {
 	protected $query_arguments = [];
 
 	/**
+	 * Renderer object.
+	 *
+	 * @var Renderer
+	 */
+	public $renderer;
+
+	/**
 	 * Class constructor
 	 *
 	 * @param array $story_attributes {
@@ -73,8 +80,6 @@ class Stories {
 
 		$this->story_attributes = $story_attributes;
 		$this->query_arguments  = $query_arguments;
-
-		$this->make_renderer();
 	}
 
 	/**
@@ -102,6 +107,7 @@ class Stories {
 	 * @return string
 	 */
 	public function render() {
+		$this->make_renderer();
 		return $this->renderer->render();
 	}
 
