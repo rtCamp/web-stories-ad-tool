@@ -77,16 +77,16 @@ class Renderer {
 			get_the_date( 'M j, Y' ) :
 			'';
 
-			$story_attrs['ID']                   = $story_id;
-			$story_attrs['url']                  = get_post_permalink( $story_id );
-			$story_attrs['title']                = $story_title;
-			$story_attrs['height']               = '430';
-			$story_attrs['width']                = '285';
-			$story_attrs['poster']               = get_the_post_thumbnail_url( $story_id, $image_size );
-			$story_attrs['author']               = $author_name;
-			$story_attrs['date']                 = $story_date;
-			$story_attrs['class']                = ( is_string( $single_story_classes ) ? $single_story_classes : '' );
-			$story_attrs['show_content_overlay'] = ( ! empty( $story_title ) || ! empty( $author_name ) || ! empty( $story_date ) ) ? true : false;
+		$story_attrs['ID']                   = $story_id;
+		$story_attrs['url']                  = get_post_permalink( $story_id );
+		$story_attrs['title']                = $story_title;
+		$story_attrs['height']               = '430';
+		$story_attrs['width']                = '285';
+		$story_attrs['poster']               = get_the_post_thumbnail_url( $story_id, $image_size );
+		$story_attrs['author']               = $author_name;
+		$story_attrs['date']                 = $story_date;
+		$story_attrs['class']                = ( is_string( $single_story_classes ) ? $single_story_classes : '' );
+		$story_attrs['show_content_overlay'] = ( ! empty( $story_title ) || ! empty( $author_name ) || ! empty( $story_date ) );
 
 		return $story_attrs;
 	}
