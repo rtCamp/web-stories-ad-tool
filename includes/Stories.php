@@ -1,0 +1,143 @@
+<?php
+/**
+ * Stories class.
+ *
+ * @package   Google\Web_Stories
+ * @copyright 2020 Google LLC
+ * @license   https://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
+ * @link      https://github.com/google/web-stories-wp
+ */
+
+/**
+ * Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+namespace Google\Web_Stories;
+
+use Google\Web_Stories\Stories_Renderer\Generic_Renderer;
+
+/**
+ * Stories class.
+ */
+class Stories {
+
+	/**
+	 * Story attributes
+	 *
+	 * @var array An array of story attributes.
+	 */
+	protected $story_attributes = [];
+
+	/**
+	 * Story query arguments.
+	 *
+	 * @var array An array of query arguments.
+	 */
+	protected $query_arguments = [];
+
+	/**
+	 * Class constructor
+	 *
+	 * @param array $story_attributes An array of attributes.
+	 * @param array $query_arguments An array of story query arguments.
+	 */
+	public function __construct( $story_attributes = [], $query_arguments = [] ) {
+
+		$this->story_attributes = $story_attributes;
+		$this->query_arguments  = $query_arguments;
+
+		$this->make_renderer();
+	}
+
+	/**
+	 * Returns an array of story IDs.
+	 *
+	 * @return array An array of post IDS
+	 */
+	public function get_stories() {
+		$query_args    = $this->get_query_args();
+		$stories_query = new \WP_Query( $query_args );
+
+		return $stories_query->posts;
+	}
+
+	/**
+	 * Instansiates the renderer classes.
+	 */
+	private function make_renderer() {
+		$this->renderer = new Generic_Renderer( $this );
+	}
+
+	/**
+	 * Renders the stories output.
+	 *
+	 * @return string
+	 */
+	public function render() {
+		return $this->renderer->render();
+	}
+
+	/**
+	 * Gets an array of story attributes.
+	 *
+	 * @return array
+	 */
+	public function get_story_attributes() {
+
+		$default_attributes = [
+			'view_type'                 => 'circles',
+			'number_of_columns'         => 2,
+			'show_title'                => false,
+			'show_author'               => false,
+			'show_date'                 => false,
+			'show_story_poster'         => true,
+			'show_view_all_link'        => false,
+			'view_all_label'            => 'View all stories',
+			'list_view_image_alignment' => 'left',
+			'autoplay_carousel'         => false,
+			'loop_carousel'             => false,
+			'delay'                     => 5,
+			'class'                     => '',
+		];
+
+		$story_attributes = wp_parse_args( $this->story_attributes, $default_attributes );
+
+		return $story_attributes;
+
+	}
+
+	/**
+	 * Returns arguments to be passed to the WP_Query object initialization.
+	 *
+	 * @since
+	 *
+	 * @return array Query arguments.
+	 */
+	protected function get_query_args() {
+
+		$default_query_args = [
+			'post_type'        => Story_Post_Type::POST_TYPE_SLUG,
+			'posts_per_page'   => 10,
+			'post_status'      => 'publish',
+			'suppress_filters' => false,
+			'no_found_rows'    => true,
+		];
+
+		$query_args = wp_parse_args( $this->query_arguments, $default_query_args );
+
+		return $query_args;
+	}
+
+}
