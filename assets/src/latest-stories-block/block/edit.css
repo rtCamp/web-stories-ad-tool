@@ -149,8 +149,9 @@
 }
 
 .wp-block-web-stories-latest-stories .latest-stories__story-placeholder {
+  /* stylelint-disable-line no-descending-specificity */
   background-size: cover;
-  background-position: center; /* stylelint-disable-line no-descending-specificity */
+  background-position: center;
   height: 430px;
 }
 
@@ -202,4 +203,12 @@
 .latest-stories-settings__image-alignment .components-base-control__label {
   margin-right: 8px;
   margin-bottom: 0;
+}
+
+/* Story overlay styles */
+.wp-block-web-stories-latest-stories .latest-stories__story-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
