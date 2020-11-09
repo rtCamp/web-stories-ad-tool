@@ -54,6 +54,13 @@ class Stories {
 	 */
 	public $renderer;
 
+	/*
+	 * Web Stories stylesheet handle.
+	 *
+	 * @var string
+	 */
+	const STYLE_HANDLE = 'web-stories-styles';
+
 	/**
 	 * Class constructor
 	 *
@@ -107,8 +114,16 @@ class Stories {
 	 * @return string
 	 */
 	public function render() {
+		// Enqueue stories styles.
+		wp_enqueue_style(
+			self::STYLE_HANDLE,
+			WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/stories.css',
+			[],
+			'v0',
+			false
+		);
+
 		$this->make_renderer();
-		return $this->renderer->render();
 	}
 
 	/**
