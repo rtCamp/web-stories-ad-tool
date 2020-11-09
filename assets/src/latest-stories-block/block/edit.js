@@ -86,6 +86,10 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         orderBy = 'title';
         order = 'desc';
         break;
+      case 'random':
+        orderBy = 'rand';
+        order = 'desc';
+        break;
       default:
         orderBy = 'date';
         order = 'desc';
@@ -119,6 +123,11 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     ? viewAllLinkLabel
     : __('View All Stories', 'web-stories');
 
+  const storiesToDisplay =
+    fetchedStories.length > numOfStories
+      ? fetchedStories.slice(0, numOfStories)
+      : fetchedStories;
+
   const blockClasses = classNames(
     'wp-block-web-stories-latest-stories latest-stories',
     { [`is-view-type-${viewType}`]: viewType },
@@ -146,10 +155,10 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         listViewImageAlignment={listViewImageAlignment}
         setAttributes={setAttributes}
       />
-      {fetchedStories && 0 < fetchedStories.length && (
+      {storiesToDisplay && 0 < storiesToDisplay.length && (
         <div>
           <div className={blockClasses} style={blockStyles}>
-            {fetchedStories.map((story) => {
+            {storiesToDisplay.map((story) => {
               const author = fetchedAuthors.find(
                 (singleAuthorObj) => story.author === singleAuthorObj.id
               );
