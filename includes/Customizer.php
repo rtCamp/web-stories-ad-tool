@@ -65,8 +65,8 @@ class Customizer {
 
 		$options = get_theme_support( 'web-story-options' );
 
-		$view_mode         = ( ! empty( $options[0]['view-type'] ) && is_array( $options[0]['view-type'] ) ) ? $options[0]['view-type'] : [];
-		$view_mode_default = ( ! empty( $options[0]['view-type-default'] ) ) ? $options[0]['view-type-default'] : 'circles';
+		$view_type         = ( ! empty( $options[0]['view-type'] ) && is_array( $options[0]['view-type'] ) ) ? $options[0]['view-type'] : [];
+		$view_type_default = ( ! empty( $options[0]['view-type-default'] ) ) ? $options[0]['view-type-default'] : 'circles';
 
 		$section_title         = ( ! empty( $options[0]['section-title'] ) ) ? $options[0]['section-title'] : false;
 		$section_title_default = ( ! empty( $options[0]['section-title-default'] ) ) ? $options[0]['section-title-default'] : 'Visual Stories';
@@ -127,7 +127,7 @@ class Customizer {
 		$wp_customize->add_setting(
 			'story-options[view_type]',
 			[
-				'default' => $view_mode_default,
+				'default' => $view_type_default,
 				'type'    => 'option',
 			]
 		);
@@ -136,9 +136,9 @@ class Customizer {
 			'story-options[view_type]',
 			[
 				'section'         => self::SECTION_SLUG,
-				'label'           => __( 'Story view mode', 'web-stories' ),
+				'label'           => __( 'Story view type', 'web-stories' ),
 				'type'            => 'select',
-				'choices'         => $this->get_view_mode_choices( $view_mode ),
+				'choices'         => $this->get_view_type_choices( $view_type ),
 				'active_callback' => function() {
 					return $this->is_option_enabled( 'show_stories' );
 				},
@@ -468,33 +468,33 @@ class Customizer {
 	}
 
 	/**
-	 * Gets the view mode choices.
+	 * Gets the view type choices.
 	 *
-	 * @param array $view_modes View mode to check.
+	 * @param array $view_type View type to check.
 	 */
-	public function get_view_mode_choices( $view_modes ) {
+	public function get_view_type_choices( $view_type ) {
 
-		if ( empty( $view_modes ) ) {
+		if ( empty( $view_type ) ) {
 			return [ 'circles' => __( 'Circles', 'web-stories' ) ];
 		}
 
-		if ( in_array( 'circles', $view_modes ) ) {
-			$view_mode_choices['circles'] = __( 'Circles', 'web-stories' );
+		if ( in_array( 'circles', $view_type ) ) {
+			$view_type_choices['circles'] = __( 'Circles', 'web-stories' );
 		}
 
-		if ( in_array( 'grid', $view_modes ) ) {
-			$view_mode_choices['grid'] = __( 'Grid', 'web-stories' );
+		if ( in_array( 'grid', $view_type ) ) {
+			$view_type_choices['grid'] = __( 'Grid', 'web-stories' );
 		}
 
-		if ( in_array( 'list', $view_modes ) ) {
-			$view_mode_choices['list'] = __( 'List', 'web-stories' );
+		if ( in_array( 'list', $view_type ) ) {
+			$view_type_choices['list'] = __( 'List', 'web-stories' );
 		}
 
-		if ( in_array( 'carousel', $view_modes ) ) {
-			$view_mode_choices['carousel'] = __( 'Carousel', 'web-stories' );
+		if ( in_array( 'carousel', $view_type ) ) {
+			$view_type_choices['carousel'] = __( 'Carousel', 'web-stories' );
 		}
 
-		return $view_mode_choices;
+		return $view_type_choices;
 
 	}
 
