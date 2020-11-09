@@ -65,16 +65,17 @@ class Renderer {
 			return $story_attrs;
 		}
 
+		$author_id       = get_post_field( 'post_author', $story_id );
 		$is_circles_view = $this->is_view_type( 'circles' );
 		$image_size      = $is_circles_view ? Media::POSTER_SQUARE_IMAGE_SIZE : Media::POSTER_PORTRAIT_IMAGE_SIZE;
 		$story_title     = ( ! empty( $this->attributes['show_title'] ) && ( true === $this->attributes['show_title'] ) ) ?
 			get_the_title( $story_id ) :
 			'';
 		$author_name     = ( ! $is_circles_view && ! empty( $this->attributes['show_author'] ) && ( true === $this->attributes['show_author'] ) ) ?
-			get_the_author_meta( 'display_name' ) :
+			get_the_author_meta( 'display_name', $author_id ) :
 			'';
 		$story_date      = ( ! $is_circles_view && ! empty( $this->attributes['show_date'] ) && ( true === $this->attributes['show_date'] ) ) ?
-			get_the_date( 'M j, Y' ) :
+			get_the_date( 'M j, Y', $story_id ) :
 			'';
 
 		$story_attrs['ID']                   = $story_id;
