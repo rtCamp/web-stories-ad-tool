@@ -269,6 +269,15 @@ class Latest_Stories_Block extends Embed_Base {
 						$story_attrs     = $this->get_story_attrs( $current_post_id, $single_story_classes );
 
 						if ( ( $is_list_view || $is_circles_view ) || ( ! empty( $attributes['isShowingStoryPoster'] && true === $attributes['isShowingStoryPoster'] ) ) ) :
+							if (
+								( function_exists( 'amp_is_request' ) && ! amp_is_request() ) ||
+								( function_exists( 'is_amp_endpoint' ) && ! is_amp_endpoint() )
+							) {
+								wp_enqueue_script( 'amp-runtime-script', 'https://cdn.ampproject.org/v0.js', [], 'v0', false );
+								wp_enqueue_script( 'amp-story-player-script', 'https://cdn.ampproject.org/v0/amp-story-player-0.1.js', [], 'v0', false );
+								wp_enqueue_script( 'amp-bind-script', 'https://cdn.ampproject.org/v0/amp-bind-0.1.js', [], 'v0', false );
+							}
+
 							echo( $this->render_story_with_poster( $story_attrs, $single_story_classes, $attributes ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						else :
 							echo( $this->render( $story_attrs ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -341,6 +350,10 @@ class Latest_Stories_Block extends Embed_Base {
 					$query_args['orderby'] = 'title';
 					$query_args['order']   = 'DESC';
 					break;
+				case 'random':
+					$query_args['orderby'] = 'rand';
+					$query_args['order']   = 'DESC';
+					break;
 			}
 		}
 
@@ -407,6 +420,8 @@ class Latest_Stories_Block extends Embed_Base {
 
 		$has_content_overlay  = false;
 		$single_story_classes = ( ! empty( $single_story_classes ) && is_string( $single_story_classes ) ) ? $single_story_classes : '';
+		$current_post_id      = get_the_ID();
+		$lightbox_state       = "lightbox{$current_post_id}";
 
 		if ( ! empty( $story_attrs['show_content_overlay'] ) && ( true === $story_attrs['show_content_overlay'] ) ) {
 			$has_content_overlay = true;
@@ -426,11 +441,24 @@ class Latest_Stories_Block extends Embed_Base {
 
 		ob_start();
 		?>
-
-		<div class="<?php echo( esc_attr( $single_story_classes ) ); ?>">
-			<a class="<?php echo( esc_attr( "image-align-{$list_view_image_alignment}" ) ); ?>"
-				href="<?php echo( esc_url_raw( $story_attrs['url'] ) ); ?>"
+		<div
+			class="<?php echo( esc_attr( $single_story_classes ) ); ?>"
+			on="tap:AMP.setState({<?php echo( esc_attr( $lightbox_state ) ); ?>: ! <?php echo( esc_attr( $lightbox_state ) ); ?>})"
+		>
+			<div
+				class="latest-stories__story-lightbox story-lightbox"
+				[class]="<?php echo( esc_attr( $lightbox_state ) ); ?> ? 'latest-stories__story-lightbox show' : 'latest-stories__story-lightbox'"
 			>
+				<span class="story-lightbox__close-button"></span>
+				<amp-story-player
+					width="285"
+					height="430"
+					layout="responsive"
+				>
+					<a href="<?php echo( esc_url_raw( $story_attrs['url'] ) ); ?>"></a>
+				</amp-story-player>
+			</div>
+			<div class="<?php echo( esc_attr( "image-align-{$list_view_image_alignment}" ) ); ?>">
 				<div
 					class="latest-stories__story-placeholder"
 					style="background-image: url(<?php echo( esc_url_raw( $poster ) ); ?>)"
@@ -470,7 +498,7 @@ class Latest_Stories_Block extends Embed_Base {
 					<?php
 				endif;
 				?>
-			</a>
+			</div>
 		</div>
 
 		<?php
