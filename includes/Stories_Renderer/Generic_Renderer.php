@@ -57,7 +57,7 @@ class Generic_Renderer extends Renderer {
 		$container_classes .= $this->attributes['class'];
 
 		$single_story_classes = ( ! empty( $this->attributes['show_story_poster'] ) && true === $this->attributes['show_story_poster'] ) ?
-			'web-stories__story-wrapper has-poster alignnone' :
+			'web-stories__story-wrapper has-poster' :
 			'web-stories__story-wrapper';
 
 		$container_classes .= ( ! empty( $this->attributes['view_type'] ) ) ? " is-view-type-{$this->attributes['view_type']}" : ' is-view-type-grid';
@@ -137,20 +137,19 @@ class Generic_Renderer extends Renderer {
 
 	/**
 	 * Renders stories archive link conditionally depending on the attributes.
+	 *
+	 * @return void
 	 */
 	protected function maybe_render_archive_link() {
 
 		if ( ( ! empty( $this->attributes['show_view_all_link'] ) ) && ( true === $this->attributes['show_view_all_link'] ) ) :
 			$web_stories_archive = get_post_type_archive_link( Story_Post_Type::POST_TYPE_SLUG );
-
 			?>
-
 			<div class="web-stories__archive-link">
 				<a href="<?php echo( esc_url_raw( $web_stories_archive ) ); ?>">
 					<?php echo( esc_html( $this->attributes['view_all_label'] ) ); ?>
 				</a>
 			</div>
-
 			<?php
 		endif;
 	}
@@ -223,16 +222,16 @@ class Generic_Renderer extends Renderer {
 		$is_amp_request = ( function_exists( 'amp_is_request' ) && amp_is_request() ) ||
 		( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() );
 
-		$height = 600;
-		$width  = 360;
+		$height = ! empty( $story_data['height'] ) ? absint( $story_data['height'] ) : 600;
+		$width  = ! empty( $story_data['width'] ) ? absint( $story_data['width'] ) : 360;
 
 		$player_style = sprintf( 'width: %dpx;height: %dpx', $width, $height );
 
 		// Enqueue standalone amp story player scripts for non AMP pages.
 		if ( true === $is_amp_request ) {
-			$story_player_attributes = sprintf( 'height=600 width=360 style="%3$s"', $height, $width, $player_style );
+			$story_player_attributes = sprintf( 'height=%d width=%d style=%s', $height, $width, $player_style );
 		} else {
-			$story_player_attributes = sprintf( 'style="%1$s"', $player_style );
+			$story_player_attributes = sprintf( 'style="%s"', $player_style );
 			wp_enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
 			wp_enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
 		}
@@ -249,7 +248,7 @@ class Generic_Renderer extends Renderer {
 
 		?>
 		<div class="<?php echo( esc_attr( $single_story_classes ) ); ?>">
-			<amp-story-player <?php echo esc_attr( $story_player_attributes ); ?> >
+			<amp-story-player <?php echo( esc_attr( $story_player_attributes ) ); ?> >
 				<a href="<?php echo esc_url( $story_data['url'] ); ?>" style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $story_data['title'] ); ?></a>
 			</amp-story-player>
 
