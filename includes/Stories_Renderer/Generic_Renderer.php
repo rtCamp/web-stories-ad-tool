@@ -179,7 +179,7 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @return string
 	 */
-	public function container_classes( string $classes ) {
+	public function container_classes( $classes ) {
 		$container_classes  = ( ! empty( $this->attributes['view_type'] ) ) ? " is-view-type-{$this->attributes['view_type']}" : ' is-view-type-grid';
 		$container_classes .= ( ! empty( $this->attributes['align'] ) ) ? " align{$this->attributes['align']}" : ' alignnone';
 
@@ -193,7 +193,7 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @return string
 	 */
-	public function single_story_classes( string $classes ) {
+	public function single_story_classes( $classes ) {
 		$single_story_classes = ( ! empty( $this->attributes['show_story_poster'] ) && true === $this->attributes['show_story_poster'] ) ?
 			'web-stories__story-wrapper has-poster' :
 			'web-stories__story-wrapper';
@@ -208,7 +208,7 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @return string
 	 */
-	public function container_styles( string $styles ) {
+	public function container_styles( $styles ) {
 		$container_style = ( true === $this->is_view_type( 'grid' ) ) ? "grid-template-columns:repeat({$this->attributes['number_of_columns']}, 1fr);" : '';
 
 		return trim( $styles . ' ' . $container_style );
