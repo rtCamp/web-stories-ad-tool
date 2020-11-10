@@ -60,6 +60,20 @@ const ModalContent = styled.div(
 `
 );
 
+const ModalFooter = styled.div`
+  position: sticky;
+  bottom: 0;
+  background: #f3f3f3;
+  border-top: 1px solid #ddd;
+  margin: 0 -24px;
+  padding: 10px 24px;
+  text-align: right;
+
+  .components-button {
+    margin-left: 8px;
+  }
+`;
+
 const LoaderContainer = styled.div`
   display: flex;
   height: 100%;
@@ -156,6 +170,7 @@ const EmbedPlaceholder = ({
   setSelectedStories,
 }) => {
   const [isStoryPickerOpen, setIsStoryPickerOpen] = useState(false);
+  const [isSortingStories, setIsSortingStories] = useState(false);
   const gridRef = useRef();
   const itemRefs = useRef({});
 
@@ -241,6 +256,8 @@ const EmbedPlaceholder = ({
                 {__('Fetching stories', 'web-stories')}
                 <Spinner />
               </LoaderContainer>
+            ) : isSortingStories ? (
+              <div />
             ) : (
               <FontProvider>
                 <TransformProvider>
@@ -322,6 +339,24 @@ const EmbedPlaceholder = ({
               </FontProvider>
             )}
           </ModalContent>
+          <ModalFooter>
+            {isSortingStories ? (
+              <>
+                <Button onClick={() => setIsSortingStories(false)}>
+                  {__('Select More Stories', 'web-stories')}
+                </Button>
+                <Button isPrimary>{__('Insert Stories', 'web-stories')}</Button>
+              </>
+            ) : (
+              <Button
+                isPrimary
+                onClick={() => setIsSortingStories(true)}
+                disabled={!selectedStories.length}
+              >
+                {__('Rearrange Stories', 'web-stories')}
+              </Button>
+            )}
+          </ModalFooter>
         </Modal>
       )}
     </Placeholder>
