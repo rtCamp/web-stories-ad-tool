@@ -47,6 +47,12 @@ class Renderer {
 	 */
 	protected $attributes = [];
 
+
+	public function is_amp_request() {
+		return ( function_exists( 'amp_is_request' ) && amp_is_request() ) ||
+		( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() );
+	}
+
 	/**
 	 * Returns story item data.
 	 *
