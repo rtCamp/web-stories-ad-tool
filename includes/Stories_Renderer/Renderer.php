@@ -26,13 +26,18 @@
 
 namespace Google\Web_Stories\Stories_Renderer;
 
+// Prevent direct access.
+defined( 'ABSPATH' ) || exit;
+
 use Google\Web_Stories\Media;
+use Google\Web_Stories\Interfaces\Renderer as RenderingInterface;
+use Google\Web_Stories\Stories;
 
 /**
  * Renderer class.
  */
-class Renderer {
-	/*
+abstract class Renderer implements RenderingInterface {
+	/**
 	 * Web Stories stylesheet handle.
 	 *
 	 * @var string
@@ -54,9 +59,35 @@ class Renderer {
 	protected $attributes = [];
 
 	/**
+	 * Constructor
+	 *
+	 * @param Stories $stories Stories instance.
+	 */
+	public function __construct( Stories $stories ) {
+		$this->stories    = $stories;
+		$this->attributes = $this->stories->get_story_attributes();
+	}
+
+	/**
+	 * Output markup for amp stories.
+	 *
+	 * @return string
+	 */
+	abstract public function render();
+
+	/**
+	 * Perform initial setup for object.
+	 *
+	 * @return void
+	 */
+	public function setup() {
+		add_action( 'wp_enqueue_scripts', [ $this, 'assets' ] );
+	}
+
+	/**
 	 * Initializes renderer functionality.
 	 */
-	public function init() {
+	public function assets() {
 		wp_enqueue_style(
 			self::STYLE_HANDLE,
 			WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/stories.css',
@@ -132,4 +163,43 @@ class Renderer {
 		return ( ! empty( $this->attributes['view_type'] ) && $view_type === $this->attributes['view_type'] );
 	}
 
+	/**
+	 * Get view type for stories.
+	 *
+	 * @return string
+	 */
+	protected function get_view_type() {
+		return isset( $this->attributes['view_type'] ) ? $this->attributes['view_type'] : '';
+	}
+
+	/**
+	 * Returns image source url of the poster for current post. If poster isn't present, will fallback to first image on first page of the story.
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return string image source url.
+	 */
+	protected function get_fallback_story_poster( $post_id ) {
+		$thumbnail_url         = '';
+		$post_content_filtered = $this->get_post_content_filtered( $post_id );
+
+		if ( empty( $post_content_filtered->pages ) ) {
+			return $thumbnail_url;
+		}
+
+		$first_page = $post_content_filtered->pages[0];
+
+		if ( empty( $first_page->elements ) || ! is_array( $first_page->elements ) ) {
+			return $thumbnail_url;
+		}
+
+		foreach ( $first_page->elements as $element ) {
+			if ( 'image' === $element->type && 'image' === $element->resource->type ) {
+				$thumbnail_url = $element->resource->src;
+				break;
+			}
+		}
+
+		return $thumbnail_url;
+	}
 }

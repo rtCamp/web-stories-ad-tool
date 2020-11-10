@@ -26,6 +26,9 @@
 
 namespace Google\Web_Stories;
 
+// Prevent direct access.
+defined( 'ABSPATH' ) || exit;
+
 use Google\Web_Stories\Stories_Renderer\Generic_Renderer;
 
 /**
@@ -80,6 +83,7 @@ class Stories {
 
 		$this->story_attributes = $story_attributes;
 		$this->query_arguments  = $query_arguments;
+		$this->renderer         = $this->make_renderer();
 	}
 
 	/**
@@ -98,7 +102,23 @@ class Stories {
 	 * Instansiates the renderer classes based on the view type.
 	 */
 	private function make_renderer() {
-		$this->renderer = new Generic_Renderer( $this );
+
+		switch ( $this->get_story_attributes()['view_type'] ) {
+
+			case 'carousel':
+			case 'circles':
+			case 'list':
+			case 'grid':
+				$renderer = new Generic_Renderer( $this );
+				break;
+
+			default:
+				$renderer = new Generic_Renderer( $this );
+		}
+
+		$renderer->setup();
+
+		return $renderer;
 	}
 
 	/**
@@ -107,8 +127,6 @@ class Stories {
 	 * @return string
 	 */
 	public function render() {
-
-		$this->make_renderer();
 
 		return $this->renderer->render();
 	}
