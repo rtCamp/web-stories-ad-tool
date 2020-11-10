@@ -40,6 +40,7 @@ class Generic_Renderer extends Renderer {
 	 * @param Stories $stories Stories instance.
 	 */
 	public function __construct( $stories ) {
+		$this->init();
 		$this->stories    = $stories;
 		$this->attributes = $this->stories->get_story_attributes();
 	}
