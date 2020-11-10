@@ -27,6 +27,7 @@
 namespace Google\Web_Stories\Stories_Renderer;
 
 use Google\Web_Stories\Embed_Base;
+use Google\Web_Stories\Stories;
 use Google\Web_Stories\Story_Post_Type;
 
 /**
@@ -39,8 +40,7 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @param Stories $stories Stories instance.
 	 */
-	public function __construct( $stories ) {
-		$this->init();
+	public function __construct( Stories $stories ) {
 		$this->stories    = $stories;
 		$this->attributes = $this->stories->get_story_attributes();
 	}
@@ -51,8 +51,6 @@ class Generic_Renderer extends Renderer {
 	 * @return string Rendered stories output.
 	 */
 	public function render() {
-
-		$content = '';
 
 		$container_classes  = 'web-stories ';
 		$container_classes .= $this->attributes['class'];
@@ -139,10 +137,7 @@ class Generic_Renderer extends Renderer {
 		</div>
 		<?php
 
-		$content = (string) ob_get_clean();
-
-		return $content;
-
+		return (string) ob_get_clean();
 	}
 
 	/**
@@ -170,7 +165,7 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @return string Returns the story ouput with poster.
 	 */
-	protected function render_story_with_poster( $story_data, $single_story_classes = '' ) {
+	protected function render_story_with_poster( array $story_data, string $single_story_classes = '' ) {
 
 		if ( empty( $story_data['url'] ) ) {
 			return '';
@@ -224,7 +219,7 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @return string Returns the story ouput with amp-story-player.
 	 */
-	protected function render_story_with_story_player( $story_data, $single_story_classes = '' ) {
+	protected function render_story_with_story_player( array $story_data, string $single_story_classes = '' ) {
 
 		$height = ! empty( $story_data['height'] ) ? absint( $story_data['height'] ) : 600;
 		$width  = ! empty( $story_data['width'] ) ? absint( $story_data['width'] ) : 360;
@@ -272,7 +267,7 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @param array $story_data Story item data. Contains information like url, height, width, etc of the story.
 	 */
-	protected function get_content_overlay( $story_data ) {
+	protected function get_content_overlay( array $story_data ) {
 		?>
 		<div
 			class="story-content-overlay web-stories__story-content-overlay"
