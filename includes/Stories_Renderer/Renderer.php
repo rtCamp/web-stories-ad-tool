@@ -55,14 +55,14 @@ class Renderer {
 	 * @param array  $story_id             Story's id for which the story attributes are requested.
 	 * @param string $single_story_classes Single story's classes.
 	 *
-	 * @return array
+	 * @return array Returns single story item data.
 	 */
 	protected function get_story_item_data( $story_id, $single_story_classes = '' ) {
 
-		$story_attrs = [];
+		$story_data = [];
 
 		if ( empty( $story_id ) ) {
-			return $story_attrs;
+			return $story_data;
 		}
 
 		$author_id       = get_post_field( 'post_author', $story_id );
@@ -78,29 +78,27 @@ class Renderer {
 			get_the_date( 'M j, Y', $story_id ) :
 			'';
 
-		$story_attrs['ID']                   = $story_id;
-		$story_attrs['url']                  = get_post_permalink( $story_id );
-		$story_attrs['title']                = $story_title;
-		$story_attrs['height']               = '430';
-		$story_attrs['width']                = '285';
-		$story_attrs['poster']               = get_the_post_thumbnail_url( $story_id, $image_size );
-		$story_attrs['author']               = $author_name;
-		$story_attrs['date']                 = $story_date;
-		$story_attrs['class']                = ( is_string( $single_story_classes ) ? $single_story_classes : '' );
-		$story_attrs['show_content_overlay'] = ( ! empty( $story_title ) || ! empty( $author_name ) || ! empty( $story_date ) );
+		$story_data['ID']                   = $story_id;
+		$story_data['url']                  = get_post_permalink( $story_id );
+		$story_data['title']                = $story_title;
+		$story_data['height']               = '430';
+		$story_data['width']                = '285';
+		$story_data['poster']               = get_the_post_thumbnail_url( $story_id, $image_size );
+		$story_data['author']               = $author_name;
+		$story_data['date']                 = $story_date;
+		$story_data['class']                = ( is_string( $single_story_classes ) ? $single_story_classes : '' );
+		$story_data['show_content_overlay'] = ( ! empty( $story_title ) || ! empty( $author_name ) || ! empty( $story_date ) );
 
-		return $story_attrs;
+		return $story_data;
 	}
 
 	/**
-	 * Returns 'post_content_filtered' field for current post or for the post of given id.
-	 *
-	 * @since
+	 * Returns 'post_content_filtered' field for current post or for the given post ID.
 	 *
 	 * @param int $post_id Post id of the post for which the field value is required. If not passed, will
 	 *                     try and get current post in the loop.
 	 *
-	 * @return object 'post_content_filtered' field's value.
+	 * @return object The 'post_content_filtered' field's value.
 	 */
 	protected function get_post_content_filtered( $post_id = null ) {
 
@@ -125,8 +123,6 @@ class Renderer {
 
 	/**
 	 * Verifies the current view type.
-	 *
-	 * @since
 	 *
 	 * @param string $view_type View type to check.
 	 *

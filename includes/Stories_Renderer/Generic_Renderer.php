@@ -35,7 +35,7 @@ use Google\Web_Stories\Story_Post_Type;
 class Generic_Renderer extends Renderer {
 
 	/**
-	 * Class constructor
+	 * Constructor
 	 *
 	 * @param Stories $stories Stories instance.
 	 */
@@ -76,6 +76,7 @@ class Generic_Renderer extends Renderer {
 
 		ob_start();
 		?>
+
 		<div>
 			<div
 				class="<?php echo( esc_attr( $container_classes ) ); ?>"
@@ -136,9 +137,7 @@ class Generic_Renderer extends Renderer {
 	}
 
 	/**
-	 * Renders stories archive link conditionally depending on the attributes.
-	 *
-	 * @return void
+	 * Renders stories archive link if the 'show_view_all_link' attribute is set to true.
 	 */
 	protected function maybe_render_archive_link() {
 
@@ -157,12 +156,10 @@ class Generic_Renderer extends Renderer {
 	/**
 	 * Renders a story with story's poster image.
 	 *
-	 * @since
-	 *
 	 * @param array  $story_data           Story item data. Contains information like url, height, width, etc of the story.
 	 * @param string $single_story_classes Single story's classes.
 	 *
-	 * @return string
+	 * @return string Returns the story ouput with poster.
 	 */
 	protected function render_story_with_poster( $story_data, $single_story_classes = '' ) {
 
@@ -208,14 +205,12 @@ class Generic_Renderer extends Renderer {
 	}
 
 	/**
-	 * Renders a story with story's poster image.
-	 *
-	 * @since
+	 * Renders a story with amp-story-player.
 	 *
 	 * @param array  $story_data          Story attributes. Contains information like url, height, width, etc of the story.
 	 * @param string $single_story_classes Single story's classes.
 	 *
-	 * @return string
+	 * @return string Returns the story ouput with amp-story-player.
 	 */
 	protected function render_story_with_story_player( $story_data, $single_story_classes = '' ) {
 

@@ -81,7 +81,7 @@ class Stories {
 	 *     @type int    $delay                     Autoplay carousel delay( in seconds ). Default 5.
 	 *     @type string $class                     Additional CSS classes for the container. Default empty string.
 	 * }
-	 * @param array $query_arguments An array of story query arguments. @see WP_Query::parse_query()
+	 * @param array $query_arguments An array of story query arguments. @see WP_Query::parse_query() for all available arguments.
 	 */
 	public function __construct( $story_attributes = [], $query_arguments = [] ) {
 
@@ -90,9 +90,9 @@ class Stories {
 	}
 
 	/**
-	 * Returns an array of story IDs.
+	 * Retrieves an array of the latest stories, or Stories matching the given criteria.
 	 *
-	 * @return array An array of post IDS
+	 * @return array An array of Story posts.
 	 */
 	public function get_stories() {
 		$query_args    = $this->get_query_args();
@@ -124,12 +124,14 @@ class Stories {
 		);
 
 		$this->make_renderer();
+
+		return $this->renderer->render();
 	}
 
 	/**
 	 * Gets an array of story attributes.
 	 *
-	 * @return array
+	 * @return array An array of story attributes.
 	 */
 	public function get_story_attributes() {
 
@@ -158,9 +160,7 @@ class Stories {
 	/**
 	 * Returns arguments to be passed to the WP_Query object initialization.
 	 *
-	 * @since
-	 *
-	 * @return array Query arguments.
+	 * @return array An array of query arguments.
 	 */
 	protected function get_query_args() {
 
