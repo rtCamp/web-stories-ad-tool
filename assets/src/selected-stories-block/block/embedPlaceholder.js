@@ -48,6 +48,7 @@ import FontProvider from '../../dashboard/app/font/fontProvider';
 const ModalContent = styled.div(
   ({ pageSize, theme }) => `
   width: calc((${pageSize.width}px * 5) + (${theme.grid.columnGap.desktop}px*4));
+  height: calc(100vh - (60px * 4));
 
   @media only ${theme.breakpoint.tablet} {
     width: calc((${pageSize.width}px * 4) + (${theme.grid.columnGap.tablet}px*3));
@@ -58,6 +59,17 @@ const ModalContent = styled.div(
   }
 `
 );
+
+const LoaderContainer = styled.div`
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+
+  .components-spinner {
+    margin-top: 0;
+  }
+`;
 
 const StoryGrid = styled(CardGrid)`
   width: ${({ theme }) =>
@@ -225,10 +237,10 @@ const EmbedPlaceholder = ({
         >
           <ModalContent pageSize={view.pageSize}>
             {isLoading ? (
-              <div>
+              <LoaderContainer>
                 {__('Fetching stories', 'web-stories')}
                 <Spinner />
-              </div>
+              </LoaderContainer>
             ) : (
               <FontProvider>
                 <TransformProvider>
