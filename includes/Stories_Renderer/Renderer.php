@@ -171,35 +171,4 @@ abstract class Renderer implements RenderingInterface {
 	protected function get_view_type() {
 		return isset( $this->attributes['view_type'] ) ? $this->attributes['view_type'] : '';
 	}
-
-	/**
-	 * Returns image source url of the poster for current post. If poster isn't present, will fallback to first image on first page of the story.
-	 *
-	 * @param int $post_id Post ID.
-	 *
-	 * @return string image source url.
-	 */
-	protected function get_fallback_story_poster( $post_id ) {
-		$thumbnail_url         = '';
-		$post_content_filtered = $this->get_post_content_filtered( $post_id );
-
-		if ( empty( $post_content_filtered->pages ) ) {
-			return $thumbnail_url;
-		}
-
-		$first_page = $post_content_filtered->pages[0];
-
-		if ( empty( $first_page->elements ) || ! is_array( $first_page->elements ) ) {
-			return $thumbnail_url;
-		}
-
-		foreach ( $first_page->elements as $element ) {
-			if ( 'image' === $element->type && 'image' === $element->resource->type ) {
-				$thumbnail_url = $element->resource->src;
-				break;
-			}
-		}
-
-		return $thumbnail_url;
-	}
 }
