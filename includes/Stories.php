@@ -83,7 +83,7 @@ class Stories {
 	 * }
 	 * @param array $query_arguments An array of story query arguments. @see WP_Query::parse_query() for all available arguments.
 	 */
-	public function __construct( $story_attributes = [], $query_arguments = [] ) {
+	public function __construct( array $story_attributes = [], array $query_arguments = [] ) {
 
 		$this->story_attributes = $story_attributes;
 		$this->query_arguments  = $query_arguments;
@@ -151,10 +151,7 @@ class Stories {
 			'class'                     => '',
 		];
 
-		$story_attributes = wp_parse_args( $this->story_attributes, $default_attributes );
-
-		return $story_attributes;
-
+		return wp_parse_args( $this->story_attributes, $default_attributes );
 	}
 
 	/**
@@ -172,9 +169,7 @@ class Stories {
 			'no_found_rows'    => true,
 		];
 
-		$query_args = wp_parse_args( $this->query_arguments, $default_query_args );
-
-		return $query_args;
+		return wp_parse_args( $this->query_arguments, $default_query_args );
 	}
 
 }
