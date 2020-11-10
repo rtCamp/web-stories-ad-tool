@@ -13,17 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
+
+/**
+ * External dependencies
+ */
+import { ThemeProvider } from 'styled-components';
 
 /**
  * Internal dependencies
  */
-import './edit.css';
+import ApiProvider from '../../dashboard/app/api/apiProvider';
+import { ConfigProvider } from '../../dashboard/app/config';
+import theme from '../../dashboard/theme';
+import EmbedPlaceholder from './embedPlaceholder';
+import { icon } from './';
 
 const LatestStoriesEdit = () => {
+  const showPlaceholder = useState(true);
+  const label = __('Selected Web Stories', 'web-stories');
+  const { config } = global.webStoriesSelectedBlockSettings;
+
+  if (showPlaceholder) {
+    return (
+      <ThemeProvider theme={theme}>
+        <ConfigProvider config={config}>
+          <ApiProvider>
+            <EmbedPlaceholder icon={icon} label={label} />
+          </ApiProvider>
+        </ConfigProvider>
+      </ThemeProvider>
+    );
+  }
+
   return <div>{__('Selected Stories', 'web-stories')}</div>;
 };
 

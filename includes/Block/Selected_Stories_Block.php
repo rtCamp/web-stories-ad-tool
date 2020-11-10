@@ -26,8 +26,10 @@
 
 namespace Google\Web_Stories\Block;
 
-use Google\Web_Stories\Embed_Base;
+use Google\Web_Stories\Locale;
 use Google\Web_Stories\Tracking;
+use Google\Web_Stories\Embed_Base;
+use Google\Web_Stories\Story_Post_Type;
 
 /**
  * Selected Stories block class.
@@ -72,14 +74,6 @@ class Selected_Stories_Block extends Embed_Base {
 		$this->register_script( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE, Tracking::SCRIPT_HANDLE ] );
 		$this->register_style( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE ] );
 
-		wp_register_style(
-			self::STYLE_HANDLE,
-			WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/selected-stories.css',
-			[],
-			'v0',
-			false
-		);
-
 		wp_localize_script(
 			self::SCRIPT_HANDLE,
 			'webStoriesSelectedBlockSettings',
@@ -107,8 +101,15 @@ class Selected_Stories_Block extends Embed_Base {
 	 * @return array Script settings.
 	 */
 	private function get_script_settings() {
+		$rest_base = Story_Post_Type::POST_TYPE_SLUG;
+
 		return [
 			'publicPath' => WEBSTORIES_PLUGIN_DIR_URL . 'assets/js/',
+			'config'     => [
+				'api' => [
+					'stories' => sprintf( '/web-stories/v1/%s', $rest_base ),
+				],
+			],
 		];
 	}
 
