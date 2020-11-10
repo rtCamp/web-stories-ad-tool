@@ -32,7 +32,6 @@ use Google\Web_Stories\Media;
  * Renderer class.
  */
 class Renderer {
-
 	/*
 	 * Web Stories stylesheet handle.
 	 *
@@ -67,6 +66,11 @@ class Renderer {
 		);
 	}
 
+	/**
+	 * Determine whether the current request is for an AMP page.
+	 *
+	 * @return boolean
+	 */
 	public function is_amp_request() {
 		return ( function_exists( 'amp_is_request' ) && amp_is_request() ) ||
 		( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() );
@@ -118,35 +122,6 @@ class Renderer {
 	}
 
 	/**
-	 * Returns 'post_content_filtered' field for current post or for the given post ID.
-	 *
-	 * @param int $post_id Post id of the post for which the field value is required. If not passed, will
-	 *                     try and get current post in the loop.
-	 *
-	 * @return object The 'post_content_filtered' field's value.
-	 */
-	protected function get_post_content_filtered( $post_id = null ) {
-
-		$post_content_filtered = new \stdClass();
-		$post_obj              = get_post( $post_id );
-
-		if ( empty( $post_obj ) || ! is_a( $post_obj, 'WP_Post' ) ) {
-			return $post_content_filtered;
-		}
-
-		$post_id = $post_obj->ID;
-
-		if ( empty( $post_id ) && empty( get_the_ID() ) ) {
-			return $post_content_filtered;
-		}
-
-		$post_content_filtered = json_decode( get_post_field( 'post_content_filtered', $post_id ) );
-
-		return $post_content_filtered;
-
-	}
-
-	/**
 	 * Verifies the current view type.
 	 *
 	 * @param string $view_type View type to check.
@@ -155,37 +130,6 @@ class Renderer {
 	 */
 	protected function is_view_type( $view_type ) {
 		return ( ! empty( $this->attributes['view_type'] ) && $view_type === $this->attributes['view_type'] );
-	}
-
-	/**
-	 * Returns image source url of the poster for current post. If poster isn't present, will fallback to first image on first page of the story.
-	 *
-	 * @param int $post_id Post ID.
-	 *
-	 * @return string image source url.
-	 */
-	protected function get_fallback_story_poster( $post_id ) {
-		$thumbnail_url         = '';
-		$post_content_filtered = $this->get_post_content_filtered( $post_id );
-
-		if ( empty( $post_content_filtered->pages ) ) {
-			return $thumbnail_url;
-		}
-
-		$first_page = $post_content_filtered->pages[0];
-
-		if ( empty( $first_page->elements ) || ! is_array( $first_page->elements ) ) {
-			return $thumbnail_url;
-		}
-
-		foreach ( $first_page->elements as $element ) {
-			if ( 'image' === $element->type && 'image' === $element->resource->type ) {
-				$thumbnail_url = $element->resource->src;
-				break;
-			}
-		}
-
-		return $thumbnail_url;
 	}
 
 }

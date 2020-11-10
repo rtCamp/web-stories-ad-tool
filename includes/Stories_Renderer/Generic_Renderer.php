@@ -183,12 +183,6 @@ class Generic_Renderer extends Renderer {
 			$has_content_overlay = true;
 		}
 
-		if ( ! empty( $story_data['poster'] ) ) {
-			$poster = $story_data['poster'];
-		} else {
-			$poster = $this->get_fallback_story_poster( $story_data['ID'] );
-		}
-
 		$height = ! empty( $story_data['height'] ) ? absint( $story_data['height'] ) : 600;
 		$width  = ! empty( $story_data['width'] ) ? absint( $story_data['width'] ) : 360;
 
