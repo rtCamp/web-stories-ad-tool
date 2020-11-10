@@ -234,13 +234,13 @@ class Generic_Renderer extends Renderer {
 		$height = ! empty( $story_data['height'] ) ? absint( $story_data['height'] ) : 600;
 		$width  = ! empty( $story_data['width'] ) ? absint( $story_data['width'] ) : 360;
 
-		$player_style = sprintf( 'width: %dpx;height: %dpx', $width, $height );
+		$player_style = sprintf( 'width: %1$spx;height: %2$spx', $width, $height );
 
 		// Enqueue standalone amp story player scripts for non AMP pages.
 		if ( true === $this->is_amp_request() ) {
-			$story_player_attributes = sprintf( 'height=%d width=%d style=%s', $height, $width, $player_style );
+			$story_player_attributes = sprintf( 'height=%d width=%d', $height, $width );
 		} else {
-			$story_player_attributes = sprintf( 'style="%s"', $player_style );
+			$story_player_attributes = '';
 			wp_enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
 			wp_enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
 		}
@@ -257,7 +257,7 @@ class Generic_Renderer extends Renderer {
 
 		?>
 		<div class="<?php echo( esc_attr( $single_story_classes ) ); ?>">
-			<amp-story-player <?php echo( esc_attr( $story_player_attributes ) ); ?> >
+			<amp-story-player <?php echo( esc_attr( $story_player_attributes ) ); ?> style="<?php echo esc_attr( $player_style ); ?>">
 				<a href="<?php echo esc_url( $story_data['url'] ); ?>" style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $story_data['title'] ); ?></a>
 			</amp-story-player>
 
