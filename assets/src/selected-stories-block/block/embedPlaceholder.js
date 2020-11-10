@@ -27,6 +27,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import { Button, Placeholder, Modal, Spinner } from '@wordpress/components';
 import { BlockIcon } from '@wordpress/block-editor';
 import { useState, useMemo, useRef } from '@wordpress/element';
+import { Icon, check, minus } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -81,7 +82,51 @@ const ItemOverlay = styled.a(
   height: ${pageSize.containerHeight}px;
 
   &:focus {
-    box-shadow: 0 0 5px 3px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, 0.8);
+    box-shadow: 0 0 3px 3px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, 0.8);
+  }
+
+  &.item-selected {
+
+    .item-selected-icon {
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      z-index: 1;
+
+      svg {
+        background-color: #ccc;
+        box-shadow: 0 0 0 1px #fff, 0 0 0 2px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        stroke: #000;
+        stroke-width: 2px;
+        padding: 3px;
+      }
+
+      .item-selected-icon-minus {
+        display: none;
+      }
+
+      &:hover {
+        .item-selected-icon-minus {
+          display: block;
+        }
+
+        .item-selected-icon-check {
+          display: none;
+        }
+      }
+    }
+
+    &:focus {
+
+      .item-selected-icon {
+
+        svg {
+          background-color: #0073aa;
+          stroke: #fff;
+        }
+      }
+    }
   }
 `
 );
@@ -92,7 +137,12 @@ export const DetailRow = styled.div`
   justify-content: space-between;
 `;
 
-const EmbedPlaceholder = ({ icon, label }) => {
+const EmbedPlaceholder = ({
+  icon,
+  label,
+  selectedStories,
+  setSelectedStories,
+}) => {
   const [isStoryPickerOpen, setIsStoryPickerOpen] = useState(false);
   const gridRef = useRef();
   const itemRefs = useRef({});
@@ -145,8 +195,14 @@ const EmbedPlaceholder = ({ icon, label }) => {
     });
   };
 
-  const handleItemSelection = (storyId) => {
-    console.log(storyId); // eslint-disable-line no-console
+  const addItemToSelectedStories = (storyId) => {
+    if (!selectedStories.includes(storyId)) {
+      setSelectedStories([...selectedStories, storyId]);
+    }
+  };
+
+  const removeItemFromSelectedStories = (storyId) => {
+    setSelectedStories(selectedStories.filter((id) => storyId !== id));
   };
 
   return (
@@ -190,6 +246,8 @@ const EmbedPlaceholder = ({ icon, label }) => {
                     >
                       {orderedStories.length &&
                         orderedStories.map((story) => {
+                          const isSelected = selectedStories.includes(story.id);
+
                           return (
                             <StoryGridItem
                               key={story.id}
@@ -218,13 +276,31 @@ const EmbedPlaceholder = ({ icon, label }) => {
                                 />
                               </DetailRow>
                               <ItemOverlay
+                                className={isSelected ? 'item-selected' : ''}
                                 pageSize={view.pageSize}
                                 href={`#select-story-${story.id}`}
-                                onClick={(evt) => {
-                                  evt.preventDefault();
-                                  handleItemSelection(story.id);
+                                onClick={(event) => {
+                                  event.preventDefault();
+                                  addItemToSelectedStories(story.id);
                                 }}
-                              />
+                              >
+                                {isSelected && (
+                                  <div className="item-selected-icon">
+                                    <Icon
+                                      className="item-selected-icon-check"
+                                      icon={check}
+                                    />
+                                    <Icon
+                                      className="item-selected-icon-minus"
+                                      icon={minus}
+                                      onClick={(event) => {
+                                        event.preventDefault();
+                                        removeItemFromSelectedStories(story.id);
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                              </ItemOverlay>
                             </StoryGridItem>
                           );
                         })}
@@ -243,10 +319,8 @@ const EmbedPlaceholder = ({ icon, label }) => {
 EmbedPlaceholder.propTypes = {
   icon: PropTypes.func,
   label: PropTypes.string,
-};
-
-EmbedPlaceholder.defaultProps = {
-  cannotEmbed: false,
+  selectedStories: PropTypes.array,
+  setSelectedStories: PropTypes.func,
 };
 
 export default EmbedPlaceholder;

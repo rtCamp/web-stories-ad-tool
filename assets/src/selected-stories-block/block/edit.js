@@ -35,7 +35,8 @@ import EmbedPlaceholder from './embedPlaceholder';
 import { icon } from './';
 
 const LatestStoriesEdit = () => {
-  const showPlaceholder = useState(true);
+  const [selectedStories, setSelectedStories] = useState([]);
+  const [showPlaceholder] = useState(true);
   const label = __('Selected Web Stories', 'web-stories');
   const { config } = global.webStoriesSelectedBlockSettings;
 
@@ -44,7 +45,12 @@ const LatestStoriesEdit = () => {
       <ThemeProvider theme={theme}>
         <ConfigProvider config={config}>
           <ApiProvider>
-            <EmbedPlaceholder icon={icon} label={label} />
+            <EmbedPlaceholder
+              icon={icon}
+              label={label}
+              selectedStories={selectedStories}
+              setSelectedStories={setSelectedStories}
+            />
           </ApiProvider>
         </ConfigProvider>
       </ThemeProvider>
