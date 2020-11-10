@@ -33,6 +33,13 @@ use Google\Web_Stories\Media;
  */
 class Renderer {
 
+	/*
+	 * Web Stories stylesheet handle.
+	 *
+	 * @var string
+	 */
+	const STYLE_HANDLE = 'web-stories-styles';
+
 	/**
 	 * Stories object
 	 *
@@ -47,6 +54,18 @@ class Renderer {
 	 */
 	protected $attributes = [];
 
+	/**
+	 * Initializes renderer functionality.
+	 */
+	public function init() {
+		wp_enqueue_style(
+			self::STYLE_HANDLE,
+			WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/stories.css',
+			[],
+			'v0',
+			false
+		);
+	}
 
 	public function is_amp_request() {
 		return ( function_exists( 'amp_is_request' ) && amp_is_request() ) ||
