@@ -118,7 +118,7 @@ class Generic_Renderer extends Renderer {
 		$current_action = current_action();
 		$view_type      = $this->get_view_type();
 
-		if ( ! $current_action || 'carousel' === $view_type ) {
+		if ( ! $current_action || 'carousel' !== $view_type ) {
 			return;
 		}
 
