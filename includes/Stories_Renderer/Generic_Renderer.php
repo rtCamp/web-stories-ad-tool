@@ -89,24 +89,61 @@ class Generic_Renderer extends Renderer {
 		}
 		?>
 		<div>
-			<?php do_action( 'web_stories_renderer_wrapper_start' ); ?>
+			<?php
+			/**
+			 * Fires before the web stories renderer wrapper.
+			 */
+			do_action( 'web_stories_renderer_wrapper_start' );
+			?>
 			<div
-				class="<?php echo esc_attr( apply_filters( 'web_stories_renderer_container_classes', 'web-stories ' . $this->attributes['class'] ) ); ?>"
-				style="<?php echo esc_attr( apply_filters( 'web_stories_renderer_container_style', '' ) ); ?>"
+				class="
+				<?php
+				/**
+				 * Filters the web stories renderer container classes.
+				 *
+				 * @param string $class Container classes.
+				 */
+				echo esc_attr( apply_filters( 'web_stories_renderer_container_classes', 'web-stories ' . $this->attributes['class'] ) );
+				?>
+				"
+				style="
+				<?php
+				/**
+				 * Filters the web stories renderer container style.
+				 *
+				 * @param string $class Container style.
+				 */
+				echo esc_attr( apply_filters( 'web_stories_renderer_container_style', '' ) ); 
+				?>
+				"
 			>
 				<?php
+				/**
+				 * Fires before the web stories renderer container.
+				 */
 				do_action( 'web_stories_renderer_container_start' );
 
 				foreach ( $story_posts as $story_post ) {
 					$story_data = $this->get_story_item_data( $story_post->ID );
+					/**
+					 * Fires inside the web stories renderer wrapper.
+					 */
 					do_action( 'web_stories_renderer_content', $story_data );
 				}
 
+				/**
+				 * Fires after the web stories renderer container.
+				 */
 				do_action( 'web_stories_renderer_container_end' );
 				?>
 
 			</div>
-			<?php do_action( 'web_stories_renderer_wrapper_end' ); ?>
+			<?php
+			/**
+			 * Fires before the web stories renderer wrapper.
+			 */
+			do_action( 'web_stories_renderer_wrapper_end' );
+			?>
 		</div>
 		<?php
 	}
@@ -227,8 +264,25 @@ class Generic_Renderer extends Renderer {
 		}
 		?>
 
-		<div class="<?php echo esc_attr( apply_filters( 'web_stories_renderer_single_story_classes', '' ) ); ?>">
-			<?php do_action( 'web_stories_renderer_single_story_content', $story_data ); ?>
+		<div class="
+			<?php
+			/**
+			 * Filters the web stories renderer single story classes.
+			 *
+			 * @param string $class Single story classes.
+			 */
+			echo esc_attr( apply_filters( 'web_stories_renderer_single_story_classes', '' ) ); 
+			?>
+			"
+		>
+			<?php
+			/**
+			 * Fires inside web stories renderer single story content.
+			 *
+			 * @param array $story_data Story attributes. Contains information like url, height, width, etc of the story.
+			 */
+			do_action( 'web_stories_renderer_single_story_content', $story_data );
+			?>
 		</div>
 		<?php
 	}
@@ -254,7 +308,14 @@ class Generic_Renderer extends Renderer {
 					class="web-stories__story-placeholder"
 					style="<?php echo esc_attr( $poster_style ); ?>"
 				></div>
-				<?php do_action( 'web_stories_renderer_story_content_overlay', $story_data ); ?>
+				<?php
+				/**
+				 * Fires after the web stories renderer single story content.
+				 *
+				 * @param array $story_data Story attributes. Contains information like url, height, width, etc of the story.
+				 */
+				do_action( 'web_stories_renderer_story_content_overlay', $story_data );
+				?>
 			</a>
 			<?php
 		}
@@ -278,6 +339,7 @@ class Generic_Renderer extends Renderer {
 			</amp-story-player>
 
 			<?php
+			/** This filter is documented in includes/Stories_Renderer/Generic_Renderer.php */
 			do_action( 'web_stories_renderer_story_content_overlay', $story_data );
 		}
 	}
