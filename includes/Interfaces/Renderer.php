@@ -27,9 +27,6 @@
  */
 namespace Google\Web_Stories\Interfaces;
 
-// Prevent direct access.
-defined( 'ABSPATH' ) || exit;
-
 interface Renderer {
 
 	/**

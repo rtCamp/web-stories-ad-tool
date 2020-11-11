@@ -26,9 +26,6 @@
 
 namespace Google\Web_Stories\Stories_Renderer;
 
-// Prevent direct access.
-defined( 'ABSPATH' ) || exit;
-
 use Google\Web_Stories\Embed_Base;
 use Google\Web_Stories\Story_Post_Type;
 

@@ -26,9 +26,6 @@
 
 namespace Google\Web_Stories;
 
-// Prevent direct access.
-defined( 'ABSPATH' ) || exit;
-
 use Google\Web_Stories\Stories_Renderer\Generic_Renderer;
 
 /**
