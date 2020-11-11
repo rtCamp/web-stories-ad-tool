@@ -112,7 +112,7 @@ class Generic_Renderer extends Renderer {
 				 *
 				 * @param string $class Container style.
 				 */
-				echo esc_attr( apply_filters( 'web_stories_renderer_container_style', '' ) ); 
+				echo esc_attr( apply_filters( 'web_stories_renderer_container_style', '' ) );
 				?>
 				"
 			>
@@ -179,7 +179,7 @@ class Generic_Renderer extends Renderer {
 						echo( 'loop' );
 					}
 					?>
-					delay="<?php echo( ! empty( $this->attributes['delay'] ) ) ? ( absint( $this->attributes['delay'] ) * 1000 ) : ''; ?>"
+					<?php echo( ! empty( $this->attributes['delay'] ) ) ? sprintf( 'delay=%1$s', ( absint( $this->attributes['delay'] ) * 1000 ) ) : ''; ?>"
 				>
 				<?php
 				break;
@@ -270,7 +270,7 @@ class Generic_Renderer extends Renderer {
 			 *
 			 * @param string $class Single story classes.
 			 */
-			echo esc_attr( apply_filters( 'web_stories_renderer_single_story_classes', '' ) ); 
+			echo esc_attr( apply_filters( 'web_stories_renderer_single_story_classes', '' ) );
 			?>
 			"
 		>
