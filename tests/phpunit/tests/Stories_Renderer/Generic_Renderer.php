@@ -24,13 +24,6 @@ use Google\Web_Stories\Stories;
 class Generic_Renderer extends \WP_UnitTestCase_Base {
 
 	/**
-	 * Object of class in test.
-	 *
-	 * @var Generic_Renderer
-	 */
-	private $testee;
-
-	/**
 	 * Stories mock object.
 	 *
 	 * @var Stories_Mock
@@ -105,6 +98,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 	public function test_assets() {
 		$this->stories->method( 'get_story_attributes' )->willReturn(
 			[
+				'class'                     => '',
 				'view_type'                 => 'list',
 				'show_story_poster'         => true,
 				'list_view_image_alignment' => 'left',
@@ -123,6 +117,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 	public function test_assets_story_player() {
 		$this->stories->method( 'get_story_attributes' )->willReturn(
 			[
+				'class'             => '',
 				'view_type'         => 'carousel',
 				'show_story_poster' => false,
 			]
@@ -207,6 +202,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 			[
 				'view_type'         => 'grid',
 				'number_of_columns' => '3',
+				'class'             => '',
 			]
 		);
 
