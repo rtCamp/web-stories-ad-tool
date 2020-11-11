@@ -86,6 +86,7 @@ class Generic_Renderer extends Renderer {
 		if ( empty( $story_posts ) ) {
 			return '';
 		}
+		ob_start();
 		?>
 		<div>
 			<?php
@@ -145,10 +146,14 @@ class Generic_Renderer extends Renderer {
 			?>
 		</div>
 		<?php
+
+		return (string) ob_get_clean();
 	}
 
 	/**
 	 * Add amp-carousel for carousel view type.
+	 *
+	 * @return void
 	 */
 	public function amp_carousel() {
 		$current_action = current_action();
@@ -193,11 +198,14 @@ class Generic_Renderer extends Renderer {
 
 	/**
 	 * Renders stories archive link if the 'show_view_all_link' attribute is set to true.
+	 *
+	 * @return void
 	 */
 	public function maybe_render_archive_link() {
 
 		if ( ( ! empty( $this->attributes['show_view_all_link'] ) ) && ( true === $this->attributes['show_view_all_link'] ) ) :
 			$web_stories_archive = get_post_type_archive_link( Story_Post_Type::POST_TYPE_SLUG );
+			$web_stories_archive = ( is_string( $web_stories_archive ) ? $web_stories_archive : '' );
 			?>
 			<div class="web-stories__archive-link">
 				<a href="<?php echo( esc_url_raw( $web_stories_archive ) ); ?>">
@@ -290,6 +298,8 @@ class Generic_Renderer extends Renderer {
 	 * Renders a story with story's poster image.
 	 *
 	 * @param array $story_data Story item data. Contains information like url, height, width, etc of the story.
+	 *
+	 * @return void
 	 */
 	public function render_story_with_poster( array $story_data ) {
 		if ( true === $this->attributes['show_story_poster'] || in_array( $this->get_view_type(), [ 'circles', 'list' ], true ) ) {
@@ -324,6 +334,8 @@ class Generic_Renderer extends Renderer {
 	 * Renders a story with amp-story-player.
 	 *
 	 * @param array $story_data Story attributes. Contains information like url, height, width, etc of the story.
+	 *
+	 * @return void
 	 */
 	public function render_story_with_story_player( array $story_data ) {
 		if ( ( true !== $this->attributes['show_story_poster'] && ! in_array( $this->get_view_type(), [ 'circles', 'list' ], true ) ) ) {
@@ -347,6 +359,8 @@ class Generic_Renderer extends Renderer {
 	 * Renders the content overlay markup.
 	 *
 	 * @param array $story_data Story item data. Contains information like url, height, width, etc of the story.
+	 *
+	 * @return void
 	 */
 	public function get_content_overlay( array $story_data ) {
 		if ( ! empty( $story_data['show_content_overlay'] ) && ( true === $story_data['show_content_overlay'] ) ) {

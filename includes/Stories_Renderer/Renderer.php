@@ -81,14 +81,15 @@ abstract class Renderer implements RenderingInterface {
 
 	/**
 	 * Initializes renderer functionality.
+	 *
+	 * @return void
 	 */
 	public function assets() {
 		wp_enqueue_style(
 			self::STYLE_HANDLE,
 			WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/stories.css',
 			[],
-			'v0',
-			false
+			'v0'
 		);
 	}
 
@@ -107,7 +108,7 @@ abstract class Renderer implements RenderingInterface {
 	 *
 	 * @since
 	 *
-	 * @param array  $story_id             Story's id for which the story attributes are requested.
+	 * @param int    $story_id             Story's id for which the story attributes are requested.
 	 * @param string $single_story_classes Single story's classes.
 	 *
 	 * @return array Returns single story item data.
@@ -120,7 +121,7 @@ abstract class Renderer implements RenderingInterface {
 			return $story_data;
 		}
 
-		$author_id       = get_post_field( 'post_author', $story_id );
+		$author_id       = absint( get_post_field( 'post_author', $story_id ) );
 		$is_circles_view = $this->is_view_type( 'circles' );
 		$image_size      = $is_circles_view ? Media::POSTER_SQUARE_IMAGE_SIZE : Media::POSTER_PORTRAIT_IMAGE_SIZE;
 		$story_title     = ( ! empty( $this->attributes['show_title'] ) && ( true === $this->attributes['show_title'] ) ) ?
@@ -141,7 +142,7 @@ abstract class Renderer implements RenderingInterface {
 		$story_data['poster']               = get_the_post_thumbnail_url( $story_id, $image_size );
 		$story_data['author']               = $author_name;
 		$story_data['date']                 = $story_date;
-		$story_data['class']                = ( is_string( $single_story_classes ) ? $single_story_classes : '' );
+		$story_data['class']                = $single_story_classes;
 		$story_data['show_content_overlay'] = ( ! empty( $story_title ) || ! empty( $author_name ) || ! empty( $story_date ) );
 
 		return $story_data;

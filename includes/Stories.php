@@ -27,6 +27,7 @@
 namespace Google\Web_Stories;
 
 use Google\Web_Stories\Stories_Renderer\Generic_Renderer;
+use Google\Web_Stories\Stories_Renderer\Renderer;
 
 /**
  * Stories class.
@@ -97,6 +98,8 @@ class Stories {
 
 	/**
 	 * Instansiates the renderer classes based on the view type.
+	 *
+	 * @return Renderer Renderer Instance.
 	 */
 	private function make_renderer() {
 
