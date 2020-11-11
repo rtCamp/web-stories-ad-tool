@@ -43,16 +43,16 @@ class Generic_Renderer extends Renderer {
 	 */
 	public function setup() {
 		parent::setup();
-		add_action( 'ws_renderer_container_start', [ $this, 'amp_carousel' ] );
-		add_action( 'ws_renderer_container_end', [ $this, 'amp_carousel' ] );
-		add_action( 'ws_renderer_content', [ $this, 'render_story' ] );
-		add_action( 'ws_renderer_wrapper_end', [ $this, 'maybe_render_archive_link' ] );
-		add_action( 'ws_story_content_overlay', [ $this, 'get_content_overlay' ] );
-		add_action( 'ws_single_story_content', [ $this, 'render_story_with_poster' ] );
-		add_action( 'ws_single_story_content', [ $this, 'render_story_with_story_player' ] );
-		add_action( 'ws_renderer_container_classes', [ $this, 'container_classes' ] );
-		add_action( 'ws_renderer_container_style', [ $this, 'container_styles' ] );
-		add_action( 'ws_single_story_classes', [ $this, 'single_story_classes' ] );
+		add_action( 'web_stories_renderer_container_start', [ $this, 'amp_carousel' ] );
+		add_action( 'web_stories_renderer_container_end', [ $this, 'amp_carousel' ] );
+		add_action( 'web_stories_renderer_content', [ $this, 'render_story' ] );
+		add_action( 'web_stories_renderer_wrapper_end', [ $this, 'maybe_render_archive_link' ] );
+		add_action( 'web_stories_renderer_story_content_overlay', [ $this, 'get_content_overlay' ] );
+		add_action( 'web_stories_renderer_single_story_content', [ $this, 'render_story_with_poster' ] );
+		add_action( 'web_stories_renderer_single_story_content', [ $this, 'render_story_with_story_player' ] );
+		add_action( 'web_stories_renderer_container_classes', [ $this, 'container_classes' ] );
+		add_action( 'web_stories_renderer_container_style', [ $this, 'container_styles' ] );
+		add_action( 'web_stories_renderer_single_story_classes', [ $this, 'single_story_classes' ] );
 	}
 
 	/**
@@ -89,24 +89,24 @@ class Generic_Renderer extends Renderer {
 		}
 		?>
 		<div>
-			<?php do_action( 'ws_renderer_wrapper_start' ); ?>
+			<?php do_action( 'web_stories_renderer_wrapper_start' ); ?>
 			<div
-				class="<?php echo esc_attr( apply_filters( 'ws_renderer_container_classes', 'web-stories ' . $this->attributes['class'] ) ); ?>"
-				style="<?php echo esc_attr( apply_filters( 'ws_renderer_container_style', '' ) ); ?>"
+				class="<?php echo esc_attr( apply_filters( 'web_stories_renderer_container_classes', 'web-stories ' . $this->attributes['class'] ) ); ?>"
+				style="<?php echo esc_attr( apply_filters( 'web_stories_renderer_container_style', '' ) ); ?>"
 			>
 				<?php
-				do_action( 'ws_renderer_container_start' );
+				do_action( 'web_stories_renderer_container_start' );
 
 				foreach ( $story_posts as $story_post ) {
 					$story_data = $this->get_story_item_data( $story_post->ID );
-					do_action( 'ws_renderer_content', $story_data );
+					do_action( 'web_stories_renderer_content', $story_data );
 				}
 
-				do_action( 'ws_renderer_container_end' );
+				do_action( 'web_stories_renderer_container_end' );
 				?>
 
 			</div>
-			<?php do_action( 'ws_renderer_wrapper_end' ); ?>
+			<?php do_action( 'web_stories_renderer_wrapper_end' ); ?>
 		</div>
 		<?php
 	}
@@ -124,7 +124,7 @@ class Generic_Renderer extends Renderer {
 
 		switch ( $current_action ) {
 
-			case 'ws_renderer_container_start':
+			case 'web_stories_renderer_container_start':
 				?>
 				<amp-carousel
 					width="1"
@@ -148,7 +148,7 @@ class Generic_Renderer extends Renderer {
 				<?php
 				break;
 
-			case 'ws_renderer_container_end':
+			case 'web_stories_renderer_container_end':
 				?>
 				</amp-carousel>
 				<?php
@@ -227,8 +227,8 @@ class Generic_Renderer extends Renderer {
 		}
 		?>
 
-		<div class="<?php echo esc_attr( apply_filters( 'ws_single_story_classes', '' ) ); ?>">
-			<?php do_action( 'ws_single_story_content', $story_data ); ?>
+		<div class="<?php echo esc_attr( apply_filters( 'web_stories_renderer_single_story_classes', '' ) ); ?>">
+			<?php do_action( 'web_stories_renderer_single_story_content', $story_data ); ?>
 		</div>
 		<?php
 	}
@@ -254,7 +254,7 @@ class Generic_Renderer extends Renderer {
 					class="web-stories__story-placeholder"
 					style="<?php echo esc_attr( $poster_style ); ?>"
 				></div>
-				<?php do_action( 'ws_story_content_overlay', $story_data ); ?>
+				<?php do_action( 'web_stories_renderer_story_content_overlay', $story_data ); ?>
 			</a>
 			<?php
 		}
@@ -266,7 +266,7 @@ class Generic_Renderer extends Renderer {
 	 * @param array $story_data Story attributes. Contains information like url, height, width, etc of the story.
 	 */
 	public function render_story_with_story_player( array $story_data ) {
-		if ( ( true !== $this->attributes['show_story_poster'] && ! in_array( $this->get_view_type(), [ 'circles', 'list' ], true ) ) && ! $this->is_amp_request() ) {
+		if ( ( true !== $this->attributes['show_story_poster'] && ! in_array( $this->get_view_type(), [ 'circles', 'list' ], true ) ) ) {
 			$height                  = ! empty( $story_data['height'] ) ? absint( $story_data['height'] ) : 600;
 			$width                   = ! empty( $story_data['width'] ) ? absint( $story_data['width'] ) : 360;
 			$player_style            = sprintf( 'width: %1$spx;height: %2$spx', $width, $height );
@@ -278,7 +278,7 @@ class Generic_Renderer extends Renderer {
 			</amp-story-player>
 
 			<?php
-			do_action( 'ws_story_content_overlay', $story_data );
+			do_action( 'web_stories_renderer_story_content_overlay', $story_data );
 		}
 	}
 

@@ -82,15 +82,15 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 	public function test_setup_hooks_added() {
 		$this->testee->setup();
 
-		$this->assertSame( 10, has_action( 'ws_renderer_container_start', [ $this->testee, 'amp_carousel' ] ) );
-		$this->assertSame( 10, has_action( 'ws_renderer_container_end', [ $this->testee, 'amp_carousel' ] ) );
-		$this->assertSame( 10, has_action( 'ws_renderer_content', [ $this->testee, 'render_story' ] ) );
-		$this->assertSame( 10, has_action( 'ws_renderer_wrapper_end', [ $this->testee, 'maybe_render_archive_link' ] ) );
-		$this->assertSame( 10, has_action( 'ws_story_content_overlay', [ $this->testee, 'get_content_overlay' ] ) );
-		$this->assertSame( 10, has_action( 'ws_single_story_content', [ $this->testee, 'render_story_with_poster' ] ) );
-		$this->assertSame( 10, has_action( 'ws_single_story_content', [ $this->testee, 'render_story_with_story_player' ] ) );
-		$this->assertSame( 10, has_action( 'ws_renderer_container_classes', [ $this->testee, 'container_classes' ] ) );
-		$this->assertSame( 10, has_action( 'ws_renderer_container_style', [ $this->testee, 'container_styles' ] ) );
-		$this->assertSame( 10, has_action( 'ws_single_story_classes', [ $this->testee, 'single_story_classes' ] ) );
+		$this->assertSame( 10, has_action( 'web_stories_renderer_container_start', [ $this->testee, 'amp_carousel' ] ) );
+		$this->assertSame( 10, has_action( 'web_stories_renderer_container_end', [ $this->testee, 'amp_carousel' ] ) );
+		$this->assertSame( 10, has_action( 'web_stories_renderer_content', [ $this->testee, 'render_story' ] ) );
+		$this->assertSame( 10, has_action( 'web_stories_renderer_wrapper_end', [ $this->testee, 'maybe_render_archive_link' ] ) );
+		$this->assertSame( 10, has_action( 'web_stories_renderer_story_content_overlay', [ $this->testee, 'get_content_overlay' ] ) );
+		$this->assertSame( 10, has_action( 'web_stories_renderer_single_story_content', [ $this->testee, 'render_story_with_poster' ] ) );
+		$this->assertSame( 10, has_action( 'web_stories_renderer_single_story_content', [ $this->testee, 'render_story_with_story_player' ] ) );
+		$this->assertSame( 10, has_action( 'web_stories_renderer_container_classes', [ $this->testee, 'container_classes' ] ) );
+		$this->assertSame( 10, has_action( 'web_stories_renderer_container_style', [ $this->testee, 'container_styles' ] ) );
+		$this->assertSame( 10, has_action( 'web_stories_renderer_single_story_classes', [ $this->testee, 'single_story_classes' ] ) );
 	}
 }
