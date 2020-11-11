@@ -248,7 +248,7 @@ class Generic_Renderer extends Renderer {
 
 			?>
 			<a class="<?php echo( esc_attr( "image-align-{$this->attributes['list_view_image_alignment']}" ) ); ?>"
-			   href="<?php echo( esc_url_raw( $story_data['url'] ) ); ?>"
+				href="<?php echo( esc_url_raw( $story_data['url'] ) ); ?>"
 			>
 				<div
 					class="web-stories__story-placeholder"

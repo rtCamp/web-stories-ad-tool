@@ -63,7 +63,7 @@ class Stories extends \WP_UnitTestCase {
 
 		self::$testee = new Testee();
 
-		self::$story_id       = $factory->post->create(
+		self::$story_id = $factory->post->create(
 			[
 				'post_type'    => \Google\Web_Stories\Story_Post_Type::POST_TYPE_SLUG,
 				'post_title'   => 'Example title',

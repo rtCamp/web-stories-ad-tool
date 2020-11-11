@@ -49,7 +49,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 	 * @param WP_UnitTest_Factory $factory Factory class object.
 	 */
 	public static function wpSetUpBeforeClass( $factory ) {
-		self::$story_id       = $factory->post->create(
+		self::$story_id = $factory->post->create(
 			[
 				'post_type'    => \Google\Web_Stories\Story_Post_Type::POST_TYPE_SLUG,
 				'post_title'   => 'Example title',
@@ -63,7 +63,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 	/**
 	 * Runs once before any test in the class run.
 	 */
-	public function setUp(): void {
+	public function setUp() {
 		$this->stories = $this->createMock( Stories::class );
 		$this->stories->method( 'get_stories' )->willReturn( [ get_post( self::$story_id ) ] );
 		$this->stories->method( 'get_story_attributes' )->willReturn(
@@ -73,7 +73,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 			]
 		);
 
-		$this->testee  = new Testee( $this->stories );
+		$this->testee = new Testee( $this->stories );
 	}
 
 	/**
