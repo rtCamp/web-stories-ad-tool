@@ -53,6 +53,8 @@ class Generic_Renderer extends Renderer {
 		add_action( 'web_stories_renderer_container_classes', [ $this, 'container_classes' ] );
 		add_action( 'web_stories_renderer_container_style', [ $this, 'container_styles' ] );
 		add_action( 'web_stories_renderer_single_story_classes', [ $this, 'single_story_classes' ] );
+
+		$this->assets();
 	}
 
 	/**

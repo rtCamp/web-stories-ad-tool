@@ -80,9 +80,7 @@ abstract class Renderer implements RenderingInterface {
 	 *
 	 * @return void
 	 */
-	public function setup() {
-		add_action( 'wp_enqueue_scripts', [ $this, 'assets' ] );
-	}
+	public function setup() {}
 
 	/**
 	 * Initializes renderer functionality.
