@@ -19,8 +19,11 @@
 .story-content-overlay .story-content-overlay__author-date {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
   margin-top: 8px;
+}
+
+.web-stories .story-content-overlay__author {
+  margin-right: 8px;
 }
 
 .story-content-overlay .story-content-overlay__title {
