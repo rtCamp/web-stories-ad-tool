@@ -380,9 +380,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 
 		$renderer = new \Google\Web_Stories\Stories_Renderer\Generic_Renderer( $this->stories );
 
-		ob_start();
-		$renderer->render();
-		$output = ob_get_clean();
+		$output = $renderer->render();
 
 		$this->assertContains( 'test-container-class', $output );
 		$this->assertContains( 'background: red;', $output );
