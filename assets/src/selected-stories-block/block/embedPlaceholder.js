@@ -36,6 +36,11 @@ import StoryPicker from './storyPicker';
 const SelectStoriesPlaceholder = styled(Placeholder)`
   &.is-appender {
     min-height: 0;
+    margin-top: 20px;
+
+    &.not-editing {
+      display: none;
+    }
   }
 `;
 
@@ -46,6 +51,7 @@ const EmbedPlaceholder = ({
   setSelectedStories,
   selectedStoriesObject,
   setSelectedStoriesObject,
+  isEditing,
 }) => {
   const [isStoryPickerOpen, setIsStoryPickerOpen] = useState(false);
   const openStoryPicker = () => setIsStoryPickerOpen(true);
@@ -64,6 +70,10 @@ const EmbedPlaceholder = ({
     placeholderLabel = false;
     instruction = false;
     placeholderClassName = 'wp-block-web-stories-embed is-appender';
+
+    if (!isEditing) {
+      placeholderClassName += ' not-editing';
+    }
   }
 
   return (
@@ -95,6 +105,7 @@ EmbedPlaceholder.propTypes = {
   setSelectedStories: PropTypes.func,
   selectedStoriesObject: PropTypes.array,
   setSelectedStoriesObject: PropTypes.func,
+  isEditing: PropTypes.bool,
 };
 
 export default EmbedPlaceholder;
