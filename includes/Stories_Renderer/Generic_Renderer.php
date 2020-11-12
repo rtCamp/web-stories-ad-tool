@@ -38,8 +38,8 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @return void
 	 */
-	public function setup() {
-		parent::setup();
+	public function init() {
+		parent::init();
 		add_action( 'web_stories_renderer_container_start', [ $this, 'amp_carousel' ] );
 		add_action( 'web_stories_renderer_container_end', [ $this, 'amp_carousel' ] );
 		add_action( 'web_stories_renderer_content', [ $this, 'render_story' ] );
@@ -66,7 +66,6 @@ class Generic_Renderer extends Renderer {
 			wp_register_script( 'amp-runtime-script', 'https://cdn.ampproject.org/v0.js', [], 'v0', true );
 			wp_register_script( 'amp-carousel-script', 'https://cdn.ampproject.org/v0/amp-carousel-0.2.js', [ 'amp-runtime-script' ], 'v0', true );
 			wp_enqueue_script( 'amp-carousel-script' );
-			wp_enqueue_script( 'amp-runtime-script' );
 		}
 
 		if ( ( true !== $this->attributes['show_story_poster'] && ! in_array( $this->get_view_type(), [ 'circles', 'list' ], true ) ) && ! $this->is_amp_request() ) {

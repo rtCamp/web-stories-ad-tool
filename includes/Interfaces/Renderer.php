@@ -35,7 +35,7 @@ interface Renderer {
 	 *
 	 * @return void
 	 */
-	public function setup();
+	public function init();
 
 	/**
 	 * Render the markup for story.

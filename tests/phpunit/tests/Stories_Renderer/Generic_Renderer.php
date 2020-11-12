@@ -63,7 +63,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 	}
 
 	/**
-	 * @covers ::setup
+	 * @covers ::init
 	 */
 	public function test_setup_hooks_added() {
 
@@ -78,7 +78,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 		);
 
 		$renderer = new \Google\Web_Stories\Stories_Renderer\Generic_Renderer( $this->stories );
-		$renderer->setup();
+		$renderer->init();
 
 		$this->assertSame( 10, has_action( 'web_stories_renderer_container_start', [ $renderer, 'amp_carousel' ] ) );
 		$this->assertSame( 10, has_action( 'web_stories_renderer_container_end', [ $renderer, 'amp_carousel' ] ) );
@@ -106,7 +106,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 		);
 
 		$renderer = new \Google\Web_Stories\Stories_Renderer\Generic_Renderer( $this->stories );
-		$renderer->setup();
+		$renderer->init();
 
 		$this->assertTrue( wp_style_is( \Google\Web_Stories\Stories_Renderer\Renderer::STYLE_HANDLE ) );
 	}
@@ -124,7 +124,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 		);
 
 		$renderer = new \Google\Web_Stories\Stories_Renderer\Generic_Renderer( $this->stories );
-		$renderer->setup();
+		$renderer->init();
 
 		$this->assertTrue( wp_style_is( \Google\Web_Stories\Embed_Base::STORY_PLAYER_HANDLE ) );
 	}

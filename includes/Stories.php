@@ -114,7 +114,7 @@ class Stories {
 				$renderer = new Generic_Renderer( $this );
 		}
 
-		$renderer->setup();
+		$renderer->init();
 
 		return $renderer;
 	}

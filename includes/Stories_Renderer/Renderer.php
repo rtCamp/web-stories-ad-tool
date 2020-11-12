@@ -77,7 +77,7 @@ abstract class Renderer implements RenderingInterface {
 	 *
 	 * @return void
 	 */
-	public function setup() {}
+	public function init() {}
 
 	/**
 	 * Initializes renderer functionality.
