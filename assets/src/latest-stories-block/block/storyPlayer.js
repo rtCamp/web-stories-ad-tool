@@ -88,7 +88,7 @@ function StoryPlayer({
             )}
             <div className="story-content-overlay__author-date">
               {isShowingAuthor && (
-                <div className="story-content-overlay__date">{`By ${author}`}</div>
+                <div className="story-content-overlay__author">{`By ${author}`}</div>
               )}
               {isShowingDate && (
                 <time
