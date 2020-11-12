@@ -28,6 +28,7 @@ namespace Google\Web_Stories;
 
 use Google\Web_Stories\Stories_Renderer\Generic_Renderer;
 use Google\Web_Stories\Stories_Renderer\Renderer;
+use WP_Query;
 
 /**
  * Stories class.
@@ -91,7 +92,7 @@ class Stories {
 	 */
 	public function get_stories() {
 		$query_args    = $this->get_query_args();
-		$stories_query = new \WP_Query( $query_args );
+		$stories_query = new WP_Query( $query_args );
 
 		return $stories_query->posts;
 	}
