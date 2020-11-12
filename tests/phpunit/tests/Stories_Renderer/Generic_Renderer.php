@@ -378,6 +378,24 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 		add_filter( 'web_stories_renderer_container_classes', [ $this, 'add_stories_container_class' ] );
 		add_filter( 'web_stories_renderer_container_style', [ $this, 'add_stories_container_style' ] );
 
+		$this->stories->method( 'get_story_attributes' )->willReturn(
+			[
+				'view_type'                 => 'circles',
+				'number_of_columns'         => 2,
+				'show_title'                => false,
+				'show_author'               => false,
+				'show_date'                 => false,
+				'show_story_poster'         => true,
+				'show_stories_archive_link' => false,
+				'stories_archive_label'     => 'View all stories',
+				'list_view_image_alignment' => 'left',
+				'autoplay_carousel'         => false,
+				'loop_carousel'             => false,
+				'delay'                     => 5,
+				'class'                     => '',
+			]
+		);
+
 		$renderer = new \Google\Web_Stories\Stories_Renderer\Generic_Renderer( $this->stories );
 
 		$output = $renderer->render();
