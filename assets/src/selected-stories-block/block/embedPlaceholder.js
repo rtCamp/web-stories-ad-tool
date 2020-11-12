@@ -18,6 +18,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 /**
  * WordPress dependencies
@@ -32,25 +33,45 @@ import { useState } from '@wordpress/element';
  */
 import StoryPicker from './storyPicker';
 
+const SelectStoriesPlaceholder = styled(Placeholder)`
+  &.is-appender {
+    min-height: 0;
+  }
+`;
+
 const EmbedPlaceholder = ({
   icon,
   label,
   selectedStories,
   setSelectedStories,
+  selectedStoriesObject,
+  setSelectedStoriesObject,
 }) => {
   const [isStoryPickerOpen, setIsStoryPickerOpen] = useState(false);
   const openStoryPicker = () => setIsStoryPickerOpen(true);
   const closeStoryPicker = () => setIsStoryPickerOpen(false);
 
+  let placeholderIcon = <BlockIcon icon={icon} showColors />;
+  let placeholderLabel = label;
+  let instruction = __(
+    'Select the web stories you want to display on your site.',
+    'web-stories'
+  );
+  let placeholderClassName = 'wp-block-web-stories-embed';
+
+  if (selectedStoriesObject.length) {
+    placeholderIcon = false;
+    placeholderLabel = false;
+    instruction = false;
+    placeholderClassName = 'wp-block-web-stories-embed is-appender';
+  }
+
   return (
-    <Placeholder
-      icon={<BlockIcon icon={icon} showColors />}
-      label={label}
-      className="wp-block-web-stories-embed"
-      instructions={__(
-        'Select the web stories you want to display on your site.',
-        'web-stories'
-      )}
+    <SelectStoriesPlaceholder
+      icon={placeholderIcon}
+      label={placeholderLabel}
+      className={placeholderClassName}
+      instructions={instruction}
     >
       <Button isPrimary onClick={openStoryPicker}>
         {__('Select Stories', 'web-stories')}
@@ -60,9 +81,10 @@ const EmbedPlaceholder = ({
           selectedStories={selectedStories}
           setSelectedStories={setSelectedStories}
           closeStoryPicker={closeStoryPicker}
+          setSelectedStoriesObject={setSelectedStoriesObject}
         />
       )}
-    </Placeholder>
+    </SelectStoriesPlaceholder>
   );
 };
 
@@ -71,6 +93,8 @@ EmbedPlaceholder.propTypes = {
   label: PropTypes.string,
   selectedStories: PropTypes.array,
   setSelectedStories: PropTypes.func,
+  selectedStoriesObject: PropTypes.array,
+  setSelectedStoriesObject: PropTypes.func,
 };
 
 export default EmbedPlaceholder;

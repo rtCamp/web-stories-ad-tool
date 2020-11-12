@@ -36,6 +36,7 @@ import { icon } from './';
 
 const LatestStoriesEdit = () => {
   const [selectedStories, setSelectedStories] = useState([]);
+  const [selectedStoriesObject, setSelectedStoriesObject] = useState([]);
   const [showPlaceholder] = useState(true);
   const label = __('Selected Web Stories', 'web-stories');
   const { config } = global.webStoriesSelectedBlockSettings;
@@ -50,6 +51,8 @@ const LatestStoriesEdit = () => {
               label={label}
               selectedStories={selectedStories}
               setSelectedStories={setSelectedStories}
+              selectedStoriesObject={selectedStoriesObject}
+              setSelectedStoriesObject={setSelectedStoriesObject}
             />
           </ApiProvider>
         </ConfigProvider>
