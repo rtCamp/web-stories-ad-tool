@@ -23,9 +23,9 @@ import classNames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useState, RawHTML } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { __, _x, sprintf } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
 
 /**
@@ -56,6 +56,13 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
   const [fetchedStories, setFetchedStories] = useState([]);
   const [fetchedAuthors, setFetchedAuthors] = useState([]);
+  const previewLink = wp.data.select( 'core/editor' ).getEditedPostPreviewLink();
+  const carouselMessage = sprintf(`<i><b>%s</b> %s <a target="__blank" href=${previewLink}>%s</a> %s</i>`, // @TODO: Fix: sprintf must be called with a valid format string.
+    _x('Note:', 'informational message', 'web-stories'),
+    __("Carousel view's functionality will not work in Editor.", 'web-stories'),
+    __('Preview', 'web-stories'),
+    __('post to see it in action.', 'web-stories')
+  );
 
   useEffect(() => {
     apiFetch({
@@ -162,12 +169,19 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
               const author = fetchedAuthors.find(
                 (singleAuthorObj) => story.author === singleAuthorObj.id
               );
+              let title = '';
+
+              if ( story.title.rendered ) {
+                title = ('circles' === viewType && story.title.rendered.length > 45) ?
+                  `${story.title.rendered.substring(0, 45)}...` :
+                  story.title.rendered;
+              }
 
               return (
                 <StoryPlayer
                   key={story.id}
                   url={story.link}
-                  title={story.title.rendered}
+                  title={title}
                   date={story.date_gmt}
                   author={author ? author.name : ''}
                   poster={story.featured_media_url}
@@ -182,6 +196,11 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
           </div>
           {isShowingViewAll && (
             <div className="latest-stories__archive-link">{viewAllLabel}</div>
+          )}
+          {'carousel' === viewType && (
+            <span className="latest-stories__carousel-message">
+                <RawHTML>{carouselMessage}</RawHTML>
+            </span>
           )}
         </div>
       )}
