@@ -46,7 +46,7 @@ function StoryPlayer({
   });
   const hasContentOverlay = isShowingTitle || isShowingAuthor || isShowingDate;
   const dateFormat = __experimentalGetSettings().formats.date;
-  const ref = useRef(null);
+  const ref = useRef();
 
   useEffect(() => {
     if (isShowingStoryPoster) {
@@ -66,7 +66,7 @@ function StoryPlayer({
             style={{ backgroundImage: `url(${poster}` }}
           />
         ) : (
-          <amp-story-player height="430px" width="285px" ref={ref}>
+          <amp-story-player height="430" width="285" ref={ref}>
             <a
               href={url}
               style={{
