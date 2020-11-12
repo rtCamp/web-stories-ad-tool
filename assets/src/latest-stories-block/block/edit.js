@@ -123,7 +123,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   }, [authors, numOfStories, orderByValue]);
 
   const willShowStoryPoster =
-    'list' === viewType || 'circles' === viewType ? true : isShowingStoryPoster;
+    ( 'grid' != viewType ) ? true : isShowingStoryPoster;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
   const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
   const viewAllLabel = viewAllLinkLabel
