@@ -23,9 +23,9 @@ import classNames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useState, RawHTML } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { __, _x, sprintf } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
 
 /**
@@ -56,6 +56,13 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
   const [fetchedStories, setFetchedStories] = useState([]);
   const [fetchedAuthors, setFetchedAuthors] = useState([]);
+  const previewLink = wp.data.select( 'core/editor' ).getEditedPostPreviewLink();
+  const carouselMessage = sprintf(`<i><b>%s</b> %s <a target="__blank" href=${previewLink}>%s</a> %s</i>`, // @TODO: Fix: sprintf must be called with a valid format string.
+    _x('Note:', 'informational message', 'web-stories'),
+    __("Carousel view's functionality will not work in Editor.", 'web-stories'),
+    __('Preview', 'web-stories'),
+    __('post to see it in action.', 'web-stories')
+  );
 
   useEffect(() => {
     apiFetch({
@@ -86,6 +93,10 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         orderBy = 'title';
         order = 'desc';
         break;
+      case 'random':
+        orderBy = 'rand';
+        order = 'desc';
+        break;
       default:
         orderBy = 'date';
         order = 'desc';
@@ -112,12 +123,17 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   }, [authors, numOfStories, orderByValue]);
 
   const willShowStoryPoster =
-    'list' === viewType || 'circles' === viewType ? true : isShowingStoryPoster;
+    ( 'grid' != viewType ) ? true : isShowingStoryPoster;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
   const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
   const viewAllLabel = viewAllLinkLabel
     ? viewAllLinkLabel
     : __('View All Stories', 'web-stories');
+
+  const storiesToDisplay =
+    fetchedStories.length > numOfStories
+      ? fetchedStories.slice(0, numOfStories)
+      : fetchedStories;
 
   const blockClasses = classNames(
     'wp-block-web-stories-latest-stories latest-stories',
@@ -146,19 +162,26 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         listViewImageAlignment={listViewImageAlignment}
         setAttributes={setAttributes}
       />
-      {fetchedStories && 0 < fetchedStories.length && (
+      {storiesToDisplay && 0 < storiesToDisplay.length && (
         <div>
           <div className={blockClasses} style={blockStyles}>
-            {fetchedStories.map((story) => {
+            {storiesToDisplay.map((story) => {
               const author = fetchedAuthors.find(
                 (singleAuthorObj) => story.author === singleAuthorObj.id
               );
+              let title = '';
+
+              if ( story.title.rendered ) {
+                title = ('circles' === viewType && story.title.rendered.length > 45) ?
+                  `${story.title.rendered.substring(0, 45)}...` :
+                  story.title.rendered;
+              }
 
               return (
                 <StoryPlayer
                   key={story.id}
                   url={story.link}
-                  title={story.title.rendered}
+                  title={title}
                   date={story.date_gmt}
                   author={author ? author.name : ''}
                   poster={story.featured_media_url}
@@ -173,6 +196,11 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
           </div>
           {isShowingViewAll && (
             <div className="latest-stories__archive-link">{viewAllLabel}</div>
+          )}
+          {'carousel' === viewType && (
+            <span className="latest-stories__carousel-message">
+                <RawHTML>{carouselMessage}</RawHTML>
+            </span>
           )}
         </div>
       )}

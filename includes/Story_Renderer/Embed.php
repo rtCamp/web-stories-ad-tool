@@ -77,7 +77,7 @@ class Embed {
 		$title               = $this->story->get_title();
 		$poster              = ! empty( $this->story->get_poster_portrait() ) ? esc_url( $this->story->get_poster_portrait() ) : '';
 		$margin              = ( 'center' === $args['align'] ) ? 'auto' : '0';
-		$player_style        = sprintf( 'width: %dpx;height: %dpx;margin: %s', absint( $args['width'] ), absint( $args['height'] ), esc_attr( $margin ) );
+		$player_style        = sprintf( 'width: %s;height: %s;margin: %s', $args['width'], $args['height'], esc_attr( $margin ) );
 		$poster_style        = ! empty( $poster ) ? sprintf( '--story-player-poster: url(%s)', $poster ) : '';
 		$has_content_overlay = ( ! empty( $args['show_content_overlay'] ) && ( true === $args['show_content_overlay'] ) ) ? true : false;
 
@@ -89,10 +89,64 @@ class Embed {
 		) {
 			$player_style = sprintf( 'margin: %s', esc_attr( $margin ) );
 			?>
-			<div class="<?php echo esc_attr( $class ); ?> <?php echo esc_attr( $align ); ?>">
-				<amp-story-player width="<?php echo esc_attr( $args['width'] ); ?>" height="<?php echo esc_attr( $args['height'] ); ?>" style="<?php echo esc_attr( $player_style ); ?>">
+			<div class="web-stories__controller">
+				<div class="<?php echo esc_attr( $class ); ?>">
+					<amp-story-player width="<?php echo esc_attr( $args['width'] ); ?>" height="<?php echo esc_attr( $args['height'] ); ?>" style="<?php echo esc_attr( $player_style ); ?>">
+						<a href="<?php echo esc_url( $url ); ?>" style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $title ); ?></a>
+					</amp-story-player>
+					<?php if ( true === $has_content_overlay ) : ?>
+					<div
+						class="story-content-overlay latest-stories__story-content-overlay"
+					>
+						<?php if ( ! empty( $args['title'] ) ) : ?>
+						<div class="story-content-overlay__title">
+							<?php if ( ! empty( $url ) ) : ?>
+								<a href="<?php echo( esc_url( $url ) ); ?>">
+							<?php endif; ?>
+								<?php
+								echo( esc_html( $args['title'] ) );
+								?>
+							<?php if ( ! empty( $url ) ) : ?>
+								</a>
+							<?php endif; ?>
+						</div>
+						<?php endif; ?>
+						<div class="story-content-overlay__author-date">
+						<?php if ( ! empty( $args['author'] ) ) : ?>
+							<div class="story-content-overlay__date">
+								<?php
+								_e( 'By', 'web-stories' );
+								echo( esc_html( ' ' . $args['author'] ) );
+								?>
+								</div>
+							<?php endif; ?>
+							<?php if ( ! empty( $args['date'] ) ) : ?>
+							<time class="story-content-content-overlay__date">
+								<?php
+								_e( 'On', 'web-stories' );
+								echo( esc_html( ' ' . $args['date'] ) );
+								?>
+							</time>
+							<?php endif; ?>
+						</div>
+					</div>
+					<?php endif; ?>
+				</div>
+			</div>
+			<?php
+
+			return (string) ob_get_clean();
+		}
+
+		wp_enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
+		wp_enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
+		?>
+		<div class="web-stories__controller">
+			<div class="<?php echo esc_attr( $class ); ?>">
+				<amp-story-player style="<?php echo esc_attr( $player_style ); ?>">
 					<a href="<?php echo esc_url( $url ); ?>" style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $title ); ?></a>
 				</amp-story-player>
+
 				<?php if ( true === $has_content_overlay ) : ?>
 				<div
 					class="story-content-overlay latest-stories__story-content-overlay"
@@ -112,7 +166,7 @@ class Embed {
 					<?php endif; ?>
 					<div class="story-content-overlay__author-date">
 					<?php if ( ! empty( $args['author'] ) ) : ?>
-						<div>
+						<div class="story-content-overlay__date">
 							<?php
 							_e( 'By', 'web-stories' );
 							echo( esc_html( ' ' . $args['author'] ) );
@@ -130,58 +184,8 @@ class Embed {
 					</div>
 				</div>
 				<?php endif; ?>
+
 			</div>
-			<?php
-
-			return (string) ob_get_clean();
-		}
-
-		wp_enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
-		wp_enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
-		?>
-		<div class="<?php echo esc_attr( $class ); ?> <?php echo esc_attr( $align ); ?>">
-			<amp-story-player style="<?php echo esc_attr( $player_style ); ?>">
-				<a href="<?php echo esc_url( $url ); ?>" style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $title ); ?></a>
-			</amp-story-player>
-
-			<?php if ( true === $has_content_overlay ) : ?>
-			<div
-				class="story-content-overlay latest-stories__story-content-overlay"
-			>
-				<?php if ( ! empty( $args['title'] ) ) : ?>
-				<div class="story-content-overlay__title">
-					<?php if ( ! empty( $url ) ) : ?>
-						<a href="<?php echo( esc_url( $url ) ); ?>">
-					<?php endif; ?>
-						<?php
-						echo( esc_html( $args['title'] ) );
-						?>
-					<?php if ( ! empty( $url ) ) : ?>
-						</a>
-					<?php endif; ?>
-				</div>
-				<?php endif; ?>
-				<div class="story-content-overlay__author-date">
-				<?php if ( ! empty( $args['author'] ) ) : ?>
-					<div>
-						<?php
-						_e( 'By', 'web-stories' );
-						echo( esc_html( ' ' . $args['author'] ) );
-						?>
-						</div>
-					<?php endif; ?>
-					<?php if ( ! empty( $args['date'] ) ) : ?>
-					<time class="story-content-content-overlay__date">
-						<?php
-						_e( 'On', 'web-stories' );
-						echo( esc_html( ' ' . $args['date'] ) );
-						?>
-					</time>
-					<?php endif; ?>
-				</div>
-			</div>
-			<?php endif; ?>
-
 		</div>
 		<?php
 		return (string) ob_get_clean();

@@ -1,161 +1,203 @@
-/* Content Overlay Styles */
-.story-content-overlay {
+/*
+ * Generic styles that apply to all view modes
+ */
+.web-stories .web-stories__story-wrapper a {
+  color: inherit;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.web-stories .web-stories__story-wrapper {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.web-stories .web-stories__story-wrapper::before {
+  content: '';
+  display: block;
+  width: 100%;
+  padding-bottom: 177%;
+}
+
+.web-stories .web-stories__story-wrapper.has-poster {
+  cursor: pointer;
+}
+
+.web-stories amp-story-player,
+.web-stories .web-stories__inner-wrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.web-stories .web-stories__story-placeholder {
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+}
+
+/* story content overlay styles */
+.web-stories .story-content-overlay {
   position: absolute;
   z-index: 1;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  background-color: white;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  color: #555555;
+  color: #ffffff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.2px;
 }
 
-.story-content-overlay .story-content-overlay__author-date {
+.web-stories .story-content-overlay__author-date {
   display: flex;
   justify-content: space-between;
   margin-top: 8px;
 }
 
-.story-content-overlay .story-content-overlay__title {
+.web-stories .story-content-overlay__date {
+  margin-right: 8px;
+}
+
+.web-stories .story-content-overlay__title {
   grid-column: 1/-1;
   font-size: 15px;
   line-height: 22px;
   font-weight: 700;
+  display: box;
+  -webkit-line-clamp: 2; /* Browser support: https://caniuse.com/?search=line-clamp */
+  box-orient: vertical; /* stylelint-disable-line property-no-unknown */
+  overflow: hidden;
 }
 
-.wp-block-web-stories-latest-stories.is-view-type-list .story-content-overlay {
-  position: relative;
-  bottom: 0;
-  left: 0;
-  flex-grow: 1;
+/* Grid View Styles */
+.web-stories.is-view-type-grid {
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
-.wp-block-web-stories-latest-stories.is-view-type-list
-  .latest-stories__story-wrapper
-  > * {
-  display: flex;
+.web-stories.is-view-type-grid .web-stories__controller {
+  flex-basis: calc(100% - 32px);
+  flex-grow: 1;
+  margin: 16px;
 }
 
-.wp-block-web-stories-latest-stories.is-view-type-list .image-align-right {
+@media only screen and (min-width: 600px) {
+  .web-stories.is-view-type-grid.columns-1 .web-stories__controller {
+    flex-basis: calc(100% - 32px);
+    flex-grow: 1;
+  }
+
+  .web-stories.is-view-type-grid.columns-2 .web-stories__controller {
+    flex-basis: calc(50% - 32px);
+    flex-grow: 1;
+  }
+
+  .web-stories.is-view-type-grid.columns-3 .web-stories__controller {
+    flex-basis: calc(33.3334% - 32px);
+    flex-grow: 1;
+  }
+
+  .web-stories.is-view-type-grid.columns-4 .web-stories__controller {
+    flex-basis: calc(25% - 32px);
+    flex-grow: 1;
+  }
+
+  .web-stories.is-view-type-grid.columns-5 .web-stories__controller {
+    flex-basis: calc(20% - 32px);
+    flex-grow: 1;
+  }
+}
+
+/* List View Styles */
+.web-stories.is-view-type-list .web-stories__story-wrapper {
+  max-width: unset;
+  min-width: unset;
+  margin-bottom: 24px;
+}
+
+@media only screen and (min-width: 400px) {
+  .web-stories.is-view-type-list .web-stories__story-wrapper::before {
+    padding-bottom: 30%;
+  }
+
+  .web-stories.is-view-type-list .story-content-overlay {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #ffffff;
+    color: #555555;
+  }
+
+  .web-stories.is-view-type-list .web-stories__inner-wrapper {
+    display: flex;
+  }
+}
+
+.web-stories.is-view-type-list .image-align-right {
   flex-direction: row-reverse;
 }
 
-.wp-block-web-stories-latest-stories.is-view-type-list
-  .latest-stories__story-placeholder {
-  min-height: 150px;
-  height: auto;
+.web-stories.is-view-type-list .web-stories__story-placeholder {
+  height: 100%;
+  width: 100%;
   flex-basis: 40%;
   flex-shrink: 0;
 }
 
-/* Generic styles that apply to all view modes */
-.wp-block-web-stories-latest-stories .latest-stories__story-wrapper a {
-  color: #555555;
-  text-decoration: none;
-}
-
-.wp-block-web-stories-latest-stories amp-story-player a:first-of-type {
-  text-align: center;
-  font-size: 16px;
-  color: #555555;
-  background: #f7f7f7;
-  text-decoration: none;
-}
-
-.wp-block-web-stories-latest-stories .latest-stories__story-wrapper {
-  max-width: 285px;
-  position: relative;
-}
-
-.wp-block-web-stories-latest-stories amp-story-player,
-.wp-block-web-stories-latest-stories .latest-stories__story-wrapper.has-poster {
-  max-width: 285px;
-  height: auto;
-}
-
-/* Grid View Styles */
-.wp-block-web-stories-latest-stories.is-view-type-grid {
-  display: grid;
-  grid-gap: 32px;
-}
-
-.wp-block-web-stories-latest-stories.is-view-type-grid amp-story-player {
-  width: 100% !important;
-  height: 430px;
-}
-
-.wp-block-web-stories-latest-stories.is-view-type-grid
-  .latest-stories__story-wrapper {
-  width: 100%;
-  height: 430px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* List View Styles */
-.wp-block-web-stories-latest-stories.is-view-type-list
-  .latest-stories__story-wrapper {
-  max-width: unset;
-  margin-bottom: 24px;
-}
-
 /* Circles View Styles */
-.wp-block-web-stories-latest-stories.is-view-type-circles {
+.web-stories.is-view-type-circles {
   display: flex;
   overflow-x: scroll;
   padding: 5px;
 }
 
-.wp-block-web-stories-latest-stories.is-view-type-circles
-  .story-content-overlay {
-  position: static;
+.web-stories.is-view-type-circles .story-content-overlay {
+  position: unset;
   background-color: transparent;
   box-shadow: unset;
   padding: 10px 0;
   text-align: center;
+  color: #555555;
 }
 
-.wp-block-web-stories-latest-stories.is-view-type-circles
-  .story-content-overlay__title {
+.web-stories.is-view-type-circles .story-content-overlay__title {
   font-size: 12px;
   line-height: 16px;
 }
 
-.wp-block-web-stories-latest-stories.is-view-type-circles amp-story-player {
-  height: 100% !important;
-  width: 100% !important;
-}
-
-.wp-block-web-stories-latest-stories.is-view-type-circles
-  .latest-stories__story-wrapper {
+.web-stories.is-view-type-circles .web-stories__story-wrapper {
   margin-right: 32px;
   flex-shrink: 0;
   max-width: 150px;
+  min-width: unset;
 }
 
-/* Carousel View Styles */
-.wp-block-web-stories-latest-stories.is-view-type-carousel amp-story-player {
-  margin-left: auto !important;
-  margin-right: auto !important;
+.web-stories.is-view-type-circles .web-stories__story-wrapper::before {
+  content: none;
 }
 
-.wp-block-web-stories-latest-stories .latest-stories__story-placeholder {
-  background-size: cover;
-  background-position: center; /* stylelint-disable-line no-descending-specificity */
-  height: 430px;
+.web-stories.web-stories.is-view-type-circles .web-stories__inner-wrapper {
+  position: relative;
 }
 
-.wp-block-web-stories-latest-stories.is-view-type-circles
-  .latest-stories__story-placeholder {
+.web-stories.is-view-type-circles .web-stories__story-placeholder {
   height: 150px;
   width: 150px;
   border-radius: 50%;
@@ -164,42 +206,96 @@
   padding: 2px;
 }
 
-.wp-block-web-stories-latest-stories.is-view-type-circles
-  .latest-stories__story-placeholder:hover {
+.web-stories.is-view-type-circles .web-stories__story-placeholder:hover {
   border-color: #333;
 }
 
-.components-toggle-control.is-disabled .components-form-toggle__track {
-  background-color: lightgrey;
-  border-color: lightgrey;
+/* Carousel View Styles */
+.web-stories.is-view-type-carousel .web-stories__story-wrapper {
+  min-width: 250px;
 }
 
-.components-toggle-control.is-disabled .components-form-toggle__thumb {
-  background-color: #fff;
-  border-color: #fff;
+.web-stories.is-view-type-carousel .web-stories__controller {
+  margin-left: 0;
+  margin-right: 16px;
 }
 
-.components-toggle-control.is-disabled .components-form-toggle__input,
-.components-toggle-control.is-disabled .components-toggle-control__label {
-  cursor: unset;
+.web-stories.is-view-type-carousel .story-content-overlay__title {
+  white-space: normal; /* Not sure why this isn't the default behaviour */
 }
 
-/* Stories Archive Link Settings */
-.latest-stories__archive-link {
+/* Stories archive link styles */
+.web-stories__archive-link {
   margin-top: 16px;
 }
 
-/* Setting controls styles */
-.components-input-control__input {
-  text-align: center;
-}
-
-.latest-stories-settings__image-alignment .components-base-control__field {
+/* Lightbox styles */
+.web-stories .web-stories__story-lightbox {
   display: flex;
+  justify-content: center;
   align-items: center;
+  position: fixed;
+  background: black;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  visibility: hidden;
+  transition: visibility 0.2s linear, opacity 0.2s linear;
+  opacity: 0;
 }
 
-.latest-stories-settings__image-alignment .components-base-control__label {
-  margin-right: 8px;
-  margin-bottom: 0;
+.web-stories .web-stories__story-lightbox.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.web-stories .story-lightbox__close-button {
+  display: inline-block;
+  position: fixed;
+  left: 10px;
+  top: 15px;
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+  z-index: 1;
+}
+
+.web-stories .story-lightbox__close-button--stick {
+  display: inline-block;
+  position: absolute;
+  left: 20px;
+  top: 5px;
+  height: 25px;
+  width: 3px;
+  background-color: #fff;
+  transform: rotateZ(45deg);
+}
+
+@media only screen and (max-width: 600px) {
+  .web-stories .story-content-overlay__title {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .web-stories .web-stories__story-lightbox amp-story-player {
+    height: 100%;
+    max-width: 100%;
+  }
+
+  .web-stories .story-lightbox__close-button {
+    top: 5px;
+    left: 0;
+  }
+
+  .web-stories .story-lightbox__close-button--stick {
+    top: 15px;
+    left: 20px;
+    height: 20px;
+  }
+}
+
+.web-stories .story-lightbox__close-button--stick:first-child {
+  transform: rotateZ(-45deg);
 }

@@ -18,8 +18,6 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { cloneDeep } from 'lodash'; // @TODO: Remove lodash and it's functions.
 
 /**
  * WordPress dependencies
@@ -49,7 +47,6 @@ import {
 import AuthorSelection from './authorSelection';
 
 /* From https://material.io/tools/icons */
-// eslint-disable-next-line no-unused-vars
 const carouselIcon = (
   <SVG
     xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +72,7 @@ const LatestStoriesControls = (props) => {
     viewAllLinkLabel,
     isShowingStoryPoster,
     setAttributes,
-    carouselSettings,
+    // carouselSettings,
     authors,
     listViewImageAlignment,
   } = props;
@@ -91,6 +88,7 @@ const LatestStoriesControls = (props) => {
       label: _x('Z -> A', 'Sorting order', 'web-stories'),
       value: 'reverse-alphabetical',
     },
+    { label: __('Random Stories', 'web-stories'), value: 'random' },
   ];
 
   const toggleView = (newViewType) => {
@@ -142,7 +140,7 @@ const LatestStoriesControls = (props) => {
             }}
             isPressed={isViewType('circles')}
           />
-          {/* <Button
+          <Button
             className="components-toolbar__control"
             label={__('Carousel View', 'web-stories')}
             icon={carouselIcon}
@@ -150,7 +148,7 @@ const LatestStoriesControls = (props) => {
               toggleView('carousel');
             }}
             isPressed={isViewType('carousel')}
-          /> */}
+          />
         </ToolbarGroup>
       </BlockControls>
       <InspectorControls>
@@ -202,16 +200,16 @@ const LatestStoriesControls = (props) => {
           )}
           <ToggleControl
             className={
-              isViewType('circles') || isViewType('list') ? 'is-disabled' : ''
+              ! isViewType('grid') ? 'is-disabled' : ''
             }
-            label={__('Show story poster only', 'web-stories')}
+            label={__('Show story cover images', 'web-stories')}
             checked={
-              isViewType('circles') || isViewType('list')
+              ! isViewType('grid')
                 ? true
                 : isShowingStoryPoster
             }
             onChange={() => {
-              if (!isViewType('circles') && !isViewType('list')) {
+              if (isViewType('grid')) {
                 setAttributes({ isShowingStoryPoster: !isShowingStoryPoster });
               }
             }}
@@ -234,7 +232,7 @@ const LatestStoriesControls = (props) => {
             </BaseControl>
           )}
         </PanelBody>
-        {isViewType('carousel') && (
+        {/* {isViewType('carousel') && (
           <PanelBody title={__('Carousel settings', 'web-stories')}>
             <ToggleControl
               label={__('Loop stories', 'web-stories')}
@@ -270,7 +268,7 @@ const LatestStoriesControls = (props) => {
               />
             )}
           </PanelBody>
-        )}
+        )} */}
         <PanelBody title={__('Sorting & Filtering', 'web-stories')}>
           <RangeControl
             label={__('Number of stories', 'web-stories')}
@@ -279,7 +277,7 @@ const LatestStoriesControls = (props) => {
               setAttributes({ numOfStories: updatedNumOfStories })
             }
             min={1}
-            max={15}
+            max={20}
             step={1}
             initialPosition={5}
           />
@@ -291,7 +289,7 @@ const LatestStoriesControls = (props) => {
                 setAttributes({ numOfColumns: updatedNumOfColumns })
               }
               min={1}
-              max={5}
+              max={4}
               step={1}
               initialPosition={2}
             />
@@ -321,7 +319,7 @@ LatestStoriesControls.propTypes = {
   viewAllLinkLabel: PropTypes.string,
   isShowingStoryPoster: PropTypes.bool,
   setAttributes: PropTypes.func.isRequired,
-  carouselSettings: PropTypes.object,
+  // carouselSettings: PropTypes.object,
   authors: PropTypes.array,
   listViewImageAlignment: PropTypes.string,
 };

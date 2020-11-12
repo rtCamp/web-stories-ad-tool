@@ -46,7 +46,7 @@ function StoryPlayer({
   });
   const hasContentOverlay = isShowingTitle || isShowingAuthor || isShowingDate;
   const dateFormat = __experimentalGetSettings().formats.date;
-  const ref = useRef(null);
+  const ref = useRef();
 
   useEffect(() => {
     if (isShowingStoryPoster) {
@@ -56,71 +56,50 @@ function StoryPlayer({
     ref.current.load();
   }, [isShowingStoryPoster]);
 
-  if (isShowingStoryPoster) {
-    return (
-      <div className={singleStoryClasses}>
-        <div className={imageAlignmentClass}>
+  return (
+    <div className={singleStoryClasses}>
+      <div className="latest-stories__story-overlay" />
+      <div className={imageAlignmentClass}>
+        {isShowingStoryPoster ? (
           <div
             className="latest-stories__story-placeholder"
             style={{ backgroundImage: `url(${poster}` }}
           />
-          {hasContentOverlay && (
-            <div className="story-content-overlay latest-stories__story-content-overlay">
-              {isShowingTitle && (
-                <div className="story-content-overlay__title">
-                  {title ? <RawHTML>{title}</RawHTML> : ''}
-                </div>
-              )}
-              <div className="story-content-overlay__author-date">
-                {isShowingAuthor && <div>{`By ${author}`}</div>}
-                {isShowingDate && (
-                  <time
-                    dateTime={format('c', date)}
-                    className="story-content-overlay__date"
-                  >
-                    {`On ${dateI18n(dateFormat, date)}`}
-                  </time>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className={singleStoryClasses}>
-      <amp-story-player height="430px" width="285px" ref={ref}>
-        <a
-          href={url}
-          style={{
-            ['--story-player-poster']: poster ? `url('${poster}')` : undefined,
-          }}
-        >
-          {title ? <RawHTML>{title}</RawHTML> : ''}
-        </a>
-      </amp-story-player>
-      {hasContentOverlay && (
-        <div className="story-content-overlay latest-stories__story-content-overlay">
-          {isShowingTitle && (
-            <div className="story-content-overlay__title">
+        ) : (
+          <amp-story-player height="430" width="285" ref={ref}>
+            <a
+              href={url}
+              style={{
+                ['--story-player-poster']: poster
+                  ? `url('${poster}')`
+                  : undefined,
+              }}
+            >
               {title ? <RawHTML>{title}</RawHTML> : ''}
-            </div>
-          )}
-          <div className="story-content-overlay__author-date">
-            {isShowingAuthor && <div>{`By ${author}`}</div>}
-            {isShowingDate && (
-              <time
-                dateTime={format('c', date)}
-                className="story-content-overlay__date"
-              >
-                {`On ${dateI18n(dateFormat, date)}`}
-              </time>
+            </a>
+          </amp-story-player>
+        )}
+        {hasContentOverlay && (
+          <div className="story-content-overlay latest-stories__story-content-overlay">
+            {isShowingTitle && (
+              <div className="story-content-overlay__title">
+                {title ? <RawHTML>{title}</RawHTML> : ''}
+              </div>
             )}
+            <div className="story-content-overlay__author-date">
+              {isShowingAuthor && <div>{`By ${author}`}</div>}
+              {isShowingDate && (
+                <time
+                  dateTime={format('c', date)}
+                  className="story-content-overlay__date"
+                >
+                  {`On ${dateI18n(dateFormat, date)}`}
+                </time>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

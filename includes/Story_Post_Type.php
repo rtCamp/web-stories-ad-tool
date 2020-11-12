@@ -530,6 +530,7 @@ class Story_Post_Type {
 			return $query_params;
 		}
 		$query_params['orderby']['enum'][] = 'story_author';
+		$query_params['orderby']['enum'][] = 'rand';
 		return $query_params;
 	}
 
@@ -721,7 +722,7 @@ class Story_Post_Type {
 					'hasUploadMediaAction'  => $has_upload_media_action,
 				],
 				'api'              => [
-					'users'   => '/wp/v2/users',
+					'users'   => '/web-stories/v1/users',
 					'stories' => sprintf( '/web-stories/v1/%s', $rest_base ),
 					'media'   => '/web-stories/v1/media',
 					'link'    => '/web-stories/v1/link',
