@@ -226,8 +226,7 @@ class Latest_Stories_Block extends Embed_Base {
 		$query_args    = $this->get_query_args();
 		$stories_query = new \WP_Query( $query_args );
 
-		$is_circles_view = $this->is_view_type( 'circles' );
-		$is_list_view    = $this->is_view_type( 'list' );
+		$is_grid_view = $this->is_view_type( 'grid' );
 
 		if ( $stories_query->have_posts() ) :
 
@@ -269,7 +268,7 @@ class Latest_Stories_Block extends Embed_Base {
 						$current_post_id = get_the_ID();
 						$story_attrs     = $this->get_story_attrs( $current_post_id, $single_story_classes );
 
-						if ( ( $is_list_view || $is_circles_view ) || ( ! empty( $attributes['isShowingStoryPoster'] && true === $attributes['isShowingStoryPoster'] ) ) ) :
+						if ( ( ! $is_grid_view ) || ( ! empty( $attributes['isShowingStoryPoster'] && true === $attributes['isShowingStoryPoster'] ) ) ) :
 							if (
 								( function_exists( 'amp_is_request' ) && ! amp_is_request() ) ||
 								( function_exists( 'is_amp_endpoint' ) && ! is_amp_endpoint() )

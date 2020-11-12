@@ -200,16 +200,16 @@ const LatestStoriesControls = (props) => {
           )}
           <ToggleControl
             className={
-              isViewType('circles') || isViewType('list') ? 'is-disabled' : ''
+              ! isViewType('grid') ? 'is-disabled' : ''
             }
             label={__('Show story cover images', 'web-stories')}
             checked={
-              isViewType('circles') || isViewType('list')
+              ! isViewType('grid')
                 ? true
                 : isShowingStoryPoster
             }
             onChange={() => {
-              if (!isViewType('circles') && !isViewType('list')) {
+              if (isViewType('grid')) {
                 setAttributes({ isShowingStoryPoster: !isShowingStoryPoster });
               }
             }}
