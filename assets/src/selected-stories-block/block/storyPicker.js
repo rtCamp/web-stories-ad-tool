@@ -87,6 +87,7 @@ const LoaderContainer = styled.div`
 function StoryPicker({
   selectedStories,
   setSelectedStories,
+  selectedStoriesObject,
   setSelectedStoriesObject,
   closeStoryPicker,
 }) {
@@ -149,30 +150,19 @@ function StoryPicker({
   const addItemToSelectedStories = (storyId) => {
     if (!selectedStories.includes(storyId)) {
       setSelectedStories([...selectedStories, storyId]);
+      setSelectedStoriesObject([
+        ...selectedStoriesObject,
+        { ...orderedStories.find((story) => story.id === storyId) },
+      ]);
     }
   };
 
   const removeItemFromSelectedStories = (storyId) => {
     setSelectedStories(selectedStories.filter((id) => storyId !== id));
+    setSelectedStoriesObject(
+      selectedStoriesObject.filter((story) => storyId !== story.id)
+    );
   };
-
-  const mapSelectedStories = () => {
-    setSelectedStoriesObject([
-      ...selectedStories.map((storyId) => {
-        return orderedStories.find((story) => story.id === storyId);
-      }),
-    ]);
-  };
-
-  const insertStories = () => {
-    mapSelectedStories();
-    closeStoryPicker();
-  };
-
-  useEffect(() => {
-    mapSelectedStories();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedStories]);
 
   return (
     <Modal
@@ -192,6 +182,8 @@ function StoryPicker({
             setSelectedStories={setSelectedStories}
             orderedStories={orderedStories}
             pageSize={view.pageSize}
+            setSelectedStoriesObject={setSelectedStoriesObject}
+            selectedStoriesObject={selectedStoriesObject}
           />
         ) : (
           <SelectStories
@@ -220,7 +212,7 @@ function StoryPicker({
           <Button
             isPrimary
             disabled={!selectedStories.length}
-            onClick={insertStories}
+            onClick={closeStoryPicker}
           >
             {__('Insert Stories', 'web-stories')}
           </Button>
@@ -233,6 +225,7 @@ function StoryPicker({
 StoryPicker.propTypes = {
   selectedStories: PropTypes.array,
   setSelectedStories: PropTypes.func,
+  selectedStoriesObject: PropTypes.array,
   setSelectedStoriesObject: PropTypes.func,
   closeStoryPicker: PropTypes.func,
 };
