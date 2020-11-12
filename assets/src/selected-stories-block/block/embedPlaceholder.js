@@ -91,6 +91,7 @@ const EmbedPlaceholder = ({
           selectedStories={selectedStories}
           setSelectedStories={setSelectedStories}
           closeStoryPicker={closeStoryPicker}
+          selectedStoriesObject={selectedStoriesObject}
           setSelectedStoriesObject={setSelectedStoriesObject}
         />
       )}

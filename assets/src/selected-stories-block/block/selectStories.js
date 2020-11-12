@@ -50,7 +50,7 @@ import TypeaheadSearch from '../../dashboard/app/views/shared/typeaheadSearch';
 import { UnitsProvider } from '../../edit-story/units';
 import { TransformProvider } from '../../edit-story/components/transform';
 import FontProvider from '../../dashboard/app/font/fontProvider';
-import { StoryGrid, StoryGridItem } from './components/cardGridItem';
+import { StoryGridItem } from './components/cardGridItem';
 
 const StoryFilter = styled.div`
   display: flex;
@@ -68,6 +68,39 @@ const StoryFilter = styled.div`
     }
   }
 `;
+
+const StoryGrid = styled.div(
+  ({ columnWidth, theme }) => `
+  display: grid;
+  overflow: auto !important;
+  width: 100%;
+  height: calc(100% - 95px) !important;
+  padding: 10px 5px;
+  grid-column-gap: ${theme.DEPRECATED_THEME.grid.columnGap.desktop}px;
+  grid-row-gap: 80px;
+  grid-template-columns: repeat(auto-fill, ${columnWidth - 5}px);
+  grid-template-rows: auto !important;
+  scroll-margin-top: 30vh;
+  margin-top: 2px; // this is for keyboard focus
+
+  ${theme.DEPRECATED_THEME.breakpoint.tablet} {
+    grid-column-gap: ${theme.DEPRECATED_THEME.grid.columnGap.tablet}px;
+  }
+  ${theme.DEPRECATED_THEME.breakpoint.largeDisplayPhone} {
+    grid-column-gap: ${
+      theme.DEPRECATED_THEME.grid.columnGap.largeDisplayPhone
+    }px;
+  }
+  ${theme.DEPRECATED_THEME.breakpoint.smallDisplayPhone} {
+    grid-column-gap: ${
+      theme.DEPRECATED_THEME.grid.columnGap.smallDisplayPhone
+    }px;
+  }
+  ${theme.DEPRECATED_THEME.breakpoint.min} {
+    grid-column-gap: ${theme.DEPRECATED_THEME.grid.columnGap.min}px;
+  }
+`
+);
 
 const SearchContainer = styled.div`
   display: inline-block;
@@ -231,8 +264,8 @@ function SelectStories({
               }}
             >
               <StoryGrid
-                pageSize={pageSize}
                 role="list"
+                columnWidth={pageSize.width}
                 ariaLabel={__('Viewing stories', 'web-stories')}
               >
                 {orderedStories.map((story) => {

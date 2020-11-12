@@ -40,6 +40,8 @@ function SortStories({
   selectedStories,
   setSelectedStories,
   orderedStories,
+  selectedStoriesObject,
+  setSelectedStoriesObject,
   pageSize,
 }) {
   const [droppingToIndex, setDroppingToIndex] = useState();
@@ -52,6 +54,13 @@ function SortStories({
     });
 
     setSelectedStoryList(list);
+
+    setSelectedStoriesObject(
+      selectedStories.map((storyId) => {
+        return selectedStoriesObject.find((story) => story.id === storyId);
+      })
+    );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedStories]);
 
@@ -160,6 +169,8 @@ SortStories.propTypes = {
   selectedStories: PropTypes.array,
   setSelectedStories: PropTypes.func,
   orderedStories: PropTypes.array,
+  selectedStoriesObject: PropTypes.array,
+  setSelectedStoriesObject: PropTypes.func,
   pageSize: PageSizePropType,
 };
 
