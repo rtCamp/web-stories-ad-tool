@@ -61,6 +61,7 @@ const ModalContent = styled.div(
 const ModalFooter = styled.div`
   position: absolute;
   bottom: 0;
+  z-index: 2;
   width: 100%;
   background: #f3f3f3;
   border-top: 1px solid #ddd;
