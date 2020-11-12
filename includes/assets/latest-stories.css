@@ -84,40 +84,33 @@
 /* Grid View Styles */
 .web-stories.is-view-type-grid {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
 }
 
 .web-stories.is-view-type-grid .web-stories__controller {
   flex-basis: calc(100% - 32px);
-  flex-grow: 1;
   margin: 16px;
 }
 
 @media only screen and (min-width: 600px) {
   .web-stories.is-view-type-grid.columns-1 .web-stories__controller {
     flex-basis: calc(100% - 32px);
-    flex-grow: 1;
   }
 
   .web-stories.is-view-type-grid.columns-2 .web-stories__controller {
     flex-basis: calc(50% - 32px);
-    flex-grow: 1;
   }
 
   .web-stories.is-view-type-grid.columns-3 .web-stories__controller {
     flex-basis: calc(33.3334% - 32px);
-    flex-grow: 1;
   }
 
   .web-stories.is-view-type-grid.columns-4 .web-stories__controller {
     flex-basis: calc(25% - 32px);
-    flex-grow: 1;
   }
 
   .web-stories.is-view-type-grid.columns-5 .web-stories__controller {
     flex-basis: calc(20% - 32px);
-    flex-grow: 1;
   }
 }
 
