@@ -31,6 +31,10 @@ import { ThemeProvider } from 'styled-components';
 import ApiProvider from '../../dashboard/app/api/apiProvider';
 import { ConfigProvider } from '../../dashboard/app/config';
 import theme from '../../dashboard/theme';
+import {
+  theme as externalDesignSystemTheme,
+  lightMode,
+} from '../../design-system';
 import EmbedPlaceholder from './embedPlaceholder';
 import { icon } from './';
 
@@ -41,9 +45,15 @@ const LatestStoriesEdit = () => {
   const label = __('Selected Web Stories', 'web-stories');
   const { config } = global.webStoriesSelectedBlockSettings;
 
+  const activeTheme = {
+    DEPRECATED_THEME: theme,
+    ...externalDesignSystemTheme,
+    colors: lightMode,
+  };
+
   if (showPlaceholder) {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={activeTheme}>
         <ConfigProvider config={config}>
           <ApiProvider>
             <EmbedPlaceholder

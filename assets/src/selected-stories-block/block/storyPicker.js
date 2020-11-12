@@ -42,17 +42,17 @@ import SortStories from './sortStories';
 const ModalContent = styled.div(
   ({ pageSize, theme }) => `
   position: relative;
-  width: calc((${pageSize.width}px * 5) + (${theme.grid.columnGap.desktop}px*7) - 12px);
+  width: calc((${pageSize.width}px * 5) + (${theme.DEPRECATED_THEME.grid.columnGap.desktop}px*7) - 12px);
   height: calc(100vh - (61px * 3));
   margin: -24px;
   overflow: hidden;
   padding: 12px 24px 0;
 
-  @media only ${theme.breakpoint.tablet} {
-    width: calc((${pageSize.width}px * 4) + (${theme.grid.columnGap.tablet}px*3));
+  @media only ${theme.DEPRECATED_THEME.breakpoint.tablet} {
+    width: calc((${pageSize.width}px * 4) + (${theme.DEPRECATED_THEME.grid.columnGap.tablet}px*3));
   }
 
-  @media only ${theme.breakpoint.min} {
+  @media only ${theme.DEPRECATED_THEME.breakpoint.min} {
     width: 100%;
   }
 `

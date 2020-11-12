@@ -75,8 +75,9 @@ const SearchContainer = styled.div`
   position: relative;
   width: 100%;
   height: 29px;
-  @media ${({ theme }) => theme.breakpoint.smallDisplayPhone} {
-    left: ${({ theme }) => `${theme.standardViewContentGutter.min}px`};
+  @media ${({ theme }) => theme.DEPRECATED_THEME.breakpoint.smallDisplayPhone} {
+    left: ${({ theme }) =>
+      `${theme.DEPRECATED_THEME.standardViewContentGutter.min}px`};
     max-width: 100%;
     justify-content: flex-start;
   }
