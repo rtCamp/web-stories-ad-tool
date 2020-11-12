@@ -82,9 +82,6 @@ class Stories extends \WP_UnitTestCase {
 			'show_stories_archive_link' => false,
 			'stories_archive_label'     => 'View all stories',
 			'list_view_image_alignment' => 'left',
-			'autoplay_carousel'         => false,
-			'loop_carousel'             => false,
-			'delay'                     => 5,
 			'class'                     => '',
 		];
 

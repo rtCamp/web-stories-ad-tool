@@ -71,9 +71,6 @@ class Stories {
 	 *     @type bool   $show_stories_archive_link Whether to show view all link or not. Default false.
 	 *     @type string $stories_archive_label     The label for view all link. Default 'View all stories'.
 	 *     @type string $list_view_image_alignment The list mode image alignment. Default 'left'.
-	 *     @type bool   $autoplay_carousel         Whether to autoplay the carousel or not. Default false.
-	 *     @type bool   $loop_carousel             Whether to loop the carousel or not. Default false.
-	 *     @type int    $delay                     Autoplay carousel delay( in seconds ). Default 5.
 	 *     @type string $class                     Additional CSS classes for the container. Default empty string.
 	 * }
 	 * @param array $query_arguments An array of story query arguments. @see WP_Query::parse_query() for all available arguments.
@@ -149,9 +146,6 @@ class Stories {
 			'show_stories_archive_link' => false,
 			'stories_archive_label'     => 'View all stories',
 			'list_view_image_alignment' => 'left',
-			'autoplay_carousel'         => false,
-			'loop_carousel'             => false,
-			'delay'                     => 5,
 			'class'                     => '',
 		];
 

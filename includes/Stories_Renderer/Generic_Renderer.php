@@ -174,17 +174,6 @@ class Generic_Renderer extends Renderer {
 					type="carousel"
 					role="region"
 					aria-label="Basic carousel"
-					<?php
-					if ( ! empty( $this->attributes['autoplay'] ) && ( true === $this->attributes['autoplay'] ) ) {
-						echo( 'autoplay' );
-					}
-					?>
-					<?php
-					if ( ! empty( $this->attributes['loop'] ) && ( true === $this->attributes['loop'] ) ) {
-						echo( 'loop' );
-					}
-					?>
-					<?php echo( ! empty( $this->attributes['delay'] ) ) ? sprintf( 'delay=%1$s', ( absint( $this->attributes['delay'] ) * 1000 ) ) : ''; ?>"
 				>
 				<?php
 				break;

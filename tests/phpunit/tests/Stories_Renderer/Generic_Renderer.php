@@ -225,9 +225,6 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 				'view_type'         => 'carousel',
 				'class'             => '',
 				'show_story_poster' => false,
-				'autoplay'          => true,
-				'loop'              => true,
-				'delay'             => 6,
 			]
 		);
 
@@ -240,9 +237,6 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 		$output = ob_get_clean();
 
 		$this->assertContains( '<amp-carousel', $output );
-		$this->assertContains( 'autoplay', $output );
-		$this->assertContains( 'loop', $output );
-		$this->assertContains( 'delay=6000', $output );
 
 	}
 
@@ -257,9 +251,6 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 				'view_type'         => 'carousel',
 				'class'             => '',
 				'show_story_poster' => false,
-				'autoplay'          => true,
-				'loop'              => true,
-				'delay'             => 6,
 			]
 		);
 
@@ -389,9 +380,6 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 				'show_stories_archive_link' => false,
 				'stories_archive_label'     => 'View all stories',
 				'list_view_image_alignment' => 'left',
-				'autoplay_carousel'         => false,
-				'loop_carousel'             => false,
-				'delay'                     => 5,
 				'class'                     => '',
 			]
 		);
