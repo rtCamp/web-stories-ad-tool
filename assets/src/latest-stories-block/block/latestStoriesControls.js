@@ -199,15 +199,9 @@ const LatestStoriesControls = (props) => {
             />
           )}
           <ToggleControl
-            className={
-              ! isViewType('grid') ? 'is-disabled' : ''
-            }
+            className={!isViewType('grid') ? 'is-disabled' : ''}
             label={__('Show story cover images', 'web-stories')}
-            checked={
-              ! isViewType('grid')
-                ? true
-                : isShowingStoryPoster
-            }
+            checked={!isViewType('grid') ? true : isShowingStoryPoster}
             onChange={() => {
               if (isViewType('grid')) {
                 setAttributes({ isShowingStoryPoster: !isShowingStoryPoster });
@@ -279,7 +273,6 @@ const LatestStoriesControls = (props) => {
             min={1}
             max={20}
             step={1}
-            initialPosition={5}
           />
           {isViewType('grid') && (
             <RangeControl
@@ -291,7 +284,6 @@ const LatestStoriesControls = (props) => {
               min={1}
               max={4}
               step={1}
-              initialPosition={2}
             />
           )}
           <SelectControl
