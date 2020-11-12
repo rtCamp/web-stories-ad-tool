@@ -30,7 +30,11 @@ import { useState, useEffect, useMemo } from '@wordpress/element';
  * Internal dependencies
  */
 import useApi from '../../dashboard/app/api/useApi';
-import { VIEW_STYLE, STORY_STATUSES } from '../../dashboard/constants';
+import {
+  VIEW_STYLE,
+  STORY_STATUSES,
+  STORY_STATUS,
+} from '../../dashboard/constants';
 import { useStoryView } from '../../dashboard/utils';
 import SelectStories from './selectStories';
 import SortStories from './sortStories';
@@ -110,7 +114,7 @@ function StoryPicker({
       searchTerm: search.keyword,
       sortDirection: view.style === VIEW_STYLE.LIST && sort.direction,
       sortOption: sort.value,
-      status: filter.value,
+      status: STORY_STATUS.PUBLISH,
     });
 
     if (fetchingForTheFirstTime) {

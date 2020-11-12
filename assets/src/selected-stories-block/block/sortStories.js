@@ -23,6 +23,8 @@ import PropTypes from 'prop-types';
  * WordPress dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
+import { Draggable } from '@wordpress/components';
+import { useEffect, useState } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -36,10 +38,33 @@ import { StoryGrid, StoryGridItem } from './components/cardGridItem';
 
 function SortStories({
   selectedStories,
-  // setSelectedStories,
+  setSelectedStories,
   orderedStories,
   pageSize,
 }) {
+  const [droppingToIndex, setDroppingToIndex] = useState();
+  const [draggedElID, setDragedElementID] = useState();
+  const [selectedStoryList, setSelectedStoryList] = useState([]);
+
+  useEffect(() => {
+    const list = selectedStories.map((storyId) => {
+      return orderedStories.find((story) => story.id === storyId);
+    });
+
+    setSelectedStoryList(list);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedStories]);
+
+  const rearrangeStories = (oldIndex, newIndex) => {
+    const selectedStoryIds = [...selectedStories];
+    selectedStoryIds.splice(
+      newIndex,
+      0,
+      selectedStoryIds.splice(oldIndex, 1).pop()
+    );
+    setSelectedStories(selectedStoryIds);
+  };
+
   return (
     <FontProvider>
       <TransformProvider>
@@ -52,29 +77,78 @@ function SortStories({
           <StoryGrid
             pageSize={pageSize}
             role="list"
-            ariaLabel={__('Viewing stories', 'web-stories')}
+            ariaLabel={__('Sorting stories', 'web-stories')}
           >
-            {orderedStories
-              .filter((story) => selectedStories.includes(story.id))
-              .map((story) => {
-                return (
-                  <StoryGridItem
-                    key={story.id}
-                    role="listitem"
-                    data-testid={`story-grid-item-${story.id}`}
+            {selectedStoryList.map((story, index) => {
+              return (
+                <div
+                  key={story.id}
+                  onDragOver={(event) => {
+                    event.preventDefault();
+                    event.target.closest('.droppable').style.borderLeft =
+                      '5px solid #000';
+
+                    setDroppingToIndex(
+                      event.target.parentElement.dataset.order
+                    );
+                  }}
+                  onDragLeave={(event) => {
+                    event.preventDefault();
+                    event.target.closest('.droppable').style.borderLeft = 0;
+                  }}
+                  onDrop={(event) => {
+                    // Update the list after drop
+                    if (draggedElID) {
+                      const oldIndex = selectedStoryList.findIndex(
+                        (storyItem) => storyItem.id === draggedElID
+                      );
+                      rearrangeStories(oldIndex, droppingToIndex);
+                    }
+
+                    event.target.closest('.droppable').style.borderLeft = 0;
+                  }}
+                  className="droppable"
+                >
+                  <div
+                    data-order={index}
+                    id={`draggable-example-box-${story.id}`}
                   >
-                    <CardPreviewContainer
-                      ariaLabel={sprintf(
-                        /* translators: %s: story title. */
-                        __('preview of %s', 'web-stories'),
-                        story.title
-                      )}
-                      pageSize={pageSize}
-                      story={story}
-                    />
-                  </StoryGridItem>
-                );
-              })}
+                    <Draggable elementId={`draggable-example-box-${story.id}`}>
+                      {({ onDraggableStart, onDraggableEnd }) => {
+                        const handleOnDragStart = (event) => {
+                          setDragedElementID(story.id);
+                          onDraggableStart(event);
+                        };
+                        const handleOnDragEnd = (event) => {
+                          onDraggableEnd(event);
+                        };
+
+                        return (
+                          <StoryGridItem
+                            role="listitem"
+                            data-testid={`story-grid-item-${story.id}`}
+                            onDragStart={handleOnDragStart}
+                            onDragEnd={handleOnDragEnd}
+                            data-order={index}
+                            draggable
+                          >
+                            <CardPreviewContainer
+                              ariaLabel={sprintf(
+                                /* translators: %s: story title. */
+                                __('preview of %s', 'web-stories'),
+                                story.title
+                              )}
+                              pageSize={pageSize}
+                              story={story}
+                            />
+                          </StoryGridItem>
+                        );
+                      }}
+                    </Draggable>
+                  </div>
+                </div>
+              );
+            })}
           </StoryGrid>
         </UnitsProvider>
       </TransformProvider>
@@ -84,7 +158,7 @@ function SortStories({
 
 SortStories.propTypes = {
   selectedStories: PropTypes.array,
-  // setSelectedStories: PropTypes.func,
+  setSelectedStories: PropTypes.func,
   orderedStories: PropTypes.array,
   pageSize: PageSizePropType,
 };
