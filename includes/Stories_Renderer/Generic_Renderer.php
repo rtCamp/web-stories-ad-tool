@@ -197,19 +197,19 @@ class Generic_Renderer extends Renderer {
 	}
 
 	/**
-	 * Renders stories archive link if the 'show_view_all_link' attribute is set to true.
+	 * Renders stories archive link if the 'show_stories_archive_link' attribute is set to true.
 	 *
 	 * @return void
 	 */
 	public function maybe_render_archive_link() {
 
-		if ( ( ! empty( $this->attributes['show_view_all_link'] ) ) && ( true === $this->attributes['show_view_all_link'] ) ) :
+		if ( ( ! empty( $this->attributes['show_stories_archive_link'] ) ) && ( true === $this->attributes['show_stories_archive_link'] ) ) :
 			$web_stories_archive = get_post_type_archive_link( Story_Post_Type::POST_TYPE_SLUG );
 			$web_stories_archive = ( is_string( $web_stories_archive ) ? $web_stories_archive : '' );
 			?>
 			<div class="web-stories__archive-link">
 				<a href="<?php echo( esc_url_raw( $web_stories_archive ) ); ?>">
-					<?php echo( esc_html( $this->attributes['view_all_label'] ) ); ?>
+					<?php echo( esc_html( $this->attributes['stories_archive_label'] ) ); ?>
 				</a>
 			</div>
 			<?php

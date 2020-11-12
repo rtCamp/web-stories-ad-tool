@@ -67,8 +67,8 @@ class Stories {
 	 *     @type bool   $show_author               Whether to show story author or not. Default false.
 	 *     @type bool   $show_date                 Whether to show story date or not. Default false.
 	 *     @type bool   $show_story_poster         Whether to show story story poster or show story player. Default true.
-	 *     @type bool   $show_view_all_link        Whether to show view all link or not. Default false.
-	 *     @type string $view_all_label            The label for view all link. Default 'View all stories'.
+	 *     @type bool   $show_stories_archive_link Whether to show view all link or not. Default false.
+	 *     @type string $stories_archive_label     The label for view all link. Default 'View all stories'.
 	 *     @type string $list_view_image_alignment The list mode image alignment. Default 'left'.
 	 *     @type bool   $autoplay_carousel         Whether to autoplay the carousel or not. Default false.
 	 *     @type bool   $loop_carousel             Whether to loop the carousel or not. Default false.
@@ -145,8 +145,8 @@ class Stories {
 			'show_author'               => false,
 			'show_date'                 => false,
 			'show_story_poster'         => true,
-			'show_view_all_link'        => false,
-			'view_all_label'            => 'View all stories',
+			'show_stories_archive_link' => false,
+			'stories_archive_label'     => 'View all stories',
 			'list_view_image_alignment' => 'left',
 			'autoplay_carousel'         => false,
 			'loop_carousel'             => false,

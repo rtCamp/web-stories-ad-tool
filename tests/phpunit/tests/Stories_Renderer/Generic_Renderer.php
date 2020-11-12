@@ -71,8 +71,8 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 			[
 				'class'                     => '',
 				'show_story_poster'         => false,
-				'show_view_all_link'        => true,
-				'view_all_label'            => 'Visual Stories',
+				'show_stories_archive_link' => true,
+				'stories_archive_label'     => 'Visual Stories',
 				'list_view_image_alignment' => 'left',
 			]
 		);
@@ -136,10 +136,10 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 
 		$this->stories->method( 'get_story_attributes' )->willReturn(
 			[
-				'class'              => '',
-				'show_story_poster'  => false,
-				'show_view_all_link' => true,
-				'view_all_label'     => 'View All Stories',
+				'class'                     => '',
+				'show_story_poster'         => false,
+				'show_stories_archive_link' => true,
+				'stories_archive_label'     => 'View All Stories',
 			]
 		);
 
