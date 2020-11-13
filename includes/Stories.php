@@ -26,6 +26,7 @@
 
 namespace Google\Web_Stories;
 
+use Google\Web_Stories\Stories_Renderer\Carousel_Renderer;
 use Google\Web_Stories\Stories_Renderer\Generic_Renderer;
 use Google\Web_Stories\Stories_Renderer\Renderer;
 use WP_Query;
@@ -102,11 +103,14 @@ class Stories {
 
 		switch ( $this->get_story_attributes()['view_type'] ) {
 
-			case 'carousel':
 			case 'circles':
 			case 'list':
 			case 'grid':
 				$renderer = new Generic_Renderer( $this );
+				break;
+
+			case 'carousel':
+				$renderer = new Carousel_Renderer( $this );
 				break;
 
 			default:

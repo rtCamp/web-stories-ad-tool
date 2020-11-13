@@ -1,6 +1,6 @@
 <?php
 /**
- * Generic_Renderer class.
+ * Carousel_Renderer class.
  *
  * @package   Google\Web_Stories
  * @copyright 2020 Google LLC
@@ -26,12 +26,10 @@
 
 namespace Google\Web_Stories\Stories_Renderer;
 
-use Google\Web_Stories\Embed_Base;
-
 /**
  * Generic_Renderer class.
  */
-class Generic_Renderer extends Renderer {
+class Carousel_Renderer extends Renderer {
 	/**
 	 * Perform initial setup for object.
 	 *
@@ -51,10 +49,10 @@ class Generic_Renderer extends Renderer {
 	public function assets() {
 		parent::assets();
 
-		if ( 'grid' === $this->get_view_type() && ! $this->is_amp_request() && true !== $this->attributes['show_story_poster'] ) {
-			wp_enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
-			wp_enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
-		}
+		// Enqueue amp runtime script and amp-carousel script to show amp-carousel on non AMP pages.
+		wp_register_script( 'amp-runtime-script', 'https://cdn.ampproject.org/v0.js', [], 'v0', true );
+		wp_register_script( 'amp-carousel-script', 'https://cdn.ampproject.org/v0/amp-carousel-0.2.js', [ 'amp-runtime-script' ], 'v0', true );
+		wp_enqueue_script( 'amp-carousel-script' );
 	}
 
 	/**
@@ -77,23 +75,31 @@ class Generic_Renderer extends Renderer {
 				class="<?php echo esc_attr( $container_classes ); ?>"
 				style="<?php echo esc_attr( $container_style ); ?>"
 			>
-				<?php
-				foreach ( $this->story_posts as $story_post ) {
-					$this->render_single_story_content( $story_post->ID );
-				}
-				?>
-
+				<amp-carousel
+					width="1"
+					height="1"
+					layout="intrinsic"
+					type="carousel"
+					role="region"
+					aria-label="Basic carousel"
+				>
+					<?php
+					foreach ( $this->story_posts as $story_post ) {
+						$this->render_single_story_content( $story_post->ID );
+					}
+					?>
+				</amp-carousel>
 			</div>
 			<?php $this->maybe_render_archive_link(); ?>
 		</div>
 		<?php
 
 		/**
-		 * Filters the Generic renderer stories content.
+		 * Filters the Carousel renderer stories content.
 		 *
 		 * @param string $content Stories content.
 		 */
-		return apply_filters( 'web_stories_generic_renderer_stories_content', (string) ob_get_clean() );
+		return apply_filters( 'web_stories_carousel_renderer_stories_content', (string) ob_get_clean() );
 	}
 
 }
