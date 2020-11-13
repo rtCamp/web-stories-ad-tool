@@ -72,7 +72,6 @@ const LatestStoriesControls = (props) => {
     viewAllLinkLabel,
     isShowingStoryPoster,
     setAttributes,
-    // carouselSettings,
     authors,
     listViewImageAlignment,
   } = props;
@@ -226,43 +225,6 @@ const LatestStoriesControls = (props) => {
             </BaseControl>
           )}
         </PanelBody>
-        {/* {isViewType('carousel') && (
-          <PanelBody title={__('Carousel settings', 'web-stories')}>
-            <ToggleControl
-              label={__('Loop stories', 'web-stories')}
-              checked={carouselSettings.loop}
-              onChange={() => {
-                const newCarouselSettings = cloneDeep(carouselSettings);
-                newCarouselSettings.loop = !carouselSettings.loop;
-                setAttributes({ carouselSettings: newCarouselSettings });
-              }}
-            />
-            <ToggleControl
-              label={__('Autoplay', 'web-stories')}
-              checked={carouselSettings.autoplay}
-              onChange={() => {
-                const newCarouselSettings = cloneDeep(carouselSettings);
-                newCarouselSettings.autoplay = !carouselSettings.autoplay;
-                setAttributes({ carouselSettings: newCarouselSettings });
-              }}
-            />
-            {carouselSettings.autoplay && (
-              <RangeControl
-                label={__('Delay in seconds', 'web-stories')}
-                value={carouselSettings.delay}
-                onChange={(newDelay) => {
-                  const newCarouselSettings = cloneDeep(carouselSettings);
-                  newCarouselSettings.delay = newDelay;
-                  setAttributes({ carouselSettings: newCarouselSettings });
-                }}
-                min={1}
-                max={5}
-                step={1}
-                initialPosition={3}
-              />
-            )}
-          </PanelBody>
-        )} */}
         <PanelBody title={__('Sorting & Filtering', 'web-stories')}>
           <RangeControl
             label={__('Number of stories', 'web-stories')}
@@ -311,7 +273,6 @@ LatestStoriesControls.propTypes = {
   viewAllLinkLabel: PropTypes.string,
   isShowingStoryPoster: PropTypes.bool,
   setAttributes: PropTypes.func.isRequired,
-  // carouselSettings: PropTypes.object,
   authors: PropTypes.array,
   listViewImageAlignment: PropTypes.string,
 };
