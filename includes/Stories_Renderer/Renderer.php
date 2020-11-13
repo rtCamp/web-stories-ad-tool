@@ -184,17 +184,23 @@ abstract class Renderer implements RenderingInterface {
 	 * @return void
 	 */
 	protected function maybe_render_archive_link() {
-		if ( ( ! empty( $this->attributes['show_stories_archive_link'] ) ) && ( true === $this->attributes['show_stories_archive_link'] ) ) :
-			$web_stories_archive = get_post_type_archive_link( Story_Post_Type::POST_TYPE_SLUG );
-			$web_stories_archive = ( is_string( $web_stories_archive ) ? $web_stories_archive : '' );
-			?>
-			<div class="web-stories__archive-link">
-				<a href="<?php echo( esc_url_raw( $web_stories_archive ) ); ?>">
-					<?php echo( esc_html( $this->attributes['stories_archive_label'] ) ); ?>
-				</a>
-			</div>
-			<?php
-		endif;
+		if ( empty( $this->attributes['show_stories_archive_link'] ) || true !== $this->attributes['show_stories_archive_link'] ) {
+			return;
+		}
+
+		$web_stories_archive = get_post_type_archive_link( Story_Post_Type::POST_TYPE_SLUG );
+
+		if ( empty( $web_stories_archive ) || ! is_string( $web_stories_archive ) ) {
+			return;
+		}
+
+		?>
+		<div class="web-stories__archive-link">
+			<a href="<?php echo( esc_url_raw( $web_stories_archive ) ); ?>">
+				<?php echo( esc_html( $this->attributes['stories_archive_label'] ) ); ?>
+			</a>
+		</div>
+		<?php
 	}
 
 	/**
@@ -203,13 +209,13 @@ abstract class Renderer implements RenderingInterface {
 	 * @return string
 	 */
 	protected function get_container_classes() {
-		$container_classes  = 'web-stories ';
-		$container_classes .= ( ! empty( $this->attributes['view_type'] ) ) ? " is-view-type-{$this->attributes['view_type']}" : ' is-view-type-grid';
-		$container_classes .= ( ! empty( $this->attributes['align'] ) ) ? " align{$this->attributes['align']}" : ' alignnone';
+		$container_classes   = [];
+		$container_classes[] = 'web-stories ';
+		$container_classes[] = ( ! empty( $this->attributes['view_type'] ) ) ? sprintf( 'is-view-type-%1$s', $this->attributes['view_type'] ) : ' is-view-type-circles';
+		$container_classes[] = ( ! empty( $this->attributes['align'] ) ) ? sprintf( 'align%1$s', $this->attributes['align'] ) : ' alignnone';
+		$container_classes[] = ! empty( $this->attributes['classes'] ) ? $this->attributes['classes'] : '';
 
-		$classes = ! empty( $this->attributes['classes'] ) ? $this->attributes['classes'] : '';
-
-		return trim( $classes . ' ' . $container_classes );
+		return implode( ' ', $container_classes );
 	}
 
 	/**
@@ -236,7 +242,7 @@ abstract class Renderer implements RenderingInterface {
 	 * @return string
 	 */
 	protected function get_container_styles() {
-		$container_style = ( true === $this->is_view_type( 'grid' ) ) ? "grid-template-columns:repeat({$this->attributes['number_of_columns']}, 1fr);" : '';
+		$container_style = ( true === $this->is_view_type( 'grid' ) ) ? sprintf( 'grid-template-columns:repeat(%1$s, 1fr);', $this->attributes['number_of_columns'] ) : '';
 
 		/**
 		 * Filters the web stories renderer container style.
@@ -348,16 +354,16 @@ abstract class Renderer implements RenderingInterface {
 				<?php if ( ! empty( $story_data['author'] ) ) : ?>
 				<div>
 					<?php
-					esc_html_e( 'By', 'web-stories' );
-					echo( esc_html( ' ' . $story_data['author'] ) );
+					/* translators: %s: author name. */
+					echo esc_html( sprintf( __( 'By %s', 'web-stories' ), $story_data['author'] ) );
 					?>
 					</div>
 				<?php endif; ?>
 				<?php if ( ! empty( $story_data['date'] ) ) : ?>
 				<time class="story-content-overlay__date">
 					<?php
-					esc_html_e( 'On', 'web-stories' );
-					echo( esc_html( ' ' . $story_data['date'] ) );
+					/* translators: %s: publish date. */
+					echo esc_html( sprintf( __( 'On %s', 'web-stories' ), $story_data['date'] ) );
 					?>
 				</time>
 				<?php endif; ?>
