@@ -40,16 +40,6 @@ class Generic_Renderer extends Renderer {
 	 */
 	public function init() {
 		parent::init();
-		add_action( 'web_stories_renderer_container_start', [ $this, 'amp_carousel' ] );
-		add_action( 'web_stories_renderer_container_end', [ $this, 'amp_carousel' ] );
-		add_action( 'web_stories_renderer_content', [ $this, 'render_story' ] );
-		add_action( 'web_stories_renderer_wrapper_end', [ $this, 'maybe_render_archive_link' ] );
-		add_action( 'web_stories_renderer_story_content_overlay', [ $this, 'get_content_overlay' ] );
-		add_action( 'web_stories_renderer_single_story_content', [ $this, 'render_story_with_poster' ] );
-		add_action( 'web_stories_renderer_single_story_content', [ $this, 'render_story_with_story_player' ] );
-		add_action( 'web_stories_renderer_container_classes', [ $this, 'container_classes' ] );
-		add_action( 'web_stories_renderer_container_style', [ $this, 'container_styles' ] );
-		add_action( 'web_stories_renderer_single_story_classes', [ $this, 'single_story_classes' ] );
 
 		$this->assets();
 	}
@@ -68,7 +58,7 @@ class Generic_Renderer extends Renderer {
 			wp_enqueue_script( 'amp-carousel-script' );
 		}
 
-		if ( ( true !== $this->attributes['show_story_poster'] && ! in_array( $this->get_view_type(), [ 'circles', 'list' ], true ) ) && ! $this->is_amp_request() ) {
+		if ( 'grid' === $this->get_view_type() && ! $this->is_amp_request() && true !== $this->attributes['show_story_poster'] ) {
 			wp_enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
 			wp_enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
 		}
@@ -80,108 +70,37 @@ class Generic_Renderer extends Renderer {
 	 * @return string Rendered stories output.
 	 */
 	public function render() {
-		$story_posts = $this->stories->get_stories();
-
-		if ( empty( $story_posts ) ) {
+		if ( empty( $this->story_posts ) || ! is_array( $this->story_posts ) ) {
 			return '';
 		}
+
+		$container_classes = $this->get_container_classes();
+		$container_style   = $this->get_container_styles();
+
 		ob_start();
 		?>
 		<div>
-			<?php
-			/**
-			 * Fires before the web stories renderer wrapper.
-			 */
-			do_action( 'web_stories_renderer_wrapper_start' );
-			?>
 			<div
-				class="
-				<?php
-				/**
-				 * Filters the web stories renderer container classes.
-				 *
-				 * @param string $class Container classes.
-				 */
-				echo esc_attr( apply_filters( 'web_stories_renderer_container_classes', 'web-stories ' . $this->attributes['class'] ) );
-				?>
-				"
-				style="
-				<?php
-				/**
-				 * Filters the web stories renderer container style.
-				 *
-				 * @param string $class Container style.
-				 */
-				echo esc_attr( apply_filters( 'web_stories_renderer_container_style', '' ) );
-				?>
-				"
+				class="<?php echo esc_attr( $container_classes ); ?>"
+				style="<?php echo esc_attr( $container_style ); ?>"
 			>
 				<?php
-				/**
-				 * Fires before the web stories renderer container.
-				 */
-				do_action( 'web_stories_renderer_container_start' );
-
-				foreach ( $story_posts as $story_post ) {
-					$story_data = $this->get_story_item_data( $story_post->ID );
-					/**
-					 * Fires inside the web stories renderer wrapper.
-					 */
-					do_action( 'web_stories_renderer_content', $story_data );
+				foreach ( $this->story_posts as $story_post ) {
+					$this->render_single_story_content( $story_post->ID );
 				}
-
-				/**
-				 * Fires after the web stories renderer container.
-				 */
-				do_action( 'web_stories_renderer_container_end' );
 				?>
 
 			</div>
-			<?php
-			/**
-			 * Fires before the web stories renderer wrapper.
-			 */
-			do_action( 'web_stories_renderer_wrapper_end' );
-			?>
+			<?php $this->maybe_render_archive_link(); ?>
 		</div>
 		<?php
 
-		return (string) ob_get_clean();
-	}
-
-	/**
-	 * Add amp-carousel for carousel view type.
-	 *
-	 * @return void
-	 */
-	public function amp_carousel() {
-		$current_action = current_action();
-		$view_type      = $this->get_view_type();
-
-		if ( ! $current_action || 'carousel' !== $view_type ) {
-			return;
-		}
-
-		switch ( $current_action ) {
-
-			case 'web_stories_renderer_container_start':
-				?>
-				<amp-carousel
-					width="1"
-					height="1"
-					layout="intrinsic"
-					type="carousel"
-					role="region"
-					aria-label="Basic carousel"
-				>
-				<?php
-				break;
-
-			case 'web_stories_renderer_container_end':
-				?>
-				</amp-carousel>
-				<?php
-		}
+		/**
+		 * Filters the Generic renderer stories content.
+		 *
+		 * @param string $content Stories content.
+		 */
+		return apply_filters( 'web_stories_generic_renderer_stories_content', (string) ob_get_clean() );
 	}
 
 	/**
@@ -189,8 +108,7 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @return void
 	 */
-	public function maybe_render_archive_link() {
-
+	protected function maybe_render_archive_link() {
 		if ( ( ! empty( $this->attributes['show_stories_archive_link'] ) ) && ( true === $this->attributes['show_stories_archive_link'] ) ) :
 			$web_stories_archive = get_post_type_archive_link( Story_Post_Type::POST_TYPE_SLUG );
 			$web_stories_archive = ( is_string( $web_stories_archive ) ? $web_stories_archive : '' );
@@ -205,78 +123,75 @@ class Generic_Renderer extends Renderer {
 	}
 
 	/**
-	 * Manipulate the classes for renderer container.
-	 *
-	 * @param string $classes Classes for container.
+	 * Gets the classes for renderer container.
 	 *
 	 * @return string
 	 */
-	public function container_classes( $classes ) {
-		$container_classes  = ( ! empty( $this->attributes['view_type'] ) ) ? " is-view-type-{$this->attributes['view_type']}" : ' is-view-type-grid';
+	protected function get_container_classes() {
+		$container_classes  = 'web-stories ';
+		$container_classes .= ( ! empty( $this->attributes['view_type'] ) ) ? " is-view-type-{$this->attributes['view_type']}" : ' is-view-type-grid';
 		$container_classes .= ( ! empty( $this->attributes['align'] ) ) ? " align{$this->attributes['align']}" : ' alignnone';
+
+		$classes = ! empty( $this->attributes['classes'] ) ? $this->attributes['classes'] : '';
 
 		return trim( $classes . ' ' . $container_classes );
 	}
 
 	/**
-	 * Single story markup classes manipulation.
-	 *
-	 * @param string $classes Classes for story.
+	 * Gets the single story container classes.
 	 *
 	 * @return string
 	 */
-	public function single_story_classes( $classes ) {
+	protected function get_single_story_classes() {
 		$single_story_classes = ( ! empty( $this->attributes['show_story_poster'] ) && true === $this->attributes['show_story_poster'] ) ?
 			'web-stories__story-wrapper has-poster' :
 			'web-stories__story-wrapper';
 
-		return trim( $classes . ' ' . $single_story_classes );
+		/**
+		 * Filters the web stories renderer single story classes.
+		 *
+		 * @param string $class Single story classes.
+		 */
+		return apply_filters( 'web_stories_renderer_single_story_classes', $single_story_classes );
 	}
 
 	/**
-	 * Manipulate container style attributes.
-	 *
-	 * @param string $styles Styles for the container.
+	 * Gets the container style attributes.
 	 *
 	 * @return string
 	 */
-	public function container_styles( $styles ) {
+	protected function get_container_styles() {
 		$container_style = ( true === $this->is_view_type( 'grid' ) ) ? "grid-template-columns:repeat({$this->attributes['number_of_columns']}, 1fr);" : '';
 
-		return trim( $styles . ' ' . $container_style );
+		/**
+		 * Filters the web stories renderer container style.
+		 *
+		 * @param string $class Container style.
+		 */
+		return apply_filters( 'web_stories_renderer_container_style', $container_style );
 	}
 
 	/**
 	 * Render story markup.
 	 *
-	 * @param array $story_data Story attributes. Contains information like url, height, width, etc of the story.
+	 * @param int $story_id Story ID.
 	 *
 	 * @return void
 	 */
-	public function render_story( array $story_data ) {
-		if ( empty( $story_data['url'] ) ) {
-			return;
-		}
+	protected function render_single_story_content( $story_id ) {
+		$story_data           = $this->get_story_item_data( $story_id );
+		$single_story_classes = $this->get_single_story_classes();
+		$show_story_player    = true !== $this->attributes['show_story_poster'] && 'grid' === $this->get_view_type();
+
 		?>
 
-		<div class="
+		<div class="<?php echo esc_attr( $single_story_classes ); ?>">
 			<?php
-			/**
-			 * Filters the web stories renderer single story classes.
-			 *
-			 * @param string $class Single story classes.
-			 */
-			echo esc_attr( apply_filters( 'web_stories_renderer_single_story_classes', '' ) );
-			?>
-			"
-		>
-			<?php
-			/**
-			 * Fires inside web stories renderer single story content.
-			 *
-			 * @param array $story_data Story attributes. Contains information like url, height, width, etc of the story.
-			 */
-			do_action( 'web_stories_renderer_single_story_content', $story_data );
+			if ( true === $show_story_player ) {
+				$this->render_story_with_story_player( $story_data );
+			} else {
+				$this->render_story_with_poster( $story_data );
+			}
 			?>
 		</div>
 		<?php
@@ -289,33 +204,24 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @return void
 	 */
-	public function render_story_with_poster( array $story_data ) {
-		if ( true === $this->attributes['show_story_poster'] || in_array( $this->get_view_type(), [ 'circles', 'list' ], true ) ) {
-			$height       = ! empty( $story_data['height'] ) ? absint( $story_data['height'] ) : 600;
-			$width        = ! empty( $story_data['width'] ) ? absint( $story_data['width'] ) : 360;
-			$poster_style = sprintf( 'background-image: url(%1$s);', esc_url_raw( $story_data['poster'] ) );
-			$poster_style = ( true === $this->is_view_type( 'carousel' ) ) ?
-				sprintf( '%1$s width: %2$spx; height: %3$spx', $poster_style, $width, $height ) : $poster_style;
+	protected function render_story_with_poster( array $story_data ) {
+		$height       = ! empty( $story_data['height'] ) ? absint( $story_data['height'] ) : 600;
+		$width        = ! empty( $story_data['width'] ) ? absint( $story_data['width'] ) : 360;
+		$poster_style = sprintf( 'background-image: url(%1$s);', esc_url_raw( $story_data['poster'] ) );
+		$poster_style = ( true === $this->is_view_type( 'carousel' ) ) ?
+			sprintf( '%1$s width: %2$spx; height: %3$spx', $poster_style, $width, $height ) : $poster_style;
 
-			?>
-			<a class="<?php echo( esc_attr( "image-align-{$this->attributes['list_view_image_alignment']}" ) ); ?>"
-				href="<?php echo( esc_url_raw( $story_data['url'] ) ); ?>"
-			>
-				<div
-					class="web-stories__story-placeholder"
-					style="<?php echo esc_attr( $poster_style ); ?>"
-				></div>
-				<?php
-				/**
-				 * Fires after the web stories renderer single story content.
-				 *
-				 * @param array $story_data Story attributes. Contains information like url, height, width, etc of the story.
-				 */
-				do_action( 'web_stories_renderer_story_content_overlay', $story_data );
-				?>
-			</a>
-			<?php
-		}
+		?>
+		<a class="<?php echo( esc_attr( "image-align-{$this->attributes['list_view_image_alignment']}" ) ); ?>"
+			href="<?php echo( esc_url_raw( $story_data['url'] ) ); ?>"
+		>
+			<div
+				class="web-stories__story-placeholder"
+				style="<?php echo esc_attr( $poster_style ); ?>"
+			></div>
+			<?php $this->get_content_overlay( $story_data ); ?>
+		</a>
+		<?php
 	}
 
 	/**
@@ -325,22 +231,19 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @return void
 	 */
-	public function render_story_with_story_player( array $story_data ) {
-		if ( ( true !== $this->attributes['show_story_poster'] && ! in_array( $this->get_view_type(), [ 'circles', 'list' ], true ) ) ) {
-			$height                  = ! empty( $story_data['height'] ) ? absint( $story_data['height'] ) : 600;
-			$width                   = ! empty( $story_data['width'] ) ? absint( $story_data['width'] ) : 360;
-			$player_style            = sprintf( 'width: %1$spx;height: %2$spx', $width, $height );
-			$story_player_attributes = $this->is_amp_request() ? sprintf( 'height=%d width=%d', $height, $width ) : '';
-			$poster_style            = ! empty( $story_data['poster'] ) ? sprintf( '--story-player-poster: url(%s)', $story_data['poster'] ) : '';
-			?>
-			<amp-story-player <?php echo( esc_attr( $story_player_attributes ) ); ?> style="<?php echo esc_attr( $player_style ); ?>">
-				<a href="<?php echo esc_url( $story_data['url'] ); ?>" style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $story_data['title'] ); ?></a>
-			</amp-story-player>
+	protected function render_story_with_story_player( array $story_data ) {
+		$height                  = ! empty( $story_data['height'] ) ? absint( $story_data['height'] ) : 600;
+		$width                   = ! empty( $story_data['width'] ) ? absint( $story_data['width'] ) : 360;
+		$player_style            = sprintf( 'width: %1$spx;height: %2$spx', $width, $height );
+		$story_player_attributes = $this->is_amp_request() ? sprintf( 'height=%d width=%d', $height, $width ) : '';
+		$poster_style            = ! empty( $story_data['poster'] ) ? sprintf( '--story-player-poster: url(%s)', $story_data['poster'] ) : '';
+		?>
+		<amp-story-player <?php echo( esc_attr( $story_player_attributes ) ); ?> style="<?php echo esc_attr( $player_style ); ?>">
+			<a href="<?php echo esc_url( $story_data['url'] ); ?>" style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $story_data['title'] ); ?></a>
+		</amp-story-player>
 
-			<?php
-			/** This filter is documented in includes/Stories_Renderer/Generic_Renderer.php */
-			do_action( 'web_stories_renderer_story_content_overlay', $story_data );
-		}
+		<?php
+		$this->get_content_overlay( $story_data );
 	}
 
 	/**
@@ -350,40 +253,42 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @return void
 	 */
-	public function get_content_overlay( array $story_data ) {
-		if ( ! empty( $story_data['show_content_overlay'] ) && ( true === $story_data['show_content_overlay'] ) ) {
-			?>
-			<div
-				class="story-content-overlay web-stories__story-content-overlay"
-			>
-				<?php if ( ! empty( $story_data['title'] ) ) : ?>
-				<div class="story-content-overlay__title">
-					<?php
-					echo( esc_html( $story_data['title'] ) );
-					?>
-				</div>
-				<?php endif; ?>
-				<div class="story-content-overlay__author-date">
-					<?php if ( ! empty( $story_data['author'] ) ) : ?>
-					<div>
-						<?php
-						esc_html_e( 'By', 'web-stories' );
-						echo( esc_html( ' ' . $story_data['author'] ) );
-						?>
-						</div>
-					<?php endif; ?>
-					<?php if ( ! empty( $story_data['date'] ) ) : ?>
-					<time class="story-content-overlay__date">
-						<?php
-						esc_html_e( 'On', 'web-stories' );
-						echo( esc_html( ' ' . $story_data['date'] ) );
-						?>
-					</time>
-					<?php endif; ?>
-				</div>
-			</div>
-			<?php
+	protected function get_content_overlay( array $story_data ) {
+		if ( empty( $story_data['show_content_overlay'] ) || ( true !== $story_data['show_content_overlay'] ) ) {
+			return;
 		}
+
+		?>
+		<div
+			class="story-content-overlay web-stories__story-content-overlay"
+		>
+			<?php if ( ! empty( $story_data['title'] ) ) : ?>
+			<div class="story-content-overlay__title">
+				<?php
+				echo( esc_html( $story_data['title'] ) );
+				?>
+			</div>
+			<?php endif; ?>
+			<div class="story-content-overlay__author-date">
+				<?php if ( ! empty( $story_data['author'] ) ) : ?>
+				<div>
+					<?php
+					esc_html_e( 'By', 'web-stories' );
+					echo( esc_html( ' ' . $story_data['author'] ) );
+					?>
+					</div>
+				<?php endif; ?>
+				<?php if ( ! empty( $story_data['date'] ) ) : ?>
+				<time class="story-content-overlay__date">
+					<?php
+					esc_html_e( 'On', 'web-stories' );
+					echo( esc_html( ' ' . $story_data['date'] ) );
+					?>
+				</time>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php
 	}
 
 }

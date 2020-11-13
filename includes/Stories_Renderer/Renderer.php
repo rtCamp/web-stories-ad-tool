@@ -56,6 +56,13 @@ abstract class Renderer implements RenderingInterface {
 	protected $attributes = [];
 
 	/**
+	 * Story posts.
+	 *
+	 * @var array An array of story posts.
+	 */
+	protected $story_posts = [];
+
+	/**
 	 * Constructor
 	 *
 	 * @param Stories $stories Stories instance.
@@ -77,7 +84,9 @@ abstract class Renderer implements RenderingInterface {
 	 *
 	 * @return void
 	 */
-	public function init() {}
+	public function init() {
+		$this->story_posts = $this->stories->get_stories();
+	}
 
 	/**
 	 * Initializes renderer functionality.

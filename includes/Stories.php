@@ -79,7 +79,6 @@ class Stories {
 
 		$this->story_attributes = $story_attributes;
 		$this->query_arguments  = $query_arguments;
-		$this->renderer         = $this->make_renderer();
 	}
 
 	/**
@@ -99,7 +98,7 @@ class Stories {
 	 *
 	 * @return Renderer Renderer Instance.
 	 */
-	private function make_renderer() {
+	private function get_renderer() {
 
 		switch ( $this->get_story_attributes()['view_type'] ) {
 
@@ -125,6 +124,8 @@ class Stories {
 	 * @return string
 	 */
 	public function render() {
+
+		$this->renderer = $this->get_renderer();
 
 		return $this->renderer->render();
 	}
