@@ -27,7 +27,7 @@
 namespace Google\Web_Stories\Stories_Renderer;
 
 /**
- * Generic_Renderer class.
+ * Carousel_Renderer class.
  */
 class Carousel_Renderer extends Renderer {
 	/**
