@@ -49,10 +49,12 @@ class Carousel_Renderer extends Renderer {
 	public function assets() {
 		parent::assets();
 
-		// Enqueue amp runtime script and amp-carousel script to show amp-carousel on non AMP pages.
-		wp_register_script( 'amp-runtime-script', 'https://cdn.ampproject.org/v0.js', [], 'v0', true );
-		wp_register_script( 'amp-carousel-script', 'https://cdn.ampproject.org/v0/amp-carousel-0.2.js', [ 'amp-runtime-script' ], 'v0', true );
-		wp_enqueue_script( 'amp-carousel-script' );
+		if ( ! $this->is_amp_request() ) {
+			// Enqueue amp runtime script and amp-carousel script to show amp-carousel on non AMP pages.
+			wp_register_script( 'amp-runtime-script', 'https://cdn.ampproject.org/v0.js', [], 'v0', true );
+			wp_register_script( 'amp-carousel-script', 'https://cdn.ampproject.org/v0/amp-carousel-0.2.js', [ 'amp-runtime-script' ], 'v0', true );
+			wp_enqueue_script( 'amp-carousel-script' );
+		}
 	}
 
 	/**
@@ -61,7 +63,7 @@ class Carousel_Renderer extends Renderer {
 	 * @return string Rendered stories output.
 	 */
 	public function render() {
-		if ( empty( $this->story_posts ) || ! is_array( $this->story_posts ) ) {
+		if ( ! $this->valid() ) {
 			return '';
 		}
 
@@ -84,10 +86,14 @@ class Carousel_Renderer extends Renderer {
 					aria-label="Basic carousel"
 				>
 					<?php
-					foreach ( $this->story_posts as $story_post ) {
-						$this->render_single_story_content( $story_post->ID );
-					}
+					do {
+
+						$this->render_single_story_content();
+						$this->next();
+
+					} while ( $this->valid() );
 					?>
+
 				</amp-carousel>
 			</div>
 			<?php $this->maybe_render_archive_link(); ?>

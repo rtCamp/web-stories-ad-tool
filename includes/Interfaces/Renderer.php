@@ -43,4 +43,11 @@ interface Renderer {
 	 * @return string
 	 */
 	public function render();
+
+	/**
+	 * Render a single story markup.
+	 *
+	 * @return mixed
+	 */
+	public function render_single_story_content();
 }
