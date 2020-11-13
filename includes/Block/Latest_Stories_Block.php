@@ -215,8 +215,8 @@ class Latest_Stories_Block extends Embed_Base {
 			'web-stories__story-wrapper';
 		$block_style          = '';
 
-		$block_classes .= ( ! empty( $attributes['viewType'] ) ) ? " is-view-type-{$attributes['viewType']}" : ' is-view-type-grid';
-		$block_classes .= ( ! empty( $attributes['align'] ) ) ? " align{$attributes['align']}" : ' alignnone';
+		$block_classes  .= ( ! empty( $attributes['viewType'] ) ) ? " is-view-type-{$attributes['viewType']}" : ' is-view-type-grid';
+		$alignment_class = ( ! empty( $attributes['align'] ) ) ? " align{$attributes['align']}" : ' alignnone';
 
 		if ( $this->is_view_type( 'grid' ) ) {
 			$num_of_columns = ( ! empty( $attributes['numOfColumns'] ) ) ? absint( $attributes['numOfColumns'] ) : 2;
@@ -232,7 +232,7 @@ class Latest_Stories_Block extends Embed_Base {
 
 			ob_start();
 			?>
-			<div>
+			<div class="<?php echo( esc_attr( $alignment_class ) ); ?>">
 				<div
 					class="<?php echo( esc_attr( $block_classes ) ); ?>"
 					style="<?php echo( esc_attr( $block_style ) ); ?>"
