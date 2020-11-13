@@ -208,7 +208,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 		$this->call_private_method( $renderer, 'render_story_with_poster', [ $story_data ] );
 		$output = ob_get_clean();
 
-		$this->assertContains( 'web-stories__story-placeholder', $output );
+		$this->assertContains( 'web-stories-list__story-placeholder', $output );
 		$this->assertContains( 'style="background-image: url(http://www.example.com/image.jpg);"', $output );
 	}
 
@@ -272,7 +272,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 		);
 
 		$renderer = new \Google\Web_Stories\Stories_Renderer\Generic_Renderer( $this->stories );
-		$expected = 'web-stories__story-wrapper has-poster';
+		$expected = 'web-stories-list__story-wrapper has-poster';
 
 		$output = $this->call_private_method( $renderer, 'get_single_story_classes' );
 
@@ -294,7 +294,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 
 		$renderer = new \Google\Web_Stories\Stories_Renderer\Generic_Renderer( $this->stories );
 
-		$expected = 'web-stories is-view-type-circles alignnone test';
+		$expected = 'web-stories-list is-view-type-circles alignnone test';
 
 		$output = $this->call_private_method( $renderer, 'get_container_classes' );
 
@@ -321,7 +321,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 		$this->call_private_method( $renderer, 'maybe_render_archive_link' );
 		$expected = ob_get_clean();
 
-		$this->assertContains( 'web-stories__archive-link', $expected );
+		$this->assertContains( 'web-stories-list__archive-link', $expected );
 		$this->assertContains( $archive_link, $expected );
 		$this->assertContains( 'View All Stories', $expected );
 

@@ -42,7 +42,7 @@ abstract class Renderer implements RenderingInterface {
 	 *
 	 * @var string
 	 */
-	const STYLE_HANDLE = 'web-stories-styles';
+	const STYLE_HANDLE = 'web-stories-list-styles';
 
 	/**
 	 * Stories object
@@ -197,7 +197,7 @@ abstract class Renderer implements RenderingInterface {
 		}
 
 		?>
-		<div class="web-stories__archive-link">
+		<div class="web-stories-list__archive-link">
 			<a href="<?php echo( esc_url_raw( $web_stories_archive ) ); ?>">
 				<?php echo( esc_html( $this->attributes['stories_archive_label'] ) ); ?>
 			</a>
@@ -212,7 +212,7 @@ abstract class Renderer implements RenderingInterface {
 	 */
 	protected function get_container_classes() {
 		$container_classes   = [];
-		$container_classes[] = 'web-stories';
+		$container_classes[] = 'web-stories-list';
 		$container_classes[] = ( ! empty( $this->attributes['view_type'] ) ) ? sprintf( 'is-view-type-%1$s', $this->attributes['view_type'] ) : 'is-view-type-circles';
 		$container_classes[] = ( ! empty( $this->attributes['align'] ) ) ? sprintf( 'align%1$s', $this->attributes['align'] ) : 'alignnone';
 		$container_classes[] = ! empty( $this->attributes['class'] ) ? $this->attributes['class'] : '';
@@ -230,7 +230,7 @@ abstract class Renderer implements RenderingInterface {
 	protected function get_single_story_classes() {
 
 		$single_story_classes   = [];
-		$single_story_classes[] = 'web-stories__story-wrapper';
+		$single_story_classes[] = 'web-stories-list__story-wrapper';
 		$single_story_classes[] = ! $this->is_view_type( 'grid' ) ? 'has-poster' : '';
 		$single_story_classes[] = $this->is_view_type( 'grid' ) && ! empty( $this->attributes['show_story_poster'] && true === $this->attributes['show_story_poster'] ) ?
 		'has-poster' :
@@ -309,7 +309,7 @@ abstract class Renderer implements RenderingInterface {
 			href="<?php echo( esc_url_raw( $story_data['url'] ) ); ?>"
 		>
 			<div
-				class="web-stories__story-placeholder"
+				class="web-stories-list__story-placeholder"
 				style="<?php echo esc_attr( $poster_style ); ?>"
 			></div>
 			<?php $this->get_content_overlay( $story_data ); ?>
@@ -353,7 +353,7 @@ abstract class Renderer implements RenderingInterface {
 
 		?>
 		<div
-			class="story-content-overlay web-stories__story-content-overlay"
+			class="story-content-overlay web-stories-list__story-content-overlay"
 		>
 			<?php if ( ! empty( $story_data['title'] ) ) : ?>
 			<div class="story-content-overlay__title">
