@@ -51,7 +51,7 @@ class Generic_Renderer extends Renderer {
 	public function assets() {
 		parent::assets();
 
-		if ( 'grid' === $this->get_view_type() && ! $this->is_amp_request() && true !== $this->attributes['show_story_poster'] ) {
+		if ( $this->is_view_type( 'grid' ) && ! $this->is_amp_request() && true !== $this->attributes['show_story_poster'] ) {
 			wp_enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
 			wp_enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
 		}
@@ -91,9 +91,11 @@ class Generic_Renderer extends Renderer {
 		/**
 		 * Filters the Generic renderer stories content.
 		 *
+		 * The dynamic portion of the hook `$this->get_view_type()` refers to the story view type.
+		 *
 		 * @param string $content Stories content.
 		 */
-		return apply_filters( 'web_stories_generic_renderer_stories_content', (string) ob_get_clean() );
+		return apply_filters( "web_stories_{$this->get_view_type()}_renderer_stories_content", (string) ob_get_clean() );
 	}
 
 }

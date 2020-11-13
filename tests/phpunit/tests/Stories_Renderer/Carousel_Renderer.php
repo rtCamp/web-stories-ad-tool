@@ -19,9 +19,9 @@ namespace Google\Web_Stories\Tests\Stories_Renderer;
 
 use Google\Web_Stories\Stories;
 /**
- * @coversDefaultClass \Google\Web_Stories\Stories_Renderer\Generic_Renderer
+ * @coversDefaultClass \Google\Web_Stories\Stories_Renderer\Carousel_Renderer
  */
-class Generic_Renderer extends \WP_UnitTestCase_Base {
+class Carousel_Renderer extends \WP_UnitTestCase_Base {
 
 	/**
 	 * Stories mock object.
@@ -60,6 +60,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 	public function setUp() {
 		$this->stories = $this->createMock( Stories::class );
 		$this->stories->method( 'get_stories' )->willReturn( [ get_post( self::$story_id ) ] );
+		$this->story_posts = [ get_post( self::$story_id ) ];
 	}
 
 	/**
@@ -68,16 +69,15 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 	public function test_assets() {
 		$this->stories->method( 'get_story_attributes' )->willReturn(
 			[
-				'class'             => '',
-				'view_type'         => 'grid',
-				'show_story_poster' => false,
+				'view_type' => 'carousel',
 			]
 		);
 
-		$renderer = new \Google\Web_Stories\Stories_Renderer\Generic_Renderer( $this->stories );
+		$renderer = new \Google\Web_Stories\Stories_Renderer\Carousel_Renderer( $this->stories );
 		$renderer->init();
 
-		$this->assertTrue( wp_style_is( \Google\Web_Stories\Embed_Base::STORY_PLAYER_HANDLE ) );
+		$this->assertTrue( wp_script_is( 'amp-carousel-script' ) );
+		$this->assertTrue( wp_script_is( 'amp-runtime-script' ) );
 	}
 
 	/**
@@ -87,25 +87,26 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 
 		$this->stories->method( 'get_story_attributes' )->willReturn(
 			[
-				'view_type'                 => 'grid',
-				'number_of_columns'         => 2,
+				'view_type'                 => 'carousel',
 				'show_title'                => false,
 				'show_author'               => false,
 				'show_date'                 => false,
-				'show_story_poster'         => true,
+				'show_story_poster'         => false,
 				'show_stories_archive_link' => false,
 				'stories_archive_label'     => 'View all stories',
-				'list_view_image_alignment' => 'left',
 				'class'                     => '',
 			]
 		);
 
-		$renderer = new \Google\Web_Stories\Stories_Renderer\Generic_Renderer( $this->stories );
+		$renderer = new \Google\Web_Stories\Stories_Renderer\Carousel_Renderer( $this->stories );
+
 		$renderer->init();
 
 		$output = $renderer->render();
 
-		$this->assertContains( 'web-stories is-view-type-grid alignnone', $output );
+
+		$this->assertContains( 'amp-carousel', $output );
+		$this->assertContains( 'web-stories is-view-type-carousel alignnone', $output );
 		$this->assertContains( 'web-stories__story-wrapper has-poster', $output );
 		$this->assertContains( 'web-stories__story-placeholder', $output );
 

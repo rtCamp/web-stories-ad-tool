@@ -33,6 +33,8 @@ use Google\Web_Stories\Story_Post_Type;
 
 /**
  * Renderer class.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 abstract class Renderer implements RenderingInterface {
 	/**
@@ -175,7 +177,7 @@ abstract class Renderer implements RenderingInterface {
 	 * @return string
 	 */
 	protected function get_view_type() {
-		return isset( $this->attributes['view_type'] ) ? $this->attributes['view_type'] : '';
+		return isset( $this->attributes['view_type'] ) ? $this->attributes['view_type'] : 'circles';
 	}
 
 	/**
@@ -210,10 +212,12 @@ abstract class Renderer implements RenderingInterface {
 	 */
 	protected function get_container_classes() {
 		$container_classes   = [];
-		$container_classes[] = 'web-stories ';
-		$container_classes[] = ( ! empty( $this->attributes['view_type'] ) ) ? sprintf( 'is-view-type-%1$s', $this->attributes['view_type'] ) : ' is-view-type-circles';
-		$container_classes[] = ( ! empty( $this->attributes['align'] ) ) ? sprintf( 'align%1$s', $this->attributes['align'] ) : ' alignnone';
-		$container_classes[] = ! empty( $this->attributes['classes'] ) ? $this->attributes['classes'] : '';
+		$container_classes[] = 'web-stories';
+		$container_classes[] = ( ! empty( $this->attributes['view_type'] ) ) ? sprintf( 'is-view-type-%1$s', $this->attributes['view_type'] ) : 'is-view-type-circles';
+		$container_classes[] = ( ! empty( $this->attributes['align'] ) ) ? sprintf( 'align%1$s', $this->attributes['align'] ) : 'alignnone';
+		$container_classes[] = ! empty( $this->attributes['class'] ) ? $this->attributes['class'] : '';
+
+		$container_classes = array_filter( $container_classes );
 
 		return implode( ' ', $container_classes );
 	}
@@ -224,16 +228,22 @@ abstract class Renderer implements RenderingInterface {
 	 * @return string
 	 */
 	protected function get_single_story_classes() {
-		$single_story_classes = ( ! empty( $this->attributes['show_story_poster'] ) && true === $this->attributes['show_story_poster'] ) ?
-			'web-stories__story-wrapper has-poster' :
-			'web-stories__story-wrapper';
+
+		$single_story_classes   = [];
+		$single_story_classes[] = 'web-stories__story-wrapper';
+		$single_story_classes[] = ! $this->is_view_type( 'grid' ) ? 'has-poster' : '';
+		$single_story_classes[] = $this->is_view_type( 'grid' ) && ! empty( $this->attributes['show_story_poster'] && true === $this->attributes['show_story_poster'] ) ?
+		'has-poster' :
+		'';
+
+		$single_story_classes = array_filter( $single_story_classes );
 
 		/**
 		 * Filters the web stories renderer single story classes.
 		 *
 		 * @param string $class Single story classes.
 		 */
-		return apply_filters( 'web_stories_renderer_single_story_classes', $single_story_classes );
+		return apply_filters( 'web_stories_renderer_single_story_classes', implode( ' ', $single_story_classes ) );
 	}
 
 	/**
@@ -262,7 +272,7 @@ abstract class Renderer implements RenderingInterface {
 	protected function render_single_story_content( $story_id ) {
 		$story_data           = $this->get_story_item_data( $story_id );
 		$single_story_classes = $this->get_single_story_classes();
-		$show_story_player    = true !== $this->attributes['show_story_poster'] && 'grid' === $this->get_view_type();
+		$show_story_player    = true !== $this->attributes['show_story_poster'] && $this->is_view_type( 'grid' )
 
 		?>
 
@@ -292,8 +302,10 @@ abstract class Renderer implements RenderingInterface {
 		$poster_style = ( true === $this->is_view_type( 'carousel' ) ) ?
 			sprintf( '%1$s width: %2$spx; height: %3$spx', $poster_style, $width, $height ) : $poster_style;
 
+		$list_view_image_alignment = ! empty( $this->attributes['list_view_image_alignment'] ) ? sprintf( 'image-align-%1$s', $this->attributes['list_view_image_alignment'] ) : '';
+
 		?>
-		<a class="<?php echo( esc_attr( "image-align-{$this->attributes['list_view_image_alignment']}" ) ); ?>"
+		<a class="<?php echo( esc_attr( $list_view_image_alignment ) ); ?>"
 			href="<?php echo( esc_url_raw( $story_data['url'] ) ); ?>"
 		>
 			<div
