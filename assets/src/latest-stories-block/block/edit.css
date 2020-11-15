@@ -1,3 +1,13 @@
+/* Placeholder styles */
+.wp-block-web-stories-latest-stories.placeholder {
+  align-items: center;
+}
+
+.wp-block-web-stories-latest-stories.placeholder
+  .components-placeholder__fieldset {
+  justify-content: center;
+}
+
 /* Content Overlay Styles */
 .wp-block-web-stories-latest-stories .story-content-overlay {
   position: absolute;
