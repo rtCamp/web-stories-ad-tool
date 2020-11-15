@@ -23,7 +23,6 @@ import { useDebouncedCallback } from 'use-debounce';
 /**
  * WordPress dependencies
  */
-import { Icon, check, minus } from '@wordpress/icons';
 import { __, sprintf } from '@wordpress/i18n';
 import { useCallback } from '@wordpress/element';
 
@@ -51,6 +50,7 @@ import { UnitsProvider } from '../../edit-story/units';
 import { TransformProvider } from '../../edit-story/components/transform';
 import FontProvider from '../../dashboard/app/font/fontProvider';
 import { StoryGridItem } from './components/cardGridItem';
+import ItemOverlay from './components/itemOverlay';
 
 const StoryFilter = styled.div`
   display: flex;
@@ -131,64 +131,6 @@ const StorySortDropdownContainer = styled.div`
 `;
 
 const SortDropdown = styled(Dropdown)``;
-
-const ItemOverlay = styled.a(
-  ({ pageSize }) => `
-  display: block;
-  position: absolute;
-  z-index: 1;
-  width: 100%;
-  height: ${pageSize.containerHeight}px;
-
-  &:focus {
-    box-shadow: 0 0 3px 3px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, 0.8);
-  }
-
-  &.item-selected {
-
-    .item-selected-icon {
-      position: absolute;
-      top: -7px;
-      right: -7px;
-      z-index: 1;
-
-      svg {
-        background-color: #ccc;
-        box-shadow: 0 0 0 1px #fff, 0 0 0 2px rgba(0, 0, 0, 0.15);
-        cursor: pointer;
-        stroke: #000;
-        stroke-width: 2px;
-        padding: 3px;
-      }
-
-      .item-selected-icon-minus {
-        display: none;
-      }
-
-      &:hover {
-        .item-selected-icon-minus {
-          display: block;
-        }
-
-        .item-selected-icon-check {
-          display: none;
-        }
-      }
-    }
-
-    &:focus {
-
-      .item-selected-icon {
-
-        svg {
-          background-color: #0073aa;
-          stroke: #fff;
-        }
-      }
-    }
-  }
-`
-);
 
 const DetailRow = styled.div`
   display: flex;
@@ -296,31 +238,14 @@ function SelectStories({
                         />
                       </DetailRow>
                       <ItemOverlay
-                        className={isSelected ? 'item-selected' : ''}
+                        isSelected={isSelected}
                         pageSize={pageSize}
-                        href={`#select-story-${story.id}`}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          addItemToSelectedStories(story.id);
-                        }}
-                      >
-                        {isSelected && (
-                          <div className="item-selected-icon">
-                            <Icon
-                              className="item-selected-icon-check"
-                              icon={check}
-                            />
-                            <Icon
-                              className="item-selected-icon-minus"
-                              icon={minus}
-                              onClick={(event) => {
-                                event.preventDefault();
-                                removeItemFromSelectedStories(story.id);
-                              }}
-                            />
-                          </div>
-                        )}
-                      </ItemOverlay>
+                        storyId={story.id}
+                        addItemToSelectedStories={addItemToSelectedStories}
+                        removeItemFromSelectedStories={
+                          removeItemFromSelectedStories
+                        }
+                      />
                     </StoryGridItem>
                   );
                 })}

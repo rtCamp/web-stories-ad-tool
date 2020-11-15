@@ -34,35 +34,30 @@ import { CardPreviewContainer } from '../../dashboard/components';
 import { UnitsProvider } from '../../edit-story/units';
 import { TransformProvider } from '../../edit-story/components/transform';
 import FontProvider from '../../dashboard/app/font/fontProvider';
+import reshapeStoryObject from '../../dashboard/app/serializers/stories';
 import { StoryGrid, StoryGridItem } from './components/cardGridItem';
+import ItemOverlay from './components/itemOverlay';
 
 function SortStories({
   selectedStories,
   setSelectedStories,
-  orderedStories,
   selectedStoriesObject,
   setSelectedStoriesObject,
   pageSize,
+  addItemToSelectedStories,
+  removeItemFromSelectedStories,
 }) {
   const [droppingToIndex, setDroppingToIndex] = useState();
   const [draggedElID, setDragedElementID] = useState();
   const [selectedStoryList, setSelectedStoryList] = useState([]);
 
   useEffect(() => {
-    const list = selectedStories.map((storyId) => {
-      return orderedStories.find((story) => story.id === storyId);
-    });
-
-    setSelectedStoryList(list);
-
-    setSelectedStoriesObject(
-      selectedStories.map((storyId) => {
-        return selectedStoriesObject.find((story) => story.id === storyId);
+    setSelectedStoryList(
+      selectedStoriesObject.map((story) => {
+        return reshapeStoryObject()(story);
       })
     );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedStories]);
+  }, [selectedStoriesObject]);
 
   const rearrangeStories = (oldIndex, newIndex) => {
     const selectedStoryIds = [...selectedStories];
@@ -72,6 +67,11 @@ function SortStories({
       selectedStoryIds.splice(oldIndex, 1).pop()
     );
     setSelectedStories(selectedStoryIds);
+    setSelectedStoriesObject(
+      selectedStoryIds.map((storyId) => {
+        return selectedStoriesObject.find((story) => story.id === storyId);
+      })
+    );
   };
 
   return (
@@ -150,6 +150,17 @@ function SortStories({
                               pageSize={pageSize}
                               story={story}
                             />
+                            <ItemOverlay
+                              isSelected={true}
+                              pageSize={pageSize}
+                              storyId={story.id}
+                              addItemToSelectedStories={
+                                addItemToSelectedStories
+                              }
+                              removeItemFromSelectedStories={
+                                removeItemFromSelectedStories
+                              }
+                            />
                           </StoryGridItem>
                         );
                       }}
@@ -168,10 +179,11 @@ function SortStories({
 SortStories.propTypes = {
   selectedStories: PropTypes.array,
   setSelectedStories: PropTypes.func,
-  orderedStories: PropTypes.array,
   selectedStoriesObject: PropTypes.array,
   setSelectedStoriesObject: PropTypes.func,
   pageSize: PageSizePropType,
+  addItemToSelectedStories: PropTypes.func,
+  removeItemFromSelectedStories: PropTypes.func,
 };
 
 export default SortStories;

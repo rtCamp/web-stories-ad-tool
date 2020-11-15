@@ -81,10 +81,10 @@ function StoryPicker({
   selectedStoriesObject,
   setSelectedStoriesObject,
   closeStoryPicker,
+  isSortingStories,
+  setIsSortingStories,
 }) {
   const [fetchingForTheFirstTime, setFetchingForTheFirstTime] = useState(true);
-  const [isSortingStories, setIsSortingStories] = useState(false);
-
   const { fetchStories, stories, storiesOrderById, totalPages } = useApi(
     ({
       actions: {
@@ -127,9 +127,17 @@ function StoryPicker({
   });
 
   useEffect(() => {
+    if (isSortingStories) {
+      setFetchingForTheFirstTime(false);
+      return;
+    } else if (!orderedStories.length) {
+      setFetchingForTheFirstTime(true);
+    }
+
     fetchWebStories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    isSortingStories,
     filter.value,
     page.value,
     search.keyword,
@@ -177,6 +185,8 @@ function StoryPicker({
             pageSize={view.pageSize}
             setSelectedStoriesObject={setSelectedStoriesObject}
             selectedStoriesObject={selectedStoriesObject}
+            addItemToSelectedStories={addItemToSelectedStories}
+            removeItemFromSelectedStories={removeItemFromSelectedStories}
           />
         ) : (
           <SelectStories
@@ -221,6 +231,8 @@ StoryPicker.propTypes = {
   selectedStoriesObject: PropTypes.array,
   setSelectedStoriesObject: PropTypes.func,
   closeStoryPicker: PropTypes.func,
+  isSortingStories: PropTypes.bool,
+  setIsSortingStories: PropTypes.func,
 };
 
 export default StoryPicker;

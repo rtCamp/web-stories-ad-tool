@@ -54,8 +54,13 @@ const EmbedPlaceholder = ({
   isEditing,
 }) => {
   const [isStoryPickerOpen, setIsStoryPickerOpen] = useState(false);
+  const [isSortingStories, setIsSortingStories] = useState(false);
+
   const openStoryPicker = () => setIsStoryPickerOpen(true);
-  const closeStoryPicker = () => setIsStoryPickerOpen(false);
+  const closeStoryPicker = () => {
+    setIsStoryPickerOpen(false);
+    setIsSortingStories(false);
+  };
 
   let placeholderIcon = <BlockIcon icon={icon} showColors />;
   let placeholderLabel = label;
@@ -64,6 +69,11 @@ const EmbedPlaceholder = ({
     'web-stories'
   );
   let placeholderClassName = 'wp-block-web-stories-embed';
+
+  const openStoryRearrangeWindow = () => {
+    setIsSortingStories(true);
+    openStoryPicker();
+  };
 
   if (selectedStoriesObject.length) {
     placeholderIcon = false;
@@ -86,6 +96,11 @@ const EmbedPlaceholder = ({
       <Button isPrimary onClick={openStoryPicker}>
         {__('Select Stories', 'web-stories')}
       </Button>
+      {selectedStoriesObject.length > 1 && (
+        <Button isSecondary onClick={openStoryRearrangeWindow}>
+          {__('Rearrange Stories', 'web-stories')}
+        </Button>
+      )}
       {isStoryPickerOpen && (
         <StoryPicker
           selectedStories={selectedStories}
@@ -93,6 +108,8 @@ const EmbedPlaceholder = ({
           closeStoryPicker={closeStoryPicker}
           selectedStoriesObject={selectedStoriesObject}
           setSelectedStoriesObject={setSelectedStoriesObject}
+          isSortingStories={isSortingStories}
+          setIsSortingStories={setIsSortingStories}
         />
       )}
     </SelectStoriesPlaceholder>
