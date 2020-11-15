@@ -19,13 +19,15 @@
  */
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { debounce } from 'lodash'; // @TODO: Remove 'lodash' dependency.
 
 /**
  * WordPress dependencies
  */
 import { useEffect, useState, RawHTML } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
-import { __, _x, sprintf } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
 
 /**
@@ -33,8 +35,13 @@ import { addQueryArgs } from '@wordpress/url';
  */
 import StoryPlayer from './storyPlayer';
 import LatestStoriesControls from './latestStoriesControls';
+import LatestStoriesPlaceholder from './latestStoriesPlaceholder';
 
 import './edit.css';
+
+const LATEST_STORIES_QUERY = {
+  per_page: -1,
+};
 
 const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   const {
@@ -56,13 +63,35 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
   const [fetchedStories, setFetchedStories] = useState([]);
   const [fetchedAuthors, setFetchedAuthors] = useState([]);
-  const previewLink = wp.data.select( 'core/editor' ).getEditedPostPreviewLink();
-  const carouselMessage = sprintf(`<i><b>%s</b> %s <a target="__blank" href=${previewLink}>%s</a> %s</i>`, // @TODO: Fix: sprintf must be called with a valid format string.
-    _x('Note:', 'informational message', 'web-stories'),
-    __("Carousel view's functionality will not work in Editor.", 'web-stories'),
-    __('Preview', 'web-stories'),
-    __('post to see it in action.', 'web-stories')
+  const [isFetchingStories, setIsFetchingStories] = useState([]);
+  const previewLink = wp.data.select('core/editor').getEditedPostPreviewLink();
+  const carouselMessage = sprintf(
+    /* Translators: Carousel informational message. 1: Preview link. */
+    __(
+      `<i><b>Note:</b> Carousel view's functionality will not work in Editor. <a target="__blank" href="%1$s">Preview</a> post to see it in action.</i>`,
+      'web-stories'
+    ),
+    previewLink
   );
+  const fetchLatestStories = async () => {
+    try {
+      setIsFetchingStories(true);
+      const stories = await apiFetch({
+        path: addQueryArgs('/web-stories/v1/web-story', LATEST_STORIES_QUERY),
+      });
+
+      if (Array.isArray(stories)) {
+        setFetchedStories(stories);
+      }
+    } catch (err) {
+      // Temporarily disabled, need to show UI message.
+      console.log(err); // eslint-disable-line no-console
+    } finally {
+      setIsFetchingStories(false);
+    }
+  };
+
+  const debouncedFetchLatestStories = debounce(fetchLatestStories, 1000);
 
   useEffect(() => {
     apiFetch({
@@ -74,7 +103,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
       .catch(() => {
         setFetchedAuthors([]);
       });
-  }, [fetchedStories]);
+  }, [authors]);
 
   useEffect(() => {
     let order,
@@ -102,28 +131,28 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         order = 'desc';
     }
 
-    const latestStoriesQuery = {
-      author: authors.map((author) => author.id),
-      order,
-      orderby: orderBy,
-      per_page: numOfStories,
-    };
+    LATEST_STORIES_QUERY.author = authors.map((author) => author.id);
+    LATEST_STORIES_QUERY.order = order;
+    LATEST_STORIES_QUERY.orderby = orderBy;
 
-    apiFetch({
-      path: addQueryArgs('/web-stories/v1/web-story', latestStoriesQuery),
-    })
-      .then((stories) => {
-        setFetchedStories(stories);
-      })
-      .catch((err) => {
-        // Temporarily disabled, show a UI message.
-        // eslint-disable-next-line no-console
-        console.log(err);
-      });
-  }, [authors, numOfStories, orderByValue]);
+    debouncedFetchLatestStories();
+    /* Disabling below rule for single line isn't working for some reason. */
+    /* eslint-disable react-hooks/exhaustive-deps */
+  }, [authors, orderByValue]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
-  const willShowStoryPoster =
-    ( 'grid' != viewType ) ? true : isShowingStoryPoster;
+  useEffect(() => {
+    if (numOfStories <= fetchedStories.length) {
+      // No need to fetch stories when reducing number of stories.
+      return;
+    }
+
+    LATEST_STORIES_QUERY.per_page = numOfStories;
+
+    debouncedFetchLatestStories();
+  }, [numOfStories]); /* eslint-disable-line react-hooks/exhaustive-deps */
+
+  const willShowStoryPoster = 'grid' != viewType ? true : isShowingStoryPoster;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
   const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
   const viewAllLabel = viewAllLinkLabel
@@ -135,10 +164,10 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
       ? fetchedStories.slice(0, numOfStories)
       : fetchedStories;
 
+  const alignmentClass = classNames({ [`align${align}`]: align });
   const blockClasses = classNames(
     'wp-block-web-stories-latest-stories latest-stories',
-    { [`is-view-type-${viewType}`]: viewType },
-    { [`align${align}`]: align }
+    { [`is-view-type-${viewType}`]: viewType }
   );
   const blockStyles = {
     gridTemplateColumns: `repeat(${numOfColumns}, 1fr)`,
@@ -162,8 +191,11 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         listViewImageAlignment={listViewImageAlignment}
         setAttributes={setAttributes}
       />
-      {storiesToDisplay && 0 < storiesToDisplay.length && (
-        <div>
+
+      {isFetchingStories && <LatestStoriesPlaceholder />}
+
+      {!isFetchingStories && storiesToDisplay && 0 < storiesToDisplay.length && (
+        <div className={alignmentClass}>
           <div className={blockClasses} style={blockStyles}>
             {storiesToDisplay.map((story) => {
               const author = fetchedAuthors.find(
@@ -171,10 +203,11 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
               );
               let title = '';
 
-              if ( story.title.rendered ) {
-                title = ('circles' === viewType && story.title.rendered.length > 45) ?
-                  `${story.title.rendered.substring(0, 45)}...` :
-                  story.title.rendered;
+              if (story.title.rendered) {
+                title =
+                  'circles' === viewType && story.title.rendered.length > 45
+                    ? `${story.title.rendered.substring(0, 45)}...`
+                    : story.title.rendered;
               }
 
               return (
@@ -199,7 +232,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
           )}
           {'carousel' === viewType && (
             <span className="latest-stories__carousel-message">
-                <RawHTML>{carouselMessage}</RawHTML>
+              <RawHTML>{carouselMessage}</RawHTML>
             </span>
           )}
         </div>
