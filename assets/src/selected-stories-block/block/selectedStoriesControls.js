@@ -37,7 +37,7 @@ import {
   BlockAlignmentToolbar,
 } from '@wordpress/block-editor';
 
-const Controls = (props) => {
+const SelectedStoriesControls = (props) => {
   const {
     viewType,
     isShowingTitle,
@@ -164,7 +164,7 @@ const Controls = (props) => {
   );
 };
 
-Controls.propTypes = {
+SelectedStoriesControls.propTypes = {
   viewType: PropTypes.string,
   isShowingTitle: PropTypes.bool,
   isShowingDate: PropTypes.bool,
@@ -177,4 +177,4 @@ Controls.propTypes = {
   listViewImageAlignment: PropTypes.string,
 };
 
-export default Controls;
+export default SelectedStoriesControls;

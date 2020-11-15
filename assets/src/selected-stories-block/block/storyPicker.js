@@ -23,7 +23,7 @@ import styled from 'styled-components';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Button, Modal, Spinner } from '@wordpress/components';
+import { Button, Modal } from '@wordpress/components';
 import { useState, useEffect, useMemo } from '@wordpress/element';
 
 /**
@@ -38,6 +38,7 @@ import {
 import { useStoryView } from '../../dashboard/utils';
 import SelectStories from './selectStories';
 import SortStories from './sortStories';
+import LoaderContainer from './components/loaderContainer';
 
 const ModalContent = styled.div(
   ({ pageSize, theme }) => `
@@ -71,17 +72,6 @@ const ModalFooter = styled.div`
 
   .components-button {
     margin-left: 8px;
-  }
-`;
-
-const LoaderContainer = styled.div`
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-
-  .components-spinner {
-    margin-top: 0;
   }
 `;
 
@@ -153,7 +143,10 @@ function StoryPicker({
       setSelectedStories([...selectedStories, storyId]);
       setSelectedStoriesObject([
         ...selectedStoriesObject,
-        { ...orderedStories.find((story) => story.id === storyId) },
+        {
+          ...orderedStories.find((story) => story.id === storyId)
+            .originalStoryData,
+        },
       ]);
     }
   };
@@ -175,7 +168,6 @@ function StoryPicker({
         {fetchingForTheFirstTime ? (
           <LoaderContainer>
             {__('Fetching stories', 'web-stories')}
-            <Spinner />
           </LoaderContainer>
         ) : isSortingStories ? (
           <SortStories
