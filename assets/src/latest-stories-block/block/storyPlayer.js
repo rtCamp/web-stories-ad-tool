@@ -61,7 +61,6 @@ function StoryPlayer({
 
   return (
     <div className={singleStoryClasses}>
-      <div className="latest-stories__story-overlay" />
       <div className={imageAlignmentClass}>
         {isShowingStoryPoster ? (
           <div
