@@ -29,6 +29,7 @@ import { useEffect, useState, RawHTML } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { __, sprintf } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
+import { Notice } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -196,6 +197,11 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
       {!isFetchingStories && storiesToDisplay && 0 < storiesToDisplay.length && (
         <div className={alignmentClass}>
+          {'carousel' === viewType && (
+            <Notice className="latest-stories-carousel-message">
+              <RawHTML>{carouselMessage}</RawHTML>
+            </Notice>
+          )}
           <div className={blockClasses} style={blockStyles}>
             {storiesToDisplay.map((story) => {
               const author = fetchedAuthors.find(
@@ -229,11 +235,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
           </div>
           {isShowingViewAll && (
             <div className="latest-stories__archive-link">{viewAllLabel}</div>
-          )}
-          {'carousel' === viewType && (
-            <span className="latest-stories__carousel-message">
-              <RawHTML>{carouselMessage}</RawHTML>
-            </span>
           )}
         </div>
       )}
