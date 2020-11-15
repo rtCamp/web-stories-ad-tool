@@ -177,10 +177,9 @@
 }
 
 /* Carousel View Styles */
-.latest-stories__carousel-message {
-  display: inline-block;
-  margin-top: 16px;
+.latest-stories-carousel-message {
   font-size: 14px;
+  margin: 0 0 16px 0;
 }
 
 .wp-block-web-stories-latest-stories.is-view-type-carousel {
