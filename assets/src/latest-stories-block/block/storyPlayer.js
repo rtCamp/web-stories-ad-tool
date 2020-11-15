@@ -39,7 +39,7 @@ function StoryPlayer({
   listViewImageAlignment,
 }) {
   const singleStoryClasses = classNames('latest-stories__story-wrapper', {
-    'has-poster alignnone': isShowingStoryPoster,
+    'has-poster': isShowingStoryPoster,
   });
   const imageAlignmentClass = classNames({
     [`image-align-${listViewImageAlignment}`]: listViewImageAlignment,
@@ -52,8 +52,11 @@ function StoryPlayer({
     if (isShowingStoryPoster) {
       return;
     }
-    ref.current = new global.AmpStoryPlayer(global, ref.current);
-    ref.current.load();
+
+    if (ref.current && global.AmpStoryPlayer) {
+      const player = new global.AmpStoryPlayer(global, ref.current);
+      player.load();
+    }
   }, [isShowingStoryPoster]);
 
   return (
