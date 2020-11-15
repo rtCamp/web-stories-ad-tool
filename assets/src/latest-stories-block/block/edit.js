@@ -168,11 +168,9 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   const alignmentClass = classNames({ [`align${align}`]: align });
   const blockClasses = classNames(
     'wp-block-web-stories-latest-stories latest-stories',
-    { [`is-view-type-${viewType}`]: viewType }
+    { [`is-view-type-${viewType}`]: viewType },
+    { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
   );
-  const blockStyles = {
-    gridTemplateColumns: `repeat(${numOfColumns}, 1fr)`,
-  };
 
   return (
     <>
@@ -202,7 +200,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
               <RawHTML>{carouselMessage}</RawHTML>
             </Notice>
           )}
-          <div className={blockClasses} style={blockStyles}>
+          <div className={blockClasses}>
             {storiesToDisplay.map((story) => {
               const author = fetchedAuthors.find(
                 (singleAuthorObj) => story.author === singleAuthorObj.id
