@@ -39,6 +39,7 @@ import {
   DROPDOWN_TYPES,
   STORY_SORT_MENU_ITEMS,
 } from '../../dashboard/constants';
+import { getRelativeDisplayDate } from '../../date';
 import { DASHBOARD_LEFT_NAV_WIDTH } from '../../dashboard/constants/pageStructure';
 import {
   CardPreviewContainer,
@@ -235,6 +236,8 @@ function SelectStories({
                           titleLink={story.editStoryLink}
                           status={story?.status}
                           id={story.id}
+                          secondaryTitle={story.author}
+                          displayDate={getRelativeDisplayDate(story.created)}
                         />
                       </DetailRow>
                       <ItemOverlay
