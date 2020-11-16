@@ -30,12 +30,27 @@ import {
   PanelBody,
   ToggleControl,
   BaseControl,
+  SVG,
+  Path,
 } from '@wordpress/components';
 import {
   BlockControls,
   InspectorControls,
   BlockAlignmentToolbar,
 } from '@wordpress/block-editor';
+
+/* From https://material.io/tools/icons */
+const carouselIcon = (
+  <SVG
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+  >
+    <Path d="M0 0h24v24H0z" fill="none" />
+    <Path d="M7 19h10V4H7v15zm-5-2h4V6H2v11zM18 6v11h4V6h-4z" />
+  </SVG>
+);
 
 const SelectedStoriesControls = (props) => {
   const {
@@ -81,6 +96,33 @@ const SelectedStoriesControls = (props) => {
               toggleView('grid');
             }}
             isPressed={isViewType('grid')}
+          />
+          <Button
+            className="components-toolbar__control"
+            label={__('List view', 'web-stories')}
+            icon="editor-justify"
+            onClick={() => {
+              toggleView('list');
+            }}
+            isPressed={isViewType('list')}
+          />
+          <Button
+            className="components-toolbar__control"
+            label={__('Circles view', 'web-stories')}
+            icon="marker"
+            onClick={() => {
+              toggleView('circles');
+            }}
+            isPressed={isViewType('circles')}
+          />
+          <Button
+            className="components-toolbar__control"
+            label={__('Carousel View', 'web-stories')}
+            icon={carouselIcon}
+            onClick={() => {
+              toggleView('carousel');
+            }}
+            isPressed={isViewType('carousel')}
           />
         </ToolbarGroup>
       </BlockControls>

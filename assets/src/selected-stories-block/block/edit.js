@@ -34,6 +34,7 @@ import { ThemeProvider } from 'styled-components';
 /**
  * Internal dependencies
  */
+import './edit.css';
 import ApiProvider from '../../dashboard/app/api/apiProvider';
 import { ConfigProvider } from '../../dashboard/app/config';
 import theme from '../../dashboard/theme';
@@ -93,7 +94,7 @@ const SelectedStoriesEdit = ({
     : __('View All Stories', 'web-stories');
 
   const blockClasses = classNames(
-    'wp-block-web-stories-latest-stories latest-stories',
+    'wp-block-web-stories-selected-stories latest-stories',
     { [`is-view-type-${viewType}`]: viewType },
     { [`align${align}`]: align }
   );
