@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
 /**
  * WordPress dependencies
  */
-import { __, _x } from '@wordpress/i18n';
+import { __, _x, sprintf } from '@wordpress/i18n';
 import {
   Button,
   ToolbarGroup,
@@ -34,12 +34,14 @@ import {
   BaseControl,
   SVG,
   Path,
+  Notice,
 } from '@wordpress/components';
 import {
   BlockControls,
   InspectorControls,
   BlockAlignmentToolbar,
 } from '@wordpress/block-editor';
+import { RawHTML } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -89,6 +91,16 @@ const LatestStoriesControls = (props) => {
     },
     { label: __('Random Stories', 'web-stories'), value: 'random' },
   ];
+
+  const previewLink = wp.data.select('core/editor').getEditedPostPreviewLink();
+  const carouselMessage = sprintf(
+    /* Translators: Carousel informational message. 1: Preview link. */
+    __(
+      `<i><b>Note:</b> Carousel view's functionality will not work in Editor. <a target="__blank" href="%1$s">Preview</a> post to see it in action.</i>`,
+      'web-stories'
+    ),
+    previewLink
+  );
 
   const toggleView = (newViewType) => {
     if (newViewType) {
@@ -155,6 +167,25 @@ const LatestStoriesControls = (props) => {
           className="latest-stories-settings"
           title={__('Story settings', 'web-stories')}
         >
+          {'carousel' === viewType && (
+            <Notice
+              className="latest-stories-carousel-message"
+              isDismissible={false}
+              status="warning"
+            >
+              <RawHTML>{carouselMessage}</RawHTML>
+            </Notice>
+          )}
+          <ToggleControl
+            className={!isViewType('grid') ? 'is-disabled' : ''}
+            label={__('Show story cover images', 'web-stories')}
+            checked={!isViewType('grid') ? true : isShowingStoryPoster}
+            onChange={() => {
+              if (isViewType('grid')) {
+                setAttributes({ isShowingStoryPoster: !isShowingStoryPoster });
+              }
+            }}
+          />
           <ToggleControl
             label={__('Show title', 'web-stories')}
             checked={isShowingTitle}
@@ -180,33 +211,6 @@ const LatestStoriesControls = (props) => {
               }
             }}
           />
-          <ToggleControl
-            label={__("Show 'View All Stories' link", 'web-stories')}
-            checked={isShowingViewAll}
-            onChange={() =>
-              setAttributes({ isShowingViewAll: !isShowingViewAll })
-            }
-          />
-          {isShowingViewAll && (
-            <TextControl
-              label={__("'View All Stories' Link label", 'web-stories')}
-              value={viewAllLinkLabel}
-              placeholder={__('View All Stories', 'web-stories')}
-              onChange={(newLabel) =>
-                setAttributes({ viewAllLinkLabel: newLabel })
-              }
-            />
-          )}
-          <ToggleControl
-            className={!isViewType('grid') ? 'is-disabled' : ''}
-            label={__('Show story cover images', 'web-stories')}
-            checked={!isViewType('grid') ? true : isShowingStoryPoster}
-            onChange={() => {
-              if (isViewType('grid')) {
-                setAttributes({ isShowingStoryPoster: !isShowingStoryPoster });
-              }
-            }}
-          />
           {isViewType('list') && (
             <BaseControl className="latest-stories-settings__image-alignment">
               <BaseControl.VisualLabel>
@@ -223,6 +227,23 @@ const LatestStoriesControls = (props) => {
                 isCollapsed={false}
               />
             </BaseControl>
+          )}
+          <ToggleControl
+            label={__("Show 'View All Stories' link", 'web-stories')}
+            checked={isShowingViewAll}
+            onChange={() =>
+              setAttributes({ isShowingViewAll: !isShowingViewAll })
+            }
+          />
+          {isShowingViewAll && (
+            <TextControl
+              label={__("'View All Stories' Link label", 'web-stories')}
+              value={viewAllLinkLabel}
+              placeholder={__('View All Stories', 'web-stories')}
+              onChange={(newLabel) =>
+                setAttributes({ viewAllLinkLabel: newLabel })
+              }
+            />
           )}
         </PanelBody>
         <PanelBody title={__('Sorting & Filtering', 'web-stories')}>
