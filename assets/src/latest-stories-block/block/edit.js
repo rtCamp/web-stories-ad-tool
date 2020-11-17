@@ -25,11 +25,10 @@ import { debounce } from 'lodash'; // @TODO: Remove 'lodash' dependency.
 /**
  * WordPress dependencies
  */
-import { useEffect, useState, RawHTML } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
-import { Notice } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -65,15 +64,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   const [fetchedStories, setFetchedStories] = useState([]);
   const [fetchedAuthors, setFetchedAuthors] = useState([]);
   const [isFetchingStories, setIsFetchingStories] = useState([]);
-  const previewLink = wp.data.select('core/editor').getEditedPostPreviewLink();
-  const carouselMessage = sprintf(
-    /* Translators: Carousel informational message. 1: Preview link. */
-    __(
-      `<i><b>Note:</b> Carousel view's functionality will not work in Editor. <a target="__blank" href="%1$s">Preview</a> post to see it in action.</i>`,
-      'web-stories'
-    ),
-    previewLink
-  );
+
   const fetchLatestStories = async () => {
     try {
       setIsFetchingStories(true);
@@ -195,11 +186,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
       {!isFetchingStories && storiesToDisplay && 0 < storiesToDisplay.length && (
         <div className={alignmentClass}>
-          {'carousel' === viewType && (
-            <Notice className="latest-stories-carousel-message">
-              <RawHTML>{carouselMessage}</RawHTML>
-            </Notice>
-          )}
           <div className={blockClasses}>
             {storiesToDisplay.map((story) => {
               const author = fetchedAuthors.find(
