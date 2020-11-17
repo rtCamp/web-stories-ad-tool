@@ -111,7 +111,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 	}
 
 	/**
-	 * @covers ::is_view_type
+	 * @covers ::get_view_type
 	 */
 	public function test_get_view_type() {
 
