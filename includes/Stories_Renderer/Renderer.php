@@ -190,7 +190,7 @@ abstract class Renderer implements RenderingInterface {
 	 */
 	protected function get_view_type() {
 
-		return isset( $this->attributes['view_type'] ) ? $this->attributes['view_type'] : 'circles';
+		return ( ! empty( $this->attributes['view_type'] ) ) ? $this->attributes['view_type'] : 'circles';
 	}
 
 	/**
@@ -381,8 +381,9 @@ abstract class Renderer implements RenderingInterface {
 		?>
 		<amp-story-player <?php echo( esc_attr( $story_player_attributes ) ); ?>
 			style="<?php echo esc_attr( $player_style ); ?>">
-			<a href="<?php echo esc_url( $story_data['url'] ); ?>"
-			   style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $story_data['title'] ); ?></a>
+			<a href="<?php echo esc_url( $story_data['url'] ); ?>" style="<?php echo esc_attr( $poster_style ); ?>">
+				<?php echo esc_html( $story_data['title'] ); ?>
+			</a>
 		</amp-story-player>
 
 		<?php
@@ -404,9 +405,7 @@ abstract class Renderer implements RenderingInterface {
 		}
 
 		?>
-		<div
-			class="story-content-overlay web-stories-list__story-content-overlay"
-		>
+		<div class="story-content-overlay web-stories-list__story-content-overlay">
 			<?php if ( ! empty( $story_data['title'] ) ) { ?>
 				<div class="story-content-overlay__title">
 					<?php

@@ -92,8 +92,9 @@ class Stories {
 
 		$query_args    = $this->get_query_args();
 		$stories_query = new WP_Query( $query_args );
+		$posts         = ( ! empty( $stories_query->posts ) && is_array( $stories_query->posts ) ) ? $stories_query->posts : [];
 
-		return $stories_query->posts;
+		return $posts;
 	}
 
 	/**
@@ -150,7 +151,7 @@ class Stories {
 			'show_date'                 => false,
 			'show_story_poster'         => true,
 			'show_stories_archive_link' => false,
-			'stories_archive_label'     => 'View all stories',
+			'stories_archive_label'     => __( 'View all stories', 'web-stories' ),
 			'list_view_image_alignment' => 'left',
 			'class'                     => '',
 		];
