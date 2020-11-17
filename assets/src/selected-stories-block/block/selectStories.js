@@ -33,6 +33,7 @@ import { PageSizePropType } from '../../dashboard/types';
 import {
   SearchPropTypes,
   SortPropTypes,
+  PagePropTypes,
 } from '../../dashboard/utils/useStoryView';
 import {
   TEXT_INPUT_DEBOUNCE,
@@ -45,6 +46,7 @@ import {
   CardPreviewContainer,
   CardTitle,
   Dropdown,
+  InfiniteScroller,
 } from '../../dashboard/components';
 import TypeaheadSearch from '../../dashboard/app/views/shared/typeaheadSearch';
 import { UnitsProvider } from '../../edit-story/units';
@@ -54,9 +56,14 @@ import { StoryGridItem } from './components/cardGridItem';
 import ItemOverlay from './components/itemOverlay';
 
 const StoryFilter = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 10px 0;
+  margin-top: -12px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  background-color: #fff;
 
   #typeahead-search {
     min-height: 18px;
@@ -147,6 +154,9 @@ function SelectStories({
   sort,
   addItemToSelectedStories,
   removeItemFromSelectedStories,
+  allPagesFetched,
+  isLoading,
+  page,
 }) {
   const [debouncedTypeaheadChange] = useDebouncedCallback((value) => {
     search.setKeyword(value);
@@ -253,6 +263,12 @@ function SelectStories({
                   );
                 })}
               </StoryGrid>
+              <InfiniteScroller
+                canLoadMore={!allPagesFetched}
+                isLoading={isLoading}
+                allDataLoadedMessage={__('No more stories', 'web-stories')}
+                onLoadMore={page.requestNextPage}
+              />
             </UnitsProvider>
           </TransformProvider>
         </FontProvider>
@@ -269,6 +285,9 @@ SelectStories.propTypes = {
   sort: SortPropTypes,
   addItemToSelectedStories: PropTypes.func,
   removeItemFromSelectedStories: PropTypes.func,
+  allPagesFetched: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  page: PagePropTypes,
 };
 
 export default SelectStories;
