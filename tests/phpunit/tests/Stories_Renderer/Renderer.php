@@ -32,6 +32,8 @@ use Google\Web_Stories\Tests\Private_Access;
 
 /**
  * Generic_Renderer class.
+ *
+ * @coversDefaultClass \Google\Web_Stories\Stories_Renderer\Renderer
  */
 class Renderer extends \WP_UnitTestCase_Base {
 
@@ -47,14 +49,14 @@ class Renderer extends \WP_UnitTestCase_Base {
 	/**
 	 * Stories mock object.
 	 *
-	 * @var Stories_Mock
+	 * @var Stories
 	 */
 	private $stories;
 
 	/**
 	 * Runs once before any test in the class run.
 	 *
-	 * @param WP_UnitTest_Factory $factory Factory class object.
+	 * @param \WP_UnitTest_Factory $factory Factory class object.
 	 */
 	public static function wpSetUpBeforeClass( $factory ) {
 
@@ -76,9 +78,9 @@ class Renderer extends \WP_UnitTestCase_Base {
 	}
 
 	/**
-	 * @covers ::asset
+	 * @covers ::assets
 	 */
-	public function test_asset() {
+	public function test_assets() {
 
 		$renderer = new Test_Renderer( $this->stories );
 
@@ -126,6 +128,9 @@ class Renderer extends \WP_UnitTestCase_Base {
 
 	}
 
+	/**
+	 * @covers ::get_story_item_data
+	 */
 	public function test_get_story_item_data() {
 
 		$this->stories->method( 'get_story_attributes' )->willReturn(
@@ -346,15 +351,21 @@ class Renderer extends \WP_UnitTestCase_Base {
 		$author_id       = get_post_field( 'post_author', self::$story_id );
 		$is_circles_view = $this->call_private_method( $renderer, 'is_view_type', [ 'list' ] );
 		$image_size      = $is_circles_view ? \Google\Web_Stories\Media::POSTER_SQUARE_IMAGE_SIZE : \Google\Web_Stories\Media::POSTER_PORTRAIT_IMAGE_SIZE;
-		$story_title     = ( ! empty( $attributes['show_title'] ) && ( true === $attributes['show_title'] ) ) ?
-			get_the_title( self::$story_id ) :
-			'';
-		$author_name     = ( ! $is_circles_view && ! empty( $attributes['show_author'] ) && ( true === $attributes['show_author'] ) ) ?
-			get_the_author_meta( 'display_name', $author_id ) :
-			'';
-		$story_date      = ( ! $is_circles_view && ! empty( $attributes['show_date'] ) && ( true === $attributes['show_date'] ) ) ?
-			get_the_date( 'M j, Y', self::$story_id ) :
-			'';
+		$story_title     = '';
+		$author_name     = '';
+		$story_date      = '';
+
+		if ( ! empty( $attributes['show_title'] ) && ( true === $attributes['show_title'] ) ) {
+			$story_title = get_the_title( self::$story_id );
+		}
+
+		if ( ! $is_circles_view && ! empty( $attributes['show_author'] ) && ( true === $attributes['show_author'] ) ) {
+			$author_name = get_the_author_meta( 'display_name', $author_id );
+		}
+
+		if ( ! $is_circles_view && ! empty( $attributes['show_date'] ) && ( true === $attributes['show_date'] ) ) {
+			$story_date = get_the_date( 'M j, Y', self::$story_id );
+		}
 
 		$story_data['ID']                   = self::$story_id;
 		$story_data['url']                  = get_post_permalink( self::$story_id );

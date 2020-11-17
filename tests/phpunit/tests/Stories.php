@@ -97,8 +97,10 @@ class Stories extends \WP_UnitTestCase {
 
 	/**
 	 * Test that instance of
+	 *
+	 * @covers ::render
 	 */
-	public function test_instance_of_renderer() {
+	public function test_render() {
 
 		ob_start();
 		self::$testee->render();
@@ -109,6 +111,8 @@ class Stories extends \WP_UnitTestCase {
 
 	/**
 	 * Test that get_stories method returns valid story.
+	 *
+	 * @covers ::get_stories
 	 */
 	public function test_get_stories_returns_valid_story() {
 
@@ -118,6 +122,8 @@ class Stories extends \WP_UnitTestCase {
 
 	/**
 	 * Test that get_stories method returns valid story.
+	 *
+	 * @covers ::get_stories
 	 */
 	public function test_get_stories_returns_empty_array() {
 
@@ -128,6 +134,8 @@ class Stories extends \WP_UnitTestCase {
 
 	/**
 	 * Test story arguments are equal.
+	 *
+	 * @covers ::get_story_attributes
 	 */
 	public function test_default_story_args_equality() {
 

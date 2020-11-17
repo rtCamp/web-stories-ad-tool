@@ -27,7 +27,7 @@ class Carousel_Renderer extends \WP_UnitTestCase_Base {
 	/**
 	 * Stories mock object.
 	 *
-	 * @var Stories_Mock
+	 * @var Stories
 	 */
 	private $stories;
 

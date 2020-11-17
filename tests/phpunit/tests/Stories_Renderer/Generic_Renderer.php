@@ -27,7 +27,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 	/**
 	 * Stories mock object.
 	 *
-	 * @var Stories_Mock
+	 * @var Stories
 	 */
 	private $stories;
 
@@ -41,7 +41,7 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 	/**
 	 * Runs once before any test in the class run.
 	 *
-	 * @param WP_UnitTest_Factory $factory Factory class object.
+	 * @param \WP_UnitTest_Factory $factory Factory class object.
 	 */
 	public static function wpSetUpBeforeClass( $factory ) {
 
