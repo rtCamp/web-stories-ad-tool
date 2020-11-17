@@ -85,6 +85,8 @@ function StoryPicker({
   setIsSortingStories,
 }) {
   const [fetchingForTheFirstTime, setFetchingForTheFirstTime] = useState(true);
+  const [currentAuthor, setCurrentAuthor] = useState('0');
+
   const {
     fetchStories,
     stories,
@@ -117,17 +119,20 @@ function StoryPicker({
   );
 
   const fetchWebStories = async () => {
-    await fetchStories({
+    const query = {
       page: page.value,
       searchTerm: search.keyword,
       sortDirection: view.style === VIEW_STYLE.LIST && sort.direction,
       sortOption: sort.value,
       status: STORY_STATUS.PUBLISH,
-    });
+    };
 
-    if (fetchingForTheFirstTime) {
-      setFetchingForTheFirstTime(false);
+    if (currentAuthor) {
+      query.author = parseInt(currentAuthor);
     }
+
+    await fetchStories(query);
+    setFetchingForTheFirstTime(false);
   };
 
   const orderedStories = useMemo(() => {
@@ -156,6 +161,7 @@ function StoryPicker({
     filter.value,
     page.value,
     search.keyword,
+    currentAuthor,
     sort.direction,
     sort.value,
     view.style,
@@ -215,6 +221,8 @@ function StoryPicker({
                     orderedStories={orderedStories}
                     pageSize={view.pageSize}
                     search={search}
+                    currentAuthor={currentAuthor}
+                    setCurrentAuthor={setCurrentAuthor}
                     sort={sort}
                     addItemToSelectedStories={addItemToSelectedStories}
                     removeItemFromSelectedStories={

@@ -165,7 +165,27 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 					'stories' => sprintf( '/web-stories/v1/%s', $rest_base ),
 				],
 			],
+			'authors'    => $this->get_story_authors(),
 		];
+	}
+
+	/**
+	 * Get a list of story authors
+	 *
+	 * @since
+	 *
+	 * @return array Author list
+	 */
+	protected function get_story_authors() {
+		// @see Roles listed in \Google\Web_Stories\Story_Post_Type::add_caps_to_roles() method
+		return get_users(
+			[
+				'role__in' => [ 'administrator', 'editor', 'author', 'contributor' ],
+				'orderby'  => 'display_name',
+				'number'   => -1,
+				'fields'   => [ 'ID', 'display_name' ],
+			]
+		);
 	}
 
 	/**

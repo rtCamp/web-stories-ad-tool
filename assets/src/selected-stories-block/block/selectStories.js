@@ -24,7 +24,7 @@ import { useDebouncedCallback } from 'use-debounce';
  * WordPress dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import { useCallback } from '@wordpress/element';
+import { useCallback, useEffect, useState } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -133,12 +133,24 @@ const SearchInner = styled.div`
   justify-content: flex-end;
 `;
 
-const StorySortDropdownContainer = styled.div`
+const DropdownContainer = styled.div`
   margin: auto 8px;
   align-self: flex-end;
 `;
 
-const SortDropdown = styled(Dropdown)``;
+const AuthorDropdown = styled(Dropdown)`
+  & > div {
+    max-height: 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.25);
+
+    & > div {
+      box-shadow: none;
+    }
+  }
+`;
 
 const DetailRow = styled.div`
   display: flex;
@@ -151,6 +163,8 @@ function SelectStories({
   orderedStories,
   pageSize,
   search,
+  currentAuthor,
+  setCurrentAuthor,
   sort,
   addItemToSelectedStories,
   removeItemFromSelectedStories,
@@ -158,6 +172,7 @@ function SelectStories({
   isLoading,
   page,
 }) {
+  const [authors, setAuthors] = useState([]);
   const [debouncedTypeaheadChange] = useDebouncedCallback((value) => {
     search.setKeyword(value);
   }, TEXT_INPUT_DEBOUNCE);
@@ -168,6 +183,24 @@ function SelectStories({
     },
     [sort]
   );
+
+  useEffect(() => {
+    const items = [
+      {
+        label: __('All authors', 'web-stories'),
+        value: '0',
+      },
+    ];
+
+    global.webStoriesSelectedBlockSettings.authors.forEach((author) => {
+      items.push({
+        label: author.display_name,
+        value: author.ID.toString(),
+      });
+    });
+
+    setAuthors(items);
+  }, []);
 
   return (
     <>
@@ -182,8 +215,20 @@ function SelectStories({
             />
           </SearchInner>
         </SearchContainer>
-        <StorySortDropdownContainer>
-          <SortDropdown
+        <DropdownContainer>
+          <AuthorDropdown
+            alignment="flex-end"
+            ariaLabel={__('Choose an author to filter', 'web-stories')}
+            items={authors}
+            type={DROPDOWN_TYPES.MENU}
+            value={currentAuthor}
+            onChange={(author) => {
+              setCurrentAuthor(author.value);
+            }}
+          />
+        </DropdownContainer>
+        <DropdownContainer>
+          <Dropdown
             alignment="flex-end"
             ariaLabel={__('Choose sort option for display', 'web-stories')}
             items={STORY_SORT_MENU_ITEMS}
@@ -193,7 +238,7 @@ function SelectStories({
               onSortChange(newSort.value);
             }}
           />
-        </StorySortDropdownContainer>
+        </DropdownContainer>
       </StoryFilter>
       {!orderedStories.length && search.keyword && (
         <p>
@@ -206,6 +251,9 @@ function SelectStories({
             search.keyword
           )}
         </p>
+      )}
+      {!orderedStories.length && !search.keyword && (
+        <p>{__(`Sorry, we couldn't find any results`, 'web-stories')}</p>
       )}
       {orderedStories.length >= 1 && (
         <FontProvider>
@@ -282,6 +330,8 @@ SelectStories.propTypes = {
   orderedStories: PropTypes.array,
   pageSize: PageSizePropType,
   search: SearchPropTypes,
+  currentAuthor: PropTypes.string,
+  setCurrentAuthor: PropTypes.func,
   sort: SortPropTypes,
   addItemToSelectedStories: PropTypes.func,
   removeItemFromSelectedStories: PropTypes.func,
