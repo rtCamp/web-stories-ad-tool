@@ -38,6 +38,6 @@ class Test_Renderer extends Renderer {
 	 *
 	 * @return void
 	 */
-	public function render(){}
+	public function render() {}
 
 }

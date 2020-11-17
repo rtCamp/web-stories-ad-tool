@@ -57,7 +57,7 @@ class Stories extends \WP_UnitTestCase {
 	/**
 	 * Runs once before any test in the class run.
 	 *
-	 * @param WP_UnitTest_Factory $factory Factory class object.
+	 * @param \WP_UnitTest_Factory $factory Factory class object.
 	 */
 	public static function wpSetUpBeforeClass( $factory ) {
 
@@ -99,6 +99,7 @@ class Stories extends \WP_UnitTestCase {
 	 * Test that instance of
 	 */
 	public function test_instance_of_renderer() {
+
 		ob_start();
 		self::$testee->render();
 		ob_end_clean();
@@ -110,6 +111,7 @@ class Stories extends \WP_UnitTestCase {
 	 * Test that get_stories method returns valid story.
 	 */
 	public function test_get_stories_returns_valid_story() {
+
 		$story_posts = self::$testee->get_stories();
 		$this->assertSame( self::$story_id, $story_posts[0]->ID );
 	}
@@ -118,6 +120,7 @@ class Stories extends \WP_UnitTestCase {
 	 * Test that get_stories method returns valid story.
 	 */
 	public function test_get_stories_returns_empty_array() {
+
 		$stories_obj = new Testee( [], [ 'post_type' => 'draft' ] );
 		$story_posts = $stories_obj->get_stories();
 		$this->assertEmpty( $story_posts );
@@ -127,7 +130,9 @@ class Stories extends \WP_UnitTestCase {
 	 * Test story arguments are equal.
 	 */
 	public function test_default_story_args_equality() {
+
 		$story_args = self::$testee->get_story_attributes();
 		$this->assertSame( self::$default_story_args, $story_args );
 	}
+
 }

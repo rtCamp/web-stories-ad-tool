@@ -32,12 +32,14 @@ use Google\Web_Stories\Embed_Base;
  * Generic_Renderer class.
  */
 class Generic_Renderer extends Renderer {
+
 	/**
 	 * Perform initial setup for object.
 	 *
 	 * @return void
 	 */
 	public function init() {
+
 		parent::init();
 
 		$this->assets();
@@ -49,6 +51,7 @@ class Generic_Renderer extends Renderer {
 	 * @return void
 	 */
 	public function assets() {
+
 		parent::assets();
 
 		if ( $this->is_view_type( 'grid' ) && ! $this->is_amp_request() && true !== $this->attributes['show_story_poster'] ) {
@@ -63,6 +66,7 @@ class Generic_Renderer extends Renderer {
 	 * @return string Rendered stories output.
 	 */
 	public function render() {
+
 		if ( empty( $this->story_posts ) || ! is_array( $this->story_posts ) ) {
 			return '';
 		}
@@ -78,6 +82,7 @@ class Generic_Renderer extends Renderer {
 				style="<?php echo esc_attr( $container_style ); ?>"
 			>
 				<?php
+
 				foreach ( $this->story_posts as $story_post ) {
 					$this->render_single_story_content( $story_post->ID );
 				}

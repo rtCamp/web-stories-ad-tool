@@ -60,8 +60,8 @@ class Stories {
 	/**
 	 * Class constructor
 	 *
-	 * @param array $story_attributes {
-	 *     An array of story attributes.
+	 * @param array $story_attributes          {
+	 *                                         An array of story attributes.
 	 *
 	 *     @type string $view_type                 Stories View type. Default circles.
 	 *     @type int    $number_of_columns         Number of columns to show in grid view. Default 2.
@@ -74,7 +74,8 @@ class Stories {
 	 *     @type string $list_view_image_alignment The list mode image alignment. Default 'left'.
 	 *     @type string $class                     Additional CSS classes for the container. Default empty string.
 	 * }
-	 * @param array $query_arguments An array of story query arguments. @see WP_Query::parse_query() for all available arguments.
+	 * @param array $query_arguments           An array of query arguments for story. @see WP_Query::parse_query() for
+	 *                                         all available arguments.
 	 */
 	public function __construct( array $story_attributes = [], array $query_arguments = [] ) {
 
@@ -88,6 +89,7 @@ class Stories {
 	 * @return array An array of Story posts.
 	 */
 	public function get_stories() {
+
 		$query_args    = $this->get_query_args();
 		$stories_query = new WP_Query( $query_args );
 
@@ -95,24 +97,23 @@ class Stories {
 	}
 
 	/**
-	 * Instansiates the renderer classes based on the view type.
+	 * Instantiates the renderer classes based on the view type.
 	 *
 	 * @return Renderer Renderer Instance.
 	 */
 	private function get_renderer() {
 
-		switch ( $this->get_story_attributes()['view_type'] ) {
+		$story_attributes = $this->get_story_attributes();
+		$view_type        = ( ! empty( $story_attributes['view_type'] ) ) ? $story_attributes['view_type'] : '';
 
-			case 'circles':
-			case 'list':
-			case 'grid':
-				$renderer = new Generic_Renderer( $this );
-				break;
-
+		switch ( $view_type ) {
 			case 'carousel':
 				$renderer = new Carousel_Renderer( $this );
 				break;
 
+			case 'circles':
+			case 'list':
+			case 'grid':
 			default:
 				$renderer = new Generic_Renderer( $this );
 		}

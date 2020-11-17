@@ -37,6 +37,7 @@ use Google\Web_Stories\Story_Post_Type;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 abstract class Renderer implements RenderingInterface {
+
 	/**
 	 * Web Stories stylesheet handle.
 	 *
@@ -71,6 +72,7 @@ abstract class Renderer implements RenderingInterface {
 	 * @param Stories $stories Stories instance.
 	 */
 	public function __construct( Stories $stories ) {
+
 		$this->stories    = $stories;
 		$this->attributes = $this->stories->get_story_attributes();
 	}
@@ -88,6 +90,7 @@ abstract class Renderer implements RenderingInterface {
 	 * @return void
 	 */
 	public function init() {
+
 		$this->story_posts = $this->stories->get_stories();
 	}
 
@@ -97,6 +100,7 @@ abstract class Renderer implements RenderingInterface {
 	 * @return void
 	 */
 	public function assets() {
+
 		wp_enqueue_style(
 			self::STYLE_HANDLE,
 			WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/stories.css',
@@ -111,14 +115,15 @@ abstract class Renderer implements RenderingInterface {
 	 * @return boolean
 	 */
 	public function is_amp_request() {
-		return ( function_exists( 'amp_is_request' ) && amp_is_request() ) ||
-		( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() );
+
+		$amp_is_request  = ( function_exists( 'amp_is_request' ) && amp_is_request() );
+		$is_amp_endpoint = ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() );
+
+		return ( $amp_is_request || $is_amp_endpoint );
 	}
 
 	/**
 	 * Returns story item data.
-	 *
-	 * @since
 	 *
 	 * @param int    $story_id             Story's id for which the story attributes are requested.
 	 * @param string $single_story_classes Single story's classes.
@@ -129,22 +134,28 @@ abstract class Renderer implements RenderingInterface {
 
 		$story_data = [];
 
-		if ( empty( $story_id ) ) {
+		if ( empty( $story_id ) || 0 >= intval( $story_id ) ) {
 			return $story_data;
 		}
 
 		$author_id       = absint( get_post_field( 'post_author', $story_id ) );
 		$is_circles_view = $this->is_view_type( 'circles' );
 		$image_size      = $is_circles_view ? Media::POSTER_SQUARE_IMAGE_SIZE : Media::POSTER_PORTRAIT_IMAGE_SIZE;
-		$story_title     = ( ! empty( $this->attributes['show_title'] ) && ( true === $this->attributes['show_title'] ) ) ?
-			get_the_title( $story_id ) :
-			'';
-		$author_name     = ( ! $is_circles_view && ! empty( $this->attributes['show_author'] ) && ( true === $this->attributes['show_author'] ) ) ?
-			get_the_author_meta( 'display_name', $author_id ) :
-			'';
-		$story_date      = ( ! $is_circles_view && ! empty( $this->attributes['show_date'] ) && ( true === $this->attributes['show_date'] ) ) ?
-			get_the_date( 'M j, Y', $story_id ) :
-			'';
+		$story_title     = '';
+		$author_name     = '';
+		$story_date      = '';
+
+		if ( ! empty( $this->attributes['show_title'] ) && ( true === $this->attributes['show_title'] ) ) {
+			$story_title = get_the_title( $story_id );
+		}
+
+		if ( ! $is_circles_view && ! empty( $this->attributes['show_author'] ) && ( true === $this->attributes['show_author'] ) ) {
+			$author_name = get_the_author_meta( 'display_name', $author_id );
+		}
+
+		if ( ! $is_circles_view && ! empty( $this->attributes['show_date'] ) && ( true === $this->attributes['show_date'] ) ) {
+			$story_date = get_the_date( 'M j, Y', $story_id );
+		}
 
 		$story_data['ID']                   = $story_id;
 		$story_data['url']                  = get_post_permalink( $story_id );
@@ -168,6 +179,7 @@ abstract class Renderer implements RenderingInterface {
 	 * @return bool Whether or not current view type matches the one passed.
 	 */
 	protected function is_view_type( $view_type ) {
+
 		return ( ! empty( $this->attributes['view_type'] ) && $view_type === $this->attributes['view_type'] );
 	}
 
@@ -177,6 +189,7 @@ abstract class Renderer implements RenderingInterface {
 	 * @return string
 	 */
 	protected function get_view_type() {
+
 		return isset( $this->attributes['view_type'] ) ? $this->attributes['view_type'] : 'circles';
 	}
 
@@ -186,6 +199,7 @@ abstract class Renderer implements RenderingInterface {
 	 * @return void
 	 */
 	protected function maybe_render_archive_link() {
+
 		if ( empty( $this->attributes['show_stories_archive_link'] ) || true !== $this->attributes['show_stories_archive_link'] ) {
 			return;
 		}
@@ -198,11 +212,12 @@ abstract class Renderer implements RenderingInterface {
 
 		?>
 		<div class="web-stories-list__archive-link">
-			<a href="<?php echo( esc_url_raw( $web_stories_archive ) ); ?>">
-				<?php echo( esc_html( $this->attributes['stories_archive_label'] ) ); ?>
+			<a href="<?php echo esc_url( $web_stories_archive ); ?>">
+				<?php echo esc_html( $this->attributes['stories_archive_label'] ); ?>
 			</a>
 		</div>
 		<?php
+
 	}
 
 	/**
@@ -211,11 +226,12 @@ abstract class Renderer implements RenderingInterface {
 	 * @return string
 	 */
 	protected function get_container_classes() {
+
 		$container_classes   = [];
 		$container_classes[] = 'web-stories-list';
 		$container_classes[] = ( ! empty( $this->attributes['view_type'] ) ) ? sprintf( 'is-view-type-%1$s', $this->attributes['view_type'] ) : 'is-view-type-circles';
 		$container_classes[] = ( ! empty( $this->attributes['align'] ) ) ? sprintf( 'align%1$s', $this->attributes['align'] ) : 'alignnone';
-		$container_classes[] = ! empty( $this->attributes['class'] ) ? $this->attributes['class'] : '';
+		$container_classes[] = ( ! empty( $this->attributes['class'] ) ) ? $this->attributes['class'] : '';
 
 		$container_classes = array_filter( $container_classes );
 
@@ -231,10 +247,17 @@ abstract class Renderer implements RenderingInterface {
 
 		$single_story_classes   = [];
 		$single_story_classes[] = 'web-stories-list__story-wrapper';
-		$single_story_classes[] = ! $this->is_view_type( 'grid' ) ? 'has-poster' : '';
-		$single_story_classes[] = $this->is_view_type( 'grid' ) && ! empty( $this->attributes['show_story_poster'] && true === $this->attributes['show_story_poster'] ) ?
-		'has-poster' :
-		'';
+
+		if ( ! $this->is_view_type( 'grid' ) ) {
+			$single_story_classes[] = 'has-poster';
+		}
+
+		if ( ! empty( $this->attributes['show_story_poster'] ) &&
+			$this->is_view_type( 'grid' ) &&
+			true === $this->attributes['show_story_poster']
+		) {
+			$single_story_classes[] = 'has-poster';
+		}
 
 		$single_story_classes = array_filter( $single_story_classes );
 
@@ -252,7 +275,12 @@ abstract class Renderer implements RenderingInterface {
 	 * @return string
 	 */
 	protected function get_container_styles() {
-		$container_style = ( true === $this->is_view_type( 'grid' ) ) ? sprintf( 'grid-template-columns:repeat(%1$s, 1fr);', $this->attributes['number_of_columns'] ) : '';
+
+		$container_style = '';
+
+		if ( true === $this->is_view_type( 'grid' ) ) {
+			$container_style = sprintf( 'grid-template-columns:repeat(%1$s, 1fr);', $this->attributes['number_of_columns'] );
+		}
 
 		/**
 		 * Filters the web stories renderer container style.
@@ -270,14 +298,16 @@ abstract class Renderer implements RenderingInterface {
 	 * @return void
 	 */
 	protected function render_single_story_content( $story_id ) {
+
 		$story_data           = $this->get_story_item_data( $story_id );
 		$single_story_classes = $this->get_single_story_classes();
-		$show_story_player    = true !== $this->attributes['show_story_poster'] && $this->is_view_type( 'grid' )
+		$show_story_player    = ( true !== $this->attributes['show_story_poster'] && $this->is_view_type( 'grid' ) );
 
 		?>
 
 		<div class="<?php echo esc_attr( $single_story_classes ); ?>">
 			<?php
+
 			if ( true === $show_story_player ) {
 				$this->render_story_with_story_player( $story_data );
 			} else {
@@ -286,6 +316,7 @@ abstract class Renderer implements RenderingInterface {
 			?>
 		</div>
 		<?php
+
 	}
 
 	/**
@@ -296,17 +327,23 @@ abstract class Renderer implements RenderingInterface {
 	 * @return void
 	 */
 	protected function render_story_with_poster( array $story_data ) {
-		$height       = ! empty( $story_data['height'] ) ? absint( $story_data['height'] ) : 600;
-		$width        = ! empty( $story_data['width'] ) ? absint( $story_data['width'] ) : 360;
-		$poster_style = sprintf( 'background-image: url(%1$s);', esc_url_raw( $story_data['poster'] ) );
-		$poster_style = ( true === $this->is_view_type( 'carousel' ) ) ?
-			sprintf( '%1$s width: %2$spx; height: %3$spx', $poster_style, $width, $height ) : $poster_style;
 
-		$list_view_image_alignment = ! empty( $this->attributes['list_view_image_alignment'] ) ? sprintf( 'image-align-%1$s', $this->attributes['list_view_image_alignment'] ) : '';
+		$height                    = ( ! empty( $story_data['height'] ) ) ? absint( $story_data['height'] ) : 600;
+		$width                     = ( ! empty( $story_data['width'] ) ) ? absint( $story_data['width'] ) : 360;
+		$poster_style              = sprintf( 'background-image: url(%1$s);', esc_url_raw( $story_data['poster'] ) );
+		$list_view_image_alignment = '';
+
+		if ( true === $this->is_view_type( 'carousel' ) ) {
+			$poster_style = sprintf( '%1$s width: %2$spx; height: %3$spx', $poster_style, $width, $height );
+		}
+
+		if ( ! empty( $this->attributes['list_view_image_alignment'] ) ) {
+			$list_view_image_alignment = sprintf( 'image-align-%1$s', $this->attributes['list_view_image_alignment'] );
+		}
 
 		?>
-		<a class="<?php echo( esc_attr( $list_view_image_alignment ) ); ?>"
-			href="<?php echo( esc_url_raw( $story_data['url'] ) ); ?>"
+		<a class="<?php echo esc_attr( $list_view_image_alignment ); ?>"
+			href="<?php echo esc_url( $story_data['url'] ); ?>"
 		>
 			<div
 				class="web-stories-list__story-placeholder"
@@ -315,6 +352,7 @@ abstract class Renderer implements RenderingInterface {
 			<?php $this->get_content_overlay( $story_data ); ?>
 		</a>
 		<?php
+
 	}
 
 	/**
@@ -325,17 +363,30 @@ abstract class Renderer implements RenderingInterface {
 	 * @return void
 	 */
 	protected function render_story_with_story_player( array $story_data ) {
-		$height                  = ! empty( $story_data['height'] ) ? absint( $story_data['height'] ) : 600;
-		$width                   = ! empty( $story_data['width'] ) ? absint( $story_data['width'] ) : 360;
+
+		$height                  = ( ! empty( $story_data['height'] ) ) ? absint( $story_data['height'] ) : 600;
+		$width                   = ( ! empty( $story_data['width'] ) ) ? absint( $story_data['width'] ) : 360;
 		$player_style            = sprintf( 'width: %1$spx;height: %2$spx', $width, $height );
-		$story_player_attributes = $this->is_amp_request() ? sprintf( 'height=%d width=%d', $height, $width ) : '';
-		$poster_style            = ! empty( $story_data['poster'] ) ? sprintf( '--story-player-poster: url(%s)', $story_data['poster'] ) : '';
+		$story_player_attributes = '';
+		$poster_style            = '';
+
+		if ( $this->is_amp_request() ) {
+			$story_player_attributes = sprintf( 'height=%d width=%d', $height, $width );
+		}
+
+		if ( ! empty( $story_data['poster'] ) ) {
+			$poster_style = sprintf( '--story-player-poster: url(%s)', $story_data['poster'] );
+		}
+
 		?>
-		<amp-story-player <?php echo( esc_attr( $story_player_attributes ) ); ?> style="<?php echo esc_attr( $player_style ); ?>">
-			<a href="<?php echo esc_url( $story_data['url'] ); ?>" style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $story_data['title'] ); ?></a>
+		<amp-story-player <?php echo( esc_attr( $story_player_attributes ) ); ?>
+			style="<?php echo esc_attr( $player_style ); ?>">
+			<a href="<?php echo esc_url( $story_data['url'] ); ?>"
+			   style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $story_data['title'] ); ?></a>
 		</amp-story-player>
 
 		<?php
+
 		$this->get_content_overlay( $story_data );
 	}
 
@@ -347,7 +398,8 @@ abstract class Renderer implements RenderingInterface {
 	 * @return void
 	 */
 	protected function get_content_overlay( array $story_data ) {
-		if ( empty( $story_data['show_content_overlay'] ) || ( true !== $story_data['show_content_overlay'] ) ) {
+
+		if ( empty( $story_data['show_content_overlay'] ) || true !== $story_data['show_content_overlay'] ) {
 			return;
 		}
 
@@ -355,32 +407,38 @@ abstract class Renderer implements RenderingInterface {
 		<div
 			class="story-content-overlay web-stories-list__story-content-overlay"
 		>
-			<?php if ( ! empty( $story_data['title'] ) ) : ?>
-			<div class="story-content-overlay__title">
-				<?php
-				echo( esc_html( $story_data['title'] ) );
-				?>
-			</div>
-			<?php endif; ?>
+			<?php if ( ! empty( $story_data['title'] ) ) { ?>
+				<div class="story-content-overlay__title">
+					<?php
+					echo esc_html( $story_data['title'] );
+					?>
+				</div>
+			<?php } ?>
+
 			<div class="story-content-overlay__author-date">
-				<?php if ( ! empty( $story_data['author'] ) ) : ?>
-				<div>
-					<?php
-					/* translators: %s: author name. */
-					echo esc_html( sprintf( __( 'By %s', 'web-stories' ), $story_data['author'] ) );
-					?>
+				<?php if ( ! empty( $story_data['author'] ) ) { ?>
+					<div>
+						<?php
+
+						/* translators: %s: author name. */
+						echo esc_html( sprintf( __( 'By %s', 'web-stories' ), $story_data['author'] ) );
+						?>
 					</div>
-				<?php endif; ?>
-				<?php if ( ! empty( $story_data['date'] ) ) : ?>
-				<time class="story-content-overlay__date">
-					<?php
-					/* translators: %s: publish date. */
-					echo esc_html( sprintf( __( 'On %s', 'web-stories' ), $story_data['date'] ) );
-					?>
-				</time>
-				<?php endif; ?>
+				<?php } ?>
+
+				<?php if ( ! empty( $story_data['date'] ) ) { ?>
+					<time class="story-content-overlay__date">
+						<?php
+
+						/* translators: %s: publish date. */
+						echo esc_html( sprintf( __( 'On %s', 'web-stories' ), $story_data['date'] ) );
+						?>
+					</time>
+				<?php } ?>
 			</div>
 		</div>
 		<?php
+
 	}
+
 }

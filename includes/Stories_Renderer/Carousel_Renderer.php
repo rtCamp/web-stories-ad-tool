@@ -30,12 +30,14 @@ namespace Google\Web_Stories\Stories_Renderer;
  * Carousel_Renderer class.
  */
 class Carousel_Renderer extends Renderer {
+
 	/**
 	 * Perform initial setup for object.
 	 *
 	 * @return void
 	 */
 	public function init() {
+
 		parent::init();
 
 		$this->assets();
@@ -47,6 +49,7 @@ class Carousel_Renderer extends Renderer {
 	 * @return void
 	 */
 	public function assets() {
+
 		parent::assets();
 
 		// Enqueue amp runtime script and amp-carousel script to show amp-carousel on non AMP pages.
@@ -61,6 +64,7 @@ class Carousel_Renderer extends Renderer {
 	 * @return string Rendered stories output.
 	 */
 	public function render() {
+
 		if ( empty( $this->story_posts ) || ! is_array( $this->story_posts ) ) {
 			return '';
 		}
@@ -84,6 +88,7 @@ class Carousel_Renderer extends Renderer {
 					aria-label="Basic carousel"
 				>
 					<?php
+
 					foreach ( $this->story_posts as $story_post ) {
 						$this->render_single_story_content( $story_post->ID );
 					}

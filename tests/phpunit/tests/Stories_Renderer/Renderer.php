@@ -57,6 +57,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 	 * @param WP_UnitTest_Factory $factory Factory class object.
 	 */
 	public static function wpSetUpBeforeClass( $factory ) {
+
 		self::$story_id = $factory->post->create(
 			[
 				'post_type' => \Google\Web_Stories\Story_Post_Type::POST_TYPE_SLUG,
@@ -69,6 +70,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 	 * Runs once before any test in the class run.
 	 */
 	public function setUp() {
+
 		$this->stories = $this->createMock( Stories::class );
 		$this->stories->method( 'get_stories' )->willReturn( [ get_post( self::$story_id ) ] );
 	}
@@ -77,6 +79,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 	 * @covers ::asset
 	 */
 	public function test_asset() {
+
 		$renderer = new Test_Renderer( $this->stories );
 
 		$renderer->assets();
@@ -245,6 +248,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 	 * @covers ::get_container_styles
 	 */
 	public function test_get_container_styles() {
+
 		$this->stories->method( 'get_story_attributes' )->willReturn(
 			[
 				'view_type'         => 'grid',
@@ -264,6 +268,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 	 * @covers ::get_single_story_classes
 	 */
 	public function test_get_single_story_classes() {
+
 		$this->stories->method( 'get_story_attributes' )->willReturn(
 			[
 				'show_story_poster' => true,
