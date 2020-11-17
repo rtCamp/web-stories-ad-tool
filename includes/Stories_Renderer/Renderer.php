@@ -379,8 +379,8 @@ abstract class Renderer implements RenderingInterface {
 		}
 
 		?>
-		<amp-story-player <?php echo( esc_attr( $story_player_attributes ) ); ?>
-			style="<?php echo esc_attr( $player_style ); ?>">
+		<amp-story-player style="<?php echo esc_attr( $player_style ); ?>"
+			<?php echo( esc_attr( $story_player_attributes ) ); ?>>
 			<a href="<?php echo esc_url( $story_data['url'] ); ?>" style="<?php echo esc_attr( $poster_style ); ?>">
 				<?php echo esc_html( $story_data['title'] ); ?>
 			</a>

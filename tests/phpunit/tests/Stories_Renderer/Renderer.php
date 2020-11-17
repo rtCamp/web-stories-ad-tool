@@ -177,7 +177,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 		$this->call_private_method( $renderer, 'render_story_with_story_player', [ $story_data ] );
 		$output = ob_get_clean();
 
-		$this->assertContains( '<amp-story-player  style="width: 285px;height: 430px">', $output );
+		$this->assertContains( '<amp-story-player style="width: 285px;height: 430px"', $output );
 		$this->assertContains( '--story-player-poster: url(www.example.com/image.jpg)', $output );
 		$this->assertContains( 'Story Title', $output );
 	}
