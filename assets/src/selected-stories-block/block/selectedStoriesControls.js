@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
   Button,
   ToolbarGroup,
@@ -31,8 +31,10 @@ import {
   ToggleControl,
   SVG,
   Path,
+  Notice,
 } from '@wordpress/components';
 import { BlockControls, InspectorControls } from '@wordpress/block-editor';
+import { RawHTML } from '@wordpress/element';
 
 /* From https://material.io/tools/icons */
 const carouselIcon = (
@@ -57,9 +59,18 @@ const SelectedStoriesControls = (props) => {
     viewAllLinkLabel,
     isShowingStoryPoster,
     setAttributes,
-    // carouselSettings,
     imageOnRight,
   } = props;
+
+  const previewLink = wp.data.select('core/editor').getEditedPostPreviewLink();
+  const carouselMessage = sprintf(
+    /* Translators: Carousel informational message. 1: Preview link. */
+    __(
+      `<i><b>Note:</b> Carousel view's functionality will not work in Editor. <a target="__blank" href="%1$s">Preview</a> post to see it in action.</i>`,
+      'web-stories'
+    ),
+    previewLink
+  );
 
   const toggleView = (newViewType) => {
     if (newViewType) {
@@ -126,6 +137,15 @@ const SelectedStoriesControls = (props) => {
           className="latest-stories-settings"
           title={__('Story settings', 'web-stories')}
         >
+          {'carousel' === viewType && (
+            <Notice
+              className="latest-stories-carousel-message"
+              isDismissible={false}
+              status="warning"
+            >
+              <RawHTML>{carouselMessage}</RawHTML>
+            </Notice>
+          )}
           <ToggleControl
             className={!isViewType('grid') ? 'is-disabled' : ''}
             label={__('Show story cover images', 'web-stories')}
