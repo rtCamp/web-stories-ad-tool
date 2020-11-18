@@ -64,7 +64,7 @@ const SelectedStoriesEdit = ({
     viewAllLinkLabel,
     isShowingStoryPoster,
     carouselSettings,
-    listViewImageAlignment,
+    imageOnRight,
   } = attributes;
 
   const [selectedStories, setSelectedStories] = useState(stories);
@@ -146,7 +146,7 @@ const SelectedStoriesEdit = ({
         viewAllLinkLabel={viewAllLinkLabel}
         isShowingStoryPoster={isShowingStoryPoster}
         carouselSettings={carouselSettings}
-        listViewImageAlignment={listViewImageAlignment}
+        imageOnRight={imageOnRight}
         setAttributes={setAttributes}
       />
       {selectedStoriesObject && 0 < selectedStoriesObject.length && (
@@ -171,7 +171,7 @@ const SelectedStoriesEdit = ({
                   author={story._embedded.author[0].name}
                   poster={story.featured_media_url}
                   isShowingStoryPoster={willShowStoryPoster}
-                  listViewImageAlignment={listViewImageAlignment}
+                  imageOnRight={imageOnRight}
                   isShowingAuthor={willShowAuthor}
                   isShowingDate={willShowDate}
                   isShowingTitle={isShowingTitle}
@@ -220,7 +220,7 @@ SelectedStoriesEdit.propTypes = {
     viewAllLinkLabel: PropTypes.string,
     isShowingStoryPoster: PropTypes.bool,
     carouselSettings: PropTypes.object,
-    listViewImageAlignment: PropTypes.string,
+    imageOnRight: PropTypes.bool,
   }),
   setAttributes: PropTypes.func.isRequired,
   isSelected: PropTypes.bool,

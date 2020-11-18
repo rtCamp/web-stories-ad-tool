@@ -36,13 +36,14 @@ function StoryPlayer({
   isShowingAuthor,
   isShowingDate,
   isShowingTitle,
-  listViewImageAlignment,
+  imageOnRight,
 }) {
   const singleStoryClasses = classNames('latest-stories__story-wrapper', {
     'has-poster': isShowingStoryPoster,
   });
   const imageAlignmentClass = classNames('latest-stories__inner-wrapper', {
-    [`image-align-${listViewImageAlignment}`]: listViewImageAlignment,
+    [`image-align-right`]: imageOnRight,
+    [`image-align-left`]: !imageOnRight,
   });
   const hasContentOverlay = isShowingTitle || isShowingAuthor || isShowingDate;
   const dateFormat = __experimentalGetSettings().formats.date;
@@ -120,7 +121,7 @@ StoryPlayer.propTypes = {
   isShowingAuthor: PropTypes.bool,
   isShowingDate: PropTypes.bool,
   isShowingTitle: PropTypes.bool,
-  listViewImageAlignment: PropTypes.string,
+  imageOnRight: PropTypes.bool,
 };
 
 export default StoryPlayer;
