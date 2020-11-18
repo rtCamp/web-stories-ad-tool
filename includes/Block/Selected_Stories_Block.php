@@ -70,7 +70,7 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 	 */
 	public function init() {
 		$this->register_script( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE, Tracking::SCRIPT_HANDLE ] );
-		$this->register_style( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE ] );
+		$this->register_style( parent::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE ] );
 
 		wp_register_style(
 			parent::STYLE_HANDLE,

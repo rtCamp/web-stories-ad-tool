@@ -10,6 +10,10 @@
       "type": "string",
       "default": "grid"
     },
+    "numOfColumns": {
+      "type": "number",
+      "default": 2
+    },
     "isShowingTitle": {
       "type": "boolean",
       "default": false
