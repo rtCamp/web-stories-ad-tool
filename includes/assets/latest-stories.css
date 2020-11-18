@@ -15,11 +15,29 @@
   max-width: 400px;
 }
 
-.web-stories .web-stories__story-wrapper::before {
+.web-stories .web-stories__story-wrapper::after {
   content: '';
   display: block;
   width: 100%;
   padding-bottom: 177%;
+}
+
+.web-stories:not(.is-view-type-list):not(.is-view-type-circles)
+  .web-stories__story-wrapper.has-poster::before {
+  content: '';
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  top: 0;
+  left: 0;
+  border-radius: 20px;
+  z-index: 1;
 }
 
 .web-stories .web-stories__story-wrapper.has-poster {
@@ -40,6 +58,7 @@
   background-position: center;
   height: 100%;
   width: 100%;
+  border-radius: 20px;
 }
 
 /* story content overlay styles */
@@ -49,8 +68,6 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
   padding: 20px;
   color: #ffffff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
@@ -58,11 +75,10 @@
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.2px;
+  border-radius: 20px;
 }
 
 .web-stories .story-content-overlay__author-date {
-  display: flex;
-  justify-content: space-between;
   margin-top: 8px;
 }
 
@@ -72,7 +88,7 @@
 
 .web-stories .story-content-overlay__title {
   grid-column: 1/-1;
-  font-size: 15px;
+  font-size: 18px;
   line-height: 22px;
   font-weight: 700;
   display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
@@ -90,6 +106,11 @@
 .web-stories.is-view-type-grid .web-stories__controller {
   flex-basis: calc(100% - 32px);
   margin: 16px;
+}
+
+.web-stories.is-view-type-grid .web-stories__inner-wrapper {
+  border: 1px solid #8080805e;
+  border-radius: 20px;
 }
 
 @media only screen and (min-width: 600px) {
@@ -122,7 +143,7 @@
 }
 
 @media only screen and (min-width: 400px) {
-  .web-stories.is-view-type-list .web-stories__story-wrapper::before {
+  .web-stories.is-view-type-list .web-stories__story-wrapper::after {
     padding-bottom: 30%;
   }
 
@@ -133,7 +154,7 @@
     display: flex;
     flex-grow: 1;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
     background-color: #ffffff;
     color: #555555;
   }
@@ -182,11 +203,11 @@
   min-width: unset;
 }
 
-.web-stories.is-view-type-circles .web-stories__story-wrapper::before {
+.web-stories.is-view-type-circles .web-stories__story-wrapper::after {
   content: none;
 }
 
-.web-stories.web-stories.is-view-type-circles .web-stories__inner-wrapper {
+.web-stories.is-view-type-circles .web-stories__inner-wrapper {
   position: relative;
 }
 
@@ -215,6 +236,11 @@
 
 .web-stories.is-view-type-carousel .story-content-overlay__title {
   white-space: normal; /* Not sure why this isn't the default behaviour */
+}
+
+.web-stories.is-view-type-carousel .web-stories__inner-wrapper {
+  border: 1px solid #8080805e;
+  border-radius: 20px;
 }
 
 /* Stories archive link styles */
@@ -267,11 +293,6 @@
 }
 
 @media only screen and (max-width: 600px) {
-  .web-stories .story-content-overlay__title {
-    font-size: 14px;
-    line-height: 18px;
-  }
-
   .web-stories .web-stories__story-lightbox amp-story-player {
     height: 100%;
     max-width: 100%;

@@ -266,7 +266,8 @@ const latestStoriesBlock = {
 const selectedStoriesBlock = {
   ...sharedConfig,
   entry: {
-    'selected-web-stories-block': './assets/src/selected-stories-block/index.js',
+    'selected-web-stories-block':
+      './assets/src/selected-stories-block/index.js',
   },
   plugins: [
     process.env.BUNDLE_ANALZYER && new BundleAnalyzerPlugin(),
@@ -323,4 +324,11 @@ const activationNotice = {
   },
 };
 
-module.exports = [storiesEditor, dashboard, storyEmbedBlock, latestStoriesBlock, selectedStoriesBlock, activationNotice];
+module.exports = [
+  storiesEditor,
+  dashboard,
+  storyEmbedBlock,
+  latestStoriesBlock,
+  selectedStoriesBlock,
+  activationNotice,
+];
