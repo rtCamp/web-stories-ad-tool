@@ -34,7 +34,6 @@ import { ThemeProvider } from 'styled-components';
 /**
  * Internal dependencies
  */
-import './edit.css';
 import ApiProvider from '../../dashboard/app/api/apiProvider';
 import { ConfigProvider } from '../../dashboard/app/config';
 import theme from '../../dashboard/theme';
@@ -57,6 +56,7 @@ const SelectedStoriesEdit = ({
     stories,
     align,
     viewType,
+    numOfColumns,
     isShowingTitle,
     isShowingDate,
     isShowingAuthor,
@@ -93,14 +93,12 @@ const SelectedStoriesEdit = ({
     ? viewAllLinkLabel
     : __('View All Stories', 'web-stories');
 
+  const alignmentClass = classNames({ [`align${align}`]: align });
   const blockClasses = classNames(
-    'wp-block-web-stories-selected-stories latest-stories',
+    'wp-block-web-stories-latest-stories latest-stories',
     { [`is-view-type-${viewType}`]: viewType },
-    { [`align${align}`]: align }
+    { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
   );
-  const blockStyles = {
-    gridTemplateColumns: `repeat(2, 1fr)`,
-  };
 
   const activeTheme = {
     DEPRECATED_THEME: theme,
@@ -150,8 +148,8 @@ const SelectedStoriesEdit = ({
         setAttributes={setAttributes}
       />
       {selectedStoriesObject && 0 < selectedStoriesObject.length && (
-        <div>
-          <div className={blockClasses} style={blockStyles}>
+        <div className={alignmentClass}>
+          <div className={blockClasses}>
             {selectedStoriesObject.map((story) => {
               let title = '';
 
@@ -213,6 +211,7 @@ SelectedStoriesEdit.propTypes = {
     stories: PropTypes.array,
     align: PropTypes.string,
     viewType: PropTypes.string,
+    numOfColumns: PropTypes.number,
     isShowingTitle: PropTypes.bool,
     isShowingDate: PropTypes.bool,
     isShowingAuthor: PropTypes.bool,
