@@ -58,7 +58,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     isShowingStoryPoster,
     carouselSettings,
     authors,
-    listViewImageAlignment,
+    imageOnRight,
   } = attributes;
 
   const [fetchedStories, setFetchedStories] = useState([]);
@@ -178,7 +178,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         isShowingStoryPoster={isShowingStoryPoster}
         carouselSettings={carouselSettings}
         authors={authors}
-        listViewImageAlignment={listViewImageAlignment}
+        imageOnRight={imageOnRight}
         setAttributes={setAttributes}
       />
 
@@ -209,7 +209,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
                   author={author ? author.name : ''}
                   poster={story.featured_media_url}
                   isShowingStoryPoster={willShowStoryPoster}
-                  listViewImageAlignment={listViewImageAlignment}
+                  imageOnRight={imageOnRight}
                   isShowingAuthor={willShowAuthor}
                   isShowingDate={willShowDate}
                   isShowingTitle={isShowingTitle}
@@ -241,7 +241,7 @@ LatestStoriesEdit.propTypes = {
     isShowingStoryPoster: PropTypes.bool,
     carouselSettings: PropTypes.object,
     authors: PropTypes.array,
-    listViewImageAlignment: PropTypes.string,
+    imageOnRight: PropTypes.bool,
   }),
   setAttributes: PropTypes.func.isRequired,
 };
