@@ -23,9 +23,8 @@ import { useDebouncedCallback } from 'use-debounce';
 /**
  * WordPress dependencies
  */
-import { Icon, check, minus } from '@wordpress/icons';
 import { __, sprintf } from '@wordpress/i18n';
-import { useCallback } from '@wordpress/element';
+import { useCallback, useEffect, useState } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -34,28 +33,37 @@ import { PageSizePropType } from '../../dashboard/types';
 import {
   SearchPropTypes,
   SortPropTypes,
+  PagePropTypes,
 } from '../../dashboard/utils/useStoryView';
 import {
   TEXT_INPUT_DEBOUNCE,
   DROPDOWN_TYPES,
   STORY_SORT_MENU_ITEMS,
 } from '../../dashboard/constants';
+import { getRelativeDisplayDate } from '../../date';
 import { DASHBOARD_LEFT_NAV_WIDTH } from '../../dashboard/constants/pageStructure';
 import {
   CardPreviewContainer,
   CardTitle,
   Dropdown,
+  InfiniteScroller,
 } from '../../dashboard/components';
 import TypeaheadSearch from '../../dashboard/app/views/shared/typeaheadSearch';
 import { UnitsProvider } from '../../edit-story/units';
 import { TransformProvider } from '../../edit-story/components/transform';
 import FontProvider from '../../dashboard/app/font/fontProvider';
 import { StoryGridItem } from './components/cardGridItem';
+import ItemOverlay from './components/itemOverlay';
 
 const StoryFilter = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 10px 0;
+  margin-top: -12px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  background-color: #fff;
 
   #typeahead-search {
     min-height: 18px;
@@ -125,70 +133,24 @@ const SearchInner = styled.div`
   justify-content: flex-end;
 `;
 
-const StorySortDropdownContainer = styled.div`
+const DropdownContainer = styled.div`
   margin: auto 8px;
   align-self: flex-end;
 `;
 
-const SortDropdown = styled(Dropdown)``;
+const AuthorDropdown = styled(Dropdown)`
+  & > div {
+    max-height: 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.25);
 
-const ItemOverlay = styled.a(
-  ({ pageSize }) => `
-  display: block;
-  position: absolute;
-  z-index: 1;
-  width: 100%;
-  height: ${pageSize.containerHeight}px;
-
-  &:focus {
-    box-shadow: 0 0 3px 3px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, 0.8);
-  }
-
-  &.item-selected {
-
-    .item-selected-icon {
-      position: absolute;
-      top: -7px;
-      right: -7px;
-      z-index: 1;
-
-      svg {
-        background-color: #ccc;
-        box-shadow: 0 0 0 1px #fff, 0 0 0 2px rgba(0, 0, 0, 0.15);
-        cursor: pointer;
-        stroke: #000;
-        stroke-width: 2px;
-        padding: 3px;
-      }
-
-      .item-selected-icon-minus {
-        display: none;
-      }
-
-      &:hover {
-        .item-selected-icon-minus {
-          display: block;
-        }
-
-        .item-selected-icon-check {
-          display: none;
-        }
-      }
-    }
-
-    &:focus {
-
-      .item-selected-icon {
-
-        svg {
-          background-color: #0073aa;
-          stroke: #fff;
-        }
-      }
+    & > div {
+      box-shadow: none;
     }
   }
-`
-);
+`;
 
 const DetailRow = styled.div`
   display: flex;
@@ -201,10 +163,16 @@ function SelectStories({
   orderedStories,
   pageSize,
   search,
+  currentAuthor,
+  setCurrentAuthor,
   sort,
   addItemToSelectedStories,
   removeItemFromSelectedStories,
+  allPagesFetched,
+  isLoading,
+  page,
 }) {
+  const [authors, setAuthors] = useState([]);
   const [debouncedTypeaheadChange] = useDebouncedCallback((value) => {
     search.setKeyword(value);
   }, TEXT_INPUT_DEBOUNCE);
@@ -215,6 +183,24 @@ function SelectStories({
     },
     [sort]
   );
+
+  useEffect(() => {
+    const items = [
+      {
+        label: __('All authors', 'web-stories'),
+        value: '0',
+      },
+    ];
+
+    global.webStoriesSelectedBlockSettings.authors.forEach((author) => {
+      items.push({
+        label: author.display_name,
+        value: author.ID.toString(),
+      });
+    });
+
+    setAuthors(items);
+  }, []);
 
   return (
     <>
@@ -229,8 +215,20 @@ function SelectStories({
             />
           </SearchInner>
         </SearchContainer>
-        <StorySortDropdownContainer>
-          <SortDropdown
+        <DropdownContainer>
+          <AuthorDropdown
+            alignment="flex-end"
+            ariaLabel={__('Choose an author to filter', 'web-stories')}
+            items={authors}
+            type={DROPDOWN_TYPES.MENU}
+            value={currentAuthor}
+            onChange={(author) => {
+              setCurrentAuthor(author.value);
+            }}
+          />
+        </DropdownContainer>
+        <DropdownContainer>
+          <Dropdown
             alignment="flex-end"
             ariaLabel={__('Choose sort option for display', 'web-stories')}
             items={STORY_SORT_MENU_ITEMS}
@@ -240,7 +238,7 @@ function SelectStories({
               onSortChange(newSort.value);
             }}
           />
-        </StorySortDropdownContainer>
+        </DropdownContainer>
       </StoryFilter>
       {!orderedStories.length && search.keyword && (
         <p>
@@ -253,6 +251,9 @@ function SelectStories({
             search.keyword
           )}
         </p>
+      )}
+      {!orderedStories.length && !search.keyword && (
+        <p>{__(`Sorry, we couldn't find any results`, 'web-stories')}</p>
       )}
       {orderedStories.length >= 1 && (
         <FontProvider>
@@ -293,38 +294,29 @@ function SelectStories({
                           titleLink={story.editStoryLink}
                           status={story?.status}
                           id={story.id}
+                          secondaryTitle={story.author}
+                          displayDate={getRelativeDisplayDate(story.created)}
                         />
                       </DetailRow>
                       <ItemOverlay
-                        className={isSelected ? 'item-selected' : ''}
+                        isSelected={isSelected}
                         pageSize={pageSize}
-                        href={`#select-story-${story.id}`}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          addItemToSelectedStories(story.id);
-                        }}
-                      >
-                        {isSelected && (
-                          <div className="item-selected-icon">
-                            <Icon
-                              className="item-selected-icon-check"
-                              icon={check}
-                            />
-                            <Icon
-                              className="item-selected-icon-minus"
-                              icon={minus}
-                              onClick={(event) => {
-                                event.preventDefault();
-                                removeItemFromSelectedStories(story.id);
-                              }}
-                            />
-                          </div>
-                        )}
-                      </ItemOverlay>
+                        storyId={story.id}
+                        addItemToSelectedStories={addItemToSelectedStories}
+                        removeItemFromSelectedStories={
+                          removeItemFromSelectedStories
+                        }
+                      />
                     </StoryGridItem>
                   );
                 })}
               </StoryGrid>
+              <InfiniteScroller
+                canLoadMore={!allPagesFetched}
+                isLoading={isLoading}
+                allDataLoadedMessage={__('No more stories', 'web-stories')}
+                onLoadMore={page.requestNextPage}
+              />
             </UnitsProvider>
           </TransformProvider>
         </FontProvider>
@@ -338,9 +330,14 @@ SelectStories.propTypes = {
   orderedStories: PropTypes.array,
   pageSize: PageSizePropType,
   search: SearchPropTypes,
+  currentAuthor: PropTypes.string,
+  setCurrentAuthor: PropTypes.func,
   sort: SortPropTypes,
   addItemToSelectedStories: PropTypes.func,
   removeItemFromSelectedStories: PropTypes.func,
+  allPagesFetched: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  page: PagePropTypes,
 };
 
 export default SelectStories;

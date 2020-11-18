@@ -1,0 +1,254 @@
+/* Content Overlay Styles */
+.wp-block-web-stories-selected-stories .story-content-overlay {
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.2px;
+}
+
+.story-content-overlay .story-content-overlay__author-date {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.story-content-overlay .story-content-overlay__title {
+  grid-column: 1/-1;
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 700;
+  display: box;
+  -webkit-line-clamp: 2; /* Browser support: https://caniuse.com/?search=line-clamp */
+  box-orient: vertical; /* stylelint-disable-line property-no-unknown */
+  overflow: hidden;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-list
+  .story-content-overlay {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #ffffff;
+  color: #555555;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-list
+  .latest-stories__story-wrapper
+  > * {
+  display: flex;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-list .image-align-right {
+  flex-direction: row-reverse;
+}
+
+/* Generic styles that apply to all view modes */
+.wp-block-web-stories-selected-stories .latest-stories__story-wrapper a {
+  color: inherit;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.wp-block-web-stories-selected-stories amp-story-player a:first-of-type {
+  text-align: center;
+  font-size: 16px;
+  color: #555555;
+  background: #f7f7f7;
+  text-decoration: none;
+}
+
+.wp-block-web-stories-selected-stories .latest-stories__story-wrapper {
+  max-width: 285px;
+  position: relative;
+}
+
+.wp-block-web-stories-selected-stories amp-story-player,
+.wp-block-web-stories-selected-stories
+  .latest-stories__story-wrapper.has-poster {
+  max-width: 285px;
+  height: auto;
+}
+
+/* Grid View Styles */
+.wp-block-web-stories-selected-stories.is-view-type-grid {
+  display: grid;
+  grid-gap: 32px;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-grid.columns-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-grid.columns-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-grid.columns-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-grid.columns-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-grid amp-story-player {
+  width: 100%;
+  height: 485px;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-grid
+  .latest-stories__story-wrapper {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* List View Styles */
+.wp-block-web-stories-selected-stories.is-view-type-list
+  .latest-stories__story-wrapper {
+  max-width: unset;
+  margin-bottom: 24px;
+}
+
+/* Circles View Styles */
+.wp-block-web-stories-selected-stories.is-view-type-circles {
+  display: flex;
+  overflow-x: scroll;
+  padding: 5px;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-circles
+  .story-content-overlay {
+  background-color: transparent;
+  position: unset;
+  box-shadow: unset;
+  padding: 10px 0;
+  text-align: center;
+  color: #555555;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-circles
+  .story-content-overlay__title {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-circles
+  .latest-stories__story-wrapper {
+  margin-right: 32px;
+  flex-shrink: 0;
+  max-width: 150px;
+}
+
+/* Carousel View Styles */
+.latest-stories__carousel-message {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-carousel {
+  display: flex;
+  overflow-x: scroll;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-carousel amp-story-player {
+  height: 430px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-carousel
+  .latest-stories__story-wrapper {
+  margin-right: 32px;
+  width: 100%;
+  height: 430px;
+  flex-shrink: 0;
+}
+
+.wp-block-web-stories-selected-stories .latest-stories__story-placeholder {
+  background-size: cover;
+  background-position: center;
+  height: 430px;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-list
+  .latest-stories__story-placeholder {
+  min-height: 150px;
+  height: auto;
+  flex-basis: 40%;
+  flex-shrink: 0;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-circles
+  .latest-stories__story-placeholder {
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  background-clip: content-box;
+  border: 3px solid #666;
+  padding: 2px;
+}
+
+.wp-block-web-stories-selected-stories.is-view-type-circles
+  .latest-stories__story-placeholder:hover {
+  border-color: #333;
+}
+
+.components-toggle-control.is-disabled .components-form-toggle__track {
+  background-color: lightgrey;
+  border-color: lightgrey;
+}
+
+.components-toggle-control.is-disabled .components-form-toggle__thumb {
+  background-color: #fff;
+  border-color: #fff;
+}
+
+.components-toggle-control.is-disabled .components-form-toggle__input,
+.components-toggle-control.is-disabled .components-toggle-control__label {
+  cursor: unset;
+}
+
+/* Stories Archive Link Settings */
+.latest-stories__archive-link {
+  margin-top: 16px;
+}
+
+/* Setting controls styles */
+.components-input-control__input {
+  text-align: center;
+}
+
+.latest-stories-settings__image-alignment .components-base-control__field {
+  display: flex;
+  align-items: center;
+}
+
+.latest-stories-settings__image-alignment .components-base-control__label {
+  margin-right: 8px;
+  margin-bottom: 0;
+}
+
+/* Story overlay styles */
+.wp-block-web-stories-selected-stories .latest-stories__story-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}

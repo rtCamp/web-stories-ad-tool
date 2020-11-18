@@ -2,6 +2,10 @@
   "name": "web-stories/selected-stories",
   "category": "embed",
   "attributes": {
+    "stories": {
+      "type": "array",
+      "default": []
+    },
     "viewType": {
       "type": "string",
       "default": "grid"

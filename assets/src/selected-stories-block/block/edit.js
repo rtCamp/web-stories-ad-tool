@@ -24,7 +24,7 @@ import classNames from 'classnames';
  * WordPress dependencies
  */
 import { __, _x, sprintf } from '@wordpress/i18n';
-import { useState, RawHTML } from '@wordpress/element';
+import { useState, RawHTML, useEffect } from '@wordpress/element';
 
 /**
  * External dependencies
@@ -34,6 +34,7 @@ import { ThemeProvider } from 'styled-components';
 /**
  * Internal dependencies
  */
+import './edit.css';
 import ApiProvider from '../../dashboard/app/api/apiProvider';
 import { ConfigProvider } from '../../dashboard/app/config';
 import theme from '../../dashboard/theme';
@@ -43,7 +44,8 @@ import {
 } from '../../design-system';
 import StoryPlayer from '../../latest-stories-block/block/storyPlayer';
 import EmbedPlaceholder from './embedPlaceholder';
-import Controls from './controls';
+import SelectedStoriesControls from './selectedStoriesControls';
+import FetchSelectedStories from './fetchSelectedStories';
 import { icon } from './';
 
 const SelectedStoriesEdit = ({
@@ -52,6 +54,7 @@ const SelectedStoriesEdit = ({
   isSelected: isEditing,
 }) => {
   const {
+    stories,
     align,
     viewType,
     isShowingTitle,
@@ -64,8 +67,12 @@ const SelectedStoriesEdit = ({
     listViewImageAlignment,
   } = attributes;
 
-  const [selectedStories, setSelectedStories] = useState([]);
+  const [selectedStories, setSelectedStories] = useState(stories);
   const [selectedStoriesObject, setSelectedStoriesObject] = useState([]);
+  const [isFetchingSelectedStories, setIsFetchingSelectedStories] = useState(
+    false
+  );
+
   const label = __('Selected Web Stories', 'web-stories');
   const { config } = global.webStoriesSelectedBlockSettings;
 
@@ -87,7 +94,7 @@ const SelectedStoriesEdit = ({
     : __('View All Stories', 'web-stories');
 
   const blockClasses = classNames(
-    'wp-block-web-stories-latest-stories latest-stories',
+    'wp-block-web-stories-selected-stories latest-stories',
     { [`is-view-type-${viewType}`]: viewType },
     { [`align${align}`]: align }
   );
@@ -101,9 +108,36 @@ const SelectedStoriesEdit = ({
     colors: lightMode,
   };
 
+  useEffect(() => {
+    setAttributes({
+      stories: selectedStories,
+    });
+
+    if (selectedStories.length && !selectedStoriesObject.length) {
+      setIsFetchingSelectedStories(true);
+    }
+  }, [
+    setAttributes,
+    selectedStories,
+    selectedStoriesObject,
+    setIsFetchingSelectedStories,
+  ]);
+
+  if (isFetchingSelectedStories) {
+    return (
+      <FetchSelectedStories
+        icon={icon}
+        label={label}
+        selectedStories={selectedStories}
+        setSelectedStoriesObject={setSelectedStoriesObject}
+        setIsFetchingSelectedStories={setIsFetchingSelectedStories}
+      />
+    );
+  }
+
   return (
     <>
-      <Controls
+      <SelectedStoriesControls
         viewType={viewType}
         isShowingTitle={isShowingTitle}
         isShowingDate={isShowingDate}
@@ -119,13 +153,22 @@ const SelectedStoriesEdit = ({
         <div>
           <div className={blockClasses} style={blockStyles}>
             {selectedStoriesObject.map((story) => {
+              let title = '';
+
+              if (story.title.rendered) {
+                title =
+                  'circles' === viewType && story.title.rendered.length > 45
+                    ? `${story.title.rendered.substring(0, 45)}...`
+                    : story.title.rendered;
+              }
+
               return (
                 <StoryPlayer
                   key={story.id}
                   url={story.link}
-                  title={story.title}
+                  title={title}
                   date={story.date_gmt}
-                  author={story.originalStoryData._embedded.author[0].name}
+                  author={story._embedded.author[0].name}
                   poster={story.featured_media_url}
                   isShowingStoryPoster={willShowStoryPoster}
                   listViewImageAlignment={listViewImageAlignment}
@@ -167,6 +210,7 @@ const SelectedStoriesEdit = ({
 
 SelectedStoriesEdit.propTypes = {
   attributes: PropTypes.shape({
+    stories: PropTypes.array,
     align: PropTypes.string,
     viewType: PropTypes.string,
     isShowingTitle: PropTypes.bool,
