@@ -147,7 +147,10 @@ class Story_Post_Type extends \WP_UnitTestCase {
 			[
 				'foo',
 				'orderby' => [
-					'enum' => [ 'story_author' ],
+					'enum' => [
+						'story_author',
+						'rand',
+					],
 				],
 			]
 		);

@@ -67,9 +67,10 @@ class Carousel_Renderer extends \WP_UnitTestCase_Base {
 	}
 
 	/**
+	 * @covers ::init
 	 * @covers ::assets
 	 */
-	public function test_assets() {
+	public function test_init() {
 
 		$this->stories->method( 'get_story_attributes' )->willReturn(
 			[
@@ -80,8 +81,8 @@ class Carousel_Renderer extends \WP_UnitTestCase_Base {
 		$renderer = new \Google\Web_Stories\Stories_Renderer\Carousel_Renderer( $this->stories );
 		$renderer->init();
 
-		$this->assertTrue( wp_script_is( 'amp-carousel-script' ) );
-		$this->assertTrue( wp_script_is( 'amp-runtime-script' ) );
+		$this->assertTrue( wp_script_is( 'amp-carousel-script', 'registered' ) );
+		$this->assertTrue( wp_script_is( 'amp-runtime-script', 'registered' ) );
 	}
 
 	/**
