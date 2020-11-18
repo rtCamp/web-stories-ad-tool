@@ -40,7 +40,7 @@ import LatestStoriesPlaceholder from './latestStoriesPlaceholder';
 import './edit.css';
 
 const LATEST_STORIES_QUERY = {
-  per_page: -1,
+  per_page: 20,
 };
 
 const LatestStoriesEdit = ({ attributes, setAttributes }) => {
