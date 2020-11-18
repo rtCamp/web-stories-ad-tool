@@ -29,18 +29,19 @@ import { v4 as uuidv4 } from 'uuid';
 /**
  * Internal dependencies
  */
-import { ANIMATION_EFFECTS } from '../../../../animation/constants';
+import {
+  BACKGROUND_ANIMATION_EFFECTS,
+  BG_MAX_SCALE,
+  BG_MIN_SCALE,
+  progress,
+} from '../../../../animation';
 import { getAnimationEffectDefaults } from '../../../../animation/parts';
 import StoryPropTypes, { AnimationPropType } from '../../../types';
-import { Row, DropDown } from '../../form';
+import { Row } from '../../form';
 import { SimplePanel } from '../panel';
 import { Note } from '../shared';
 import EffectPanel from './effectPanel';
-
-const ANIMATION_OPTIONS = [
-  { value: '', name: __('Add Effect', 'web-stories') },
-  ...Object.values(ANIMATION_EFFECTS),
-];
+import EffectChooserDropdown from './effectChooserDropdown';
 
 const ANIMATION_PROPERTY = 'animation';
 
@@ -63,25 +64,41 @@ function AnimationPanel({
     [pushUpdateForObject]
   );
 
+  const isBackground =
+    selectedElements.length === 1 && selectedElements[0].isBackground;
+  const backgroundScale = isBackground && selectedElements[0].scale;
   const handleAddEffect = useCallback(
-    (type) => {
-      if (!type) {
+    ({ animation, ...options }) => {
+      if (!animation) {
         return;
       }
 
-      const defaults = getAnimationEffectDefaults(type);
+      const defaults = getAnimationEffectDefaults(animation);
+
+      // Background Zoom's `scale from` initial value should match
+      // the current background's scale slider
+      if (
+        isBackground &&
+        animation === BACKGROUND_ANIMATION_EFFECTS.ZOOM.value
+      ) {
+        defaults.normalizedScaleFrom =
+          progress(backgroundScale, [BG_MIN_SCALE, BG_MAX_SCALE]) ||
+          defaults.normalizedScaleFrom;
+      }
+
       pushUpdateForObject(
         ANIMATION_PROPERTY,
         {
           id: uuidv4(),
-          type,
+          type: animation,
           ...defaults,
+          ...options,
         },
         null,
         true
       );
     },
-    [pushUpdateForObject]
+    [pushUpdateForObject, isBackground, backgroundScale]
   );
 
   const updatedAnimations = useMemo(() => {
@@ -106,11 +123,12 @@ function AnimationPanel({
   ) : (
     <>
       <SimplePanel name="animation" title={__('Animation', 'web-stories')}>
-        <DropDown
-          value={ANIMATION_OPTIONS[0].value}
-          onChange={handleAddEffect}
-          options={ANIMATION_OPTIONS}
-        />
+        <Row>
+          <EffectChooserDropdown
+            onAnimationSelected={handleAddEffect}
+            isBackgroundEffects={isBackground}
+          />
+        </Row>
       </SimplePanel>
       {updatedAnimations.map((animation) => (
         <EffectPanel
