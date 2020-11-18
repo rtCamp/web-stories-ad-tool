@@ -125,6 +125,8 @@ abstract class Renderer implements RenderingInterface {
 	/**
 	 * Returns story item data.
 	 *
+	 * @SuppressWarnings(PHPMD.NPathComplexity)
+	 *
 	 * @param int    $story_id             Story's id for which the story attributes are requested.
 	 * @param string $single_story_classes Single story's classes.
 	 *
