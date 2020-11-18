@@ -20,7 +20,7 @@
     },
     "isShowingTitle": {
       "type": "boolean",
-      "default": false
+      "default": true
     },
     "isShowingDate": {
       "type": "boolean",
@@ -40,7 +40,7 @@
     },
     "isShowingStoryPoster": {
       "type": "boolean",
-      "default": false
+      "default": true
     },
     "carouselSettings": {
       "type": "object",

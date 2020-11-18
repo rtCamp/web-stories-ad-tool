@@ -116,7 +116,7 @@ class Latest_Stories_Block extends Embed_Base {
 					],
 					'isShowingTitle'         => [
 						'type'    => 'boolean',
-						'default' => false,
+						'default' => true,
 					],
 					'isShowingDate'          => [
 						'type'    => 'boolean',
@@ -136,7 +136,7 @@ class Latest_Stories_Block extends Embed_Base {
 					],
 					'isShowingStoryPoster'   => [
 						'type'    => 'boolean',
-						'default' => false,
+						'default' => true,
 					],
 					'carouselSettings'       => [
 						'type'    => 'object',
