@@ -12,7 +12,7 @@
     },
     "isShowingTitle": {
       "type": "boolean",
-      "default": false
+      "default": true
     },
     "isShowingDate": {
       "type": "boolean",
@@ -32,7 +32,7 @@
     },
     "isShowingStoryPoster": {
       "type": "boolean",
-      "default": false
+      "default": true
     },
     "carouselSettings": {
       "type": "object",
@@ -42,9 +42,9 @@
         "loop": false
       }
     },
-    "listViewImageAlignment": {
-      "type": "string",
-      "default": "left"
+    "imageOnRight": {
+      "type": "boolean",
+      "default": false
     },
     "align": {
       "type": "string",

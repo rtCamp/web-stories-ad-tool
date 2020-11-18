@@ -91,43 +91,43 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 			self::BLOCK_NAME,
 			[
 				'attributes'      => [
-					'stories'                => [
+					'stories'              => [
 						'type'    => 'array',
 						'default' => [],
 					],
-					'align'                  => [
+					'align'                => [
 						'type'    => 'string',
 						'default' => 'none',
 					],
-					'viewType'               => [
+					'viewType'             => [
 						'type'    => 'string',
 						'default' => 'grid',
 					],
-					'isShowingTitle'         => [
+					'isShowingTitle'       => [
+						'type'    => 'boolean',
+						'default' => true,
+					],
+					'isShowingDate'        => [
 						'type'    => 'boolean',
 						'default' => false,
 					],
-					'isShowingDate'          => [
+					'isShowingAuthor'      => [
 						'type'    => 'boolean',
 						'default' => false,
 					],
-					'isShowingAuthor'        => [
+					'isShowingViewAll'     => [
 						'type'    => 'boolean',
 						'default' => false,
 					],
-					'isShowingViewAll'       => [
-						'type'    => 'boolean',
-						'default' => false,
-					],
-					'viewAllLinkLabel'       => [
+					'viewAllLinkLabel'     => [
 						'type'    => 'string',
 						'default' => '',
 					],
-					'isShowingStoryPoster'   => [
+					'isShowingStoryPoster' => [
 						'type'    => 'boolean',
-						'default' => false,
+						'default' => true,
 					],
-					'carouselSettings'       => [
+					'carouselSettings'     => [
 						'type'    => 'object',
 						'default' => [
 							'autoplay' => false,
@@ -135,9 +135,9 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 							'loop'     => false,
 						],
 					],
-					'listViewImageAlignment' => [
-						'type'    => 'string',
-						'default' => 'left',
+					'imageOnRight'         => [
+						'type'    => 'boolean',
+						'default' => false,
 					],
 				],
 				'render_callback' => [ $this, 'render_block' ],
