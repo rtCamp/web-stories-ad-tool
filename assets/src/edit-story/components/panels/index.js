@@ -76,10 +76,10 @@ export const PanelTypes = {
   BORDER,
   LINK,
   VIDEO_OPTIONS,
+  CAPTIONS,
   IMAGE_ACCESSIBILITY,
   VIDEO_ACCESSIBILITY,
   ANIMATION,
-  CAPTIONS,
 };
 
 const ALL = Object.values(PanelTypes);
@@ -108,6 +108,10 @@ export function getPanels(elements, options = {}) {
         Panel: BackgroundSizePositionPanel,
       });
       panels.push({ type: BACKGROUND_OVERLAY, Panel: BackgroundOverlayPanel });
+
+      if (enableAnimation) {
+        panels.push({ type: ANIMATION, Panel: AnimationPanel });
+      }
     }
 
     // If the selected element's type is video / image , display accessibility panel, too.
