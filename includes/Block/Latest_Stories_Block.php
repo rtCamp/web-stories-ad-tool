@@ -255,7 +255,7 @@ class Latest_Stories_Block extends Embed_Base {
 							<?php
 							if ( ! empty( $attributes['carouselSettings']['delay'] ) ) {
 								$delay = absint( $attributes['carouselSettings']['delay'] ) * 1000;
-								echo( "delay='{$delay}'" );
+								printf( "delay='%s'", esc_html( $delay ) );
 							}
 							?>
 						>
