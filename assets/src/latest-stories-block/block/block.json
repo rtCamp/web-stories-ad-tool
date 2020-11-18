@@ -1,0 +1,66 @@
+{
+  "name": "web-stories/latest-stories",
+  "category": "embed",
+  "attributes": {
+    "viewType": {
+      "type": "string",
+      "default": "grid"
+    },
+    "numOfStories": {
+      "type": "number",
+      "default": 5
+    },
+    "numOfColumns": {
+      "type": "number",
+      "default": 2
+    },
+    "orderByValue": {
+      "type": "string",
+      "default": ""
+    },
+    "isShowingTitle": {
+      "type": "boolean",
+      "default": false
+    },
+    "isShowingDate": {
+      "type": "boolean",
+      "default": false
+    },
+    "isShowingAuthor": {
+      "type": "boolean",
+      "default": false
+    },
+    "isShowingViewAll": {
+      "type": "boolean",
+      "default": false
+    },
+    "viewAllLinkLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "isShowingStoryPoster": {
+      "type": "boolean",
+      "default": false
+    },
+    "carouselSettings": {
+      "type": "object",
+      "default": {
+        "autoplay": false,
+        "delay": "",
+        "loop": false
+      }
+    },
+    "listViewImageAlignment": {
+      "type": "string",
+      "default": "left"
+    },
+    "authors": {
+      "type": "array",
+      "default": []
+    },
+    "align": {
+      "type": "string",
+      "default": "none"
+    }
+  }
+}

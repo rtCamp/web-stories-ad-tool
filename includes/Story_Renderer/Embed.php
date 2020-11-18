@@ -64,49 +64,73 @@ class Embed {
 	 * @return string Rendered block type output.
 	 */
 	public function render( array $args = [] ) {
-		$defaults = [
+		$defaults            = [
 			'align'  => 'none',
 			'class'  => 'wp-block-web-stories-embed',
 			'height' => 600,
 			'width'  => 360,
 		];
+		$args                = wp_parse_args( $args, $defaults );
+		$align               = sprintf( 'align%s', $args['align'] );
+		$class               = $args['class'];
+		$url                 = $this->story->get_url();
+		$title               = $this->story->get_title();
+		$poster              = ! empty( $this->story->get_poster_portrait() ) ? esc_url( $this->story->get_poster_portrait() ) : '';
+		$margin              = ( 'center' === $args['align'] ) ? 'auto' : '0';
+		$player_style        = sprintf( 'width: %s;height: %s;margin: %s', $args['width'], $args['height'], esc_attr( $margin ) );
+		$poster_style        = ! empty( $poster ) ? sprintf( '--story-player-poster: url(%s)', $poster ) : '';
+		$has_content_overlay = ( ! empty( $args['show_content_overlay'] ) && ( true === $args['show_content_overlay'] ) ) ? true : false;
 
-		$args   = wp_parse_args( $args, $defaults );
-		$align  = sprintf( 'align%s', $args['align'] );
-		$class  = $args['class'];
-		$url    = $this->story->get_url();
-		$title  = $this->story->get_title();
-		$poster = ! empty( $this->story->get_poster_portrait() ) ? esc_url_raw( $this->story->get_poster_portrait() ) : '';
-
-		$poster_style  = ! empty( $poster ) ? sprintf( '--story-player-poster: url(%s)', $poster ) : '';
-		$wrapper_style = sprintf(
-			'--aspect-ratio: %F; --width: %dpx; --height: %dpx',
-			0 !== $args['width'] ? $args['height'] / $args['width'] : 1,
-			(int) $args['width'],
-			(int) $args['height']
-		);
-
-		// This CSS is used for AMP and non-AMP.
-		wp_enqueue_style( Embed_Base::SCRIPT_HANDLE );
+		ob_start();
 
 		if (
 			( function_exists( 'amp_is_request' ) && amp_is_request() ) ||
 			( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() )
 		) {
-			ob_start();
+			$player_style = sprintf( 'margin: %s', esc_attr( $margin ) );
 			?>
-			<div class="<?php echo esc_attr( "$class web-stories-embed web-stories-embed-amp $align" ); ?>">
-				<div class="wp-block-embed__wrapper">
-					<amp-story-player
-						width="<?php echo esc_attr( $args['width'] ); ?>"
-						height="<?php echo esc_attr( $args['height'] ); ?>"
-						layout="responsive">
-						<a
-							href="<?php echo esc_url( $url ); ?>"
-							style="<?php echo esc_attr( $poster_style ); ?>">
-							<?php echo esc_html( $title ); ?>
-						</a>
+			<div class="web-stories__controller">
+				<div class="<?php echo esc_attr( $class ); ?>">
+					<amp-story-player width="<?php echo esc_attr( $args['width'] ); ?>" height="<?php echo esc_attr( $args['height'] ); ?>" style="<?php echo esc_attr( $player_style ); ?>">
+						<a href="<?php echo esc_url( $url ); ?>" style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $title ); ?></a>
 					</amp-story-player>
+					<?php if ( true === $has_content_overlay ) : ?>
+					<div
+						class="story-content-overlay latest-stories__story-content-overlay"
+					>
+						<?php if ( ! empty( $args['title'] ) ) : ?>
+						<div class="story-content-overlay__title">
+							<?php if ( ! empty( $url ) ) : ?>
+								<a href="<?php echo( esc_url( $url ) ); ?>">
+							<?php endif; ?>
+								<?php
+								echo( esc_html( $args['title'] ) );
+								?>
+							<?php if ( ! empty( $url ) ) : ?>
+								</a>
+							<?php endif; ?>
+						</div>
+						<?php endif; ?>
+						<div class="story-content-overlay__author-date">
+						<?php if ( ! empty( $args['author'] ) ) : ?>
+							<div class="story-content-overlay__date">
+								<?php
+								_e( 'By', 'web-stories' );
+								echo( esc_html( ' ' . $args['author'] ) );
+								?>
+								</div>
+							<?php endif; ?>
+							<?php if ( ! empty( $args['date'] ) ) : ?>
+							<time class="story-content-content-overlay__date">
+								<?php
+								_e( 'On', 'web-stories' );
+								echo( esc_html( ' ' . $args['date'] ) );
+								?>
+							</time>
+							<?php endif; ?>
+						</div>
+					</div>
+					<?php endif; ?>
 				</div>
 			</div>
 			<?php
@@ -116,22 +140,54 @@ class Embed {
 
 		wp_enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
 		wp_enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
-
-		ob_start();
 		?>
-		<div class="<?php echo esc_attr( "$class web-stories-embed $align" ); ?>">
-			<div class="wp-block-embed__wrapper" style="<?php echo esc_attr( $wrapper_style ); ?>">
-				<amp-story-player>
-					<a
-						href="<?php echo esc_url( $url ); ?>"
-						style="<?php echo esc_attr( $poster_style ); ?>">
-						<?php echo esc_html( $title ); ?>
-					</a>
+		<div class="web-stories__controller">
+			<div class="<?php echo esc_attr( $class ); ?>">
+				<amp-story-player style="<?php echo esc_attr( $player_style ); ?>">
+					<a href="<?php echo esc_url( $url ); ?>" style="<?php echo esc_attr( $poster_style ); ?>"><?php echo esc_html( $title ); ?></a>
 				</amp-story-player>
+
+				<?php if ( true === $has_content_overlay ) : ?>
+				<div
+					class="story-content-overlay latest-stories__story-content-overlay"
+				>
+					<?php if ( ! empty( $args['title'] ) ) : ?>
+					<div class="story-content-overlay__title">
+						<?php if ( ! empty( $url ) ) : ?>
+							<a href="<?php echo( esc_url( $url ) ); ?>">
+						<?php endif; ?>
+							<?php
+							echo( esc_html( $args['title'] ) );
+							?>
+						<?php if ( ! empty( $url ) ) : ?>
+							</a>
+						<?php endif; ?>
+					</div>
+					<?php endif; ?>
+					<div class="story-content-overlay__author-date">
+					<?php if ( ! empty( $args['author'] ) ) : ?>
+						<div class="story-content-overlay__date">
+							<?php
+							_e( 'By', 'web-stories' );
+							echo( esc_html( ' ' . $args['author'] ) );
+							?>
+							</div>
+						<?php endif; ?>
+						<?php if ( ! empty( $args['date'] ) ) : ?>
+						<time class="story-content-content-overlay__date">
+							<?php
+							_e( 'On', 'web-stories' );
+							echo( esc_html( ' ' . $args['date'] ) );
+							?>
+						</time>
+						<?php endif; ?>
+					</div>
+				</div>
+				<?php endif; ?>
+
 			</div>
 		</div>
 		<?php
-
 		return (string) ob_get_clean();
 	}
 }

@@ -49,6 +49,7 @@ function useLoadStory({ storyId, shouldLoad, restore }) {
           link,
           story_data: storyDataRaw,
           featured_media_url: featuredMediaUrl,
+          // todo: get publisher_logo_url image dimensions for prepublish checklist
           publisher_logo_url: publisherLogoUrl,
           permalink_template: permalinkTemplate,
           style_presets: stylePresets,

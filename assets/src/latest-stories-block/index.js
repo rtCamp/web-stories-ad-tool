@@ -13,11 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const clamp = (v, range) => {
-  const lowerBound = Math.min(range[0], range[1]);
-  const upperBound = Math.max(range[0], range[1]);
 
-  return Math.min(Math.max(lowerBound, v), upperBound);
-};
+/**
+ * WordPress dependencies
+ */
+import { registerBlockType } from '@wordpress/blocks';
 
-export default clamp;
+/**
+ * Internal dependencies
+ */
+import { initializeTracking } from '../tracking';
+import { name, settings } from './block';
+
+__webpack_public_path__ = global.webStoriesLatestBlockSettings.publicPath;
+
+registerBlockType(name, settings);
+
+initializeTracking('Latest Stories Block', false);

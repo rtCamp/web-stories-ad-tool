@@ -328,6 +328,7 @@ class Story_Post_Type {
 			return $query_params;
 		}
 		$query_params['orderby']['enum'][] = 'story_author';
+		$query_params['orderby']['enum'][] = 'rand';
 		return $query_params;
 	}
 
