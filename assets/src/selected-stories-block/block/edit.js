@@ -23,8 +23,8 @@ import classNames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { __, _x, sprintf } from '@wordpress/i18n';
-import { useState, RawHTML, useEffect } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { useState, useEffect } from '@wordpress/element';
 
 /**
  * External dependencies
@@ -75,16 +75,6 @@ const SelectedStoriesEdit = ({
 
   const label = __('Selected Web Stories', 'web-stories');
   const { config } = global.webStoriesSelectedBlockSettings;
-
-  const previewLink = wp.data.select('core/editor').getEditedPostPreviewLink();
-  const carouselMessage = sprintf(
-    '<i><b></b> %1$s <a target="__blank" href="%2$s">%3$s</a> %4$s</i>',
-    _x('Note:', 'informational message', 'web-stories'),
-    __("Carousel view's functionality will not work in Editor.", 'web-stories'),
-    previewLink,
-    __('Preview', 'web-stories'),
-    __('post to see it in action.', 'web-stories')
-  );
 
   const willShowStoryPoster = 'grid' != viewType ? true : isShowingStoryPoster;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
@@ -179,11 +169,6 @@ const SelectedStoriesEdit = ({
           </div>
           {isShowingViewAll && (
             <div className="latest-stories__archive-link">{viewAllLabel}</div>
-          )}
-          {'carousel' === viewType && (
-            <span className="latest-stories__carousel-message">
-              <RawHTML>{carouselMessage}</RawHTML>
-            </span>
           )}
         </div>
       )}
