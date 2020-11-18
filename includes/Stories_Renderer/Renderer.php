@@ -145,15 +145,15 @@ abstract class Renderer implements RenderingInterface {
 		$author_name     = '';
 		$story_date      = '';
 
-		if ( ! empty( $this->attributes['show_title'] ) && ( true === $this->attributes['show_title'] ) ) {
+		if ( ! empty( $this->attributes['show_title'] ) && true === $this->attributes['show_title'] ) {
 			$story_title = get_the_title( $story_id );
 		}
 
-		if ( ! $is_circles_view && ! empty( $this->attributes['show_author'] ) && ( true === $this->attributes['show_author'] ) ) {
+		if ( ! $is_circles_view && ! empty( $this->attributes['show_author'] ) && true === $this->attributes['show_author'] ) {
 			$author_name = get_the_author_meta( 'display_name', $author_id );
 		}
 
-		if ( ! $is_circles_view && ! empty( $this->attributes['show_date'] ) && ( true === $this->attributes['show_date'] ) ) {
+		if ( ! $is_circles_view && ! empty( $this->attributes['show_date'] ) && true === $this->attributes['show_date'] ) {
 			$story_date = get_the_date( 'M j, Y', $story_id );
 		}
 
