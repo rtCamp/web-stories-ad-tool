@@ -35,6 +35,7 @@ use Iterator;
  * Renderer class.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+<<<<<<< HEAD
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @implements Iterator<int, \WP_Post>
  */
