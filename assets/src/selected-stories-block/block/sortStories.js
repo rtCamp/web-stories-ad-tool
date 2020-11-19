@@ -106,6 +106,9 @@ function SortStories({
                     event.target.closest('.droppable').style.borderLeft = 0;
                   }}
                   onDrop={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+
                     // Update the list after drop
                     if (draggedElID) {
                       const oldIndex = selectedStoryList.findIndex(
