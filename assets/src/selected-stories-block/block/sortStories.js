@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
 /**
  * WordPress dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { Draggable } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 
@@ -30,13 +30,13 @@ import { useEffect, useState } from '@wordpress/element';
  * Internal dependencies
  */
 import { PageSizePropType } from '../../dashboard/types';
-import { CardPreviewContainer } from '../../dashboard/components';
 import { UnitsProvider } from '../../edit-story/units';
 import { TransformProvider } from '../../edit-story/components/transform';
 import FontProvider from '../../dashboard/app/font/fontProvider';
 import reshapeStoryObject from '../../dashboard/app/serializers/stories';
 import { StoryGrid, StoryGridItem } from './components/cardGridItem';
 import ItemOverlay from './components/itemOverlay';
+import StoryPreview from './storyPreview';
 
 function SortStories({
   selectedStories,
@@ -141,15 +141,7 @@ function SortStories({
                             data-order={index}
                             draggable
                           >
-                            <CardPreviewContainer
-                              ariaLabel={sprintf(
-                                /* translators: %s: story title. */
-                                __('preview of %s', 'web-stories'),
-                                story.title
-                              )}
-                              pageSize={pageSize}
-                              story={story}
-                            />
+                            <StoryPreview pageSize={pageSize} story={story} />
                             <ItemOverlay
                               isSelected={true}
                               pageSize={pageSize}

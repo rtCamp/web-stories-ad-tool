@@ -43,7 +43,6 @@ import {
 import { getRelativeDisplayDate } from '../../date';
 import { DASHBOARD_LEFT_NAV_WIDTH } from '../../dashboard/constants/pageStructure';
 import {
-  CardPreviewContainer,
   CardTitle,
   Dropdown,
   InfiniteScroller,
@@ -54,6 +53,7 @@ import { TransformProvider } from '../../edit-story/components/transform';
 import FontProvider from '../../dashboard/app/font/fontProvider';
 import { StoryGridItem } from './components/cardGridItem';
 import ItemOverlay from './components/itemOverlay';
+import StoryPreview from './storyPreview';
 
 const StoryFilter = styled.div`
   position: sticky;
@@ -278,15 +278,7 @@ function SelectStories({
                       role="listitem"
                       data-testid={`story-grid-item-${story.id}`}
                     >
-                      <CardPreviewContainer
-                        ariaLabel={sprintf(
-                          /* translators: %s: story title. */
-                          __('preview of %s', 'web-stories'),
-                          story.title
-                        )}
-                        pageSize={pageSize}
-                        story={story}
-                      />
+                      <StoryPreview story={story} pageSize={pageSize} />
                       <DetailRow>
                         <CardTitle
                           tabIndex={-1}
