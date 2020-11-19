@@ -19,8 +19,7 @@
  */
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { debounce } from 'lodash'; // @TODO: Remove 'lodash' dependency.
+import { useDebouncedCallback } from 'use-debounce';
 
 /**
  * WordPress dependencies
@@ -42,6 +41,7 @@ import './edit.css';
 const LATEST_STORIES_QUERY = {
   per_page: 20,
 };
+const FETCH_STORIES_DEBOUNCE = 1000;
 
 const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   const {
@@ -83,7 +83,10 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     }
   };
 
-  const debouncedFetchLatestStories = debounce(fetchLatestStories, 1000);
+  const [debouncedFetchLatestStories] = useDebouncedCallback(
+    fetchLatestStories,
+    FETCH_STORIES_DEBOUNCE
+  );
 
   useEffect(() => {
     apiFetch({
