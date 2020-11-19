@@ -29,8 +29,6 @@ import { FormTokenField } from '@wordpress/components';
  * External dependencies
  */
 import PropTypes from 'prop-types';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { unescape } from 'lodash';
 
 const Autocomplete = ({
   label,
@@ -47,7 +45,6 @@ const Autocomplete = ({
       <div className="components-base-control">
         <FormTokenField
           value={value}
-          displayTransform={unescape}
           suggestions={options}
           onChange={onChange}
           onInputChange={onInputChange}
