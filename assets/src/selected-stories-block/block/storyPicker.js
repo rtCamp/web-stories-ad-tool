@@ -22,7 +22,7 @@ import styled from 'styled-components';
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { Button, Modal } from '@wordpress/components';
 import { useState, useEffect, useMemo } from '@wordpress/element';
 
@@ -37,6 +37,7 @@ import {
 } from '../../dashboard/constants';
 import { useStoryView } from '../../dashboard/utils';
 import { ScrollToTop, Layout } from '../../dashboard/components';
+import { useConfig } from '../../dashboard/app/config';
 import SelectStories from './selectStories';
 import SortStories from './sortStories';
 import LoaderContainer from './components/loaderContainer';
@@ -64,16 +65,31 @@ const ModalFooter = styled.div`
   bottom: 0;
   z-index: 2;
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: #f3f3f3;
   border-top: 1px solid #ddd;
   margin: 0 -24px;
   padding: 10px 24px;
-  text-align: right;
 
   .components-button {
     margin-left: 8px;
   }
 `;
+
+const ModalFooterLeft = styled.div`
+  min-width: 1px;
+`;
+
+const LimitIndicator = styled.span(
+  ({ reachedMaximum }) => `
+  font-weight: 600;
+  color: ${reachedMaximum ? '#EB5757' : 'inherit'};
+`
+);
+
+const ModalFooterRight = styled.div``;
 
 function StoryPicker({
   selectedStories,
@@ -86,6 +102,7 @@ function StoryPicker({
 }) {
   const [fetchingForTheFirstTime, setFetchingForTheFirstTime] = useState(true);
   const [currentAuthor, setCurrentAuthor] = useState('0');
+  const { maxNumOfStories } = useConfig();
 
   const {
     fetchStories,
@@ -168,6 +185,10 @@ function StoryPicker({
   ]);
 
   const addItemToSelectedStories = (storyId) => {
+    if (selectedStories.length >= maxNumOfStories) {
+      return;
+    }
+
     if (!selectedStories.includes(storyId)) {
       setSelectedStories([...selectedStories, storyId]);
       setSelectedStoriesObject([
@@ -242,25 +263,41 @@ function StoryPicker({
         )}
       </ModalContent>
       <ModalFooter>
-        {isSortingStories ? (
-          <Button onClick={() => setIsSortingStories(false)}>
-            {__('Select More Stories', 'web-stories')}
-          </Button>
-        ) : (
+        <ModalFooterLeft>
+          {!isSortingStories && !fetchingForTheFirstTime && (
+            <LimitIndicator
+              reachedMaximum={selectedStories.length >= maxNumOfStories}
+            >
+              {sprintf(
+                /* translators: %1$d: Number of selected stories, %2$d: Maximum allowed stories */
+                __('%1$d of %2$d stories selected', 'web-stories'),
+                selectedStories.length,
+                maxNumOfStories
+              )}
+            </LimitIndicator>
+          )}
+        </ModalFooterLeft>
+        <ModalFooterRight>
+          {isSortingStories ? (
+            <Button onClick={() => setIsSortingStories(false)}>
+              {__('Select More Stories', 'web-stories')}
+            </Button>
+          ) : (
+            <Button
+              onClick={() => setIsSortingStories(true)}
+              disabled={selectedStories.length <= 1}
+            >
+              {__('Rearrange Stories', 'web-stories')}
+            </Button>
+          )}
           <Button
-            onClick={() => setIsSortingStories(true)}
-            disabled={selectedStories.length <= 1}
+            isPrimary
+            disabled={!selectedStories.length}
+            onClick={closeStoryPicker}
           >
-            {__('Rearrange Stories', 'web-stories')}
+            {__('Insert Stories', 'web-stories')}
           </Button>
-        )}
-        <Button
-          isPrimary
-          disabled={!selectedStories.length}
-          onClick={closeStoryPicker}
-        >
-          {__('Insert Stories', 'web-stories')}
-        </Button>
+        </ModalFooterRight>
       </ModalFooter>
     </StoryPickerModal>
   );

@@ -62,6 +62,13 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 	protected $block_attributes = [];
 
 	/**
+	 * Maximum number of stories users can select
+	 *
+	 * @var int
+	 */
+	protected $max_num_of_stories = 0;
+
+	/**
 	 * Initializes the Web Stories embed block.
 	 *
 	 * @since
@@ -69,6 +76,15 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 	 * @return void
 	 */
 	public function init() {
+		/**
+		 * Filters the maximum number of stories users can select
+		 *
+		 * @since
+		 *
+		 * @param int $max_num_of_stories
+		 */
+		$this->max_num_of_stories = apply_filters( 'web_stories_selected_stories_limit', 20 );
+
 		$this->register_script( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE, Tracking::SCRIPT_HANDLE ] );
 		$this->register_style( parent::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE ] );
 
@@ -160,12 +176,13 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 
 		return [
 			'publicPath' => WEBSTORIES_PLUGIN_DIR_URL . 'assets/js/',
+			'authors'    => $this->get_story_authors(),
 			'config'     => [
-				'api' => [
+				'maxNumOfStories' => $this->max_num_of_stories,
+				'api'             => [
 					'stories' => sprintf( '/web-stories/v1/%s', $rest_base ),
 				],
 			],
-			'authors'    => $this->get_story_authors(),
 		];
 	}
 
@@ -208,7 +225,7 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 
 		$query_args = [
 			'post_type'      => Story_Post_Type::POST_TYPE_SLUG,
-			'posts_per_page' => -1,
+			'posts_per_page' => $this->max_num_of_stories,
 			'post_status'    => 'publish',
 			'no_found_rows'  => true,
 			'fields'         => 'ids',
