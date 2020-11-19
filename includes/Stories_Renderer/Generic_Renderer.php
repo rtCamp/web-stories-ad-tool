@@ -73,6 +73,7 @@ class Generic_Renderer extends Renderer {
 	/**
 	 * Renders the stories output for given attributes.
 	 *
+<<<<<<< HEAD
 	 * @SuppressWarnings(PHPMD.UnusedLocalVariable)
 	 *
 	 * @param array $args Array of rendering arguments.
