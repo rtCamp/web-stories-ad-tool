@@ -18,8 +18,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { debounce, isEmpty } from 'lodash';
+import { useDebouncedCallback } from 'use-debounce';
 
 /**
  * WordPress dependencies
@@ -40,12 +39,13 @@ import Autocomplete from './autocomplete';
 const USERS_LIST_QUERY = {
   per_page: -1,
 };
+const FETCH_AUTHORS_DEBOUNCE = 500;
 
 const AuthorSelection = ({ authors, setAttributes }) => {
   const [authorsList, setAuthorsList] = useState([]);
 
   const getAuthorSuggestions = () => {
-    if (undefined !== authorsList && authorsList.length > 0) {
+    if (Array.isArray(authorsList) && authorsList.length > 0) {
       return authorsList.reduce(
         (accumulator, author) => ({
           ...accumulator,
@@ -60,12 +60,10 @@ const AuthorSelection = ({ authors, setAttributes }) => {
     return [];
   };
 
-  const getAuthorNames = (authorsObj = []) => {
-    if (isEmpty(authorsObj)) {
-      authorsObj = getAuthorSuggestions();
-    }
+  const getAuthorNames = () => {
+    const authorsObj = getAuthorSuggestions();
 
-    if (isEmpty(authorsObj)) {
+    if ('object' !== typeof authorsObj) {
       return [];
     }
 
@@ -118,7 +116,10 @@ const AuthorSelection = ({ authors, setAttributes }) => {
     };
   };
 
-  const debouncedOnAuthorChange = debounce(onAuthorChange, 500);
+  const [debouncedOnAuthorChange] = useDebouncedCallback(
+    onAuthorChange,
+    FETCH_AUTHORS_DEBOUNCE
+  );
 
   return (
     <Autocomplete
@@ -126,7 +127,7 @@ const AuthorSelection = ({ authors, setAttributes }) => {
       value={authors}
       options={getAuthorNames()}
       onChange={(value) => selectAuthors(value)}
-      onInputChange={(value) => debouncedOnAuthorChange(value)}
+      onInputChange={debouncedOnAuthorChange}
     />
   );
 };
