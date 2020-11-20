@@ -32,6 +32,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import Autocomplete from './autocomplete';
+import { FETCH_AUTHORS_DEBOUNCE } from './constants';
 
 /**
  * Module Constants
@@ -39,7 +40,6 @@ import Autocomplete from './autocomplete';
 const USERS_LIST_QUERY = {
   per_page: -1,
 };
-const FETCH_AUTHORS_DEBOUNCE = 500;
 
 const AuthorSelection = ({ authors, setAttributes }) => {
   const [authorsList, setAuthorsList] = useState([]);
