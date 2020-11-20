@@ -59,6 +59,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     carouselSettings,
     authors,
     imageOnRight,
+    isStyleSquared,
   } = attributes;
 
   const [fetchedStories, setFetchedStories] = useState([]);
@@ -144,7 +145,25 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     debouncedFetchLatestStories();
   }, [numOfStories]); /* eslint-disable-line react-hooks/exhaustive-deps */
 
-  const willShowStoryPoster = 'grid' != viewType ? true : isShowingStoryPoster;
+  useEffect(() => {
+    if ('circles' !== viewType) {
+      setAttributes({
+        isShowingStoryPoster: true,
+        isShowingTitle: true,
+        isShowingAuthor: true,
+        isShowingDate: true,
+      });
+    }
+
+    if ('circles' === viewType) {
+      setAttributes({
+        isShowingStoryPoster: true,
+        isShowingTitle: true,
+      });
+    }
+  }, [viewType, setAttributes]);
+
+  const willShowStoryPoster = 'grid' !== viewType ? true : isShowingStoryPoster;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
   const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
   const viewAllLabel = viewAllLinkLabel
@@ -158,6 +177,10 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
   const alignmentClass = classNames({ [`align${align}`]: align });
   const blockClasses = classNames(
+    {
+      'is-style-default': !isStyleSquared && isShowingStoryPoster,
+      'is-style-squared': isStyleSquared,
+    },
     'wp-block-web-stories-latest-stories latest-stories',
     { [`is-view-type-${viewType}`]: viewType },
     { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
@@ -179,6 +202,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         carouselSettings={carouselSettings}
         authors={authors}
         imageOnRight={imageOnRight}
+        isStyleSquared={isStyleSquared}
         setAttributes={setAttributes}
       />
 
@@ -242,6 +266,7 @@ LatestStoriesEdit.propTypes = {
     carouselSettings: PropTypes.object,
     authors: PropTypes.array,
     imageOnRight: PropTypes.bool,
+    isStyleSquared: PropTypes.bool,
   }),
   setAttributes: PropTypes.func.isRequired,
 };

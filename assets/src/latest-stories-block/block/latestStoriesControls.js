@@ -71,6 +71,7 @@ const LatestStoriesControls = (props) => {
     setAttributes,
     authors,
     imageOnRight,
+    isStyleSquared,
   } = props;
 
   const orderByOptions = [
@@ -215,6 +216,15 @@ const LatestStoriesControls = (props) => {
               }}
             />
           )}
+          {!isViewType('circles') && isShowingStoryPoster && (
+            <ToggleControl
+              label={__('Show squared corners', 'web-stories')}
+              checked={isStyleSquared}
+              onChange={() => {
+                setAttributes({ isStyleSquared: !isStyleSquared });
+              }}
+            />
+          )}
           <ToggleControl
             label={__("Show 'View All Stories' link", 'web-stories')}
             checked={isShowingViewAll}
@@ -283,6 +293,7 @@ LatestStoriesControls.propTypes = {
   setAttributes: PropTypes.func.isRequired,
   authors: PropTypes.array,
   imageOnRight: PropTypes.bool,
+  isStyleSquared: PropTypes.bool,
 };
 
 export default LatestStoriesControls;
