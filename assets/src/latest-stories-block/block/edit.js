@@ -33,15 +33,18 @@ import { addQueryArgs } from '@wordpress/url';
  * Internal dependencies
  */
 import StoryPlayer from './storyPlayer';
-import LatestStoriesControls from './latestStoriesControls';
+import LatestStoriesInspectorControls from './latestStoriesInspectorControls';
+import LatestStoriesBlockControls from './latestStoriesBlockControls';
 import LatestStoriesPlaceholder from './latestStoriesPlaceholder';
-
+import { FETCH_STORIES_DEBOUNCE } from './constants';
 import './edit.css';
 
+/**
+ * Module constants
+ */
 const LATEST_STORIES_QUERY = {
   per_page: 20,
 };
-const FETCH_STORIES_DEBOUNCE = 1000;
 
 const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   const {
@@ -76,8 +79,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         setFetchedStories(stories);
       }
     } catch (err) {
-      // Temporarily disabled, need to show UI message.
-      console.log(err); // eslint-disable-line no-console
+      setFetchedStories(err);
     } finally {
       setIsFetchingStories(false);
     }
@@ -131,10 +133,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     LATEST_STORIES_QUERY.orderby = orderBy;
 
     debouncedFetchLatestStories();
-    /* Disabling below rule for single line isn't working for some reason. */
-    /* eslint-disable react-hooks/exhaustive-deps */
-  }, [authors, orderByValue]);
-  /* eslint-enable react-hooks/exhaustive-deps */
+  }, [authors, orderByValue, debouncedFetchLatestStories]);
 
   useEffect(() => {
     if (numOfStories <= fetchedStories.length) {
@@ -145,7 +144,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     LATEST_STORIES_QUERY.per_page = numOfStories;
 
     debouncedFetchLatestStories();
-  }, [numOfStories]); /* eslint-disable-line react-hooks/exhaustive-deps */
+  }, [numOfStories, fetchedStories.length, debouncedFetchLatestStories]);
 
   const willShowStoryPoster = 'grid' != viewType ? true : isShowingStoryPoster;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
@@ -168,7 +167,11 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
   return (
     <>
-      <LatestStoriesControls
+      <LatestStoriesBlockControls
+        viewType={viewType}
+        setAttributes={setAttributes}
+      />
+      <LatestStoriesInspectorControls
         viewType={viewType}
         numOfStories={numOfStories}
         numOfColumns={numOfColumns}
@@ -194,20 +197,12 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
               const author = fetchedAuthors.find(
                 (singleAuthorObj) => story.author === singleAuthorObj.id
               );
-              let title = '';
-
-              if (story.title.rendered) {
-                title =
-                  'circles' === viewType && story.title.rendered.length > 45
-                    ? `${story.title.rendered.substring(0, 45)}...`
-                    : story.title.rendered;
-              }
 
               return (
                 <StoryPlayer
                   key={story.id}
                   url={story.link}
-                  title={title}
+                  title={story.title.rendered ? story.title.rendered : ''}
                   date={story.date_gmt}
                   author={author ? author.name : ''}
                   poster={story.featured_media_url}
