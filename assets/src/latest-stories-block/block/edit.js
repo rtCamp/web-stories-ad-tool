@@ -68,7 +68,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   const [fetchedAuthors, setFetchedAuthors] = useState([]);
   const [isFetchingStories, setIsFetchingStories] = useState([]);
 
-  const fetchLatestStories = async () => {
+  const fetchStories = async () => {
     try {
       setIsFetchingStories(true);
       const stories = await apiFetch({
@@ -85,8 +85,8 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     }
   };
 
-  const [debouncedFetchLatestStories] = useDebouncedCallback(
-    fetchLatestStories,
+  const [debouncedFetchStories] = useDebouncedCallback(
+    fetchStories,
     FETCH_STORIES_DEBOUNCE
   );
 
@@ -132,8 +132,8 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     LATEST_STORIES_QUERY.order = order;
     LATEST_STORIES_QUERY.orderby = orderBy;
 
-    debouncedFetchLatestStories();
-  }, [authors, orderByValue, debouncedFetchLatestStories]);
+    debouncedFetchStories();
+  }, [authors, orderByValue, debouncedFetchStories]);
 
   useEffect(() => {
     if (numOfStories <= fetchedStories.length) {
@@ -143,8 +143,8 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
     LATEST_STORIES_QUERY.per_page = numOfStories;
 
-    debouncedFetchLatestStories();
-  }, [numOfStories, fetchedStories.length, debouncedFetchLatestStories]);
+    debouncedFetchStories();
+  }, [numOfStories, fetchedStories.length, debouncedFetchStories]);
 
   const willShowStoryPoster = 'grid' != viewType ? true : isShowingStoryPoster;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
