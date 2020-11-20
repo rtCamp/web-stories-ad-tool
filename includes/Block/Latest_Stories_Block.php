@@ -547,7 +547,7 @@ class Latest_Stories_Block extends Embed_Base {
 
 		$story_attrs['id']                   = $story_id;
 		$story_attrs['url']                  = get_post_permalink( $story_id );
-		$story_attrs['title']                = $is_circles_view ? mb_strimwidth( $story_title, 0, 45, '...' ) : $story_title;
+		$story_attrs['title']                = $story_title;
 		$story_attrs['height']               = '100%';
 		$story_attrs['width']                = '100%';
 		$story_attrs['poster']               = get_the_post_thumbnail_url( $story_id, $image_size );
