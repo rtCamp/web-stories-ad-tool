@@ -123,9 +123,9 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 						'type'    => 'string',
 						'default' => '',
 					],
-					'isShowingStoryPoster' => [
+					'isShowingStoryPlayer' => [
 						'type'    => 'boolean',
-						'default' => true,
+						'default' => false,
 					],
 					'carouselSettings'     => [
 						'type'    => 'object',
@@ -136,6 +136,10 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 						],
 					],
 					'imageOnRight'         => [
+						'type'    => 'boolean',
+						'default' => false,
+					],
+					'isStyleSquared'       => [
 						'type'    => 'boolean',
 						'default' => false,
 					],

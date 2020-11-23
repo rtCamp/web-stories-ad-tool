@@ -55,10 +55,11 @@ const SelectedStoriesControls = (props) => {
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    isShowingStoryPoster,
+    isShowingStoryPlayer,
     setAttributes,
     // carouselSettings,
     imageOnRight,
+    isStyleSquared,
   } = props;
 
   const toggleView = (newViewType) => {
@@ -128,11 +129,11 @@ const SelectedStoriesControls = (props) => {
         >
           <ToggleControl
             className={!isViewType('grid') ? 'is-disabled' : ''}
-            label={__('Show story cover images', 'web-stories')}
-            checked={!isViewType('grid') ? true : isShowingStoryPoster}
+            label={__('Replace cover image with story player', 'web-stories')}
+            checked={!isViewType('grid') ? false : isShowingStoryPlayer}
             onChange={() => {
               if (isViewType('grid')) {
-                setAttributes({ isShowingStoryPoster: !isShowingStoryPoster });
+                setAttributes({ isShowingStoryPlayer: !isShowingStoryPlayer });
               }
             }}
           />
@@ -170,6 +171,15 @@ const SelectedStoriesControls = (props) => {
               }}
             />
           )}
+          {!isViewType('circles') && !isShowingStoryPlayer && (
+            <ToggleControl
+              label={__('Show square corners', 'web-stories')}
+              checked={isStyleSquared}
+              onChange={() => {
+                setAttributes({ isStyleSquared: !isStyleSquared });
+              }}
+            />
+          )}
           <ToggleControl
             label={__("Show 'View All Stories' link", 'web-stories')}
             checked={isShowingViewAll}
@@ -200,10 +210,11 @@ SelectedStoriesControls.propTypes = {
   isShowingAuthor: PropTypes.bool,
   isShowingViewAll: PropTypes.bool,
   viewAllLinkLabel: PropTypes.string,
-  isShowingStoryPoster: PropTypes.bool,
+  isShowingStoryPlayer: PropTypes.bool,
   setAttributes: PropTypes.func.isRequired,
   // carouselSettings: PropTypes.object,
   imageOnRight: PropTypes.bool,
+  isStyleSquared: PropTypes.bool,
 };
 
 export default SelectedStoriesControls;

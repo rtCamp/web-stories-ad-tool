@@ -62,9 +62,10 @@ const SelectedStoriesEdit = ({
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    isShowingStoryPoster,
+    isShowingStoryPlayer,
     carouselSettings,
     imageOnRight,
+    isStyleSquared,
   } = attributes;
 
   const [selectedStories, setSelectedStories] = useState(stories);
@@ -86,7 +87,8 @@ const SelectedStoriesEdit = ({
     __('post to see it in action.', 'web-stories')
   );
 
-  const willShowStoryPoster = 'grid' != viewType ? true : isShowingStoryPoster;
+  const willShowStoryPlayer =
+    'grid' !== viewType ? false : isShowingStoryPlayer;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
   const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
   const viewAllLabel = viewAllLinkLabel
@@ -95,6 +97,10 @@ const SelectedStoriesEdit = ({
 
   const alignmentClass = classNames({ [`align${align}`]: align });
   const blockClasses = classNames(
+    {
+      'is-style-default': !isStyleSquared && !isShowingStoryPlayer,
+      'is-style-squared': isStyleSquared,
+    },
     'wp-block-web-stories-latest-stories latest-stories',
     { [`is-view-type-${viewType}`]: viewType },
     { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
@@ -121,6 +127,24 @@ const SelectedStoriesEdit = ({
     setIsFetchingSelectedStories,
   ]);
 
+  useEffect(() => {
+    if ('circles' !== viewType) {
+      setAttributes({
+        isShowingStoryPlayer: false,
+        isShowingTitle: true,
+        isShowingAuthor: true,
+        isShowingDate: true,
+      });
+    }
+
+    if ('circles' === viewType) {
+      setAttributes({
+        isShowingStoryPlayer: false,
+        isShowingTitle: true,
+      });
+    }
+  }, [viewType, setAttributes]);
+
   if (isFetchingSelectedStories) {
     return (
       <FetchSelectedStories
@@ -142,10 +166,11 @@ const SelectedStoriesEdit = ({
         isShowingAuthor={isShowingAuthor}
         isShowingViewAll={isShowingViewAll}
         viewAllLinkLabel={viewAllLinkLabel}
-        isShowingStoryPoster={isShowingStoryPoster}
+        isShowingStoryPlayer={isShowingStoryPlayer}
         carouselSettings={carouselSettings}
         imageOnRight={imageOnRight}
         setAttributes={setAttributes}
+        isStyleSquared={isStyleSquared}
       />
       {selectedStoriesObject && 0 < selectedStoriesObject.length && (
         <div className={alignmentClass}>
@@ -168,7 +193,7 @@ const SelectedStoriesEdit = ({
                   date={story.date_gmt}
                   author={story._embedded.author[0].name}
                   poster={story.featured_media_url}
-                  isShowingStoryPoster={willShowStoryPoster}
+                  isShowingStoryPlayer={willShowStoryPlayer}
                   imageOnRight={imageOnRight}
                   isShowingAuthor={willShowAuthor}
                   isShowingDate={willShowDate}
@@ -217,9 +242,10 @@ SelectedStoriesEdit.propTypes = {
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.string,
-    isShowingStoryPoster: PropTypes.bool,
+    isShowingStoryPlayer: PropTypes.bool,
     carouselSettings: PropTypes.object,
     imageOnRight: PropTypes.bool,
+    isStyleSquared: PropTypes.bool,
   }),
   setAttributes: PropTypes.func.isRequired,
   isSelected: PropTypes.bool,

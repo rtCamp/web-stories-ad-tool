@@ -34,9 +34,9 @@
       "type": "string",
       "default": ""
     },
-    "isShowingStoryPoster": {
+    "isShowingStoryPlayer": {
       "type": "boolean",
-      "default": true
+      "default": false
     },
     "carouselSettings": {
       "type": "object",
@@ -53,6 +53,10 @@
     "align": {
       "type": "string",
       "default": "none"
+    },
+    "isStyleSquared": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
