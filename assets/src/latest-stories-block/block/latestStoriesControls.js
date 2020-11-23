@@ -67,7 +67,7 @@ const LatestStoriesControls = (props) => {
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    isShowingStoryPoster,
+    isShowingStoryPlayer,
     setAttributes,
     authors,
     imageOnRight,
@@ -174,11 +174,11 @@ const LatestStoriesControls = (props) => {
           )}
           <ToggleControl
             className={!isViewType('grid') ? 'is-disabled' : ''}
-            label={__('Show story cover images', 'web-stories')}
-            checked={!isViewType('grid') ? true : isShowingStoryPoster}
+            label={__('Replace cover image with story player', 'web-stories')}
+            checked={!isViewType('grid') ? false : isShowingStoryPlayer}
             onChange={() => {
               if (isViewType('grid')) {
-                setAttributes({ isShowingStoryPoster: !isShowingStoryPoster });
+                setAttributes({ isShowingStoryPlayer: !isShowingStoryPlayer });
               }
             }}
           />
@@ -216,9 +216,9 @@ const LatestStoriesControls = (props) => {
               }}
             />
           )}
-          {!isViewType('circles') && isShowingStoryPoster && (
+          {!isViewType('circles') && !isShowingStoryPlayer && (
             <ToggleControl
-              label={__('Show squared corners', 'web-stories')}
+              label={__('Show square corners', 'web-stories')}
               checked={isStyleSquared}
               onChange={() => {
                 setAttributes({ isStyleSquared: !isStyleSquared });
@@ -289,7 +289,7 @@ LatestStoriesControls.propTypes = {
   isShowingAuthor: PropTypes.bool,
   isShowingViewAll: PropTypes.bool,
   viewAllLinkLabel: PropTypes.string,
-  isShowingStoryPoster: PropTypes.bool,
+  isShowingStoryPlayer: PropTypes.bool,
   setAttributes: PropTypes.func.isRequired,
   authors: PropTypes.array,
   imageOnRight: PropTypes.bool,
