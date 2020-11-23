@@ -37,12 +37,32 @@ import {
   BlockAlignmentToolbar,
 } from '@wordpress/block-editor';
 import { RawHTML } from '@wordpress/element';
+import { select } from '@wordpress/data';
 
 /**
  * Internal dependencies
  */
 import AuthorSelection from './authorSelection';
 
+/**
+ * LatestStoriesInspectorControls component. Renders InspectorControls of the block.
+ *
+ * @param {Object} props Component props.
+ * @param {string} props.viewType String indicator of active view type.
+ * @param {number} props.numOfStories Number indicator of maximum number of stories to show.
+ * @param {number} props.numOfColumns Number indicator of number of columns in grid view type.
+ * @param {string} props.orderByValue String indicator of stories sorting.
+ * @param {boolean} props.isShowingTitle Whether or not to display story's title.
+ * @param {boolean} props.isShowingDate Whether or not to display story's date.
+ * @param {boolean} props.isShowingAuthor Whether or not to display story's author.
+ * @param {boolean} props.isShowingViewAll Whether or not to display stories archive link.
+ * @param {string} props.viewAllLinkLabel Archive link's label.
+ * @param {boolean} props.isShowingStoryPoster Whether or not to display story's cover image.
+ * @param {string} props.listViewImageAlignment Image's alignment in list view type.
+ * @param {Array} props.authors An array of authors objects which are currently selected.
+ * @param props.setAttributes Callable function for saving attribute values.
+ * @return {*} JSX markup.
+ */
 const LatestStoriesInspectorControls = (props) => {
   const {
     viewType,
@@ -74,7 +94,7 @@ const LatestStoriesInspectorControls = (props) => {
     { label: __('Random Stories', 'web-stories'), value: 'random' },
   ];
 
-  const previewLink = wp.data.select('core/editor').getEditedPostPreviewLink();
+  const previewLink = select('core/editor').getEditedPostPreviewLink();
   const carouselMessage = sprintf(
     /* Translators: Carousel informational message. 1: Preview link. */
     __(

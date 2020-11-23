@@ -23,7 +23,7 @@ import { useDebouncedCallback } from 'use-debounce';
 /**
  * WordPress dependencies
  */
-import { useState, useRef } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { __ } from '@wordpress/i18n';
@@ -38,12 +38,26 @@ import { FETCH_AUTHORS_DEBOUNCE } from './constants';
  * Module Constants
  */
 const USERS_LIST_QUERY = {
-  per_page: -1,
+  per_page: 100,
 };
 
+/**
+ * AuthorSelection component. Used for selecting authors of stories.
+ *
+ * @param {Object} props Component props.
+ * @param {Array} props.authors An array of authors objects which are currently selected.
+ * @param props.setAttributes Callable function for saving attribute values.
+ * @return {*} JSX markup.
+ */
 const AuthorSelection = ({ authors, setAttributes }) => {
   const [authorsList, setAuthorsList] = useState([]);
 
+  /**
+   * Returns an array of author objects with author's name as the key. An object will contain 'id' and 'value' field.
+   * 'value' is author's name.
+   *
+   * @return {Array} An array of author objects with author's name as the key.
+   */
   const getAuthorSuggestions = () => {
     if (Array.isArray(authorsList) && authorsList.length > 0) {
       return authorsList.reduce(
@@ -60,6 +74,11 @@ const AuthorSelection = ({ authors, setAttributes }) => {
     return [];
   };
 
+  /**
+   * Returns an array of authors' names in string format, used by the Autocomplete component to display suggestions.
+   *
+   * @return {Array} An array of authors' names in string format.
+   */
   const getAuthorNames = () => {
     const authorsObj = getAuthorSuggestions();
 
@@ -70,11 +89,22 @@ const AuthorSelection = ({ authors, setAttributes }) => {
     return Object.keys(authorsObj);
   };
 
+  /**
+   * Callback function called when user selects an author from the suggestions. Will process the names given
+   * by the user and valid author names will be saved.
+   *
+   * @param {Array} tokens Array of strings that were parsed from the text field.
+   * @return {void}
+   */
   const selectAuthors = (tokens) => {
+    if (!Array.isArray(tokens)) {
+      return;
+    }
+
     const authorSuggestions = getAuthorSuggestions();
 
     const hasNoSuggestion = tokens.some(
-      (token) => typeof token === 'string' && !authorSuggestions[token]
+      (token) => 'string' === typeof token && !authorSuggestions[token]
     );
 
     if (hasNoSuggestion) {
@@ -88,11 +118,14 @@ const AuthorSelection = ({ authors, setAttributes }) => {
     setAttributes({ authors: allAuthors });
   };
 
-  const isStillMounted = useRef();
-
+  /**
+   * Callback function used when user types in the search query in the text field. Makes an API call
+   * to fetch authors matching the search query.
+   *
+   * @param {string} searchQuery Search query to look for authors.
+   * @return {void}
+   */
   const onAuthorChange = (searchQuery) => {
-    isStillMounted.current = true;
-
     if (searchQuery) {
       USERS_LIST_QUERY.search = searchQuery;
     }
@@ -101,19 +134,13 @@ const AuthorSelection = ({ authors, setAttributes }) => {
       path: addQueryArgs('/wp/v2/users', USERS_LIST_QUERY),
     })
       .then((data) => {
-        if (isStillMounted.current) {
+        if (Array.isArray(data)) {
           setAuthorsList(data);
         }
       })
       .catch(() => {
-        if (isStillMounted.current) {
-          setAuthorsList([]);
-        }
+        setAuthorsList([]);
       });
-
-    return () => {
-      isStillMounted.current = false;
-    };
   };
 
   const [debouncedOnAuthorChange] = useDebouncedCallback(
