@@ -36,9 +36,23 @@ import {
   CAROUSEL_VIEW_TYPE_ICON,
 } from './constants';
 
+/**
+ * LatestStoriesBlockControls component. Used for rendering block controls of the block.
+ *
+ * @param {Object} props Component props.
+ * @param {string} props.viewType String indicator of active view type.
+ * @param props.setAttributes Callable function for saving attribute values.
+ * @return {*} JSX markup.
+ */
 const LatestStoriesBlockControls = ({ viewType, setAttributes }) => {
+  /**
+   * Toggles a view type.
+   *
+   * @param {string} newViewType New view type to switch to.
+   * @return {void}
+   */
   const toggleView = (newViewType) => {
-    if (newViewType) {
+    if ('string' === typeof newViewType) {
       setAttributes({ viewType: newViewType });
     }
   };

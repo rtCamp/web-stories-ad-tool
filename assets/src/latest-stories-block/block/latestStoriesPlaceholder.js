@@ -20,6 +20,11 @@
 import { Spinner, Placeholder } from '@wordpress/components';
 import { _x } from '@wordpress/i18n';
 
+/**
+ * LatestStoriesPlaceholder component. Displays a spinner when stories are being fetched.
+ *
+ * @return {*} JSX markup.
+ */
 const LatestStoriesPlaceholder = () => {
   return (
     <Placeholder

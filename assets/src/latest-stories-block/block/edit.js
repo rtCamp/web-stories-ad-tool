@@ -43,9 +43,17 @@ import './edit.css';
  * Module constants
  */
 const LATEST_STORIES_QUERY = {
-  per_page: 20,
+  per_page: -1,
 };
 
+/**
+ * LatestStoriesEdit component
+ *
+ * @param {Object} props Component props.
+ * @param {Object} props.attributes Block attributes.
+ * @param props.setAttributes Callable function for saving attribute values.
+ * @return {*} JSX markup for the editor.
+ */
 const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   const {
     align,
@@ -68,6 +76,11 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   const [fetchedAuthors, setFetchedAuthors] = useState([]);
   const [isFetchingStories, setIsFetchingStories] = useState([]);
 
+  /**
+   * Fetch stories based on the query.
+   *
+   * @return {void}
+   */
   const fetchStories = async () => {
     try {
       setIsFetchingStories(true);
@@ -79,7 +92,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         setFetchedStories(stories);
       }
     } catch (err) {
-      setFetchedStories(err);
+      setFetchedStories([]);
     } finally {
       setIsFetchingStories(false);
     }
@@ -100,15 +113,14 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
       .catch(() => {
         setFetchedAuthors([]);
       });
-  }, [authors]);
+  }, []); // Empty array because we want to fetch authors only once on component mount.
 
   useEffect(() => {
-    let order,
-      orderBy = '';
+    let order = 'desc',
+      orderBy = 'date';
 
     switch (orderByValue) {
       case 'old-to-new':
-        orderBy = 'date';
         order = 'asc';
         break;
       case 'alphabetical':
@@ -117,11 +129,9 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         break;
       case 'reverse-alphabetical':
         orderBy = 'title';
-        order = 'desc';
         break;
       case 'random':
         orderBy = 'rand';
-        order = 'desc';
         break;
       default:
         orderBy = 'date';
@@ -144,11 +154,20 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     LATEST_STORIES_QUERY.per_page = numOfStories;
 
     debouncedFetchStories();
-  }, [numOfStories, fetchedStories.length, debouncedFetchStories]);
+    /* eslint-disable react-hooks/exhaustive-deps */
+    /* Disabled because the hook shouldn't be dependent on fetchedStories's length, this hook is specifically when user
+    changes number of stories. fetchedStories variable may change even if user changes 'order' of stories or 'authors' filter. */
+  }, [numOfStories, debouncedFetchStories]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
+  /*
+   * We are manually checking for view type and ignoring the flag's value to preserve the setting when user
+   * moves back to a view type which has that setting/toggle enabled.
+   */
   const willShowStoryPoster = 'grid' != viewType ? true : isShowingStoryPoster;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
   const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
+
   const viewAllLabel = viewAllLinkLabel
     ? viewAllLinkLabel
     : __('View All Stories', 'web-stories');
