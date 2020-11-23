@@ -66,7 +66,7 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 	 *
 	 * @var int
 	 */
-	protected $max_num_of_stories = 0;
+	protected $max_num_of_stories = 20;
 
 	/**
 	 * Initializes the Web Stories embed block.
@@ -83,7 +83,7 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 		 *
 		 * @param int $max_num_of_stories
 		 */
-		$this->max_num_of_stories = apply_filters( 'web_stories_selected_stories_limit', 20 );
+		$this->max_num_of_stories = apply_filters( 'web_stories_selected_stories_limit', $this->max_num_of_stories );
 
 		$this->register_script( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE, Tracking::SCRIPT_HANDLE ] );
 		$this->register_style( parent::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE ] );
