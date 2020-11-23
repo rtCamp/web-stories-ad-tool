@@ -134,9 +134,9 @@ class Latest_Stories_Block extends Embed_Base {
 						'type'    => 'string',
 						'default' => '',
 					],
-					'isShowingStoryPoster' => [
+					'isShowingStoryPlayer' => [
 						'type'    => 'boolean',
-						'default' => true,
+						'default' => false,
 					],
 					'carouselSettings'     => [
 						'type'    => 'object',
@@ -214,10 +214,8 @@ class Latest_Stories_Block extends Embed_Base {
 
 		$content              = '';
 		$block_classes        = 'web-stories ';
-		$block_classes        = ( ! empty( $attributes['isStyleSquared'] ) ) ? $block_classes . 'is-style-squared ' : $block_classes . 'is-style-default ';
-		$single_story_classes = ( ! empty( $attributes['isShowingStoryPoster'] ) && true === $attributes['isShowingStoryPoster'] ) ?
-			'web-stories__story-wrapper has-poster' :
-			'web-stories__story-wrapper';
+		$block_classes        = ( ! empty( $attributes['isStyleSquared'] ) || ! empty( $attributes['isShowingStoryPlayer'] ) ) ? $block_classes . 'is-style-squared ' : $block_classes . 'is-style-default ';
+		$single_story_classes = ( empty( $attributes['isShowingStoryPlayer'] ) ) ? 'web-stories__story-wrapper has-poster ' : 'web-stories__story-wrapper ';
 		$block_style          = '';
 
 		$block_classes  .= ( ! empty( $attributes['viewType'] ) ) ? " is-view-type-{$attributes['viewType']}" : ' is-view-type-grid';
@@ -273,7 +271,7 @@ class Latest_Stories_Block extends Embed_Base {
 						$current_post_id = get_the_ID();
 						$story_attrs     = $this->get_story_attrs( $current_post_id, $single_story_classes );
 
-						if ( ( ! $is_grid_view ) || ( ! empty( $attributes['isShowingStoryPoster'] && true === $attributes['isShowingStoryPoster'] ) ) ) :
+						if ( ( ! $is_grid_view ) || ( empty( $attributes['isShowingStoryPlayer'] ) ) ) :
 							if (
 								( function_exists( 'amp_is_request' ) && ! amp_is_request() ) ||
 								( function_exists( 'is_amp_endpoint' ) && ! is_amp_endpoint() )

@@ -53,7 +53,7 @@ const settings = {
       numOfColumns: 2,
       isShowingTitle: true,
       isShowingAuthor: true,
-      isShowingStoryPoster: true,
+      isShowingStoryPlayer: false,
     },
   },
   supports: {

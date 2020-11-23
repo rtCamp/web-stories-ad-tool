@@ -66,7 +66,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    isShowingStoryPoster,
+    isShowingStoryPlayer,
     carouselSettings,
     authors,
     imageOnRight,
@@ -154,18 +154,30 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
     LATEST_STORIES_QUERY.per_page = numOfStories;
 
-    debouncedFetchStories();
-    /* eslint-disable react-hooks/exhaustive-deps */
-    /* Disabled because the hook shouldn't be dependent on fetchedStories's length, this hook is specifically when user
-    changes number of stories. fetchedStories variable may change even if user changes 'order' of stories or 'authors' filter. */
-  }, [numOfStories, debouncedFetchStories]);
-  /* eslint-enable react-hooks/exhaustive-deps */
+    debouncedFetchLatestStories();
+  }, [numOfStories]); /* eslint-disable-line react-hooks/exhaustive-deps */
 
-  /*
-   * We are manually checking for view type and ignoring the flag's value to preserve the setting when user
-   * moves back to a view type which has that setting/toggle enabled.
-   */
-  const willShowStoryPoster = 'grid' != viewType ? true : isShowingStoryPoster;
+  useEffect(() => {
+    if ('circles' !== viewType) {
+      setAttributes({
+        isShowingStoryPlayer: false,
+        isShowingTitle: true,
+        isShowingAuthor: true,
+        isShowingDate: true,
+      });
+    }
+
+    if ('circles' === viewType) {
+      setAttributes({
+        isShowingStoryPlayer: false,
+        isShowingTitle: true,
+      });
+    }
+  }, [viewType, setAttributes]);
+
+  const willShowStoryPlayer =
+    'grid' !== viewType ? false : isShowingStoryPlayer;
+
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
   const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
 
@@ -181,7 +193,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   const alignmentClass = classNames({ [`align${align}`]: align });
   const blockClasses = classNames(
     {
-      'is-style-default': !isStyleSquared && isShowingStoryPoster,
+      'is-style-default': !isStyleSquared && !isShowingStoryPlayer,
       'is-style-squared': isStyleSquared,
     },
     'wp-block-web-stories-latest-stories latest-stories',
@@ -205,7 +217,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         isShowingAuthor={isShowingAuthor}
         isShowingViewAll={isShowingViewAll}
         viewAllLinkLabel={viewAllLinkLabel}
-        isShowingStoryPoster={isShowingStoryPoster}
+        isShowingStoryPlayer={isShowingStoryPlayer}
         carouselSettings={carouselSettings}
         authors={authors}
         imageOnRight={imageOnRight}
@@ -231,7 +243,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
                   date={story.date_gmt}
                   author={author ? author.name : ''}
                   poster={story.featured_media_url}
-                  isShowingStoryPoster={willShowStoryPoster}
+                  isShowingStoryPlayer={willShowStoryPlayer}
                   imageOnRight={imageOnRight}
                   isShowingAuthor={willShowAuthor}
                   isShowingDate={willShowDate}
@@ -261,7 +273,7 @@ LatestStoriesEdit.propTypes = {
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.bool,
-    isShowingStoryPoster: PropTypes.bool,
+    isShowingStoryPlayer: PropTypes.bool,
     carouselSettings: PropTypes.object,
     authors: PropTypes.array,
     imageOnRight: PropTypes.bool,
