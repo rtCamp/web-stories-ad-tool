@@ -41,6 +41,9 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 
 	/**
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Use Story Model and Fix test cases
 	 * Story model.
 	 *
 	 * @var Story
@@ -48,8 +51,11 @@ class Generic_Renderer extends \WP_UnitTestCase_Base {
 	private $story_model;
 
 	/**
+<<<<<<< HEAD
 =======
 >>>>>>> PHP: Stories class
+=======
+>>>>>>> Use Story Model and Fix test cases
 	 * Runs once before any test in the class run.
 	 *
 	 * @param \WP_UnitTest_Factory $factory Factory class object.
