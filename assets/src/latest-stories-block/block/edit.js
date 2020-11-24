@@ -89,7 +89,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         path: addQueryArgs('/web-stories/v1/web-story', LATEST_STORIES_QUERY),
       });
 
-      if (Array.isArray(stories)) {
+      if ('undefined' !== typeof stories && Array.isArray(stories)) {
         setFetchedStories(stories);
       }
     } catch (err) {
