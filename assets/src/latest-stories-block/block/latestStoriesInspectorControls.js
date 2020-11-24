@@ -29,13 +29,9 @@ import {
   RangeControl,
   SelectControl,
   ToggleControl,
-  BaseControl,
   Notice,
 } from '@wordpress/components';
-import {
-  InspectorControls,
-  BlockAlignmentToolbar,
-} from '@wordpress/block-editor';
+import { InspectorControls } from '@wordpress/block-editor';
 import { RawHTML } from '@wordpress/element';
 import { select } from '@wordpress/data';
 
@@ -57,7 +53,7 @@ import AuthorSelection from './authorSelection';
  * @param {boolean} props.isShowingAuthor Whether or not to display story's author.
  * @param {boolean} props.isShowingViewAll Whether or not to display stories archive link.
  * @param {string} props.viewAllLinkLabel Archive link's label.
- * @param {boolean} props.isShowingStoryPoster Whether or not to display story's cover image.
+ * @param {boolean} props.isShowingStoryPlayer Whether or not to display story's cover image.
  * @param {string} props.listViewImageAlignment Image's alignment in list view type.
  * @param {Array} props.authors An array of authors objects which are currently selected.
  * @param props.setAttributes Callable function for saving attribute values.
@@ -74,10 +70,11 @@ const LatestStoriesInspectorControls = (props) => {
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    isShowingStoryPoster,
+    isShowingStoryPlayer,
     setAttributes,
     authors,
-    listViewImageAlignment,
+    imageOnRight,
+    isStyleSquared,
   } = props;
 
   const orderByOptions = [
@@ -121,11 +118,11 @@ const LatestStoriesInspectorControls = (props) => {
         )}
         <ToggleControl
           className={'grid' !== viewType ? 'is-disabled' : ''}
-          label={__('Show story cover images', 'web-stories')}
-          checked={'grid' !== viewType ? true : isShowingStoryPoster}
+          label={__('Replace cover image with story player', 'web-stories')}
+          checked={'grid' !== viewType ? false : isShowingStoryPlayer}
           onChange={() => {
             if ('grid' === viewType) {
-              setAttributes({ isShowingStoryPoster: !isShowingStoryPoster });
+              setAttributes({ isShowingStoryPlayer: !isShowingStoryPlayer });
             }
           }}
         />
@@ -155,21 +152,22 @@ const LatestStoriesInspectorControls = (props) => {
           }}
         />
         {'list' === viewType && (
-          <BaseControl className="latest-stories-settings__image-alignment">
-            <BaseControl.VisualLabel>
-              {__('Image alignment', 'web-stories')}
-            </BaseControl.VisualLabel>
-            <BlockAlignmentToolbar
-              value={listViewImageAlignment}
-              onChange={(value) =>
-                setAttributes({
-                  listViewImageAlignment: value,
-                })
-              }
-              controls={['left', 'right']}
-              isCollapsed={false}
-            />
-          </BaseControl>
+          <ToggleControl
+            label={__('Show image on right', 'web-stories')}
+            checked={imageOnRight}
+            onChange={() => {
+              setAttributes({ imageOnRight: !imageOnRight });
+            }}
+          />
+        )}
+        {'circles' !== viewType && !isShowingStoryPlayer && (
+          <ToggleControl
+            label={__('Show square corners', 'web-stories')}
+            checked={isStyleSquared}
+            onChange={() => {
+              setAttributes({ isStyleSquared: !isStyleSquared });
+            }}
+          />
         )}
         <ToggleControl
           label={__("Show 'View All Stories' link", 'web-stories')}
@@ -234,10 +232,11 @@ LatestStoriesInspectorControls.propTypes = {
   isShowingAuthor: PropTypes.bool,
   isShowingViewAll: PropTypes.bool,
   viewAllLinkLabel: PropTypes.string,
-  isShowingStoryPoster: PropTypes.bool,
+  isShowingStoryPlayer: PropTypes.bool,
   setAttributes: PropTypes.func.isRequired,
   authors: PropTypes.array,
-  listViewImageAlignment: PropTypes.string,
+  imageOnRight: PropTypes.bool,
+  isStyleSquared: PropTypes.bool,
 };
 
 export default LatestStoriesInspectorControls;
