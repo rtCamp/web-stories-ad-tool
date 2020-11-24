@@ -26,15 +26,13 @@
 
 namespace Google\Web_Stories\Block;
 
-use Google\Web_Stories\Locale;
 use Google\Web_Stories\Tracking;
-use Google\Web_Stories\Embed_Base;
 use Google\Web_Stories\Story_Post_Type;
 
 /**
  * Selected Stories block class.
  */
-class Selected_Stories_Block extends Embed_Base {
+class Selected_Stories_Block extends Latest_Stories_Block {
 	/**
 	 * Script handle.
 	 *
@@ -72,7 +70,15 @@ class Selected_Stories_Block extends Embed_Base {
 	 */
 	public function init() {
 		$this->register_script( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE, Tracking::SCRIPT_HANDLE ] );
-		$this->register_style( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE ] );
+		$this->register_style( parent::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE ] );
+
+		wp_register_style(
+			parent::STYLE_HANDLE,
+			WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/latest-stories.css',
+			[],
+			'v0',
+			false
+		);
 
 		wp_localize_script(
 			self::SCRIPT_HANDLE,
@@ -84,7 +90,60 @@ class Selected_Stories_Block extends Embed_Base {
 		register_block_type(
 			self::BLOCK_NAME,
 			[
-				'attributes'      => [],
+				'attributes'      => [
+					'stories'              => [
+						'type'    => 'array',
+						'default' => [],
+					],
+					'align'                => [
+						'type'    => 'string',
+						'default' => 'none',
+					],
+					'viewType'             => [
+						'type'    => 'string',
+						'default' => 'grid',
+					],
+					'isShowingTitle'       => [
+						'type'    => 'boolean',
+						'default' => true,
+					],
+					'isShowingDate'        => [
+						'type'    => 'boolean',
+						'default' => false,
+					],
+					'isShowingAuthor'      => [
+						'type'    => 'boolean',
+						'default' => false,
+					],
+					'isShowingViewAll'     => [
+						'type'    => 'boolean',
+						'default' => false,
+					],
+					'viewAllLinkLabel'     => [
+						'type'    => 'string',
+						'default' => '',
+					],
+					'isShowingStoryPlayer' => [
+						'type'    => 'boolean',
+						'default' => false,
+					],
+					'carouselSettings'     => [
+						'type'    => 'object',
+						'default' => [
+							'autoplay' => false,
+							'delay'    => '',
+							'loop'     => false,
+						],
+					],
+					'imageOnRight'         => [
+						'type'    => 'boolean',
+						'default' => false,
+					],
+					'isStyleSquared'       => [
+						'type'    => 'boolean',
+						'default' => false,
+					],
+				],
 				'render_callback' => [ $this, 'render_block' ],
 				'editor_script'   => self::SCRIPT_HANDLE,
 				'editor_style'    => self::SCRIPT_HANDLE,
@@ -110,37 +169,57 @@ class Selected_Stories_Block extends Embed_Base {
 					'stories' => sprintf( '/web-stories/v1/%s', $rest_base ),
 				],
 			],
+			'authors'    => $this->get_story_authors(),
 		];
 	}
 
 	/**
-	 * Initializes class variable $block_attributes.
+	 * Get a list of story authors
 	 *
 	 * @since
 	 *
-	 * @param array $block_attributes Array containing block attributes.
-	 *
-	 * @return bool Whether or not block attributes have been initialized with given value.
+	 * @return array Author list
 	 */
-	protected function initialize_block_attributes( $block_attributes = [] ) {
-		if ( ! empty( $block_attributes ) || ! is_array( $block_attributes ) ) {
-			$this->block_attributes = $block_attributes;
-			return true;
-		}
-		return false;
+	protected function get_story_authors() {
+		// @see Roles listed in \Google\Web_Stories\Story_Post_Type::add_caps_to_roles() method
+		return get_users(
+			[
+				'role__in' => [ 'administrator', 'editor', 'author', 'contributor' ],
+				'orderby'  => 'display_name',
+				'number'   => -1,
+				'fields'   => [ 'ID', 'display_name' ],
+			]
+		);
 	}
 
 	/**
-	 * Renders the block type output for given attributes.
+	 * Returns arguments to be passed to the WP_Query object initialization.
 	 *
 	 * @since
 	 *
-	 * @return string Rendered block type output.*
+	 * @param array $attributes Current block's attributes. If not passed, will use attributes stored in class variable.
+	 *
+	 * @return array Query arguments.
 	 */
-	public function render_block() {
+	protected function get_query_args( array $attributes = [] ) {
+		if ( empty( $attributes ) ) {
+			$attributes = $this->block_attributes;
+		}
 
-		$content = 'Selected stories block content';
+		if ( empty( $attributes ) || empty( $attributes['stories'] ) ) {
+			return [];
+		}
 
-		return $content;
+		$query_args = [
+			'post_type'      => Story_Post_Type::POST_TYPE_SLUG,
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+			'no_found_rows'  => true,
+			'fields'         => 'ids',
+			'post__in'       => $attributes['stories'],
+			'orderby'        => 'post__in',
+		];
+
+		return $query_args;
 	}
 }

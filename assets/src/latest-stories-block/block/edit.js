@@ -55,10 +55,11 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    isShowingStoryPoster,
+    isShowingStoryPlayer,
     carouselSettings,
     authors,
-    listViewImageAlignment,
+    imageOnRight,
+    isStyleSquared,
   } = attributes;
 
   const [fetchedStories, setFetchedStories] = useState([]);
@@ -144,7 +145,27 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     debouncedFetchLatestStories();
   }, [numOfStories]); /* eslint-disable-line react-hooks/exhaustive-deps */
 
-  const willShowStoryPoster = 'grid' != viewType ? true : isShowingStoryPoster;
+  useEffect(() => {
+    if ('circles' !== viewType) {
+      setAttributes({
+        isShowingStoryPlayer: false,
+        isShowingTitle: true,
+        isShowingAuthor: true,
+        isShowingDate: true,
+      });
+    }
+
+    if ('circles' === viewType) {
+      setAttributes({
+        isShowingStoryPlayer: false,
+        isShowingTitle: true,
+      });
+    }
+  }, [viewType, setAttributes]);
+
+  const willShowStoryPlayer =
+    'grid' !== viewType ? false : isShowingStoryPlayer;
+
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
   const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
   const viewAllLabel = viewAllLinkLabel
@@ -158,6 +179,10 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
   const alignmentClass = classNames({ [`align${align}`]: align });
   const blockClasses = classNames(
+    {
+      'is-style-default': !isStyleSquared && !isShowingStoryPlayer,
+      'is-style-squared': isStyleSquared,
+    },
     'wp-block-web-stories-latest-stories latest-stories',
     { [`is-view-type-${viewType}`]: viewType },
     { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
@@ -175,10 +200,11 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         isShowingAuthor={isShowingAuthor}
         isShowingViewAll={isShowingViewAll}
         viewAllLinkLabel={viewAllLinkLabel}
-        isShowingStoryPoster={isShowingStoryPoster}
+        isShowingStoryPlayer={isShowingStoryPlayer}
         carouselSettings={carouselSettings}
         authors={authors}
-        listViewImageAlignment={listViewImageAlignment}
+        imageOnRight={imageOnRight}
+        isStyleSquared={isStyleSquared}
         setAttributes={setAttributes}
       />
 
@@ -208,8 +234,8 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
                   date={story.date_gmt}
                   author={author ? author.name : ''}
                   poster={story.featured_media_url}
-                  isShowingStoryPoster={willShowStoryPoster}
-                  listViewImageAlignment={listViewImageAlignment}
+                  isShowingStoryPlayer={willShowStoryPlayer}
+                  imageOnRight={imageOnRight}
                   isShowingAuthor={willShowAuthor}
                   isShowingDate={willShowDate}
                   isShowingTitle={isShowingTitle}
@@ -238,10 +264,11 @@ LatestStoriesEdit.propTypes = {
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.bool,
-    isShowingStoryPoster: PropTypes.bool,
+    isShowingStoryPlayer: PropTypes.bool,
     carouselSettings: PropTypes.object,
     authors: PropTypes.array,
-    listViewImageAlignment: PropTypes.string,
+    imageOnRight: PropTypes.bool,
+    isStyleSquared: PropTypes.bool,
   }),
   setAttributes: PropTypes.func.isRequired,
 };

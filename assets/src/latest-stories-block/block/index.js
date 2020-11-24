@@ -47,10 +47,13 @@ const settings = {
   example: {
     // TODO: Replace with something custom.
     attributes: {
-      url:
-        'https://preview.amp.dev/documentation/examples/introduction/stories_in_amp',
+      viewType: 'grid',
       title: __('Stories in AMP', 'web-stories'),
-      poster: 'https://amp.dev/static/samples/img/story_dog2_portrait.jpg',
+      numOfStories: 1,
+      numOfColumns: 2,
+      isShowingTitle: true,
+      isShowingAuthor: true,
+      isShowingStoryPlayer: false,
     },
   },
   supports: {

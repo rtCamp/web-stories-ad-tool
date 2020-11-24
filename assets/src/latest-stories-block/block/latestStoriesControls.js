@@ -31,16 +31,11 @@ import {
   RangeControl,
   SelectControl,
   ToggleControl,
-  BaseControl,
   SVG,
   Path,
   Notice,
 } from '@wordpress/components';
-import {
-  BlockControls,
-  InspectorControls,
-  BlockAlignmentToolbar,
-} from '@wordpress/block-editor';
+import { BlockControls, InspectorControls } from '@wordpress/block-editor';
 import { RawHTML } from '@wordpress/element';
 
 /**
@@ -72,10 +67,11 @@ const LatestStoriesControls = (props) => {
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    isShowingStoryPoster,
+    isShowingStoryPlayer,
     setAttributes,
     authors,
-    listViewImageAlignment,
+    imageOnRight,
+    isStyleSquared,
   } = props;
 
   const orderByOptions = [
@@ -178,11 +174,11 @@ const LatestStoriesControls = (props) => {
           )}
           <ToggleControl
             className={!isViewType('grid') ? 'is-disabled' : ''}
-            label={__('Show story cover images', 'web-stories')}
-            checked={!isViewType('grid') ? true : isShowingStoryPoster}
+            label={__('Replace cover image with story player', 'web-stories')}
+            checked={!isViewType('grid') ? false : isShowingStoryPlayer}
             onChange={() => {
               if (isViewType('grid')) {
-                setAttributes({ isShowingStoryPoster: !isShowingStoryPoster });
+                setAttributes({ isShowingStoryPlayer: !isShowingStoryPlayer });
               }
             }}
           />
@@ -212,21 +208,22 @@ const LatestStoriesControls = (props) => {
             }}
           />
           {isViewType('list') && (
-            <BaseControl className="latest-stories-settings__image-alignment">
-              <BaseControl.VisualLabel>
-                {__('Image alignment', 'web-stories')}
-              </BaseControl.VisualLabel>
-              <BlockAlignmentToolbar
-                value={listViewImageAlignment}
-                onChange={(value) =>
-                  setAttributes({
-                    listViewImageAlignment: value,
-                  })
-                }
-                controls={['left', 'right']}
-                isCollapsed={false}
-              />
-            </BaseControl>
+            <ToggleControl
+              label={__('Show image on right', 'web-stories')}
+              checked={imageOnRight}
+              onChange={() => {
+                setAttributes({ imageOnRight: !imageOnRight });
+              }}
+            />
+          )}
+          {!isViewType('circles') && !isShowingStoryPlayer && (
+            <ToggleControl
+              label={__('Show square corners', 'web-stories')}
+              checked={isStyleSquared}
+              onChange={() => {
+                setAttributes({ isStyleSquared: !isStyleSquared });
+              }}
+            />
           )}
           <ToggleControl
             label={__("Show 'View All Stories' link", 'web-stories')}
@@ -292,10 +289,11 @@ LatestStoriesControls.propTypes = {
   isShowingAuthor: PropTypes.bool,
   isShowingViewAll: PropTypes.bool,
   viewAllLinkLabel: PropTypes.string,
-  isShowingStoryPoster: PropTypes.bool,
+  isShowingStoryPlayer: PropTypes.bool,
   setAttributes: PropTypes.func.isRequired,
   authors: PropTypes.array,
-  listViewImageAlignment: PropTypes.string,
+  imageOnRight: PropTypes.bool,
+  isStyleSquared: PropTypes.bool,
 };
 
 export default LatestStoriesControls;

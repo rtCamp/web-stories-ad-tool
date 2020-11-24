@@ -38,9 +38,9 @@
       "type": "string",
       "default": ""
     },
-    "isShowingStoryPoster": {
+    "isShowingStoryPlayer": {
       "type": "boolean",
-      "default": true
+      "default": false
     },
     "carouselSettings": {
       "type": "object",
@@ -50,9 +50,9 @@
         "loop": false
       }
     },
-    "listViewImageAlignment": {
-      "type": "string",
-      "default": "left"
+    "imageOnRight": {
+      "type": "boolean",
+      "default": false
     },
     "authors": {
       "type": "array",
@@ -61,6 +61,10 @@
     "align": {
       "type": "string",
       "default": "none"
+    },
+    "isStyleSquared": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
