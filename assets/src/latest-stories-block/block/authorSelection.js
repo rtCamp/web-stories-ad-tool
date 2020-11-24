@@ -59,7 +59,11 @@ const AuthorSelection = ({ authors, setAttributes }) => {
    * @return {Array} An array of author objects with author's name as the key.
    */
   const getAuthorSuggestions = () => {
-    if (Array.isArray(authorsList) && authorsList.length > 0) {
+    if (
+      'undefined' !== typeof authorsList &&
+      Array.isArray(authorsList) &&
+      authorsList.length > 0
+    ) {
       return authorsList.reduce(
         (accumulator, author) => ({
           ...accumulator,
@@ -97,7 +101,7 @@ const AuthorSelection = ({ authors, setAttributes }) => {
    * @return {void}
    */
   const selectAuthors = (tokens) => {
-    if (!Array.isArray(tokens)) {
+    if ('undefined' !== typeof tokens && !Array.isArray(tokens)) {
       return;
     }
 
@@ -134,7 +138,7 @@ const AuthorSelection = ({ authors, setAttributes }) => {
       path: addQueryArgs('/wp/v2/users', USERS_LIST_QUERY),
     })
       .then((data) => {
-        if (Array.isArray(data)) {
+        if ('undefined' !== typeof data && Array.isArray(data)) {
           setAuthorsList(data);
         }
       })
