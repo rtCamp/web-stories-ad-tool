@@ -54,7 +54,7 @@ import AuthorSelection from './authorSelection';
  * @param {boolean} props.isShowingViewAll Whether or not to display stories archive link.
  * @param {string} props.viewAllLinkLabel Archive link's label.
  * @param {boolean} props.isShowingStoryPlayer Whether or not to display story's cover image.
- * @param {string} props.listViewImageAlignment Image's alignment in list view type.
+ * @param {boolean} props.imageOnRight Whether or not to display images on right side in list view type.
  * @param {Array} props.authors An array of authors objects which are currently selected.
  * @param props.setAttributes Callable function for saving attribute values.
  * @return {*} JSX markup.
