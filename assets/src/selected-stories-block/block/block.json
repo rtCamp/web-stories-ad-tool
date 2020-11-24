@@ -2,13 +2,21 @@
   "name": "web-stories/selected-stories",
   "category": "embed",
   "attributes": {
+    "stories": {
+      "type": "array",
+      "default": []
+    },
     "viewType": {
       "type": "string",
       "default": "grid"
     },
+    "numOfColumns": {
+      "type": "number",
+      "default": 2
+    },
     "isShowingTitle": {
       "type": "boolean",
-      "default": false
+      "default": true
     },
     "isShowingDate": {
       "type": "boolean",
@@ -26,7 +34,7 @@
       "type": "string",
       "default": ""
     },
-    "isShowingStoryPoster": {
+    "isShowingStoryPlayer": {
       "type": "boolean",
       "default": false
     },
@@ -38,13 +46,17 @@
         "loop": false
       }
     },
-    "listViewImageAlignment": {
-      "type": "string",
-      "default": "left"
+    "imageOnRight": {
+      "type": "boolean",
+      "default": false
     },
     "align": {
       "type": "string",
       "default": "none"
+    },
+    "isStyleSquared": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

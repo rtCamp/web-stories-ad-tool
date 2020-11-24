@@ -29,15 +29,25 @@ import {
   TextControl,
   PanelBody,
   ToggleControl,
-  BaseControl,
+  SVG,
+  Path,
 } from '@wordpress/components';
-import {
-  BlockControls,
-  InspectorControls,
-  BlockAlignmentToolbar,
-} from '@wordpress/block-editor';
+import { BlockControls, InspectorControls } from '@wordpress/block-editor';
 
-const Controls = (props) => {
+/* From https://material.io/tools/icons */
+const carouselIcon = (
+  <SVG
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+  >
+    <Path d="M0 0h24v24H0z" fill="none" />
+    <Path d="M7 19h10V4H7v15zm-5-2h4V6H2v11zM18 6v11h4V6h-4z" />
+  </SVG>
+);
+
+const SelectedStoriesControls = (props) => {
   const {
     viewType,
     isShowingTitle,
@@ -45,10 +55,11 @@ const Controls = (props) => {
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    isShowingStoryPoster,
+    isShowingStoryPlayer,
     setAttributes,
     // carouselSettings,
-    listViewImageAlignment,
+    imageOnRight,
+    isStyleSquared,
   } = props;
 
   const toggleView = (newViewType) => {
@@ -82,6 +93,33 @@ const Controls = (props) => {
             }}
             isPressed={isViewType('grid')}
           />
+          <Button
+            className="components-toolbar__control"
+            label={__('List view', 'web-stories')}
+            icon="editor-justify"
+            onClick={() => {
+              toggleView('list');
+            }}
+            isPressed={isViewType('list')}
+          />
+          <Button
+            className="components-toolbar__control"
+            label={__('Circles view', 'web-stories')}
+            icon="marker"
+            onClick={() => {
+              toggleView('circles');
+            }}
+            isPressed={isViewType('circles')}
+          />
+          <Button
+            className="components-toolbar__control"
+            label={__('Carousel View', 'web-stories')}
+            icon={carouselIcon}
+            onClick={() => {
+              toggleView('carousel');
+            }}
+            isPressed={isViewType('carousel')}
+          />
         </ToolbarGroup>
       </BlockControls>
       <InspectorControls>
@@ -89,6 +127,16 @@ const Controls = (props) => {
           className="latest-stories-settings"
           title={__('Story settings', 'web-stories')}
         >
+          <ToggleControl
+            className={!isViewType('grid') ? 'is-disabled' : ''}
+            label={__('Replace cover image with story player', 'web-stories')}
+            checked={!isViewType('grid') ? false : isShowingStoryPlayer}
+            onChange={() => {
+              if (isViewType('grid')) {
+                setAttributes({ isShowingStoryPlayer: !isShowingStoryPlayer });
+              }
+            }}
+          />
           <ToggleControl
             label={__('Show title', 'web-stories')}
             checked={isShowingTitle}
@@ -114,6 +162,24 @@ const Controls = (props) => {
               }
             }}
           />
+          {isViewType('list') && (
+            <ToggleControl
+              label={__('Show image on right', 'web-stories')}
+              checked={imageOnRight}
+              onChange={() => {
+                setAttributes({ imageOnRight: !imageOnRight });
+              }}
+            />
+          )}
+          {!isViewType('circles') && !isShowingStoryPlayer && (
+            <ToggleControl
+              label={__('Show square corners', 'web-stories')}
+              checked={isStyleSquared}
+              onChange={() => {
+                setAttributes({ isStyleSquared: !isStyleSquared });
+              }}
+            />
+          )}
           <ToggleControl
             label={__("Show 'View All Stories' link", 'web-stories')}
             checked={isShowingViewAll}
@@ -131,50 +197,24 @@ const Controls = (props) => {
               }
             />
           )}
-          <ToggleControl
-            className={!isViewType('grid') ? 'is-disabled' : ''}
-            label={__('Show story cover images', 'web-stories')}
-            checked={!isViewType('grid') ? true : isShowingStoryPoster}
-            onChange={() => {
-              if (isViewType('grid')) {
-                setAttributes({ isShowingStoryPoster: !isShowingStoryPoster });
-              }
-            }}
-          />
-          {isViewType('list') && (
-            <BaseControl className="latest-stories-settings__image-alignment">
-              <BaseControl.VisualLabel>
-                {__('Image alignment', 'web-stories')}
-              </BaseControl.VisualLabel>
-              <BlockAlignmentToolbar
-                value={listViewImageAlignment}
-                onChange={(value) =>
-                  setAttributes({
-                    listViewImageAlignment: value,
-                  })
-                }
-                controls={['left', 'right']}
-                isCollapsed={false}
-              />
-            </BaseControl>
-          )}
         </PanelBody>
       </InspectorControls>
     </>
   );
 };
 
-Controls.propTypes = {
+SelectedStoriesControls.propTypes = {
   viewType: PropTypes.string,
   isShowingTitle: PropTypes.bool,
   isShowingDate: PropTypes.bool,
   isShowingAuthor: PropTypes.bool,
   isShowingViewAll: PropTypes.bool,
   viewAllLinkLabel: PropTypes.string,
-  isShowingStoryPoster: PropTypes.bool,
+  isShowingStoryPlayer: PropTypes.bool,
   setAttributes: PropTypes.func.isRequired,
   // carouselSettings: PropTypes.object,
-  listViewImageAlignment: PropTypes.string,
+  imageOnRight: PropTypes.bool,
+  isStyleSquared: PropTypes.bool,
 };
 
-export default Controls;
+export default SelectedStoriesControls;

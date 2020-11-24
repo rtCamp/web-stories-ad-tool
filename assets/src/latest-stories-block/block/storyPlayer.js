@@ -32,24 +32,25 @@ function StoryPlayer({
   poster,
   author,
   date,
-  isShowingStoryPoster,
+  isShowingStoryPlayer,
   isShowingAuthor,
   isShowingDate,
   isShowingTitle,
-  listViewImageAlignment,
+  imageOnRight,
 }) {
   const singleStoryClasses = classNames('latest-stories__story-wrapper', {
-    'has-poster': isShowingStoryPoster,
+    'has-poster': !isShowingStoryPlayer,
   });
   const imageAlignmentClass = classNames('latest-stories__inner-wrapper', {
-    [`image-align-${listViewImageAlignment}`]: listViewImageAlignment,
+    [`image-align-right`]: imageOnRight,
+    [`image-align-left`]: !imageOnRight,
   });
   const hasContentOverlay = isShowingTitle || isShowingAuthor || isShowingDate;
   const dateFormat = __experimentalGetSettings().formats.date;
   const ref = useRef();
 
   useEffect(() => {
-    if (isShowingStoryPoster) {
+    if (!isShowingStoryPlayer) {
       return;
     }
 
@@ -57,13 +58,13 @@ function StoryPlayer({
       const player = new global.AmpStoryPlayer(global, ref.current);
       player.load();
     }
-  }, [isShowingStoryPoster]);
+  }, [isShowingStoryPlayer]);
 
   return (
     <div className="latest-stories__controller">
       <div className={singleStoryClasses}>
         <div className={imageAlignmentClass}>
-          {isShowingStoryPoster ? (
+          {!isShowingStoryPlayer ? (
             <div
               className="latest-stories__story-placeholder"
               style={{ backgroundImage: `url(${poster}` }}
@@ -116,11 +117,11 @@ StoryPlayer.propTypes = {
   poster: PropTypes.string,
   author: PropTypes.string,
   date: PropTypes.string,
-  isShowingStoryPoster: PropTypes.bool,
+  isShowingStoryPlayer: PropTypes.bool,
   isShowingAuthor: PropTypes.bool,
   isShowingDate: PropTypes.bool,
   isShowingTitle: PropTypes.bool,
-  listViewImageAlignment: PropTypes.string,
+  imageOnRight: PropTypes.bool,
 };
 
 export default StoryPlayer;

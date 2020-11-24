@@ -24,7 +24,7 @@ import classNames from 'classnames';
  * WordPress dependencies
  */
 import { __, _x, sprintf } from '@wordpress/i18n';
-import { useState, RawHTML } from '@wordpress/element';
+import { useState, RawHTML, useEffect } from '@wordpress/element';
 
 /**
  * External dependencies
@@ -43,7 +43,8 @@ import {
 } from '../../design-system';
 import StoryPlayer from '../../latest-stories-block/block/storyPlayer';
 import EmbedPlaceholder from './embedPlaceholder';
-import Controls from './controls';
+import SelectedStoriesControls from './selectedStoriesControls';
+import FetchSelectedStories from './fetchSelectedStories';
 import { icon } from './';
 
 const SelectedStoriesEdit = ({
@@ -52,20 +53,27 @@ const SelectedStoriesEdit = ({
   isSelected: isEditing,
 }) => {
   const {
+    stories,
     align,
     viewType,
+    numOfColumns,
     isShowingTitle,
     isShowingDate,
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    isShowingStoryPoster,
+    isShowingStoryPlayer,
     carouselSettings,
-    listViewImageAlignment,
+    imageOnRight,
+    isStyleSquared,
   } = attributes;
 
-  const [selectedStories, setSelectedStories] = useState([]);
+  const [selectedStories, setSelectedStories] = useState(stories);
   const [selectedStoriesObject, setSelectedStoriesObject] = useState([]);
+  const [isFetchingSelectedStories, setIsFetchingSelectedStories] = useState(
+    false
+  );
+
   const label = __('Selected Web Stories', 'web-stories');
   const { config } = global.webStoriesSelectedBlockSettings;
 
@@ -79,21 +87,24 @@ const SelectedStoriesEdit = ({
     __('post to see it in action.', 'web-stories')
   );
 
-  const willShowStoryPoster = 'grid' != viewType ? true : isShowingStoryPoster;
+  const willShowStoryPlayer =
+    'grid' !== viewType ? false : isShowingStoryPlayer;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
   const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
   const viewAllLabel = viewAllLinkLabel
     ? viewAllLinkLabel
     : __('View All Stories', 'web-stories');
 
+  const alignmentClass = classNames({ [`align${align}`]: align });
   const blockClasses = classNames(
+    {
+      'is-style-default': !isStyleSquared && !isShowingStoryPlayer,
+      'is-style-squared': isStyleSquared,
+    },
     'wp-block-web-stories-latest-stories latest-stories',
     { [`is-view-type-${viewType}`]: viewType },
-    { [`align${align}`]: align }
+    { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
   );
-  const blockStyles = {
-    gridTemplateColumns: `repeat(2, 1fr)`,
-  };
 
   const activeTheme = {
     DEPRECATED_THEME: theme,
@@ -101,34 +112,89 @@ const SelectedStoriesEdit = ({
     colors: lightMode,
   };
 
+  useEffect(() => {
+    setAttributes({
+      stories: selectedStories,
+    });
+
+    if (selectedStories.length && !selectedStoriesObject.length) {
+      setIsFetchingSelectedStories(true);
+    }
+  }, [
+    setAttributes,
+    selectedStories,
+    selectedStoriesObject,
+    setIsFetchingSelectedStories,
+  ]);
+
+  useEffect(() => {
+    if ('circles' !== viewType) {
+      setAttributes({
+        isShowingStoryPlayer: false,
+        isShowingTitle: true,
+        isShowingAuthor: true,
+        isShowingDate: true,
+      });
+    }
+
+    if ('circles' === viewType) {
+      setAttributes({
+        isShowingStoryPlayer: false,
+        isShowingTitle: true,
+      });
+    }
+  }, [viewType, setAttributes]);
+
+  if (isFetchingSelectedStories) {
+    return (
+      <FetchSelectedStories
+        icon={icon}
+        label={label}
+        selectedStories={selectedStories}
+        setSelectedStoriesObject={setSelectedStoriesObject}
+        setIsFetchingSelectedStories={setIsFetchingSelectedStories}
+      />
+    );
+  }
+
   return (
     <>
-      <Controls
+      <SelectedStoriesControls
         viewType={viewType}
         isShowingTitle={isShowingTitle}
         isShowingDate={isShowingDate}
         isShowingAuthor={isShowingAuthor}
         isShowingViewAll={isShowingViewAll}
         viewAllLinkLabel={viewAllLinkLabel}
-        isShowingStoryPoster={isShowingStoryPoster}
+        isShowingStoryPlayer={isShowingStoryPlayer}
         carouselSettings={carouselSettings}
-        listViewImageAlignment={listViewImageAlignment}
+        imageOnRight={imageOnRight}
         setAttributes={setAttributes}
+        isStyleSquared={isStyleSquared}
       />
       {selectedStoriesObject && 0 < selectedStoriesObject.length && (
-        <div>
-          <div className={blockClasses} style={blockStyles}>
+        <div className={alignmentClass}>
+          <div className={blockClasses}>
             {selectedStoriesObject.map((story) => {
+              let title = '';
+
+              if (story.title.rendered) {
+                title =
+                  'circles' === viewType && story.title.rendered.length > 45
+                    ? `${story.title.rendered.substring(0, 45)}...`
+                    : story.title.rendered;
+              }
+
               return (
                 <StoryPlayer
                   key={story.id}
                   url={story.link}
-                  title={story.title}
+                  title={title}
                   date={story.date_gmt}
-                  author={story.originalStoryData._embedded.author[0].name}
+                  author={story._embedded.author[0].name}
                   poster={story.featured_media_url}
-                  isShowingStoryPoster={willShowStoryPoster}
-                  listViewImageAlignment={listViewImageAlignment}
+                  isShowingStoryPlayer={willShowStoryPlayer}
+                  imageOnRight={imageOnRight}
                   isShowingAuthor={willShowAuthor}
                   isShowingDate={willShowDate}
                   isShowingTitle={isShowingTitle}
@@ -167,16 +233,19 @@ const SelectedStoriesEdit = ({
 
 SelectedStoriesEdit.propTypes = {
   attributes: PropTypes.shape({
+    stories: PropTypes.array,
     align: PropTypes.string,
     viewType: PropTypes.string,
+    numOfColumns: PropTypes.number,
     isShowingTitle: PropTypes.bool,
     isShowingDate: PropTypes.bool,
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.string,
-    isShowingStoryPoster: PropTypes.bool,
+    isShowingStoryPlayer: PropTypes.bool,
     carouselSettings: PropTypes.object,
-    listViewImageAlignment: PropTypes.string,
+    imageOnRight: PropTypes.bool,
+    isStyleSquared: PropTypes.bool,
   }),
   setAttributes: PropTypes.func.isRequired,
   isSelected: PropTypes.bool,
