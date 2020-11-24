@@ -43,7 +43,7 @@ import './edit.css';
  * Module constants
  */
 const LATEST_STORIES_QUERY = {
-  per_page: -1,
+  per_page: 20,
 };
 
 /**
@@ -175,15 +175,11 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
       setAttributes({
         isShowingStoryPlayer: false,
         isShowingTitle: true,
+        isShowingDate: false,
+        isShowingAuthor: false,
       });
     }
   }, [viewType, setAttributes]);
-
-  const willShowStoryPlayer =
-    'grid' !== viewType ? false : isShowingStoryPlayer;
-
-  const willShowDate = 'circles' === viewType ? false : isShowingDate;
-  const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
 
   const viewAllLabel = viewAllLinkLabel
     ? viewAllLinkLabel
@@ -247,10 +243,10 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
                   date={story.date_gmt}
                   author={author ? author.name : ''}
                   poster={story.featured_media_url}
-                  isShowingStoryPlayer={willShowStoryPlayer}
+                  isShowingStoryPlayer={isShowingStoryPlayer}
                   imageOnRight={imageOnRight}
-                  isShowingAuthor={willShowAuthor}
-                  isShowingDate={willShowDate}
+                  isShowingAuthor={isShowingAuthor}
+                  isShowingDate={isShowingDate}
                   isShowingTitle={isShowingTitle}
                 />
               );
