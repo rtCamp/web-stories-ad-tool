@@ -42,6 +42,7 @@ use Google\Web_Stories\REST_API\Stories_Settings_Controller;
 use Google\Web_Stories\REST_API\Stories_Users_Controller;
 use Google\Web_Stories\Shortcode\Embed_Shortcode;
 use Google\Web_Stories\Block\Latest_Stories_Block;
+use Google\Web_Stories\Block\Selected_Stories_Block;
 use WP_Post;
 
 /**
@@ -103,6 +104,13 @@ class Plugin {
 	 * @var Latest_Stories_Block
 	 */
 	public $latest_stories_block;
+
+	/**
+	 * Latest Stories Block.
+	 *
+	 * @var Selected_Stories_Block
+	 */
+	public $selected_stories_block;
 
 	/**
 	 * Embed shortcode
@@ -208,10 +216,12 @@ class Plugin {
 		add_action( 'init', [ $this->embed_base, 'init' ], 9 );
 
 		// Gutenberg Blocks.
-		$this->embed_block          = new Embed_Block();
-		$this->latest_stories_block = new Latest_Stories_Block();
+		$this->embed_block            = new Embed_Block();
+		$this->latest_stories_block   = new Latest_Stories_Block();
+		$this->selected_stories_block = new Selected_Stories_Block();
 		add_action( 'init', [ $this->embed_block, 'init' ] );
 		add_action( 'init', [ $this->latest_stories_block, 'init' ] );
+		add_action( 'init', [ $this->selected_stories_block, 'init' ] );
 
 		// Embed shortcode.
 		$this->embed_shortcode = new Embed_Shortcode();

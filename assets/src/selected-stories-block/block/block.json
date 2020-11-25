@@ -1,0 +1,62 @@
+{
+  "name": "web-stories/selected-stories",
+  "category": "embed",
+  "attributes": {
+    "stories": {
+      "type": "array",
+      "default": []
+    },
+    "viewType": {
+      "type": "string",
+      "default": "grid"
+    },
+    "numOfColumns": {
+      "type": "number",
+      "default": 2
+    },
+    "isShowingTitle": {
+      "type": "boolean",
+      "default": true
+    },
+    "isShowingDate": {
+      "type": "boolean",
+      "default": false
+    },
+    "isShowingAuthor": {
+      "type": "boolean",
+      "default": false
+    },
+    "isShowingViewAll": {
+      "type": "boolean",
+      "default": false
+    },
+    "viewAllLinkLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "isShowingStoryPlayer": {
+      "type": "boolean",
+      "default": false
+    },
+    "carouselSettings": {
+      "type": "object",
+      "default": {
+        "autoplay": false,
+        "delay": "",
+        "loop": false
+      }
+    },
+    "imageOnRight": {
+      "type": "boolean",
+      "default": false
+    },
+    "align": {
+      "type": "string",
+      "default": "none"
+    },
+    "isStyleSquared": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}
