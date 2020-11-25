@@ -56,6 +56,7 @@ const useStoryApi = (dataAdapter, { editStoryURL, storyApi, encodeMarkup }) => {
       sortOption = STORY_SORT_OPTIONS.LAST_MODIFIED,
       sortDirection,
       searchTerm,
+      author,
       page = 1,
       perPage = STORIES_PER_REQUEST,
     }) => {
@@ -82,6 +83,7 @@ const useStoryApi = (dataAdapter, { editStoryURL, storyApi, encodeMarkup }) => {
         context: 'edit',
         _web_stories_envelope: true,
         search: searchTerm || undefined,
+        author: author || undefined,
         orderby: sortOption,
         page,
         per_page: perPage,

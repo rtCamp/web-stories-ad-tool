@@ -263,6 +263,40 @@ const latestStoriesBlock = {
   },
 };
 
+const selectedStoriesBlock = {
+  ...sharedConfig,
+  entry: {
+    'selected-web-stories-block':
+      './assets/src/selected-stories-block/index.js',
+  },
+  plugins: [
+    process.env.BUNDLE_ANALZYER && new BundleAnalyzerPlugin(),
+    new DependencyExtractionWebpackPlugin({
+      injectPolyfill: true,
+    }),
+    new MiniCssExtractPlugin({
+      filename: '../css/[name].css',
+    }),
+    new WebpackBar({
+      name: 'Selected Web Stories Block',
+      color: '#357BB5',
+    }),
+  ].filter(Boolean),
+  optimization: {
+    ...sharedConfig.optimization,
+    splitChunks: {
+      cacheGroups: {
+        stories: {
+          name: 'selected-web-stories-block',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
+  },
+};
+
 const activationNotice = {
   ...sharedConfig,
   entry: {
@@ -295,5 +329,6 @@ module.exports = [
   dashboard,
   storyEmbedBlock,
   latestStoriesBlock,
+  selectedStoriesBlock,
   activationNotice,
 ];
