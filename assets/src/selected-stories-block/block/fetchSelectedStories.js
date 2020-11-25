@@ -64,7 +64,11 @@ function FetchSelectedStories({
           include: selectedStories,
         }),
       });
-      setSelectedStoriesObject(response.body);
+      setSelectedStoriesObject(
+        response.body.sort((a, b) => {
+          return selectedStories.indexOf(a.id) - selectedStories.indexOf(b.id);
+        })
+      );
       setIsFetchingSelectedStories(false);
     } catch (error) {
       // Temporarily disabled, show a UI message.
