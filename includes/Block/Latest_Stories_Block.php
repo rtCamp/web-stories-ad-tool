@@ -63,6 +63,14 @@ class Latest_Stories_Block extends Embed_Base {
 	 */
 	protected $block_attributes = [];
 
+	// function __construct() {
+	// 	add_action('wp_head', [ $this, 'hello' ] );
+	// }
+
+	// public function hello() {
+	// 	echo '<meta name="amp-script-src" content="sha384-I-nwwiMaAd4b7-im3e6LAcgIErd29WmcLGQboge5iKw6SIv2YlhkuT1q9WK7xpNy">';
+	// }
+
 	/**
 	 * Initializes the Web Stories embed block.
 	 *
@@ -228,6 +236,7 @@ class Latest_Stories_Block extends Embed_Base {
 
 		$query_args    = $this->get_query_args();
 		$stories_query = new \WP_Query( $query_args );
+		$stories_links = [];
 
 		$is_grid_view = $this->is_view_type( 'grid' );
 
@@ -235,68 +244,121 @@ class Latest_Stories_Block extends Embed_Base {
 
 			ob_start();
 			?>
-			<div class="<?php echo( esc_attr( $alignment_class ) ); ?>">
-				<div
-					class="<?php echo( esc_attr( $block_classes ) ); ?>"
-					style="<?php echo( esc_attr( $block_style ) ); ?>"
-				>
-					<?php
-					if ( $this->is_view_type( 'carousel' ) ) :
-						?>
-						<amp-carousel
-							width="1"
-							height="1"
-							layout="intrinsic"
-							type="carousel"
-							role="region"
-							aria-label="Basic carousel"
-							<?php
-							if ( ! empty( $attributes['carouselSettings']['autoplay'] ) && ( true === $attributes['carouselSettings']['autoplay'] ) ) {
-								echo( 'autoplay' );
-							}
-							?>
-							<?php
-							if ( ! empty( $attributes['carouselSettings']['delay'] ) ) {
-								$delay = absint( $attributes['carouselSettings']['delay'] ) * 1000;
-								printf( "delay='%s'", esc_attr( $delay ) );
-							}
-							?>
-						>
+				<div class="<?php echo( esc_attr( $alignment_class ) ); ?>">
+					<div
+						class="<?php echo( esc_attr( $block_classes ) ); ?>"
+						style="<?php echo( esc_attr( $block_style ) ); ?>"
+					>
 						<?php
-					endif;
-
-					while ( $stories_query->have_posts() ) :
-						$stories_query->the_post();
-
-						$current_post_id = get_the_ID();
-						$story_attrs     = $this->get_story_attrs( $current_post_id, $single_story_classes );
-
-						if ( ( ! $is_grid_view ) || ( empty( $attributes['isShowingStoryPlayer'] ) ) ) :
-							if (
-								( function_exists( 'amp_is_request' ) && ! amp_is_request() ) ||
-								( function_exists( 'is_amp_endpoint' ) && ! is_amp_endpoint() )
-							) {
-								wp_enqueue_script( 'amp-runtime-script', 'https://cdn.ampproject.org/v0.js', [], 'v0', false );
-								wp_enqueue_script( 'amp-story-player-script', 'https://cdn.ampproject.org/v0/amp-story-player-0.1.js', [], 'v0', false );
-								wp_enqueue_script( 'amp-bind-script', 'https://cdn.ampproject.org/v0/amp-bind-0.1.js', [], 'v0', false );
-								wp_enqueue_script( 'amp-carousel-script', 'https://cdn.ampproject.org/v0/amp-carousel-0.1.js', [], 'v0', false );
-							}
-
-							echo( $this->render_story_with_poster( $story_attrs, $single_story_classes, $attributes ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						else :
-							echo( $this->render( $story_attrs ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						if ( $this->is_view_type( 'carousel' ) ) :
+							?>
+							<amp-carousel
+								width="1"
+								height="1"
+								layout="intrinsic"
+								type="carousel"
+								role="region"
+								aria-label="Basic carousel"
+							>
+							<?php
 						endif;
-					endwhile;
 
-					if ( $this->is_view_type( 'carousel' ) ) :
+						while ( $stories_query->have_posts() ) :
+							$stories_query->the_post();
+
+							$current_post_id = get_the_ID();
+							$story_attrs     = $this->get_story_attrs( $current_post_id, $single_story_classes );
+							$stories_links[] = get_the_permalink( $current_post_id );
+
+							if ( ( ! $is_grid_view ) || ( empty( $attributes['isShowingStoryPlayer'] ) ) ) :
+								if (
+									( function_exists( 'amp_is_request' ) && ! amp_is_request() ) ||
+									( function_exists( 'is_amp_endpoint' ) && ! is_amp_endpoint() )
+								) {
+									wp_enqueue_script( 'amp-runtime-script', 'https://cdn.ampproject.org/v0.js', [], 'v0', false );
+									// wp_enqueue_script( 'amp-story-player-script', 'https://cdn.ampproject.org/v0/amp-story-player-0.1.js', [], 'v0', false );
+									wp_enqueue_script( 'amp-bind-script', 'https://cdn.ampproject.org/v0/amp-bind-0.1.js', [], 'v0', false );
+									wp_enqueue_script( 'amp-carousel-script', 'https://cdn.ampproject.org/v0/amp-carousel-0.1.js', [], 'v0', false );
+									wp_enqueue_script( 'amp-script-script', 'https://cdn.ampproject.org/v0/amp-script-0.1.js', [], 'v0', false );
+								}
+
+								echo( $this->render_story_with_poster( $story_attrs, $single_story_classes, $attributes ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							else :
+								echo( $this->render( $story_attrs ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							endif;
+						endwhile;
+
+						if ( $this->is_view_type( 'carousel' ) ) :
+							?>
+							</amp-carousel>
+							<?php
+						endif;
 						?>
-						</amp-carousel>
+					</div>
+					<?php $this->maybe_render_archive_link( $attributes ); ?>
+				<amp-script width="285" height="800" layout="intrinsic" script="hello-world">
+					<?php
+						foreach ( $stories_links as $index => $story_link ) :
+						?>
+							<div class="entry-point-card-container" style="width: 20px; height: 20px; display: inline-block;"><?php echo $index; ?></div>
 						<?php
-					endif;
+						endforeach;
 					?>
+					<div class="lightbox">
+						<amp-story-player height="400" width="285" id="story-player">
+							<?php
+								foreach ( $stories_links as $story_link ) :
+								?>
+								<a href="<?php echo esc_url( $story_link ); ?>"></a>
+								<?php
+								endforeach;
+							?>
+						</amp-story-player>
+					</div>
+				</amp-script>
 				</div>
-				<?php $this->maybe_render_archive_link( $attributes ); ?>
-			</div>
+			<script id="hello-world" type="text/plain" target="amp-script">
+			let stories;
+			let cards;
+
+const player = document.querySelector("amp-story-player");
+
+console.log( player );
+console.log( player.isReady );
+
+player.addEventListener("ready", () => {
+  initializeCarousel();
+  console.log( 'called' );
+});
+
+if (player.isReady) {
+  initializeCarousel();
+}
+
+function initializeCarousel() {
+  stories = player.getStories();
+  console.log( 'called' );
+  initializeCards();
+}
+
+function initializeCards() {
+  const lightboxEl = querySelector(".lightbox");
+  lightboxEl.addEventListener("click", () => {
+    lightboxEl.classList.toggle("show");
+  });
+
+  cards = document.querySelectorAll(".entry-point-card-container");
+  console.log(cards);
+  console.log(stories);
+  cards.forEach((card, idx) => {
+    card.addEventListener("click", () => {
+      player.show(stories[idx].href);
+      lightboxEl.classList.toggle("show");
+    });
+  });
+}
+
+			</script>
 			<?php
 
 			$content = (string) ob_get_clean();

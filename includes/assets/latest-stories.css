@@ -314,3 +314,8 @@
 .web-stories .story-lightbox__close-button--stick:first-child {
   transform: rotateZ(-45deg);
 }
+
+amp-script {
+  height: 100%;
+  width: 100%;
+}
