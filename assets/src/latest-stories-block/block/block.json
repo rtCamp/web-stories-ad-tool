@@ -50,9 +50,9 @@
         "loop": false
       }
     },
-    "listViewImageAlignment": {
-      "type": "string",
-      "default": "left"
+    "imageOnRight": {
+      "type": "boolean",
+      "default": false
     },
     "authors": {
       "type": "array",

@@ -94,51 +94,51 @@ class Latest_Stories_Block extends Embed_Base {
 			self::BLOCK_NAME,
 			[
 				'attributes'      => [
-					'align'                  => [
+					'align'                => [
 						'type'    => 'string',
 						'default' => 'none',
 					],
-					'viewType'               => [
+					'viewType'             => [
 						'type'    => 'string',
 						'default' => 'grid',
 					],
-					'numOfStories'           => [
+					'numOfStories'         => [
 						'type'    => 'number',
 						'default' => 5,
 					],
-					'numOfColumns'           => [
+					'numOfColumns'         => [
 						'type'    => 'number',
 						'default' => 2,
 					],
-					'orderByValue'           => [
+					'orderByValue'         => [
 						'type'    => 'string',
 						'default' => '',
 					],
-					'isShowingTitle'         => [
+					'isShowingTitle'       => [
 						'type'    => 'boolean',
 						'default' => true,
 					],
-					'isShowingDate'          => [
+					'isShowingDate'        => [
 						'type'    => 'boolean',
 						'default' => false,
 					],
-					'isShowingAuthor'        => [
+					'isShowingAuthor'      => [
 						'type'    => 'boolean',
 						'default' => false,
 					],
-					'isShowingViewAll'       => [
+					'isShowingViewAll'     => [
 						'type'    => 'boolean',
 						'default' => false,
 					],
-					'viewAllLinkLabel'       => [
+					'viewAllLinkLabel'     => [
 						'type'    => 'string',
 						'default' => '',
 					],
-					'isShowingStoryPoster'   => [
+					'isShowingStoryPoster' => [
 						'type'    => 'boolean',
 						'default' => true,
 					],
-					'carouselSettings'       => [
+					'carouselSettings'     => [
 						'type'    => 'object',
 						'default' => [
 							'autoplay' => false,
@@ -146,13 +146,13 @@ class Latest_Stories_Block extends Embed_Base {
 							'loop'     => false,
 						],
 					],
-					'authors'                => [
+					'authors'              => [
 						'type'    => 'array',
 						'default' => [],
 					],
-					'listViewImageAlignment' => [
-						'type'    => 'string',
-						'default' => 'left',
+					'imageOnRight'         => [
+						'type'    => 'boolean',
+						'default' => false,
 					],
 				],
 				'render_callback' => [ $this, 'render_block' ],
@@ -255,7 +255,7 @@ class Latest_Stories_Block extends Embed_Base {
 							<?php
 							if ( ! empty( $attributes['carouselSettings']['delay'] ) ) {
 								$delay = absint( $attributes['carouselSettings']['delay'] ) * 1000;
-								echo( "delay='{$delay}'" );
+								printf( "delay='%s'", esc_attr( $delay ) );
 							}
 							?>
 						>
@@ -436,8 +436,8 @@ class Latest_Stories_Block extends Embed_Base {
 
 		$list_view_image_alignment = 'left';
 
-		if ( ! empty( $this->block_attributes['listViewImageAlignment'] ) ) {
-			$list_view_image_alignment = $this->block_attributes['listViewImageAlignment'];
+		if ( ! empty( $this->block_attributes['imageOnRight'] ) ) {
+			$list_view_image_alignment = 'right';
 		}
 
 		ob_start();
