@@ -250,7 +250,7 @@
 }
 
 /* Lightbox styles */
-.web-stories .web-stories__story-lightbox {
+.web-stories .web-stories__lightbox {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -266,7 +266,7 @@
   opacity: 0;
 }
 
-.web-stories .web-stories__story-lightbox.show {
+.web-stories .web-stories__lightbox.show {
   opacity: 1;
   visibility: visible;
 }
@@ -294,7 +294,7 @@
 }
 
 @media only screen and (max-width: 600px) {
-  .web-stories .web-stories__story-lightbox amp-story-player {
+  .web-stories .web-stories__lightbox amp-story-player {
     height: 100%;
     max-width: 100%;
   }

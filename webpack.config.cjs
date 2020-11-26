@@ -197,6 +197,39 @@ const dashboard = {
   },
 };
 
+const webStoriesScripts = {
+  ...sharedConfig,
+  entry: {
+    'web-stories-scripts': './includes/assets/index.js',
+  },
+  plugins: [
+    process.env.BUNDLE_ANALZYER && new BundleAnalyzerPlugin(),
+    new DependencyExtractionWebpackPlugin({
+      injectPolyfill: true,
+    }),
+    new MiniCssExtractPlugin({
+      filename: '../css/[name].css',
+    }),
+    new WebpackBar({
+      name: 'Web Stories Scripts',
+      color: '#357BB5',
+    }),
+  ].filter(Boolean),
+  optimization: {
+    ...sharedConfig.optimization,
+    splitChunks: {
+      cacheGroups: {
+        stories: {
+          name: 'web-stories-scripts',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
+  },
+};
+
 const storyEmbedBlock = {
   ...sharedConfig,
   entry: {
@@ -327,6 +360,7 @@ const activationNotice = {
 module.exports = [
   storiesEditor,
   dashboard,
+  webStoriesScripts,
   storyEmbedBlock,
   latestStoriesBlock,
   selectedStoriesBlock,

@@ -73,7 +73,6 @@ class Latest_Stories_Block extends Embed_Base {
 	public function init() {
 		$this->register_script( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE, Tracking::SCRIPT_HANDLE ] );
 		$this->register_style( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE ] );
-		wp_register_script( 'amp-carousel-script', 'https://cdn.ampproject.org/v0/amp-carousel-0.1.js', [], 'v0', true );
 
 		wp_register_style(
 			self::STYLE_HANDLE,
@@ -212,6 +211,16 @@ class Latest_Stories_Block extends Embed_Base {
 			return '';
 		}
 
+		if ( ! $this->is_amp() ) {
+			wp_enqueue_script(
+				'web-stories-lightbox',
+				WEBSTORIES_PLUGIN_DIR_URL . 'assets/js/web-stories-scripts.js',
+				[],
+				'v0',
+				false
+			);
+		}
+
 		$content              = '';
 		$block_classes        = 'web-stories ';
 		$block_classes        = ( ! empty( $attributes['isStyleSquared'] ) || ! empty( $attributes['isShowingStoryPlayer'] ) ) ? $block_classes . 'is-style-squared ' : $block_classes . 'is-style-default ';
@@ -228,6 +237,7 @@ class Latest_Stories_Block extends Embed_Base {
 
 		$query_args    = $this->get_query_args();
 		$stories_query = new \WP_Query( $query_args );
+		$stories_links = [];
 
 		$is_grid_view = $this->is_view_type( 'grid' );
 
@@ -269,13 +279,11 @@ class Latest_Stories_Block extends Embed_Base {
 						$stories_query->the_post();
 
 						$current_post_id = get_the_ID();
+						$stories_links[] = get_the_permalink( $current_post_id );
 						$story_attrs     = $this->get_story_attrs( $current_post_id, $single_story_classes );
 
 						if ( ( ! $is_grid_view ) || ( empty( $attributes['isShowingStoryPlayer'] ) ) ) :
-							if (
-								( function_exists( 'amp_is_request' ) && ! amp_is_request() ) ||
-								( function_exists( 'is_amp_endpoint' ) && ! is_amp_endpoint() )
-							) {
+							if ( ! $this->is_amp() ) {
 								wp_enqueue_script( 'amp-runtime-script', 'https://cdn.ampproject.org/v0.js', [], 'v0', false );
 								wp_enqueue_script( 'amp-story-player-script', 'https://cdn.ampproject.org/v0/amp-story-player-0.1.js', [], 'v0', false );
 								wp_enqueue_script( 'amp-bind-script', 'https://cdn.ampproject.org/v0/amp-bind-0.1.js', [], 'v0', false );
@@ -292,6 +300,31 @@ class Latest_Stories_Block extends Embed_Base {
 						?>
 						</amp-carousel>
 						<?php
+					endif;
+
+					if ( ! $this->is_amp() ) :
+					?>
+						<div class="web-stories__lightbox">
+							<amp-story-player width="1" height="1" layout="intrinsic">
+							<script type="application/json">
+								{
+									"controls": [
+									{
+										"name": "close",
+										"position": "start"
+									}]
+								}
+							</script>
+							<?php
+								foreach ( $stories_links as $story_link ) :
+								?>
+									<a href="<?php echo esc_url( $story_link ); ?>"></a>
+								<?php
+								endforeach;
+							?>
+							</amp-story-player>
+						</div>
+					<?php
 					endif;
 					?>
 				</div>
@@ -422,10 +455,15 @@ class Latest_Stories_Block extends Embed_Base {
 			return '';
 		}
 
-		$has_content_overlay  = false;
-		$single_story_classes = ( ! empty( $single_story_classes ) && is_string( $single_story_classes ) ) ? $single_story_classes : '';
-		$current_post_id      = get_the_ID();
-		$lightbox_state       = "lightbox{$current_post_id}";
+		$has_content_overlay     = false;
+		$single_story_classes    = ( ! empty( $single_story_classes ) && is_string( $single_story_classes ) ) ? $single_story_classes : '';
+		$current_post_id         = get_the_ID();
+		$lightbox_state          = "lightbox{$current_post_id}";
+		$lightbox_set_state_attr = $this->is_amp() ? sprintf(
+			'on="tap:AMP.setState({%1$s: ! %2$s})"',
+			$lightbox_state,
+			$lightbox_state
+		) : '';
 
 		if ( ! empty( $story_attrs['show_content_overlay'] ) && ( true === $story_attrs['show_content_overlay'] ) ) {
 			$has_content_overlay = true;
@@ -448,31 +486,37 @@ class Latest_Stories_Block extends Embed_Base {
 		<div class="web-stories__controller">
 			<div
 				class="<?php echo( esc_attr( $single_story_classes ) ); ?>"
-				on="tap:AMP.setState({<?php echo( esc_attr( $lightbox_state ) ); ?>: ! <?php echo( esc_attr( $lightbox_state ) ); ?>})"
+				<?php echo wp_kses( $lightbox_set_state_attr, ['on'] ); ?>
 			>
-				<div
-					class="web-stories__story-lightbox story-lightbox"
-					[class]="<?php echo( esc_attr( $lightbox_state ) ); ?> ? 'web-stories__story-lightbox show' : 'web-stories__story-lightbox'"
-				>
+			<?php
+				if ( $this->is_amp() ) : // For now, we will have multiple lightboxes for separate stories on AMP.
+				?>
 					<div
-						class="story-lightbox__close-button"
-						on="tap:AMP.setState({<?php echo( esc_attr( $lightbox_state ) ); ?>: false})"
+						class="web-stories__lightbox story-lightbox"
+						[class]="<?php echo( esc_attr( $lightbox_state ) ); ?> ? 'web-stories__lightbox show' : 'web-stories__lightbox'"
 					>
-						<span class="story-lightbox__close-button--stick"></span>
-						<span class="story-lightbox__close-button--stick"></span>
+						<div
+							class="story-lightbox__close-button"
+							on="tap:AMP.setState({<?php echo( esc_attr( $lightbox_state ) ); ?>: false})"
+						>
+							<span class="story-lightbox__close-button--stick"></span>
+							<span class="story-lightbox__close-button--stick"></span>
+						</div>
+						<amp-story-player
+							width="0"
+							height="0"
+							layout="responsive"
+						>
+							<a href="<?php echo( esc_url( $story_attrs['url'] ) ); ?>"></a>
+						</amp-story-player>
 					</div>
-					<amp-story-player
-						width="0"
-						height="0"
-						layout="responsive"
-					>
-						<a href="<?php echo( esc_url_raw( $story_attrs['url'] ) ); ?>"></a>
-					</amp-story-player>
-				</div>
+				<?php
+				endif;
+			?>
 				<div class="web-stories__inner-wrapper <?php echo( esc_attr( "image-align-{$list_view_image_alignment}" ) ); ?>">
 					<div
 						class="web-stories__story-placeholder"
-						style="background-image: url(<?php echo( esc_url_raw( $poster ) ); ?>)"
+						style="background-image: url(<?php echo( esc_url( $poster ) ); ?>)"
 					></div>
 					<?php
 					if ( true === $has_content_overlay ) :
@@ -648,5 +692,12 @@ class Latest_Stories_Block extends Embed_Base {
 		}
 
 		return false;
+	}
+
+	protected function is_amp() {
+		return(
+			( function_exists( 'amp_is_request' ) && amp_is_request() ) ||
+			( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() )
+		);
 	}
 }
