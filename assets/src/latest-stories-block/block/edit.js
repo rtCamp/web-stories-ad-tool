@@ -154,8 +154,12 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
     LATEST_STORIES_QUERY.per_page = numOfStories;
 
-    debouncedFetchLatestStories();
-  }, [numOfStories]); /* eslint-disable-line react-hooks/exhaustive-deps */
+    debouncedFetchStories();
+    /* eslint-disable react-hooks/exhaustive-deps */
+    /* Disabled because the hook shouldn't be dependent on fetchedStories's length, this hook is specifically when user
+    changes number of stories. fetchedStories variable may change even if user changes 'order' of stories or 'authors' filter. */
+  }, [numOfStories, debouncedFetchStories]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   useEffect(() => {
     if ('circles' !== viewType) {

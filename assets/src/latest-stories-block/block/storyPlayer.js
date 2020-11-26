@@ -47,7 +47,7 @@ function StoryPlayer({
   });
   const hasContentOverlay = isShowingTitle || isShowingAuthor || isShowingDate;
   const dateFormat = __experimentalGetSettings().formats.date;
-  const ref = useRef(null);
+  const ref = useRef();
 
   useEffect(() => {
     if (!isShowingStoryPlayer) {
