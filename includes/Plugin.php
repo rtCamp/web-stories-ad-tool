@@ -45,6 +45,8 @@ use Google\Web_Stories\Shortcode\Stories_Shortcode;
 
 /**
  * Plugin class.
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Plugin {
 	/**
