@@ -31,16 +31,11 @@ import {
   RangeControl,
   SelectControl,
   ToggleControl,
-  BaseControl,
   SVG,
   Path,
   Notice,
 } from '@wordpress/components';
-import {
-  BlockControls,
-  InspectorControls,
-  BlockAlignmentToolbar,
-} from '@wordpress/block-editor';
+import { BlockControls, InspectorControls } from '@wordpress/block-editor';
 import { RawHTML } from '@wordpress/element';
 
 /**
@@ -75,7 +70,7 @@ const LatestStoriesControls = (props) => {
     isShowingStoryPoster,
     setAttributes,
     authors,
-    listViewImageAlignment,
+    imageOnRight,
   } = props;
 
   const orderByOptions = [
@@ -212,21 +207,13 @@ const LatestStoriesControls = (props) => {
             }}
           />
           {isViewType('list') && (
-            <BaseControl className="latest-stories-settings__image-alignment">
-              <BaseControl.VisualLabel>
-                {__('Image alignment', 'web-stories')}
-              </BaseControl.VisualLabel>
-              <BlockAlignmentToolbar
-                value={listViewImageAlignment}
-                onChange={(value) =>
-                  setAttributes({
-                    listViewImageAlignment: value,
-                  })
-                }
-                controls={['left', 'right']}
-                isCollapsed={false}
-              />
-            </BaseControl>
+            <ToggleControl
+              label={__('Show image on right', 'web-stories')}
+              checked={imageOnRight}
+              onChange={() => {
+                setAttributes({ imageOnRight: !imageOnRight });
+              }}
+            />
           )}
           <ToggleControl
             label={__("Show 'View All Stories' link", 'web-stories')}
@@ -295,7 +282,7 @@ LatestStoriesControls.propTypes = {
   isShowingStoryPoster: PropTypes.bool,
   setAttributes: PropTypes.func.isRequired,
   authors: PropTypes.array,
-  listViewImageAlignment: PropTypes.string,
+  imageOnRight: PropTypes.bool,
 };
 
 export default LatestStoriesControls;
