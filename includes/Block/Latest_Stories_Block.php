@@ -154,6 +154,10 @@ class Latest_Stories_Block extends Embed_Base {
 						'type'    => 'boolean',
 						'default' => false,
 					],
+					'isStyleSquared'       => [
+						'type'    => 'boolean',
+						'default' => false,
+					],
 				],
 				'render_callback' => [ $this, 'render_block' ],
 				'editor_script'   => self::SCRIPT_HANDLE,
@@ -209,7 +213,8 @@ class Latest_Stories_Block extends Embed_Base {
 		}
 
 		$content              = '';
-		$block_classes        = 'web-stories web-stories';
+		$block_classes        = 'web-stories ';
+		$block_classes        = ( ! empty( $attributes['isStyleSquared'] ) ) ? $block_classes . 'is-style-squared ' : $block_classes . 'is-style-default ';
 		$single_story_classes = ( ! empty( $attributes['isShowingStoryPoster'] ) && true === $attributes['isShowingStoryPoster'] ) ?
 			'web-stories__story-wrapper has-poster' :
 			'web-stories__story-wrapper';

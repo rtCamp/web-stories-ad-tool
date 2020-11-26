@@ -61,6 +61,10 @@
     "align": {
       "type": "string",
       "default": "none"
+    },
+    "isStyleSquared": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
