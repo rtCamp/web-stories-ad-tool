@@ -208,10 +208,10 @@ class Latest_Stories_Block extends Embed_Base {
 		}
 
 		$content              = '';
-		$block_classes        = 'wp-block-web-stories-latest-stories latest-stories';
+		$block_classes        = 'web-stories web-stories';
 		$single_story_classes = ( ! empty( $attributes['isShowingStoryPoster'] ) && true === $attributes['isShowingStoryPoster'] ) ?
-			'latest-stories__story-wrapper has-poster alignnone' :
-			'latest-stories__story-wrapper';
+			'web-stories__story-wrapper has-poster alignnone' :
+			'web-stories__story-wrapper';
 		$block_style          = '';
 
 		$block_classes .= ( ! empty( $attributes['viewType'] ) ) ? " is-view-type-{$attributes['viewType']}" : ' is-view-type-grid';
@@ -219,7 +219,7 @@ class Latest_Stories_Block extends Embed_Base {
 
 		if ( $this->is_view_type( 'grid' ) ) {
 			$num_of_columns = ( ! empty( $attributes['numOfColumns'] ) ) ? absint( $attributes['numOfColumns'] ) : 2;
-			$block_style   .= "grid-template-columns:repeat({$num_of_columns}, 1fr);";
+			$block_classes .= " columns-{$num_of_columns}";
 		}
 
 		$query_args    = $this->get_query_args();
@@ -241,10 +241,10 @@ class Latest_Stories_Block extends Embed_Base {
 					if ( $this->is_view_type( 'carousel' ) ) :
 						?>
 						<amp-carousel
-							width="400"
+							width="600"
 							height="280"
-							layout="responsive"
-							type="slides"
+							layout="intrinsic"
+							type="carousel"
 							role="region"
 							aria-label="Basic carousel"
 							<?php
@@ -257,7 +257,12 @@ class Latest_Stories_Block extends Embed_Base {
 								echo( 'loop' );
 							}
 							?>
-							delay="<?php echo( ! empty( $attributes['carouselSettings']['delay'] ) ) ? ( absint( $attributes['carouselSettings']['delay'] ) * 1000 ) : ''; ?>"
+							<?php
+							if ( ! empty( $attributes['carouselSettings']['delay'] ) ) {
+								$delay = absint( $attributes['carouselSettings']['delay'] ) * 1000;
+								echo( "delay='{$delay}'" );
+							}
+							?>
 						>
 						<?php
 					endif;
@@ -392,7 +397,7 @@ class Latest_Stories_Block extends Embed_Base {
 			$view_all_stories_label = ( ! empty( $attributes['viewAllLinkLabel'] ) ) ? $attributes['viewAllLinkLabel'] : __( 'View All Stories', 'web-stories' );
 			?>
 
-			<div class="latest-stories__archive-link">
+			<div class="web-stories__archive-link">
 				<a href="<?php echo( esc_url_raw( $web_stories_archive ) ); ?>">
 					<?php echo( esc_html( $view_all_stories_label ) ); ?>
 				</a>
@@ -446,28 +451,34 @@ class Latest_Stories_Block extends Embed_Base {
 			on="tap:AMP.setState({<?php echo( esc_attr( $lightbox_state ) ); ?>: ! <?php echo( esc_attr( $lightbox_state ) ); ?>})"
 		>
 			<div
-				class="latest-stories__story-lightbox story-lightbox"
-				[class]="<?php echo( esc_attr( $lightbox_state ) ); ?> ? 'latest-stories__story-lightbox show' : 'latest-stories__story-lightbox'"
+				class="web-stories__story-lightbox story-lightbox"
+				[class]="<?php echo( esc_attr( $lightbox_state ) ); ?> ? 'web-stories__story-lightbox show' : 'web-stories__story-lightbox'"
 			>
-				<span class="story-lightbox__close-button"></span>
+				<div
+					class="story-lightbox__close-button"
+					on="tap:AMP.setState({<?php echo( esc_attr( $lightbox_state ) ); ?>: false})"
+				>
+					<span class="story-lightbox__close-button--stick"></span>
+					<span class="story-lightbox__close-button--stick"></span>
+				</div>
 				<amp-story-player
-					width="285"
-					height="430"
+					width="0"
+					height="0"
 					layout="responsive"
 				>
 					<a href="<?php echo( esc_url_raw( $story_attrs['url'] ) ); ?>"></a>
 				</amp-story-player>
 			</div>
-			<div class="<?php echo( esc_attr( "image-align-{$list_view_image_alignment}" ) ); ?>">
+			<div class="web-stories__inner-wrapper <?php echo( esc_attr( "image-align-{$list_view_image_alignment}" ) ); ?>">
 				<div
-					class="latest-stories__story-placeholder"
+					class="web-stories__story-placeholder"
 					style="background-image: url(<?php echo( esc_url_raw( $poster ) ); ?>)"
 				></div>
 				<?php
 				if ( true === $has_content_overlay ) :
 					?>
 					<div
-						class="story-content-overlay latest-stories__story-content-overlay"
+						class="story-content-overlay web-stories__story-content-overlay"
 					>
 						<?php if ( ! empty( $story_attrs['title'] ) ) : ?>
 						<div class="story-content-overlay__title">
@@ -537,9 +548,9 @@ class Latest_Stories_Block extends Embed_Base {
 			'';
 
 		$story_attrs['url']                  = get_post_permalink( $story_id );
-		$story_attrs['title']                = $story_title;
-		$story_attrs['height']               = '430';
-		$story_attrs['width']                = '285';
+		$story_attrs['title']                = $is_circles_view ? mb_strimwidth( $story_title, 0, 45, '...' ) : $story_title;
+		$story_attrs['height']               = '100%';
+		$story_attrs['width']                = '100%';
 		$story_attrs['poster']               = get_the_post_thumbnail_url( $story_id, $image_size );
 		$story_attrs['author']               = $author_name;
 		$story_attrs['date']                 = $story_date;
