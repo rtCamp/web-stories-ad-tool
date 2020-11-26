@@ -43,6 +43,13 @@ class Latest_Stories_Block extends Embed_Base {
 	const SCRIPT_HANDLE = 'latest-web-stories-block';
 
 	/**
+	 * Style handle.
+	 *
+	 * @var string
+	 */
+	const STYLE_HANDLE = 'latest-stories-block-style';
+
+	/**
 	 * Block name.
 	 *
 	 * @var string
@@ -66,6 +73,14 @@ class Latest_Stories_Block extends Embed_Base {
 	public function init() {
 		$this->register_script( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE, Tracking::SCRIPT_HANDLE ] );
 		$this->register_style( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE ] );
+
+		wp_register_style(
+			self::STYLE_HANDLE,
+			WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/latest-stories.css',
+			[],
+			'v0',
+			false
+		);
 
 		wp_localize_script(
 			self::SCRIPT_HANDLE,
@@ -142,7 +157,7 @@ class Latest_Stories_Block extends Embed_Base {
 				'render_callback' => [ $this, 'render_block' ],
 				'editor_script'   => self::SCRIPT_HANDLE,
 				'editor_style'    => self::SCRIPT_HANDLE,
-				'style'           => self::SCRIPT_HANDLE,
+				'style'           => self::STYLE_HANDLE,
 			]
 		);
 	}
@@ -496,6 +511,7 @@ class Latest_Stories_Block extends Embed_Base {
 		$story_attrs['url']                  = get_post_permalink( $story_id );
 		$story_attrs['title']                = $story_title;
 		$story_attrs['height']               = '430';
+		$story_attrs['width']                = '285';
 		$story_attrs['poster']               = get_the_post_thumbnail_url( $story_id, $image_size );
 		$story_attrs['author']               = $author_name;
 		$story_attrs['date']                 = $story_date;
