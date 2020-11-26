@@ -31,9 +31,9 @@
   font-size: 15px;
   line-height: 22px;
   font-weight: 700;
-  display: box;
+  display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
   -webkit-line-clamp: 2; /* Browser support: https://caniuse.com/?search=line-clamp */
-  box-orient: vertical;
+  -webkit-box-orient: vertical; /* stylelint-disable-line property-no-vendor-prefix */
   overflow: hidden;
 }
 
