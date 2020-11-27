@@ -15,12 +15,6 @@
  */
 
 /**
- * Not using Core 'Autocomplete' as it's broken.
- *
- * See Github issue: https://github.com/WordPress/gutenberg/issues/10542
- */
-
-/**
  * WordPress dependencies
  */
 import { FormTokenField } from '@wordpress/components';
