@@ -23,9 +23,9 @@ import styled from 'styled-components';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Placeholder } from '@wordpress/components';
+import { Notice, Placeholder } from '@wordpress/components';
 import { BlockIcon } from '@wordpress/block-editor';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 
@@ -38,11 +38,11 @@ const LoadingPlaceholder = styled(Placeholder)`
   &.is-appender {
     min-height: 0;
     margin-top: 20px;
-
-    &.not-editing {
-      /* display: none; */
-    }
   }
+`;
+
+const ErrorNotice = styled(Notice)`
+  width: 100%;
 `;
 
 function FetchSelectedStories({
@@ -52,6 +52,7 @@ function FetchSelectedStories({
   setSelectedStoriesObject,
   setIsFetchingSelectedStories,
 }) {
+  const [errorMsg, setErrorMsg] = useState('');
   let placeholderIcon = <BlockIcon icon={icon} showColors />;
 
   const fetchStories = async () => {
@@ -71,9 +72,7 @@ function FetchSelectedStories({
       );
       setIsFetchingSelectedStories(false);
     } catch (error) {
-      // Temporarily disabled, show a UI message.
-      // eslint-disable-next-line no-console
-      console.log(error);
+      error?.message && setErrorMsg(error.message);
     }
   };
 
@@ -89,9 +88,15 @@ function FetchSelectedStories({
       className="wp-block-web-stories-embed is-appender not-editing"
       instructions={false}
     >
-      <LoaderContainer>
-        {__('Fetching selected stories', 'web-stories')}
-      </LoaderContainer>
+      {!errorMsg ? (
+        <LoaderContainer>
+          {__('Fetching selected stories', 'web-stories')}
+        </LoaderContainer>
+      ) : (
+        <ErrorNotice status="error" isDismissible={false}>
+          {errorMsg}
+        </ErrorNotice>
+      )}
     </LoadingPlaceholder>
   );
 }
