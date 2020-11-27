@@ -42,6 +42,7 @@ use Google\Web_Stories\REST_API\Stories_Settings_Controller;
 use Google\Web_Stories\REST_API\Stories_Users_Controller;
 use Google\Web_Stories\Shortcode\Embed_Shortcode;
 use Google\Web_Stories\Block\Latest_Stories_Block;
+use Google\Web_Stories\Block\Selected_Stories_Block;
 
 /**
  * Plugin class.
@@ -102,6 +103,13 @@ class Plugin {
 	 * @var Latest_Stories_Block
 	 */
 	public $latest_stories_block;
+
+	/**
+	 * Latest Stories Block.
+	 *
+	 * @var Selected_Stories_Block
+	 */
+	public $selected_stories_block;
 
 	/**
 	 * Embed shortcode
@@ -169,6 +177,7 @@ class Plugin {
 	public function register() {
 		// Plugin compatibility / polyfills.
 		add_action( 'wp', [ $this, 'load_amp_plugin_compat' ] );
+		add_action( 'rest_dispatch_request', [ $this, 'load_amp_plugin_compat' ] );
 
 		// Settings.
 		$this->settings = new Settings();
@@ -207,10 +216,12 @@ class Plugin {
 		add_action( 'init', [ $this->embed_base, 'init' ], 9 );
 
 		// Gutenberg Blocks.
-		$this->embed_block          = new Embed_Block();
-		$this->latest_stories_block = new Latest_Stories_Block();
+		$this->embed_block            = new Embed_Block();
+		$this->latest_stories_block   = new Latest_Stories_Block();
+		$this->selected_stories_block = new Selected_Stories_Block();
 		add_action( 'init', [ $this->embed_block, 'init' ] );
 		add_action( 'init', [ $this->latest_stories_block, 'init' ] );
+		add_action( 'init', [ $this->selected_stories_block, 'init' ] );
 
 		// Embed shortcode.
 		$this->embed_shortcode = new Embed_Shortcode();
@@ -257,7 +268,8 @@ class Plugin {
 	 *
 	 * Loads a separate PHP file that allows defining functions in the global namespace.
 	 *
-	 * Runs on the 'wp' hook to ensure the WP environment has been fully set up,
+	 * Runs on the 'wp' and 'rest_dispatch_request' hook to ensure the WP environment has
+	 * been fully set up,
 	 *
 	 * @return void
 	 */
