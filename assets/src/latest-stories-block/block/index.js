@@ -44,7 +44,6 @@ const settings = {
   ],
   attributes,
   example: {
-    // TODO: Replace with something custom.
     attributes: {
       viewType: 'grid',
       title: __('Stories in AMP', 'web-stories'),
