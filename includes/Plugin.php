@@ -43,6 +43,7 @@ use Google\Web_Stories\REST_API\Stories_Users_Controller;
 use Google\Web_Stories\Shortcode\Embed_Shortcode;
 use Google\Web_Stories\Block\Latest_Stories_Block;
 use Google\Web_Stories\Block\Selected_Stories_Block;
+use Google\Web_Stories\Block\Web_Stories_Block;
 
 /**
  * Plugin class.
@@ -110,6 +111,13 @@ class Plugin {
 	 * @var Selected_Stories_Block
 	 */
 	public $selected_stories_block;
+
+	/**
+	 * Web Stories Block.
+	 *
+	 * @var Web_Stories_Block
+	 */
+	public $web_stories_block;
 
 	/**
 	 * Embed shortcode
@@ -219,9 +227,11 @@ class Plugin {
 		$this->embed_block            = new Embed_Block();
 		$this->latest_stories_block   = new Latest_Stories_Block();
 		$this->selected_stories_block = new Selected_Stories_Block();
+		$this->web_stories_block      = new Web_Stories_Block();
 		add_action( 'init', [ $this->embed_block, 'init' ] );
 		add_action( 'init', [ $this->latest_stories_block, 'init' ] );
 		add_action( 'init', [ $this->selected_stories_block, 'init' ] );
+		add_action( 'init', [ $this->web_stories_block, 'init' ] );
 
 		// Embed shortcode.
 		$this->embed_shortcode = new Embed_Shortcode();
