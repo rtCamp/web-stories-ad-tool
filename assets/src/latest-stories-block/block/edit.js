@@ -196,7 +196,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
       'is-style-default': !isStyleSquared && !isShowingStoryPlayer,
       'is-style-squared': isStyleSquared,
     },
-    'wp-block-web-stories-latest-stories latest-stories',
+    'web-stories',
     { [`is-view-type-${viewType}`]: viewType },
     { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
   );

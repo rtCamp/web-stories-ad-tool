@@ -104,12 +104,12 @@ const LatestStoriesInspectorControls = (props) => {
   return (
     <InspectorControls>
       <PanelBody
-        className="latest-stories-settings"
+        className="web-stories-settings"
         title={__('Story settings', 'web-stories')}
       >
         {'carousel' === viewType && (
           <Notice
-            className="latest-stories-carousel-message"
+            className="web-stories-carousel-message"
             isDismissible={false}
             status="warning"
           >
