@@ -43,7 +43,6 @@ use Google\Web_Stories\REST_API\Stories_Users_Controller;
 use Google\Web_Stories\Shortcode\Embed_Shortcode;
 use Google\Web_Stories\Block\Latest_Stories_Block;
 use Google\Web_Stories\Block\Selected_Stories_Block;
-use WP_Post;
 
 /**
  * Plugin class.
