@@ -32,7 +32,7 @@ const { name, category, attributes } = metadata;
 
 const settings = {
   title: __('Selected Web Stories', 'web-stories'),
-  description: __('Embed Selected web stories.', 'web-stories'),
+  description: __('Manually select web stories to show/embed.', 'web-stories'),
   category,
   icon,
   keywords: [
