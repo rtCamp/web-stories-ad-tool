@@ -1,0 +1,86 @@
+{
+  "name": "web-stories/block",
+  "category": "embed",
+  "attributes": {
+    "blockType": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "poster": {
+      "type": "string"
+    },
+    "width": {
+      "type": "number",
+      "default": 360
+    },
+    "height": {
+      "type": "number",
+      "default": 600
+    },
+    "align": {
+      "type": "string",
+      "default": "none"
+    },
+    "stories": {
+      "type": "array",
+      "default": []
+    },
+    "viewType": {
+      "type": "string",
+      "default": ""
+    },
+    "numOfStories": {
+      "type": "number",
+      "default": 5
+    },
+    "numOfColumns": {
+      "type": "number",
+      "default": 2
+    },
+    "orderByValue": {
+      "type": "string",
+      "default": ""
+    },
+    "isShowingTitle": {
+      "type": "boolean",
+      "default": true
+    },
+    "isShowingDate": {
+      "type": "boolean",
+      "default": false
+    },
+    "isShowingAuthor": {
+      "type": "boolean",
+      "default": false
+    },
+    "isShowingViewAll": {
+      "type": "boolean",
+      "default": false
+    },
+    "viewAllLinkLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "isShowingStoryPlayer": {
+      "type": "boolean",
+      "default": false
+    },
+    "imageOnRight": {
+      "type": "boolean",
+      "default": false
+    },
+    "authors": {
+      "type": "array",
+      "default": []
+    },
+    "isStyleSquared": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}
