@@ -272,7 +272,7 @@ LatestStoriesEdit.propTypes = {
     isShowingDate: PropTypes.bool,
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,
-    viewAllLinkLabel: PropTypes.bool,
+    viewAllLinkLabel: PropTypes.string,
     isShowingStoryPlayer: PropTypes.bool,
     carouselSettings: PropTypes.object,
     authors: PropTypes.array,

@@ -26,10 +26,11 @@
 
 namespace Google\Web_Stories\Block;
 
-use Google\Web_Stories\Embed_Base;
-use Google\Web_Stories\Tracking;
-use Google\Web_Stories\Story_Post_Type;
 use Google\Web_Stories\Media;
+use Google\Web_Stories\Story_Query;
+use Google\Web_Stories\Tracking;
+use Google\Web_Stories\Embed_Base;
+use Google\Web_Stories\Story_Post_Type;
 
 /**
  * Latest Stories block class.
@@ -41,13 +42,6 @@ class Latest_Stories_Block extends Embed_Base {
 	 * @var string
 	 */
 	const SCRIPT_HANDLE = 'latest-web-stories-block';
-
-	/**
-	 * Style handle.
-	 *
-	 * @var string
-	 */
-	const STYLE_HANDLE = 'latest-stories-block-style';
 
 	/**
 	 * Block name.
@@ -73,15 +67,6 @@ class Latest_Stories_Block extends Embed_Base {
 	public function init() {
 		$this->register_script( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE, Tracking::SCRIPT_HANDLE ] );
 		$this->register_style( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE ] );
-		wp_register_script( 'amp-carousel-script', 'https://cdn.ampproject.org/v0/amp-carousel-0.1.js', [], 'v0', true );
-
-		wp_register_style(
-			self::STYLE_HANDLE,
-			WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/latest-stories.css',
-			[],
-			'v0',
-			false
-		);
 
 		wp_localize_script(
 			self::SCRIPT_HANDLE,
@@ -162,7 +147,6 @@ class Latest_Stories_Block extends Embed_Base {
 				'render_callback' => [ $this, 'render_block' ],
 				'editor_script'   => self::SCRIPT_HANDLE,
 				'editor_style'    => self::SCRIPT_HANDLE,
-				'style'           => self::STYLE_HANDLE,
 			]
 		);
 	}
@@ -212,99 +196,21 @@ class Latest_Stories_Block extends Embed_Base {
 			return '';
 		}
 
-		$content              = '';
-		$block_classes        = 'web-stories ';
-		$block_classes        = ( ! empty( $attributes['isStyleSquared'] ) || ! empty( $attributes['isShowingStoryPlayer'] ) ) ? $block_classes . 'is-style-squared ' : $block_classes . 'is-style-default ';
-		$single_story_classes = ( empty( $attributes['isShowingStoryPlayer'] ) ) ? 'web-stories__story-wrapper has-poster ' : 'web-stories__story-wrapper ';
-		$block_style          = '';
+		$story_attributes = [
+			'view_type'                 => ! empty( $attributes['viewType'] ) ? $attributes['viewType'] : 'circles',
+			'number_of_columns'         => ! empty( $attributes['numOfColumns'] ) ? $attributes['numOfColumns'] : 2,
+			'show_title'                => ! empty( $attributes['isShowingTitle'] ) ? $attributes['isShowingTitle'] : false,
+			'show_author'               => ! empty( $attributes['isShowingAuthor'] ) ? $attributes['isShowingAuthor'] : false,
+			'show_date'                 => ! empty( $attributes['isShowingDate'] ) ? $attributes['isShowingDate'] : false,
+			'show_story_poster'         => ! empty( $attributes['isShowingStoryPlayer'] ) ? $attributes['isShowingStoryPlayer'] : true,
+			'show_stories_archive_link' => ! empty( $attributes['isShowingViewAll'] ) ? $attributes['isShowingViewAll'] : false,
+			'stories_archive_label'     => ! empty( $attributes['viewAllLinkLabel'] ) ? $attributes['viewAllLinkLabel'] : __( 'View all stories', 'web-stories' ),
+			'list_view_image_alignment' => ! empty( $attributes['imageOnRight'] ) ? $attributes['imageOnRight'] : 'left',
+		];
 
-		$block_classes  .= ( ! empty( $attributes['viewType'] ) ) ? " is-view-type-{$attributes['viewType']}" : ' is-view-type-grid';
-		$alignment_class = ( ! empty( $attributes['align'] ) ) ? " align{$attributes['align']}" : ' alignnone';
+		$stories = new Story_Query( $story_attributes, $this->get_query_args() );
 
-		if ( $this->is_view_type( 'grid' ) ) {
-			$num_of_columns = ( ! empty( $attributes['numOfColumns'] ) ) ? absint( $attributes['numOfColumns'] ) : 2;
-			$block_classes .= " columns-{$num_of_columns}";
-		}
-
-		$query_args    = $this->get_query_args();
-		$stories_query = new \WP_Query( $query_args );
-
-		$is_grid_view = $this->is_view_type( 'grid' );
-
-		if ( $stories_query->have_posts() ) :
-
-			ob_start();
-			?>
-			<div class="<?php echo( esc_attr( $alignment_class ) ); ?>">
-				<div
-					class="<?php echo( esc_attr( $block_classes ) ); ?>"
-					style="<?php echo( esc_attr( $block_style ) ); ?>"
-				>
-					<?php
-					if ( $this->is_view_type( 'carousel' ) ) :
-						?>
-						<amp-carousel
-							width="1"
-							height="1"
-							layout="intrinsic"
-							type="carousel"
-							role="region"
-							aria-label="Basic carousel"
-							<?php
-							if ( ! empty( $attributes['carouselSettings']['autoplay'] ) && ( true === $attributes['carouselSettings']['autoplay'] ) ) {
-								echo( 'autoplay' );
-							}
-							?>
-							<?php
-							if ( ! empty( $attributes['carouselSettings']['delay'] ) ) {
-								$delay = absint( $attributes['carouselSettings']['delay'] ) * 1000;
-								printf( "delay='%s'", esc_attr( $delay ) );
-							}
-							?>
-						>
-						<?php
-					endif;
-
-					while ( $stories_query->have_posts() ) :
-						$stories_query->the_post();
-
-						$current_post_id = get_the_ID();
-						$story_attrs     = $this->get_story_attrs( $current_post_id, $single_story_classes );
-
-						if ( ( ! $is_grid_view ) || ( empty( $attributes['isShowingStoryPlayer'] ) ) ) :
-							if (
-								( function_exists( 'amp_is_request' ) && ! amp_is_request() ) ||
-								( function_exists( 'is_amp_endpoint' ) && ! is_amp_endpoint() )
-							) {
-								wp_enqueue_script( 'amp-runtime-script', 'https://cdn.ampproject.org/v0.js', [], 'v0', false );
-								wp_enqueue_script( 'amp-story-player-script', 'https://cdn.ampproject.org/v0/amp-story-player-0.1.js', [], 'v0', false );
-								wp_enqueue_script( 'amp-bind-script', 'https://cdn.ampproject.org/v0/amp-bind-0.1.js', [], 'v0', false );
-								wp_enqueue_script( 'amp-carousel-script', 'https://cdn.ampproject.org/v0/amp-carousel-0.1.js', [], 'v0', false );
-							}
-
-							echo( $this->render_story_with_poster( $story_attrs, $single_story_classes, $attributes ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						else :
-							echo( $this->render( $story_attrs ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						endif;
-					endwhile;
-
-					if ( $this->is_view_type( 'carousel' ) ) :
-						?>
-						</amp-carousel>
-						<?php
-					endif;
-					?>
-				</div>
-				<?php $this->maybe_render_archive_link( $attributes ); ?>
-			</div>
-			<?php
-
-			$content = (string) ob_get_clean();
-		endif;
-
-		wp_reset_postdata();
-
-		return $content;
+		return $stories->render();
 	}
 
 	/**
@@ -332,7 +238,6 @@ class Latest_Stories_Block extends Embed_Base {
 			'post_status'      => 'publish',
 			'suppress_filters' => false,
 			'no_found_rows'    => true,
-			'fields'           => 'ids',
 		];
 		$order_by_value = ( ! empty( $attributes['orderByValue'] ) ) ? $attributes['orderByValue'] : '';
 		$num_of_stories = ( ! empty( $attributes['numOfStories'] ) ) ? absint( $attributes['numOfStories'] ) : '';
