@@ -26,7 +26,6 @@ import { ReactComponent as icon } from './icon.svg';
 import metadata from './block';
 import edit from './edit';
 import save from './save';
-import transforms from './transforms';
 
 const { name, category, attributes } = metadata;
 
@@ -61,7 +60,6 @@ const settings = {
   },
   edit,
   save,
-  transforms,
 };
 
 export { metadata, name, icon, settings };
