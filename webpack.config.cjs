@@ -290,7 +290,6 @@ const activationNotice = {
   },
 };
 
-module.exports = [storiesEditor, dashboard, storyEmbedBlock, latestStoriesBlock, activationNotice];
 module.exports = [
   storiesEditor,
   dashboard,
