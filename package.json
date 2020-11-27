@@ -28,6 +28,7 @@
     "commander": "bin/commander.js"
   },
   "dependencies": {
+    "@ap.cx/hues": "^2.2.0",
     "@wordpress/api-fetch": "^3.19.1",
     "@wordpress/block-editor": "^5.0.2",
     "@wordpress/blocks": "^6.23.0",
@@ -41,10 +42,12 @@
     "big.js": "^6.0.2",
     "classnames": "^2.2.6",
     "colorthief": "^2.3.2",
+    "date-fns": "^2.16.1",
     "date-fns-tz": "^1.0.12",
     "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
     "draft-js-import-html": "^1.4.1",
+    "draftjs-filters": "^2.5.0",
     "flagged": "^2.0.1",
     "history": "^5.0.0",
     "mousetrap": "^1.6.5",
