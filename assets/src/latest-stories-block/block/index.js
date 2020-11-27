@@ -26,7 +26,6 @@ import { ReactComponent as icon } from './icon.svg';
 import metadata from './block';
 import edit from './edit';
 import save from './save';
-import transforms from './transforms';
 
 const { name, category, attributes } = metadata;
 
@@ -45,7 +44,6 @@ const settings = {
   ],
   attributes,
   example: {
-    // TODO: Replace with something custom.
     attributes: {
       viewType: 'grid',
       title: __('Stories in AMP', 'web-stories'),
@@ -61,7 +59,6 @@ const settings = {
   },
   edit,
   save,
-  transforms,
 };
 
 export { metadata, name, icon, settings };
