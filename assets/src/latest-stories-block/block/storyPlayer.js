@@ -38,10 +38,10 @@ function StoryPlayer({
   isShowingTitle,
   imageOnRight,
 }) {
-  const singleStoryClasses = classNames('latest-stories__story-wrapper', {
+  const singleStoryClasses = classNames('web-stories__story-wrapper', {
     'has-poster': !isShowingStoryPlayer,
   });
-  const imageAlignmentClass = classNames('latest-stories__inner-wrapper', {
+  const imageAlignmentClass = classNames('web-stories__inner-wrapper', {
     [`image-align-right`]: imageOnRight,
     [`image-align-left`]: !imageOnRight,
   });
@@ -61,12 +61,12 @@ function StoryPlayer({
   }, [isShowingStoryPlayer]);
 
   return (
-    <div className="latest-stories__controller">
+    <div className="web-stories__controller">
       <div className={singleStoryClasses}>
         <div className={imageAlignmentClass}>
           {!isShowingStoryPlayer ? (
             <div
-              className="latest-stories__story-placeholder"
+              className="web-stories__story-placeholder"
               style={{ backgroundImage: `url(${poster}` }}
             />
           ) : (
@@ -84,7 +84,7 @@ function StoryPlayer({
             </amp-story-player>
           )}
           {hasContentOverlay && (
-            <div className="story-content-overlay latest-stories__story-content-overlay">
+            <div className="story-content-overlay web-stories__story-content-overlay">
               {isShowingTitle && (
                 <div className="story-content-overlay__title">
                   {title ? <RawHTML>{title}</RawHTML> : ''}

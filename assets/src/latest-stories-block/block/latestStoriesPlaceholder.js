@@ -28,7 +28,7 @@ import { _x } from '@wordpress/i18n';
 const LatestStoriesPlaceholder = () => {
   return (
     <Placeholder
-      className="wp-block-web-stories-latest-stories placeholder"
+      className="web-stories placeholder"
       instructions={_x(
         'Loading Stories…',
         'Instructional message for users',
