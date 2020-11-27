@@ -41,13 +41,6 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 	const SCRIPT_HANDLE = 'selected-web-stories-block';
 
 	/**
-	 * Style handle.
-	 *
-	 * @var string
-	 */
-	const STYLE_HANDLE = 'selected-stories-block-style';
-
-	/**
 	 * Block name.
 	 *
 	 * @var string
@@ -87,14 +80,6 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 
 		$this->register_script( self::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE, Tracking::SCRIPT_HANDLE ] );
 		$this->register_style( parent::SCRIPT_HANDLE, [ self::STORY_PLAYER_HANDLE ] );
-
-		wp_register_style(
-			parent::STYLE_HANDLE,
-			WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/latest-stories.css',
-			[],
-			'v0',
-			false
-		);
 
 		wp_localize_script(
 			self::SCRIPT_HANDLE,
@@ -163,7 +148,6 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 				'render_callback' => [ $this, 'render_block' ],
 				'editor_script'   => self::SCRIPT_HANDLE,
 				'editor_style'    => self::SCRIPT_HANDLE,
-				'style'           => self::STYLE_HANDLE,
 			]
 		);
 	}
@@ -232,7 +216,6 @@ class Selected_Stories_Block extends Latest_Stories_Block {
 			'posts_per_page' => $this->max_num_of_stories,
 			'post_status'    => 'publish',
 			'no_found_rows'  => true,
-			'fields'         => 'ids',
 			'post__in'       => $attributes['stories'],
 			'orderby'        => 'post__in',
 		];
