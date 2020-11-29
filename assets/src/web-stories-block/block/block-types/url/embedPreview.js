@@ -34,48 +34,52 @@ import {
  */
 import StoryPlayer from './storyPlayer';
 
-function EmbedPreview({ url, title, poster, isSelected, width, height }, ref) {
-  const [interactive, setInteractive] = useState(false);
+const EmbedPreview = forwardRef(
+  ({ url, title, poster, isSelected, width, height }, ref) => {
+    const [interactive, setInteractive] = useState(false);
 
-  useEffect(() => {
-    if (!isSelected && interactive) {
-      setInteractive(false);
-    }
-  }, [isSelected, interactive, setInteractive]);
+    useEffect(() => {
+      if (!isSelected && interactive) {
+        setInteractive(false);
+      }
+    }, [isSelected, interactive, setInteractive]);
 
-  const hideOverlay = useCallback(() => setInteractive(true), [setInteractive]);
+    const hideOverlay = useCallback(() => setInteractive(true), [
+      setInteractive,
+    ]);
 
-  // Disabled because the overlay div doesn't actually have a role or functionality
-  // as far as the user is concerned. We're just catching the first click so that
-  // the block can be selected without interacting with the embed preview that the overlay covers.
-  /* eslint-disable jsx-a11y/no-static-element-interactions */
-  return (
-    <div
-      className="web-stories-embed-preview wp-block-embed__wrapper"
-      style={{
-        '--aspect-ratio': 0 !== width ? height / width : 1,
-        '--width': `${width}px`,
-        '--height': `${height}px`,
-      }}
-    >
-      <StoryPlayer
-        url={url}
-        title={title}
-        poster={poster}
-        ref={ref}
-        onFocus={hideOverlay}
-      />
-      {!interactive && (
-        <div
-          className="web-stories-embed-preview-overlay"
-          data-testid="embed-preview-overlay"
-          onMouseUp={hideOverlay}
+    // Disabled because the overlay div doesn't actually have a role or functionality
+    // as far as the user is concerned. We're just catching the first click so that
+    // the block can be selected without interacting with the embed preview that the overlay covers.
+    /* eslint-disable jsx-a11y/no-static-element-interactions */
+    return (
+      <div
+        className="web-stories-embed-preview wp-block-embed__wrapper"
+        style={{
+          '--aspect-ratio': 0 !== width ? height / width : 1,
+          '--width': `${width}px`,
+          '--height': `${height}px`,
+        }}
+      >
+        <StoryPlayer
+          url={url}
+          title={title}
+          poster={poster}
+          ref={ref}
+          onFocus={hideOverlay}
         />
-      )}
-    </div>
-  );
-  /* eslint-enable jsx-a11y/no-static-element-interactions */
-}
+        {!interactive && (
+          <div
+            className="web-stories-embed-preview-overlay"
+            data-testid="embed-preview-overlay"
+            onMouseUp={hideOverlay}
+          />
+        )}
+      </div>
+    );
+    /* eslint-enable jsx-a11y/no-static-element-interactions */
+  }
+);
 
 EmbedPreview.propTypes = {
   url: PropTypes.string.isRequired,
@@ -86,6 +90,4 @@ EmbedPreview.propTypes = {
   height: PropTypes.number.isRequired,
 };
 
-const EmbedPreviewWithRef = forwardRef(EmbedPreview);
-
-export default EmbedPreviewWithRef;
+export default EmbedPreview;
