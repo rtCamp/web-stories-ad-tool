@@ -136,6 +136,11 @@
   border-color: #333;
 }
 
+/* Carousel view type styles */
+.web-stories-list.is-view-type-carousel .slick-track > * + * {
+  margin-left: 16px;
+}
+
 /* Stories archive link styles */
 .web-stories-list__archive-link {
   margin-top: 16px;

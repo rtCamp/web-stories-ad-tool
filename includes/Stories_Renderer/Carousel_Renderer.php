@@ -57,10 +57,10 @@ class Carousel_Renderer extends Renderer {
 		parent::assets();
 
 		if ( ! $this->is_amp_request() ) {
-			// Enqueue amp runtime script and amp-carousel script to show amp-carousel on non AMP pages.
-			wp_register_script( 'amp-runtime-script', 'https://cdn.ampproject.org/v0.js', [], 'v0', true );
-			wp_register_script( 'amp-carousel-script', 'https://cdn.ampproject.org/v0/amp-carousel-0.2.js', [ 'amp-runtime-script' ], 'v0', true );
-			wp_enqueue_script( 'amp-carousel-script' );
+			wp_register_script( 'slick-js', WEBSTORIES_PLUGIN_DIR_URL . 'lib/slick/slick.min.js', [ 'jquery' ], 'v1.8.0', true );
+			wp_enqueue_style( 'slick-css', WEBSTORIES_PLUGIN_DIR_URL . 'lib/slick/slick.css', [], 'v1.8.0' );
+			wp_enqueue_style( 'slick-theme-css', WEBSTORIES_PLUGIN_DIR_URL . 'lib/slick/slick-theme.css', [], 'v1.8.0' );
+			wp_enqueue_script( 'web-stories-carousel', WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/web-stories-carousel.js', [ 'slick-js', 'jquery' ], 'v0', true );
 		}
 	}
 
@@ -82,26 +82,34 @@ class Carousel_Renderer extends Renderer {
 
 		ob_start();
 		?>
-		<div>
+		<div class="alignwide">
 			<div
 				class="<?php echo esc_attr( $container_classes ); ?>"
 				style="<?php echo esc_attr( $container_style ); ?>"
 			>
-				<amp-carousel
-					width="1"
-					height="1"
-					layout="intrinsic"
-					type="carousel"
-					role="region"
-					aria-label="<?php esc_attr_e( 'Basic carousel', 'web-stories' ); ?>"
-				>
-					<?php
-					foreach ( $this->story_posts as $story ) {
-						$this->render_single_story_content();
-						$this->next();
-					}
+			<?php if ( $this->is_amp_request() ) : ?>
+					<amp-carousel
+						width="1"
+						height="1"
+						layout="intrinsic"
+						type="carousel"
+						role="region"
+						aria-label="<?php esc_attr_e( 'Basic carousel', 'web-stories' ); ?>"
+					>
+				<?php else : ?>
+					<div class="web-stories-list__carousel-wrapper">
+					<?php 
+				endif;
+				foreach ( $this->story_posts as $story ) {
+					$this->render_single_story_content();
+					$this->next();
+				}
+				if ( $this->is_amp_request() ) : 
 					?>
-				</amp-carousel>
+					</amp-carousel>
+				<?php else : ?>
+					</div>
+				<?php endif; ?>
 			</div>
 			<?php $this->maybe_render_archive_link(); ?>
 		</div>
