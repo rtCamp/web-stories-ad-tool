@@ -25,14 +25,16 @@ import PropTypes from 'prop-types';
 import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
-import { ResizableBox } from '@wordpress/components';
+import { ResizableBox, ToolbarGroup } from '@wordpress/components';
 import { useViewportMatch } from '@wordpress/compose';
 import { useDispatch, useSelect } from '@wordpress/data';
+import { BlockControls } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
 import { trackEvent } from '../../../../tracking';
+import BlockTypeSwitcher from '../../blockTypeSwitcher';
 import EmbedControls from './embedControls';
 import EmbedLoadinng from './embedLoading';
 import EmbedPlaceholder from './embedPlaceholder';
@@ -170,15 +172,25 @@ function StoryURLEdit({
 
   if (showPlaceholder) {
     return (
-      <EmbedPlaceholder
-        icon={icon}
-        label={label}
-        value={localURL}
-        onSubmit={onSubmit}
-        onChange={(event) => setLocalURL(event.target.value)}
-        cannotEmbed={cannotEmbed}
-        errorMessage={storyData?.message}
-      />
+      <>
+        <BlockControls>
+          <ToolbarGroup>
+            <BlockTypeSwitcher
+              selectedBlockType={blockType}
+              setAttributes={setAttributes}
+            />
+          </ToolbarGroup>
+        </BlockControls>
+        <EmbedPlaceholder
+          icon={icon}
+          label={label}
+          value={localURL}
+          onSubmit={onSubmit}
+          onChange={(event) => setLocalURL(event.target.value)}
+          cannotEmbed={cannotEmbed}
+          errorMessage={storyData?.message}
+        />
+      </>
     );
   }
 
