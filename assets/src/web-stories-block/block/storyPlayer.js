@@ -67,7 +67,9 @@ function StoryPlayer({
           {!isShowingStoryPlayer ? (
             <div
               className="web-stories__story-placeholder"
-              style={{ backgroundImage: `url(${poster}` }}
+              style={{
+                backgroundImage: poster ? `url('${poster}')` : undefined,
+              }}
             />
           ) : (
             <amp-story-player height="430" width="285" ref={ref}>
