@@ -24,7 +24,11 @@ import classNames from 'classnames';
  * WordPress dependencies
  */
 import { useRef, useEffect, RawHTML } from '@wordpress/element';
-import { dateI18n, format, __experimentalGetSettings } from '@wordpress/date';
+
+/**
+ * Internal dependencies
+ */
+import StoryContentOverlay from './components/storyContentOverlay';
 
 function StoryPlayer({
   url,
@@ -46,7 +50,6 @@ function StoryPlayer({
     [`image-align-left`]: !imageOnRight,
   });
   const hasContentOverlay = isShowingTitle || isShowingAuthor || isShowingDate;
-  const dateFormat = __experimentalGetSettings().formats.date;
   const ref = useRef();
 
   useEffect(() => {
@@ -84,26 +87,14 @@ function StoryPlayer({
             </amp-story-player>
           )}
           {hasContentOverlay && (
-            <div className="story-content-overlay web-stories__story-content-overlay">
-              {isShowingTitle && (
-                <div className="story-content-overlay__title">
-                  {title ? <RawHTML>{title}</RawHTML> : ''}
-                </div>
-              )}
-              <div className="story-content-overlay__author-date">
-                {isShowingAuthor && (
-                  <div className="story-content-overlay__author">{`By ${author}`}</div>
-                )}
-                {isShowingDate && (
-                  <time
-                    dateTime={format('c', date)}
-                    className="story-content-overlay__date"
-                  >
-                    {`On ${dateI18n(dateFormat, date)}`}
-                  </time>
-                )}
-              </div>
-            </div>
+            <StoryContentOverlay
+              isShowingTitle={isShowingTitle}
+              title={title}
+              isShowingAuthor={isShowingAuthor}
+              author={author}
+              isShowingDate={isShowingDate}
+              date={date}
+            />
           )}
         </div>
       </div>
