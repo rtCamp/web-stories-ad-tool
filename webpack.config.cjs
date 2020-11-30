@@ -300,8 +300,7 @@ const selectedStoriesBlock = {
 const webStoriesBlock = {
   ...sharedConfig,
   entry: {
-    'web-stories-block':
-      './assets/src/web-stories-block/index.js',
+    'web-stories-block': './assets/src/web-stories-block/index.js',
   },
   plugins: [
     process.env.BUNDLE_ANALZYER && new BundleAnalyzerPlugin(),

@@ -72,7 +72,7 @@ const SelectedStoriesEdit = ({
     false
   );
 
-  const label = __('Selected Web Stories', 'web-stories');
+  const label = __('Web Stories', 'web-stories');
   const { config } = global.webStoriesSelectedBlockSettings;
 
   const willShowStoryPlayer =
