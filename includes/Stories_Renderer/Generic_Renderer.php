@@ -64,7 +64,7 @@ class Generic_Renderer extends Renderer {
 
 		parent::assets();
 
-		if ( $this->is_view_type( 'grid' ) && ! $this->is_amp_request() && true !== $this->attributes['show_story_poster'] ) {
+		if ( $this->is_view_type( 'grid' ) && ! $this->is_amp_request() && true === $this->attributes['show_story_player'] ) {
 			$this->enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
 			$this->enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
 		}
@@ -86,16 +86,13 @@ class Generic_Renderer extends Renderer {
 		}
 
 		parent::render( $args );
+		$block_classes     = $this->get_block_classes();
 		$container_classes = $this->get_container_classes();
-		$container_style   = $this->get_container_styles();
 
 		ob_start();
 		?>
-		<div>
-			<div
-				class="<?php echo esc_attr( $container_classes ); ?>"
-				style="<?php echo esc_attr( $container_style ); ?>"
-			>
+		<div class="<?php echo esc_attr( $container_classes ); ?>">
+			<div class="<?php echo esc_attr( $block_classes ); ?>">
 				<?php
 				foreach ( $this->story_posts as $story ) {
 					$this->render_single_story_content();

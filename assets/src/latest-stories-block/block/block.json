@@ -42,14 +42,6 @@
       "type": "boolean",
       "default": false
     },
-    "carouselSettings": {
-      "type": "object",
-      "default": {
-        "autoplay": false,
-        "delay": "",
-        "loop": false
-      }
-    },
     "imageOnRight": {
       "type": "boolean",
       "default": false
