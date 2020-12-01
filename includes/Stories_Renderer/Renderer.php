@@ -300,21 +300,37 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	}
 
 	/**
-	 * Gets the classes for renderer container.
+	 * Gets the classes for the block wrapper.
 	 *
 	 * @return string
 	 */
 	protected function get_container_classes() {
 
 		$container_classes   = [];
-		$container_classes[] = 'web-stories-list';
-		$container_classes[] = ( ! empty( $this->attributes['view_type'] ) ) ? sprintf( 'is-view-type-%1$s', $this->attributes['view_type'] ) : 'is-view-type-circles';
 		$container_classes[] = ( ! empty( $this->attributes['align'] ) ) ? sprintf( 'align%1$s', $this->attributes['align'] ) : 'alignnone';
-		$container_classes[] = ( ! empty( $this->attributes['class'] ) ) ? $this->attributes['class'] : '';
 
 		$container_classes = array_filter( $container_classes );
 
 		return implode( ' ', $container_classes );
+	}
+
+	/**
+	 * Gets the classes for renderer container.
+	 *
+	 * @return string
+	 */
+	protected function get_block_classes() {
+
+		$block_classes   = [];
+		$block_classes[] = 'web-stories-list';
+		$block_classes[] = ( ! empty( $this->attributes['has_square_corners'] ) ) ? 'is-style-squared' : 'is-style-default';
+		$block_classes[] = ( ! empty( $this->attributes['view_type'] ) ) ? sprintf( 'is-view-type-%1$s', $this->attributes['view_type'] ) : 'is-view-type-circles';
+		$block_classes[] = ( ! empty( $this->attributes['number_of_columns'] ) ) ? sprintf( 'columns-%1$s', $this->attributes['number_of_columns'] ) : 'columns-3';
+		$block_classes[] = ( ! empty( $this->attributes['class'] ) ) ? $this->attributes['class'] : '';
+
+		$block_classes = array_filter( $block_classes );
+
+		return implode( ' ', $block_classes );
 	}
 
 	/**
@@ -331,7 +347,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 			$single_story_classes[] = 'has-poster';
 		}
 
-		if ( $this->is_view_type( 'grid' ) && true === $this->attributes['show_story_poster'] ) {
+		if ( $this->is_view_type( 'grid' ) && true !== $this->attributes['show_story_player'] ) {
 			$single_story_classes[] = 'has-poster';
 		}
 
@@ -347,34 +363,13 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	}
 
 	/**
-	 * Gets the container style attributes.
-	 *
-	 * @return string
-	 */
-	protected function get_container_styles() {
-
-		$container_style = '';
-
-		if ( true === $this->is_view_type( 'grid' ) ) {
-			$container_style = sprintf( 'grid-template-columns:repeat(%1$s, 1fr);', $this->attributes['number_of_columns'] );
-		}
-
-		/**
-		 * Filters the web stories renderer container style.
-		 *
-		 * @param string $class Container style.
-		 */
-		return apply_filters( 'web_stories_renderer_container_style', $container_style );
-	}
-
-	/**
 	 * Render story markup.
 	 *
 	 * @return void
 	 */
 	public function render_single_story_content() {
 		$single_story_classes = $this->get_single_story_classes();
-		$show_story_player    = ( true !== $this->attributes['show_story_poster'] && $this->is_view_type( 'grid' ) );
+		$show_story_player    = ( true === $this->attributes['show_story_player'] && $this->is_view_type( 'grid' ) );
 
 		?>
 
@@ -399,23 +394,23 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	 */
 	protected function render_story_with_poster() {
 
-		$story_data                = $this->current();
-		$height                    = ( ! empty( $this->height ) ) ? absint( $this->height ) : 600;
-		$width                     = ( ! empty( $this->width ) ) ? absint( $this->width ) : 360;
-		$poster_url                = ( 'circles' === $this->get_view_type() ) ? $story_data->get_poster_square() : $story_data->get_poster_portrait();
-		$poster_style              = sprintf( 'background-image: url(%1$s);', esc_url_raw( $poster_url ) );
-		$list_view_image_alignment = '';
+		$story_data            = $this->current();
+		$height                = ( ! empty( $this->height ) ) ? absint( $this->height ) : 600;
+		$width                 = ( ! empty( $this->width ) ) ? absint( $this->width ) : 360;
+		$poster_url            = ( 'circles' === $this->get_view_type() ) ? $story_data->get_poster_square() : $story_data->get_poster_portrait();
+		$poster_style          = sprintf( 'background-image: url(%1$s);', esc_url_raw( $poster_url ) );
+		$inner_wrapper_classes = 'web-stories-list__inner-wrapper ';
 
 		if ( true === $this->is_view_type( 'carousel' ) ) {
-			$poster_style = sprintf( '%1$s width: %2$spx; height: %3$spx', $poster_style, (string) $width, (string) $height );
+			$poster_style = sprintf( '%1$s', $poster_style );
 		}
 
 		if ( ! empty( $this->attributes['list_view_image_alignment'] ) ) {
-			$list_view_image_alignment = sprintf( 'image-align-%1$s', $this->attributes['list_view_image_alignment'] );
+			$inner_wrapper_classes .= sprintf( 'image-align-%1$s', $this->attributes['list_view_image_alignment'] );
 		}
 
 		?>
-		<a class="<?php echo esc_attr( $list_view_image_alignment ); ?>"
+		<a class="<?php echo esc_attr( $inner_wrapper_classes ); ?>"
 			href="<?php echo esc_url( $story_data->get_url() ); ?>"
 		>
 			<div
@@ -444,7 +439,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		$poster_style            = '';
 
 		if ( $this->is_amp_request() ) {
-			$story_player_attributes = sprintf( 'height=%d width=%d', $height, $width );
+			$story_player_attributes = sprintf( 'height=%d width=%d layout="responsive"', esc_attr( $height ), esc_attr( $width ) );
 		}
 
 		if ( ! empty( $poster_image_url ) ) {
@@ -453,7 +448,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 		?>
 		<amp-story-player style="<?php echo esc_attr( $player_style ); ?>"
-			<?php echo( esc_attr( $story_player_attributes ) ); ?>>
+			<?php echo( $story_player_attributes ); ?>>
 			<a href="<?php echo esc_url( $story_data->get_url() ); ?>" style="<?php echo esc_attr( $poster_style ); ?>">
 				<?php echo esc_html( $story_data->get_title() ); ?>
 			</a>

@@ -147,7 +147,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 			[
 				'view_type'         => 'grid',
 				'class'             => '',
-				'show_story_poster' => false,
+				'show_story_player' => true,
 			]
 		);
 
@@ -159,7 +159,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 		$this->call_private_method( $renderer, 'render_story_with_story_player' );
 		$output = ob_get_clean();
 
-		$this->assertContains( '<amp-story-player style="width: 285px;height: 430px"', $output );
+		$this->assertContains( '<amp-story-player style="width: 285px;height: 475px"', $output );
 		$this->assertContains( '--story-player-poster: url(www.example.com/image.jpg)', $output );
 		$this->assertContains( 'Story Title', $output );
 	}
@@ -173,7 +173,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 			[
 				'view_type'                 => 'list',
 				'class'                     => '',
-				'show_story_poster'         => true,
+				'show_story_player'         => false,
 				'list_view_image_alignment' => 'left',
 			]
 		);
@@ -222,33 +222,13 @@ class Renderer extends \WP_UnitTestCase_Base {
 	}
 
 	/**
-	 * @covers ::get_container_styles
-	 */
-	public function test_get_container_styles() {
-
-		$this->stories->method( 'get_story_attributes' )->willReturn(
-			[
-				'view_type'         => 'grid',
-				'number_of_columns' => '3',
-			]
-		);
-
-		$renderer = new \Google\Web_Stories\Stories_Renderer\Generic_Renderer( $this->stories );
-
-		$expected = 'grid-template-columns:repeat(3, 1fr);';
-		$output   = $this->call_private_method( $renderer, 'get_container_styles' );
-
-		$this->assertEquals( $expected, $output );
-	}
-
-	/**
 	 * @covers ::get_single_story_classes
 	 */
 	public function test_get_single_story_classes() {
 
 		$this->stories->method( 'get_story_attributes' )->willReturn(
 			[
-				'show_story_poster' => true,
+				'show_story_player' => false,
 				'view_type'         => 'circles',
 			]
 		);
@@ -270,7 +250,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 			[
 				'view_type'         => 'circles',
 				'class'             => 'test',
-				'show_story_poster' => false,
+				'show_story_player' => true,
 			]
 		);
 
@@ -290,7 +270,7 @@ class Renderer extends \WP_UnitTestCase_Base {
 
 		$this->stories->method( 'get_story_attributes' )->willReturn(
 			[
-				'show_story_poster'         => false,
+				'show_story_player'         => true,
 				'show_stories_archive_link' => true,
 				'stories_archive_label'     => 'View All Stories',
 			]

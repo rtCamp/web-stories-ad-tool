@@ -67,7 +67,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     isShowingViewAll,
     viewAllLinkLabel,
     isShowingStoryPlayer,
-    carouselSettings,
     authors,
     imageOnRight,
     isStyleSquared,
@@ -196,7 +195,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
       'is-style-default': !isStyleSquared && !isShowingStoryPlayer,
       'is-style-squared': isStyleSquared,
     },
-    'web-stories',
+    'web-stories-list',
     { [`is-view-type-${viewType}`]: viewType },
     { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
   );
@@ -218,7 +217,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         isShowingViewAll={isShowingViewAll}
         viewAllLinkLabel={viewAllLinkLabel}
         isShowingStoryPlayer={isShowingStoryPlayer}
-        carouselSettings={carouselSettings}
         authors={authors}
         imageOnRight={imageOnRight}
         isStyleSquared={isStyleSquared}
@@ -253,7 +251,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
             })}
           </div>
           {isShowingViewAll && (
-            <div className="latest-stories__archive-link">{viewAllLabel}</div>
+            <div className="web-stories-list__archive-link">{viewAllLabel}</div>
           )}
         </div>
       )}
@@ -274,7 +272,6 @@ LatestStoriesEdit.propTypes = {
     isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.string,
     isShowingStoryPlayer: PropTypes.bool,
-    carouselSettings: PropTypes.object,
     authors: PropTypes.array,
     imageOnRight: PropTypes.bool,
     isStyleSquared: PropTypes.bool,

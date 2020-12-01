@@ -80,16 +80,13 @@ class Carousel_Renderer extends Renderer {
 		}
 
 		parent::render( $args );
+		$block_classes     = $this->get_block_classes();
 		$container_classes = $this->get_container_classes();
-		$container_style   = $this->get_container_styles();
 
 		ob_start();
 		?>
-		<div>
-			<div
-				class="<?php echo esc_attr( $container_classes ); ?>"
-				style="<?php echo esc_attr( $container_style ); ?>"
-			>
+		<div class="<?php echo esc_attr( $container_classes ); ?>">
+			<div class="<?php echo esc_attr( $block_classes ); ?>">
 				<amp-carousel
 					width="1"
 					height="1"

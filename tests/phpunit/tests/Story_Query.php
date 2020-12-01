@@ -78,7 +78,7 @@ class Story_Query extends \WP_UnitTestCase {
 			'show_title'                => false,
 			'show_author'               => false,
 			'show_date'                 => false,
-			'show_story_poster'         => true,
+			'show_story_player'         => false,
 			'show_stories_archive_link' => false,
 			'stories_archive_label'     => 'View all stories',
 			'list_view_image_alignment' => 'left',

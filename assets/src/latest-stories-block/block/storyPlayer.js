@@ -42,10 +42,10 @@ function StoryPlayer({
   isShowingTitle,
   imageOnRight,
 }) {
-  const singleStoryClasses = classNames('web-stories__story-wrapper', {
+  const singleStoryClasses = classNames('web-stories-list__story-wrapper', {
     'has-poster': !isShowingStoryPlayer,
   });
-  const imageAlignmentClass = classNames('web-stories__inner-wrapper', {
+  const imageAlignmentClass = classNames('web-stories-list__inner-wrapper', {
     [`image-align-right`]: imageOnRight,
     [`image-align-left`]: !imageOnRight,
   });
@@ -64,39 +64,37 @@ function StoryPlayer({
   }, [isShowingStoryPlayer]);
 
   return (
-    <div className="web-stories__controller">
-      <div className={singleStoryClasses}>
-        <div className={imageAlignmentClass}>
-          {!isShowingStoryPlayer ? (
-            <div
-              className="web-stories__story-placeholder"
-              style={{ backgroundImage: `url(${poster}` }}
-            />
-          ) : (
-            <amp-story-player height="430" width="285" ref={ref}>
-              <a
-                href={url}
-                style={{
-                  ['--story-player-poster']: poster
-                    ? `url('${poster}')`
-                    : undefined,
-                }}
-              >
-                {title ? <RawHTML>{title}</RawHTML> : ''}
-              </a>
-            </amp-story-player>
-          )}
-          {hasContentOverlay && (
-            <StoryContentOverlay
-              isShowingTitle={isShowingTitle}
-              title={title}
-              isShowingAuthor={isShowingAuthor}
-              author={author}
-              isShowingDate={isShowingDate}
-              date={date}
-            />
-          )}
-        </div>
+    <div className={singleStoryClasses}>
+      <div className={imageAlignmentClass}>
+        {!isShowingStoryPlayer ? (
+          <div
+            className="web-stories-list__story-placeholder"
+            style={{ backgroundImage: `url(${poster}` }}
+          />
+        ) : (
+          <amp-story-player height="430" width="285" ref={ref}>
+            <a
+              href={url}
+              style={{
+                ['--story-player-poster']: poster
+                  ? `url('${poster}')`
+                  : undefined,
+              }}
+            >
+              {title ? <RawHTML>{title}</RawHTML> : ''}
+            </a>
+          </amp-story-player>
+        )}
+        {hasContentOverlay && (
+          <StoryContentOverlay
+            isShowingTitle={isShowingTitle}
+            title={title}
+            isShowingAuthor={isShowingAuthor}
+            author={author}
+            isShowingDate={isShowingDate}
+            date={date}
+          />
+        )}
       </div>
     </div>
   );
