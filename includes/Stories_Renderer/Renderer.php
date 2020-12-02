@@ -26,6 +26,7 @@
 
 namespace Google\Web_Stories\Stories_Renderer;
 
+use Google\Web_Stories\Embed_Base;
 use Google\Web_Stories\Interfaces\Renderer as RenderingInterface;
 use Google\Web_Stories\Model\Story;
 use Google\Web_Stories\Story_Query as Stories;
@@ -195,6 +196,20 @@ abstract class Renderer implements RenderingInterface, Iterator {
 			[],
 			WEBSTORIES_VERSION
 		);
+
+		if ( ! $this->is_amp_request() ) {
+
+			$this->enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
+			$this->enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
+
+			wp_enqueue_script(
+				'web-stories-lightbox',
+				WEBSTORIES_PLUGIN_DIR_URL . 'assets/js/web-stories-scripts.js',
+				[ Embed_Base::STORY_PLAYER_HANDLE ],
+				WEBSTORIES_VERSION,
+				false
+			);
+		}
 	}
 
 	/**
@@ -420,7 +435,6 @@ abstract class Renderer implements RenderingInterface, Iterator {
 			<?php $this->get_content_overlay(); ?>
 		</a>
 		<?php
-
 	}
 
 	/**
@@ -448,7 +462,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 		?>
 		<amp-story-player style="<?php echo esc_attr( $player_style ); ?>"
-			<?php echo( $story_player_attributes ); ?>>
+			<?php echo( $story_player_attributes ); // phpcs:ignore -- Outputs escaped string of attributes. ?>>
 			<a href="<?php echo esc_url( $story_data->get_url() ); ?>" style="<?php echo esc_attr( $poster_style ); ?>">
 				<?php echo esc_html( $story_data->get_title() ); ?>
 			</a>
@@ -475,8 +489,16 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		<div class="story-content-overlay web-stories-list__story-content-overlay">
 			<?php if ( $this->attributes['show_title'] ) { ?>
 				<div class="story-content-overlay__title">
-					<?php
-					echo esc_html( $story_data->get_title() );
+					<?php if ( $this->attributes['show_story_player'] ) { ?>
+						<a href="<?php echo esc_url( $story_data->get_url() ); ?>">
+						<?php
+							echo esc_html( $story_data->get_title() );
+						?>
+						</a>
+						<?php
+					} else {
+						echo esc_html( $story_data->get_title() );
+					}
 					?>
 				</div>
 			<?php } ?>
@@ -505,6 +527,37 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		</div>
 		<?php
 
+	}
+
+	/**
+	 * Renders the lightbox markup for non-amp pages.
+	 *
+	 * @return void
+	 */
+	protected function render_stories_with_lightbox_noamp() {
+		$stories = $this->story_posts;
+		?>
+		<div class="web-stories-list__lightbox">
+			<amp-story-player width="0" height="0" layout="responsive">
+				<script type="application/json">
+					{
+						"controls": [
+							{
+								"name": "close",
+								"position": "start"
+							},
+							{
+								"name": "skip-next"
+							}
+						]
+					}
+				</script>
+				<?php foreach ( $stories as $story ) { ?>
+					<a href="<?php echo esc_url( $story->get_url() ); ?>"><?php echo esc_html( $story->get_title() ); ?></a>
+				<?php } ?>
+			</amp-story-player>
+		</div>
+		<?php
 	}
 
 }
