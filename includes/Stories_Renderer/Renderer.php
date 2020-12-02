@@ -74,6 +74,13 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	protected $story_posts = [];
 
 	/**
+	 * Holds required html for the lightbox.
+	 *
+	 * @var string A string of lightbox markup.
+	 */
+	protected $lightbox_html = '';
+
+	/**
 	 * Pointer to iterate over stories.
 	 *
 	 * @var int
@@ -442,9 +449,23 @@ abstract class Renderer implements RenderingInterface, Iterator {
 			<?php $this->get_content_overlay(); ?>
 		</div>
 		<?php
-		if ( $this->is_amp_request() ) {
-			$this->render_stories_with_lightbox_amp();
+
+		// Start collecting markup for the lightbox stories. This way we don't have to re-run the loop.
+		ob_start();
+
+		// Collect story links to fill-in non-AMP lightbox 'amp-story-player'.
+		if ( ! $this->is_amp_request() ) {
+			?>
+				<a href="<?php echo esc_url( $story_data->get_url() ); ?>"><?php echo esc_html( $story_data->get_title() ); ?></a>
+			<?php
 		}
+
+		// Generate lightbox html for the AMP page.
+		if ( $this->is_amp_request() ) {
+			$this->generate_amp_lightbox_html();
+		}
+
+		$this->lightbox_html .= ob_get_clean();
 	}
 
 	/**
@@ -562,27 +583,24 @@ abstract class Renderer implements RenderingInterface, Iterator {
 						]
 					}
 				</script>
-				<?php foreach ( $stories as $story ) { ?>
-					<a href="<?php echo esc_url( $story->get_url() ); ?>"><?php echo esc_html( $story->get_title() ); ?></a>
-				<?php } ?>
+				<?php echo wp_kses_post( $this->lightbox_html ); ?>
 			</amp-story-player>
 		</div>
 		<?php
 	}
 
 	/**
-	 * Renders the lightbox markup for non-amp pages.
+	 * Markup for the lightbox used on AMP pages.
 	 *
 	 * @return void
 	 */
-	protected function render_stories_with_lightbox_amp() {
-
-		$current_story  = $this->current();
-		$lightbox_state = "lightbox{$current_story->get_id()}";
-
+	protected function generate_amp_lightbox_html() {
+		$story          = $this->current();
+		$lightbox_state = "lightbox{$story->get_id()}";
+		$lightbox_class = "lightbox-{$story->get_id()}";
 		?>
 		<div
-			class="web-stories-list__lightbox"
+			class="web-stories-list__lightbox <?php echo esc_attr( $lightbox_class ); ?>"
 			[class]="<?php echo( esc_attr( $lightbox_state ) ); ?> ? 'web-stories-list__lightbox show' : 'web-stories-list__lightbox'"
 		>
 			<div
@@ -597,10 +615,20 @@ abstract class Renderer implements RenderingInterface, Iterator {
 				height="0"
 				layout="responsive"
 			>
-				<a href="<?php echo( esc_url( $current_story->get_url() ) ); ?>"><?php echo esc_html( $current_story->get_title() ); ?></a>
+				<a href="<?php echo( esc_url( $story->get_url() ) ); ?>"><?php echo esc_html( $story->get_title() ); ?></a>
 			</amp-story-player>
 		</div>
 		<?php
+	}
 
+	/**
+	 * Renders the lightbox markup for non-amp pages.
+	 *
+	 * @return void
+	 */
+	protected function render_stories_with_lightbox_amp() {
+
+		// Have to ignore this as the escaping functions are stripping off 'amp-bind' custom attribute '[class]'.
+		echo $this->lightbox_html; // phpcs:ignore -- Generated above with properly escaped data.
 	}
 }
