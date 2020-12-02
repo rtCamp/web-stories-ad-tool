@@ -5,6 +5,7 @@ const DEFAULT_STATE = {
     show_date: false,
     number: 5,
     columns: 1,
+    order: '',
   },
   modalOpen: false
 }

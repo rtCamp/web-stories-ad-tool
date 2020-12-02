@@ -20,7 +20,7 @@ import CAROUSEL_IMG from "./images/carousel";
   tinymce.PluginManager.add('web_stories', function( editor ) {
     editor.addButton('web_stories', {
       text: __( 'Web Stories', 'web-stories' ),
-      icon: CAROUSEL_IMG,
+      icon: 'bold',
       onclick: function() {
         dispatch( name ).toggleModal( true );
       }

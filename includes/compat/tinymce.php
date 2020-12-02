@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+use Google\Web_Stories\Customizer;
+
 if ( ! function_exists( 'tinymce_web_stories_button' ) ) {
 	/**
 	 * Add web stories button in TinyMCE editor.
@@ -81,12 +83,26 @@ if ( ! function_exists( 'web_stories_tinymce_root_element' ) ) {
 }
 
 if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
+	/**
+	 * Put some tinymce related data on the page.
+	 *
+	 * @return void
+	 */
 	function web_stories_tinymce_data() {
-		$data = [
-			'theme_support' => []
-		];
+		$theme_support = Customizer::get_stories_theme_support();
+		$order         = $theme_support['order'];
+		$order_list    = [];
 
+		foreach ( $order as $order_key => $an_order ) {
+			$order_list[] = [
+				'label' => $an_order,
+				'value' => $order_key,
+			];
+		}
+
+		echo "<script type='text/javascript'>\n";
+		echo 'var webStoriesMCEData = ' . wp_json_encode( $order_list ) . ';';
+		echo "\n</script>";
 	}
-	add_action( 'admin_enqueue_scripts' );
+	add_action( 'admin_enqueue_scripts', 'web_stories_tinymce_data' );
 }
-

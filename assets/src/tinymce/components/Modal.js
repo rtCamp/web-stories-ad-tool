@@ -3,7 +3,9 @@ import name from "../store/name";
 const {
   Modal,
   ToggleControl,
-  RangeControl
+  RangeControl,
+  SelectControl,
+  Button
 } = wp.components;
 
 const { dispatch } = wp.data;
@@ -16,7 +18,8 @@ const WebStoriesModal = ( props ) => {
     show_author,
     show_date,
     number,
-    columns
+    columns,
+    order
   } = settings;
 
   return (
@@ -61,6 +64,27 @@ const WebStoriesModal = ( props ) => {
             max={ 4 }
             onChange={ ( cols ) => dispatch( name ).setSettings( { ...settings, columns: parseInt( cols, 10 ) } ) }
           />
+
+          <SelectControl
+            label={ __( 'Select Order', 'web-stories' ) }
+            value={ order }
+            options={ window.webStoriesMCEData }
+            onChange={ ( order ) => dispatch( name ).setSettings( { ...settings, order: order } ) }
+          />
+
+          <div className={ 'alignright' }>
+            <Button
+              isPrimary
+              onClick={ () => {
+                console.log( 'Insert shortcode here....' );
+                editor.insertContent('[stories number=10]');
+                dispatch( name ).toggleModal( false );
+            }}
+            >
+              { __( 'Okay', 'web-stories' ) }
+            </Button>
+            <Button>{ __( 'Cancel', 'web-stories' ) }</Button>
+          </div>
 
         </Modal>
       ) }
