@@ -77,5 +77,16 @@ if ( ! function_exists( 'web_stories_tinymce_root_element' ) ) {
 	function web_stories_tinymce_root_element() {
 		echo '<div id="web-stories-tinymce"></div>';
 	}
-	add_action( 'edit_form_after_editor', 'web_stories_tinymce_root_element' );
+	add_action( 'admin_footer', 'web_stories_tinymce_root_element' );
 }
+
+if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
+	function web_stories_tinymce_data() {
+		$data = [
+			'theme_support' => []
+		];
+
+	}
+	add_action( 'admin_enqueue_scripts' );
+}
+

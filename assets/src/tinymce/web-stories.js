@@ -1,11 +1,17 @@
+/**
+ * Main file for TinyMCE button script.
+ */
+
+/**
+ * Import dependencies.
+ */
+import { render } from "@wordpress/element";
+import { dispatch } from "@wordpress/data";
+import { __ } from "@wordpress/i18n";
 import name from "./store/name";
 import WebStoryMCEStore from "./store";
 import WebStoriesModal from "./containers/Modal";
-
-const { render } = wp.element;
-const { domReady } = wp;
-const { dispatch } = wp.data;
-const { __ } = wp.i18n;
+import CAROUSEL_IMG from "./images/carousel";
 
 /**
  * Add button to tinyMCE editor.
@@ -14,10 +20,9 @@ const { __ } = wp.i18n;
   tinymce.PluginManager.add('web_stories', function( editor ) {
     editor.addButton('web_stories', {
       text: __( 'Web Stories', 'web-stories' ),
-      icon: false,
+      icon: CAROUSEL_IMG,
       onclick: function() {
         dispatch( name ).toggleModal( true );
-        editor.insertContent('[wdm_shortcode]');
       }
     });
   });
@@ -35,11 +40,6 @@ const RenderModal = () => {
     render(<WebStoriesModal/>, target );
   }
 };
-
-/**
- * Mount the component when DOM is ready.
- */
-domReady( () => RenderModal() );
 
 /**
  * Subscribe to state change in store.

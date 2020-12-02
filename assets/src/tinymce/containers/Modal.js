@@ -12,7 +12,6 @@ const { compose  } = wp.compose;
  */
 const mapSelectToProps = ( select ) => {
   return {
-    categories: select( 'core' ).getEntityRecords( 'taxonomy', 'category' ),
     modalOpen: select( name ).getModal(),
     settings: select( name ).getSettings()
   }
