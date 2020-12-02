@@ -57,10 +57,11 @@ class Carousel_Renderer extends Renderer {
 		parent::assets();
 
 		if ( ! $this->is_amp_request() ) {
-			// Enqueue amp runtime script and amp-carousel script to show amp-carousel on non AMP pages.
-			wp_register_script( 'amp-runtime-script', 'https://cdn.ampproject.org/v0.js', [], 'v0', true );
-			wp_register_script( 'amp-carousel-script', 'https://cdn.ampproject.org/v0/amp-carousel-0.2.js', [ 'amp-runtime-script' ], 'v0', true );
-			wp_enqueue_script( 'amp-carousel-script' );
+
+			wp_enqueue_script( 'glider-js', WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/lib/glider-js/glider.min.js', [], '1.7.4', true );
+			wp_enqueue_style( 'glider-css', WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/lib/glider-js/glider.min.css', [], '1.7.4' );
+
+			$this->enqueue_script( 'carousel-script', [ 'glider-js' ] );
 		}
 	}
 
@@ -87,26 +88,41 @@ class Carousel_Renderer extends Renderer {
 		?>
 		<div class="<?php echo esc_attr( $container_classes ); ?>">
 			<div class="<?php echo esc_attr( $block_classes ); ?>">
-				<amp-carousel
-					width="1"
-					height="1"
-					layout="intrinsic"
-					type="carousel"
-					role="region"
-					aria-label="<?php esc_attr_e( 'Web Stories', 'web-stories' ); ?>"
-				>
-					<?php
-					foreach ( $this->story_posts as $story ) {
-						$this->render_single_story_content();
-						$this->next();
-					}
-					?>
-				</amp-carousel>
 				<?php
 				if ( ! $this->is_amp_request() ) {
+					?>
+					<div class="web-stories-list__carousel">
+						<?php
+						foreach ( $this->story_posts as $story ) {
+							$this->render_single_story_content();
+							$this->next();
+						}
+						?>
+					</div>
+					<div tabindex="-1" aria-label="Previous" class="glider-prev">←</div>
+					<div tabindex="0" aria-label="Next" class="glider-next">→</div>
+					<div role="tablist" class="dots"></div>
+					<?php
 					$this->render_stories_with_lightbox_noamp();
 				}
 				if ( $this->is_amp_request() ) {
+					?>
+					<amp-carousel
+						width="1"
+						height="1"
+						layout="intrinsic"
+						type="carousel"
+						role="region"
+						aria-label="<?php esc_attr_e( 'Basic carousel', 'web-stories' ); ?>"
+					>
+						<?php
+						foreach ( $this->story_posts as $story ) {
+							$this->render_single_story_content();
+							$this->next();
+						}
+						?>
+					</amp-carousel>
+					<?php
 					$this->render_stories_with_lightbox_amp();
 				}
 				?>

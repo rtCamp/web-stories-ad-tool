@@ -223,6 +223,27 @@
 }
 
 /* Carousel View Styles */
+.web-stories-list.is-view-type-carousel {
+  position: relative;
+}
+
+.web-stories-list.is-view-type-carousel .glider-next,
+.web-stories-list.is-view-type-carousel .glider-prev {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 10px;
+  top: 50%;
+  font-size: 16px;
+  color: white;
+}
+
+.web-stories-list.is-view-type-carousel .glider-next {
+  right: 0;
+}
+
+.web-stories-list.is-view-type-carousel .glider-prev {
+  left: 0;
+}
+
 .web-stories-list.is-view-type-carousel .web-stories-list__story-wrapper {
   min-width: 250px;
   margin-left: 0;
@@ -314,8 +335,4 @@
     left: 20px;
     height: 20px;
   }
-}
-
-.web-stories-list .story-lightbox__close-button--stick:first-child {
-  transform: rotateZ(-45deg);
 }
