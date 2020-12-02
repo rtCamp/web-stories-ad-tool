@@ -386,9 +386,18 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		$single_story_classes = $this->get_single_story_classes();
 		$show_story_player    = ( true === $this->attributes['show_story_player'] && $this->is_view_type( 'grid' ) );
 
+		$lightbox_state          = "lightbox{$this->current()->get_id()}";
+		$lightbox_set_state_attr = ( $this->is_amp_request() ) ? sprintf(
+			'on="tap:AMP.setState({%1$s: ! %1$s})"',
+			$lightbox_state
+		) : '';
+
 		?>
 
-		<div class="<?php echo esc_attr( $single_story_classes ); ?>">
+		<div
+			class="<?php echo esc_attr( $single_story_classes ); ?>"
+			<?php echo wp_kses( $lightbox_set_state_attr, 'on' ); ?>
+		>
 			<?php
 
 			if ( true === $show_story_player ) {
@@ -425,16 +434,17 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		}
 
 		?>
-		<a class="<?php echo esc_attr( $inner_wrapper_classes ); ?>"
-			href="<?php echo esc_url( $story_data->get_url() ); ?>"
-		>
+		<div class="<?php echo esc_attr( $inner_wrapper_classes ); ?>">
 			<div
 				class="web-stories-list__story-placeholder"
 				style="<?php echo esc_attr( $poster_style ); ?>"
 			></div>
 			<?php $this->get_content_overlay(); ?>
-		</a>
+		</div>
 		<?php
+		if ( $this->is_amp_request() ) {
+			$this->render_stories_with_lightbox_amp();
+		}
 	}
 
 	/**
@@ -560,4 +570,37 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		<?php
 	}
 
+	/**
+	 * Renders the lightbox markup for non-amp pages.
+	 *
+	 * @return void
+	 */
+	protected function render_stories_with_lightbox_amp() {
+
+		$current_story  = $this->current();
+		$lightbox_state = "lightbox{$current_story->get_id()}";
+
+		?>
+		<div
+			class="web-stories-list__lightbox"
+			[class]="<?php echo( esc_attr( $lightbox_state ) ); ?> ? 'web-stories-list__lightbox show' : 'web-stories-list__lightbox'"
+		>
+			<div
+				class="story-lightbox__close-button"
+				on="tap:AMP.setState({<?php echo( esc_attr( $lightbox_state ) ); ?>: false})"
+			>
+				<span class="story-lightbox__close-button--stick"></span>
+				<span class="story-lightbox__close-button--stick"></span>
+			</div>
+			<amp-story-player
+				width="0"
+				height="0"
+				layout="responsive"
+			>
+				<a href="<?php echo( esc_url( $current_story->get_url() ) ); ?>"><?php echo esc_html( $current_story->get_title() ); ?></a>
+			</amp-story-player>
+		</div>
+		<?php
+
+	}
 }
