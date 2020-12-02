@@ -80,14 +80,14 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Height for displaying story.
 	 *
-	 * @var string
+	 * @var int
 	 */
 	protected $height = 430;
 
 	/**
 	 * Width for displaying story.
 	 *
-	 * @var string
+	 * @var int
 	 */
 	protected $width = 285;
 
