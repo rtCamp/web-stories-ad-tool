@@ -91,7 +91,7 @@ const SelectedStoriesEdit = ({
       'is-style-default': !isStyleSquared && !isShowingStoryPlayer,
       'is-style-squared': isStyleSquared,
     },
-    'wp-block-web-stories-latest-stories latest-stories',
+    'web-stories-list',
     { [`is-view-type-${viewType}`]: viewType },
     { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
   );
@@ -193,7 +193,7 @@ const SelectedStoriesEdit = ({
             })}
           </div>
           {isShowingViewAll && (
-            <div className="latest-stories__archive-link">{viewAllLabel}</div>
+            <div className="web-stories-list__archive-link">{viewAllLabel}</div>
           )}
         </div>
       )}
