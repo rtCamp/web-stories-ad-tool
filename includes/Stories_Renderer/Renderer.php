@@ -209,13 +209,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 			$this->enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
 			$this->enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
 
-			wp_enqueue_script(
-				'web-stories-lightbox',
-				WEBSTORIES_PLUGIN_DIR_URL . 'assets/js/web-stories-scripts.js',
-				[ Embed_Base::STORY_PLAYER_HANDLE ],
-				WEBSTORIES_VERSION,
-				false
-			);
+			$this->enqueue_script( 'web-stories-scripts', [ Embed_Base::STORY_PLAYER_HANDLE ] );
+
 		}
 	}
 

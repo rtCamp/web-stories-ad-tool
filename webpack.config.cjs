@@ -201,6 +201,7 @@ const webStoriesScripts = {
   ...sharedConfig,
   entry: {
     'web-stories-scripts': './includes/assets/js/index.js',
+    'carousel-script': './includes/assets/js/carousel-view.js',
   },
   plugins: [
     process.env.BUNDLE_ANALZYER && new BundleAnalyzerPlugin(),
