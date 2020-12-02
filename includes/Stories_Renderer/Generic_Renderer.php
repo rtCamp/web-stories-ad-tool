@@ -56,21 +56,6 @@ class Generic_Renderer extends Renderer {
 	}
 
 	/**
-	 * Enqueue assets.
-	 *
-	 * @return void
-	 */
-	public function assets() {
-
-		parent::assets();
-
-		if ( $this->is_view_type( 'grid' ) && ! $this->is_amp_request() && true === $this->attributes['show_story_player'] ) {
-			$this->enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
-			$this->enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
-		}
-	}
-
-	/**
 	 * Renders the stories output for given attributes.
 	 *
 	 * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -97,6 +82,10 @@ class Generic_Renderer extends Renderer {
 				foreach ( $this->story_posts as $story ) {
 					$this->render_single_story_content();
 					$this->next();
+				}
+
+				if ( ! $this->is_amp_request() ) {
+					$this->render_stories_with_lightbox_noamp();
 				}
 				?>
 

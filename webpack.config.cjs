@@ -200,7 +200,7 @@ const dashboard = {
 const webStoriesScripts = {
   ...sharedConfig,
   entry: {
-    'web-stories-scripts': './includes/assets/index.js',
+    'web-stories-scripts': './includes/assets/js/index.js',
   },
   plugins: [
     process.env.BUNDLE_ANALZYER && new BundleAnalyzerPlugin(),
