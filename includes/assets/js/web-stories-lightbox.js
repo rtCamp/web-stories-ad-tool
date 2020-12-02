@@ -32,6 +32,14 @@ class Lightbox {
   }
 
   initializeLightbox() {
+
+	  /*
+	   * Stop stories from auto-play.
+	   *
+	   * https://github.com/ampproject/amphtml/issues/31334#issuecomment-733998656
+	   */
+    this.player.pause();
+
     this.stories = this.player.getStories();
     this.bindStoryClickListeners();
     this.lightboxInitialized = true;
