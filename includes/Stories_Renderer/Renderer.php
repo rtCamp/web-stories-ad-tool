@@ -256,12 +256,12 @@ abstract class Renderer implements RenderingInterface, Iterator {
 			$story_date  = ( true === $this->attributes['show_date'] ) ? get_the_date( 'M j, Y', $story_id ) : $story_date;
 		}
 
-		$story_data['id']              = $story_id;
-		$story_data['author']          = $author_name;
-		$story_data['date']            = $story_date;
-		$story_data['classes']         = $this->get_single_story_classes();
-		$story_data['content_overlay'] = ( ! empty( $story_title ) || ! empty( $author_name ) || ! empty( $story_date ) );
-		$transformed_post              = new Story( $story_data );
+		$story_data['id']      = $story_id;
+		$story_data['author']  = $author_name;
+		$story_data['date']    = $story_date;
+		$story_data['classes'] = $this->get_single_story_classes();
+		$this->content_overlay = ( ! empty( $story_title ) || ! empty( $author_name ) || ! empty( $story_date ) );
+		$transformed_post      = new Story( $story_data );
 		$transformed_post->load_from_post( $story_id );
 
 		return $transformed_post;
@@ -421,8 +421,6 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	protected function render_story_with_poster() {
 
 		$story_data            = $this->current();
-		$height                = ( ! empty( $this->height ) ) ? absint( $this->height ) : 600;
-		$width                 = ( ! empty( $this->width ) ) ? absint( $this->width ) : 360;
 		$poster_url            = ( 'circles' === $this->get_view_type() ) ? $story_data->get_poster_square() : $story_data->get_poster_portrait();
 		$poster_style          = sprintf( 'background-image: url(%1$s);', esc_url_raw( $poster_url ) );
 		$inner_wrapper_classes = 'web-stories-list__inner-wrapper ';

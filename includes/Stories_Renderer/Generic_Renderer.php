@@ -26,8 +26,6 @@
 
 namespace Google\Web_Stories\Stories_Renderer;
 
-use Google\Web_Stories\Embed_Base;
-
 /**
  * Generic_Renderer class.
  *
