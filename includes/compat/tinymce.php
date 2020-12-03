@@ -100,8 +100,14 @@ if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 			];
 		}
 
+		$data = [
+			'orderlist' => $order_list,
+			'icon'      => WEBSTORIES_ASSETS_URL . '/src/tinymce/images/carousel.svg',
+			'tag'       => 'stories'
+		];
+
 		echo "<script type='text/javascript'>\n";
-		echo 'var webStoriesMCEData = ' . wp_json_encode( $order_list ) . ';';
+		echo 'var webStoriesMCEData = ' . wp_json_encode( $data ) . ';';
 		echo "\n</script>";
 	}
 	add_action( 'admin_enqueue_scripts', 'web_stories_tinymce_data' );

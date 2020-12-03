@@ -1,8 +1,27 @@
+import { forEach } from "lodash";
+
 import name from "../store/name";
 import WebStoriesModal from "../components/Modal";
 
-const { withSelect } = wp.data;
+const { withSelect, select } = wp.data;
 const { compose  } = wp.compose;
+const { webStoriesMCEData } = window;
+
+const prepareShortCode = () => {
+  let shortCode = '[' + webStoriesMCEData.tag;
+  const editorInstance = select(name).getEditor();
+  const settings = select(name).getSettings();
+
+  if ( editorInstance ) {
+    forEach( settings, ( value, index ) => {
+      shortCode =  shortCode + ' ' + index.toString() + '=' + value.toString();
+    })
+  }
+
+  shortCode = shortCode + ' /]';
+
+  return shortCode;
+}
 
 /**
  * Pass extended props to the Modal component.
@@ -13,7 +32,8 @@ const { compose  } = wp.compose;
 const mapSelectToProps = ( select ) => {
   return {
     modalOpen: select( name ).getModal(),
-    settings: select( name ).getSettings()
+    settings: select( name ).getSettings(),
+    prepareShortCode: prepareShortCode
   }
 };
 

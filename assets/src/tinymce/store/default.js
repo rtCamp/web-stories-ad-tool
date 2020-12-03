@@ -1,13 +1,17 @@
+import { isEmpty } from "lodash";
+
+const { orderlist } = window.webStoriesMCEData;
+
 const DEFAULT_STATE = {
   settings: {
-    image_options: false,
     show_author: true,
     show_date: false,
     number: 5,
     columns: 1,
-    order: '',
+    order: ! isEmpty( orderlist ) ? orderlist[0].value : null,
   },
-  modalOpen: false
+  modalOpen: false,
+  editor: false
 }
 
 export default DEFAULT_STATE

@@ -17,3 +17,10 @@ export function toggleModal( open ) {
     modalOpen: open
   }
 }
+
+export function setEditor( editor ) {
+  return {
+    type: 'SET_EDITOR',
+    editor: editor
+  }
+}

@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import name from "../store/name";
 
 const {
@@ -8,13 +9,12 @@ const {
   Button
 } = wp.components;
 
-const { dispatch } = wp.data;
+const { dispatch, select } = wp.data;
 const { __ } = wp.i18n;
 
 const WebStoriesModal = ( props ) => {
-  const { modalOpen, settings } = props;
+  const { modalOpen, settings, prepareShortCode } = props;
   const {
-    image_options,
     show_author,
     show_date,
     number,
@@ -29,13 +29,10 @@ const WebStoriesModal = ( props ) => {
           onRequestClose={ () => {
             dispatch( name ).toggleModal( false );
           }}
-          title={ __( 'Web Stories', 'web-stories' ) }>
-
-          <ToggleControl
-            label={ __( 'Story Image Options', 'web-stories' ) }
-            checked={ image_options }
-            onChange={ () => dispatch( name ).setSettings( { ...settings, image_options: !image_options } ) }
-          />
+          closeButtonLabel={ __( 'Close', 'web-stories' ) }
+          title={ __( 'Web Stories', 'web-stories' ) }
+          className={ "component_web_stories_mce_model" }
+        >
 
           <ToggleControl
             label={ __( 'Show Author', 'web-stories' ) }
@@ -65,25 +62,36 @@ const WebStoriesModal = ( props ) => {
             onChange={ ( cols ) => dispatch( name ).setSettings( { ...settings, columns: parseInt( cols, 10 ) } ) }
           />
 
-          <SelectControl
+          { ! isEmpty( order ) && <SelectControl
             label={ __( 'Select Order', 'web-stories' ) }
             value={ order }
-            options={ window.webStoriesMCEData }
+            options={ window.webStoriesMCEData.orderlist }
             onChange={ ( order ) => dispatch( name ).setSettings( { ...settings, order: order } ) }
-          />
+          />}
 
-          <div className={ 'alignright' }>
+          <div
+            style={ { padding: "20px 0" } }
+            className={ 'alignright' }>
             <Button
               isPrimary
               onClick={ () => {
-                console.log( 'Insert shortcode here....' );
-                editor.insertContent('[stories number=10]');
+                const editorInstance = select(name).getEditor();
+
+                if ( editorInstance ) {
+                  const shortcode = prepareShortCode();
+                  editorInstance.insertContent(shortcode);
+                }
+
                 dispatch( name ).toggleModal( false );
             }}
             >
               { __( 'Okay', 'web-stories' ) }
             </Button>
-            <Button>{ __( 'Cancel', 'web-stories' ) }</Button>
+            <Button
+              onClick={ () => dispatch( name ).toggleModal( false ) }
+            >
+              { __( 'Cancel', 'web-stories' ) }
+            </Button>
           </div>
 
         </Modal>

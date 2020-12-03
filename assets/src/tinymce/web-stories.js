@@ -11,7 +11,6 @@ import { __ } from "@wordpress/i18n";
 import name from "./store/name";
 import WebStoryMCEStore from "./store";
 import WebStoriesModal from "./containers/Modal";
-import CAROUSEL_IMG from "./images/carousel";
 
 /**
  * Add button to tinyMCE editor.
@@ -20,8 +19,9 @@ import CAROUSEL_IMG from "./images/carousel";
   tinymce.PluginManager.add('web_stories', function( editor ) {
     editor.addButton('web_stories', {
       text: __( 'Web Stories', 'web-stories' ),
-      icon: 'bold',
+      icon: 'books',
       onclick: function() {
+        dispatch( name ).setEditor( editor );
         dispatch( name ).toggleModal( true );
       }
     });

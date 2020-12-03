@@ -23,10 +23,10 @@ function reducer( state = DEFAULT_STATE, action ) {
         modalOpen: action.modalOpen
       }
 
-    case 'SET_CATEGORIES':
+    case 'SET_EDITOR':
       return {
         ...state,
-        categories: action.categories
+        editor: action.editor
       }
 
     default:
