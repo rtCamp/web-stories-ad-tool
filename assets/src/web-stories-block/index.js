@@ -29,4 +29,4 @@ __webpack_public_path__ = global.webStoriesBlockSettings.publicPath;
 
 registerBlockType(name, settings);
 
-initializeTracking('Web Stories Block', false);
+initializeTracking('Web Stories List Block', false);

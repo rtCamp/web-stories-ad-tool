@@ -282,19 +282,19 @@
   align-items: center;
   position: fixed;
   background: black;
-  z-index: 99999;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   visibility: hidden;
-  transition: visibility 0.2s linear, opacity 0.2s linear;
   opacity: 0;
+  transition: opacity 0.2s linear;
 }
 
 .web-stories-list .web-stories-list__lightbox.show {
   opacity: 1;
   visibility: visible;
+  z-index: 99999;
 }
 
 .web-stories-list .story-lightbox__close-button {
@@ -317,6 +317,10 @@
   width: 3px;
   background-color: #fff;
   transform: rotateZ(45deg);
+}
+
+.web-stories-list .story-lightbox__close-button--stick:first-child {
+  transform: rotateZ(-45deg);
 }
 
 @media only screen and (max-width: 600px) {

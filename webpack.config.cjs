@@ -264,73 +264,6 @@ const storyEmbedBlock = {
   },
 };
 
-const latestStoriesBlock = {
-  ...sharedConfig,
-  entry: {
-    'latest-web-stories-block': './assets/src/latest-stories-block/index.js',
-  },
-  plugins: [
-    process.env.BUNDLE_ANALZYER && new BundleAnalyzerPlugin(),
-    new DependencyExtractionWebpackPlugin({
-      injectPolyfill: true,
-    }),
-    new MiniCssExtractPlugin({
-      filename: '../css/[name].css',
-    }),
-    new WebpackBar({
-      name: 'Latest Web Stories Block',
-      color: '#357BB5',
-    }),
-  ].filter(Boolean),
-  optimization: {
-    ...sharedConfig.optimization,
-    splitChunks: {
-      cacheGroups: {
-        stories: {
-          name: 'latest-web-stories-block',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true,
-        },
-      },
-    },
-  },
-};
-
-const selectedStoriesBlock = {
-  ...sharedConfig,
-  entry: {
-    'selected-web-stories-block':
-      './assets/src/selected-stories-block/index.js',
-  },
-  plugins: [
-    process.env.BUNDLE_ANALZYER && new BundleAnalyzerPlugin(),
-    new DependencyExtractionWebpackPlugin({
-      injectPolyfill: true,
-    }),
-    new MiniCssExtractPlugin({
-      filename: '../css/[name].css',
-    }),
-    new WebpackBar({
-      name: 'Selected Web Stories Block',
-      color: '#357BB5',
-    }),
-  ].filter(Boolean),
-  optimization: {
-    ...sharedConfig.optimization,
-    splitChunks: {
-      cacheGroups: {
-        stories: {
-          name: 'selected-web-stories-block',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true,
-        },
-      },
-    },
-  },
-};
-
 const webStoriesBlock = {
   ...sharedConfig,
   entry: {
@@ -396,8 +329,6 @@ module.exports = [
   dashboard,
   webStoriesScripts,
   storyEmbedBlock,
-  latestStoriesBlock,
-  selectedStoriesBlock,
   webStoriesBlock,
   activationNotice,
 ];
