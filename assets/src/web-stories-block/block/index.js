@@ -30,7 +30,7 @@ import save from './save';
 const { name, category, attributes } = metadata;
 
 const settings = {
-  title: __('Web Stories 2', 'web-stories'),
+  title: __('Web Stories List', 'web-stories'),
   description: __('Embed visual stories.', 'web-stories'),
   category,
   icon,
