@@ -73,7 +73,7 @@ const SelectedStoriesEdit = ({
   );
 
   const label = __('Web Stories', 'web-stories');
-  const { config } = global.webStoriesSelectedBlockSettings;
+  const { config } = global.webStoriesBlockSettings;
 
   const willShowStoryPlayer =
     'grid' !== viewType ? false : isShowingStoryPlayer;

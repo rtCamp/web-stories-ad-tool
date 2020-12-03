@@ -192,7 +192,7 @@ function SelectStories({
       },
     ];
 
-    global.webStoriesSelectedBlockSettings.authors.forEach((author) => {
+    global.webStoriesBlockSettings.authors.forEach((author) => {
       items.push({
         label: author.display_name,
         value: author.ID.toString(),
