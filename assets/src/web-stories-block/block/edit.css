@@ -37,7 +37,7 @@
 }
 
 .web-stories:not(.is-view-type-list):not(.is-view-type-circles)
-  .web-stories__story-wrapper.has-poster::before {
+  .web-stories__story-wrapper::before {
   content: '';
   display: block;
   position: absolute;

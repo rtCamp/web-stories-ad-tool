@@ -60,7 +60,6 @@ const SelectedStoriesEdit = ({
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    isShowingStoryPlayer,
     carouselSettings,
     imageOnRight,
     isStyleSquared,
@@ -75,8 +74,6 @@ const SelectedStoriesEdit = ({
   const label = __('Web Stories', 'web-stories');
   const { config } = global.webStoriesBlockSettings;
 
-  const willShowStoryPlayer =
-    'grid' !== viewType ? false : isShowingStoryPlayer;
   const willShowDate = 'circles' === viewType ? false : isShowingDate;
   const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
   const viewAllLabel = viewAllLinkLabel
@@ -86,7 +83,7 @@ const SelectedStoriesEdit = ({
   const alignmentClass = classNames({ [`align${align}`]: align });
   const blockClasses = classNames(
     {
-      'is-style-default': !isStyleSquared && !isShowingStoryPlayer,
+      'is-style-default': !isStyleSquared,
       'is-style-squared': isStyleSquared,
     },
     'web-stories',
@@ -118,7 +115,6 @@ const SelectedStoriesEdit = ({
   useEffect(() => {
     if ('circles' !== viewType) {
       setAttributes({
-        isShowingStoryPlayer: false,
         isShowingTitle: true,
         isShowingAuthor: true,
         isShowingDate: true,
@@ -127,7 +123,6 @@ const SelectedStoriesEdit = ({
 
     if ('circles' === viewType) {
       setAttributes({
-        isShowingStoryPlayer: false,
         isShowingTitle: true,
       });
     }
@@ -160,7 +155,6 @@ const SelectedStoriesEdit = ({
         isShowingAuthor={isShowingAuthor}
         isShowingViewAll={isShowingViewAll}
         viewAllLinkLabel={viewAllLinkLabel}
-        isShowingStoryPlayer={isShowingStoryPlayer}
         carouselSettings={carouselSettings}
         imageOnRight={imageOnRight}
         isStyleSquared={isStyleSquared}
@@ -188,7 +182,6 @@ const SelectedStoriesEdit = ({
                   date={story.date_gmt}
                   author={story._embedded.author[0].name}
                   poster={story.featured_media_url}
-                  isShowingStoryPlayer={willShowStoryPlayer}
                   imageOnRight={imageOnRight}
                   isShowingAuthor={willShowAuthor}
                   isShowingDate={willShowDate}
@@ -234,7 +227,6 @@ SelectedStoriesEdit.propTypes = {
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.string,
-    isShowingStoryPlayer: PropTypes.bool,
     carouselSettings: PropTypes.object,
     imageOnRight: PropTypes.bool,
     isStyleSquared: PropTypes.bool,
