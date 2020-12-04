@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+use Google\Web_Stories\Story_Query;
 use Google\Web_Stories\Customizer;
 
 if ( ! function_exists( 'tinymce_web_stories_button' ) ) {
@@ -109,11 +110,33 @@ if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 			];
 		}
 
+		$fields       = [
+			'title',
+			'author',
+			'date',
+			'image_align',
+			'excerpt',
+			'archive_link',
+		];
+		$field_states = [];
+
+		foreach ( $views as $view_type => $view_label ) {
+			$field_state = ( new Story_Query( [ 'view' => $view_type ] ) )->get_renderer()->field();
+			foreach ( $fields as $field ) {
+				$field_states[ $view_type ][ $field ] = [
+					'show'     => $field_state->$field()->show(),
+					'label'    => $field_state->$field()->label(),
+					'readonly' => $field_state->$field()->readonly(),
+				];
+			}
+		}
+
 		$data = [
 			'orderlist' => $order_list,
 			'icon'      => WEBSTORIES_ASSETS_URL . '/src/tinymce/images/carousel.svg',
 			'tag'       => 'stories',
 			'views'     => $view_types,
+			'fields'    => $field_states
 		];
 
 		echo "<script type='text/javascript'>\n";
