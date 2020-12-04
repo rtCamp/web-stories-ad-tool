@@ -29,6 +29,12 @@ function reducer( state = DEFAULT_STATE, action ) {
         editor: action.editor
       }
 
+    case 'SET_CURRENT_VIEW':
+      return {
+        ...state,
+        currentView: action.currentView
+      }
+
     default:
       return state;
   }

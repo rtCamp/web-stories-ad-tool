@@ -1,3 +1,6 @@
+import { select } from "@wordpress/data";
+import name from "./name";
+
 /**
  * Retrieve settings.
  *
@@ -26,4 +29,14 @@ export function getModal( state ) {
  */
 export function getEditor( state ) {
   return state.editor;
+}
+
+export function getCurrentView( state ) {
+  return state.currentView;
+}
+
+export function getCurrentViewSettings( state ) {
+  const currentView = select(name).getCurrentView();
+
+  return state.settings[currentView];
 }

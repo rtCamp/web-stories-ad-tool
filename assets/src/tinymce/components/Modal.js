@@ -1,10 +1,10 @@
 import { isEmpty } from "lodash";
 import name from "../store/name";
 import { isCircleView } from "../utils";
+import TinyMCEToggle from "./controls/Toggle";
 
 const {
   Modal,
-  ToggleControl,
   RangeControl,
   SelectControl,
   Button
@@ -25,6 +25,8 @@ const WebStoriesModal = ( props ) => {
     view
   } = settings;
 
+  console.log(settings);
+
   return (
     <>
       { modalOpen && (
@@ -41,29 +43,23 @@ const WebStoriesModal = ( props ) => {
             label={ __( 'Select View Type', 'web-stories' ) }
             value={ view }
             options={ window.webStoriesMCEData.views }
-            onChange={ ( view ) => dispatch( name ).setSettings( { ...settings, view: view } ) }
+            onChange={ ( view ) => dispatch( name ).setCurrentView( view ) }
           />}
 
-          {!isCircleView() && <ToggleControl
-            label={__('Show Title', 'web-stories')}
-            checked={title}
-            onChange={() => dispatch(name).setSettings({...settings, title: !title})}
+          <TinyMCEToggle
+            field={ 'title' }
+            fieldObj={ title }
           />
-          }
 
-          {!isCircleView() && <ToggleControl
-            label={__('Show Author', 'web-stories')}
-            checked={author}
-            onChange={() => dispatch(name).setSettings({...settings, author: !author})}
+          <TinyMCEToggle
+            field={ 'author' }
+            fieldObj={ author }
           />
-          }
 
-          {!isCircleView() && <ToggleControl
-            label={ __( 'Show Date & Time', 'web-stories' ) }
-            checked={ date }
-            onChange={ () => dispatch( name ).setSettings( { ...settings, date: !date } ) }
+          <TinyMCEToggle
+            field={ 'date' }
+            fieldObj={ date }
           />
-          }
 
           <RangeControl
             label={ __( 'Number of Stories', 'web-stories' ) }

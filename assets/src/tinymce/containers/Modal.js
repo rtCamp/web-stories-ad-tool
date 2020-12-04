@@ -32,7 +32,7 @@ const prepareShortCode = () => {
 const mapSelectToProps = ( select ) => {
   return {
     modalOpen: select( name ).getModal(),
-    settings: select( name ).getSettings(),
+    settings: select( name ).getCurrentViewSettings(),
     prepareShortCode: prepareShortCode
   }
 };

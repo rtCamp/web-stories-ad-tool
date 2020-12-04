@@ -24,3 +24,16 @@ export function setEditor( editor ) {
     editor: editor
   }
 }
+
+/**
+ * Set current view.
+ *
+ * @param {string} view Current view.
+ * @returns {{currentView: string, type: string}}
+ */
+export function setCurrentView( view ) {
+  return {
+    type: 'SET_CURRENT_VIEW',
+    currentView: view
+  }
+}

@@ -121,7 +121,7 @@ if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 		$field_states = [];
 
 		foreach ( $views as $view_type => $view_label ) {
-			$field_state = ( new Story_Query( [ 'view' => $view_type ] ) )->get_renderer()->field();
+			$field_state = ( new Story_Query( [ 'view_type' => $view_type ] ) )->get_renderer()->field();
 			foreach ( $fields as $field ) {
 				$field_states[ $view_type ][ $field ] = [
 					'show'     => $field_state->$field()->show(),

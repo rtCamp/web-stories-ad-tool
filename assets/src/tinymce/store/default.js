@@ -1,25 +1,33 @@
-import { isEmpty } from "lodash";
+import { isEmpty, forEach } from "lodash";
 
 const { orderlist, views } = window.webStoriesMCEData;
 
 let DEFAULT_STATE = {
-  settings: {
-    title: false,
-    author: false,
-    date: false,
-    number: 5,
-    columns: 1
-  },
+  settings: {},
   modalOpen: false,
-  editor: false
+  editor: false,
+  currentView: isEmpty( views ) ? 'grid' : views[0].value,
 }
 
-if ( ! isEmpty( orderlist ) ) {
-  DEFAULT_STATE.settings['order'] = orderlist[0].value;
-}
+forEach( views, ( value ) => {
+  const { value: viewValue } = value;
 
-if ( ! isEmpty( views ) ) {
-  DEFAULT_STATE.settings['view'] = views[0].value;
-}
+  const {
+    title,
+    author,
+    date
+  } = window.webStoriesMCEData.fields[viewValue];
+
+  DEFAULT_STATE["settings"][viewValue] = {
+    title: title,
+    author: author,
+    date: date,
+    image_align: false,
+    number: 5,
+    columns: 1,
+    view: viewValue,
+    order: isEmpty( orderlist ) ? 'latest' : orderlist[0].value,
+  }
+});
 
 export default DEFAULT_STATE
