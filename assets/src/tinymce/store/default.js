@@ -1,17 +1,25 @@
 import { isEmpty } from "lodash";
 
-const { orderlist } = window.webStoriesMCEData;
+const { orderlist, views } = window.webStoriesMCEData;
 
-const DEFAULT_STATE = {
+let DEFAULT_STATE = {
   settings: {
-    show_author: true,
-    show_date: false,
+    title: false,
+    author: false,
+    date: false,
     number: 5,
-    columns: 1,
-    order: ! isEmpty( orderlist ) ? orderlist[0].value : null,
+    columns: 1
   },
   modalOpen: false,
   editor: false
+}
+
+if ( ! isEmpty( orderlist ) ) {
+  DEFAULT_STATE.settings['order'] = orderlist[0].value;
+}
+
+if ( ! isEmpty( views ) ) {
+  DEFAULT_STATE.settings['view'] = views[0].value;
 }
 
 export default DEFAULT_STATE

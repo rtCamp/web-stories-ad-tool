@@ -1,5 +1,6 @@
 import { isEmpty } from "lodash";
 import name from "../store/name";
+import { isCircleView } from "../utils";
 
 const {
   Modal,
@@ -15,11 +16,13 @@ const { __ } = wp.i18n;
 const WebStoriesModal = ( props ) => {
   const { modalOpen, settings, prepareShortCode } = props;
   const {
-    show_author,
-    show_date,
+    author,
+    date,
+    title,
     number,
     columns,
-    order
+    order,
+    view
   } = settings;
 
   return (
@@ -34,17 +37,33 @@ const WebStoriesModal = ( props ) => {
           className={ "component_web_stories_mce_model" }
         >
 
-          <ToggleControl
-            label={ __( 'Show Author', 'web-stories' ) }
-            checked={ show_author }
-            onChange={ () => dispatch( name ).setSettings( { ...settings, show_author: !show_author } ) }
-          />
+          { ! isEmpty( view ) && <SelectControl
+            label={ __( 'Select View Type', 'web-stories' ) }
+            value={ view }
+            options={ window.webStoriesMCEData.views }
+            onChange={ ( view ) => dispatch( name ).setSettings( { ...settings, view: view } ) }
+          />}
 
-          <ToggleControl
-            label={ __( 'Show Date & Time', 'web-stories' ) }
-            checked={ show_date }
-            onChange={ () => dispatch( name ).setSettings( { ...settings, show_date: !show_date } ) }
+          {!isCircleView() && <ToggleControl
+            label={__('Show Title', 'web-stories')}
+            checked={title}
+            onChange={() => dispatch(name).setSettings({...settings, title: !title})}
           />
+          }
+
+          {!isCircleView() && <ToggleControl
+            label={__('Show Author', 'web-stories')}
+            checked={author}
+            onChange={() => dispatch(name).setSettings({...settings, author: !author})}
+          />
+          }
+
+          {!isCircleView() && <ToggleControl
+            label={ __( 'Show Date & Time', 'web-stories' ) }
+            checked={ date }
+            onChange={ () => dispatch( name ).setSettings( { ...settings, date: !date } ) }
+          />
+          }
 
           <RangeControl
             label={ __( 'Number of Stories', 'web-stories' ) }
@@ -54,13 +73,14 @@ const WebStoriesModal = ( props ) => {
             onChange={ ( items ) => dispatch( name ).setSettings( { ...settings, number: parseInt( items, 10 ) } ) }
           />
 
-          <RangeControl
-            label={ __( 'Number of Columns', 'web-stories' ) }
-            value={ columns }
-            min={ 1 }
-            max={ 4 }
-            onChange={ ( cols ) => dispatch( name ).setSettings( { ...settings, columns: parseInt( cols, 10 ) } ) }
+          {!isCircleView() && <RangeControl
+            label={__('Number of Columns', 'web-stories')}
+            value={columns}
+            min={1}
+            max={4}
+            onChange={(cols) => dispatch(name).setSettings({...settings, columns: parseInt(cols, 10)})}
           />
+          }
 
           { ! isEmpty( order ) && <SelectControl
             label={ __( 'Select Order', 'web-stories' ) }

@@ -91,7 +91,9 @@ if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 	function web_stories_tinymce_data() {
 		$theme_support = Customizer::get_stories_theme_support();
 		$order         = $theme_support['order'];
+		$views         = $theme_support['view-type'];
 		$order_list    = [];
+		$view_types    = [];
 
 		foreach ( $order as $order_key => $an_order ) {
 			$order_list[] = [
@@ -100,10 +102,18 @@ if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 			];
 		}
 
+		foreach ( $views as $view_key => $view_label ) {
+			$view_types[] = [
+				'label' => $view_label,
+				'value' => $view_key,
+			];
+		}
+
 		$data = [
 			'orderlist' => $order_list,
 			'icon'      => WEBSTORIES_ASSETS_URL . '/src/tinymce/images/carousel.svg',
-			'tag'       => 'stories'
+			'tag'       => 'stories',
+			'views'     => $view_types,
 		];
 
 		echo "<script type='text/javascript'>\n";
