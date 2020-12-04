@@ -89,84 +89,80 @@ class Web_Stories_Block {
 			self::BLOCK_NAME,
 			[
 				'attributes'      => [
-					'blockType'            => [
+					'blockType'        => [
 						'type' => 'string',
 					],
-					'url'                  => [
+					'url'              => [
 						'type' => 'string',
 					],
-					'title'                => [
+					'title'            => [
 						'type'    => 'string',
 						'default' => __( 'Web Story', 'web-stories' ),
 					],
-					'poster'               => [
+					'poster'           => [
 						'type' => 'string',
 					],
-					'width'                => [
+					'width'            => [
 						'type'    => 'number',
 						'default' => 360,
 					],
-					'height'               => [
+					'height'           => [
 						'type'    => 'number',
 						'default' => 600,
 					],
-					'align'                => [
+					'align'            => [
 						'type'    => 'string',
 						'default' => 'none',
 					],
-					'stories'              => [
+					'stories'          => [
 						'type'    => 'array',
 						'default' => [],
 					],
-					'viewType'             => [
+					'viewType'         => [
 						'type'    => 'string',
 						'default' => '',
 					],
-					'numOfStories'         => [
+					'numOfStories'     => [
 						'type'    => 'number',
 						'default' => 5,
 					],
-					'numOfColumns'         => [
+					'numOfColumns'     => [
 						'type'    => 'number',
 						'default' => 2,
 					],
-					'orderByValue'         => [
+					'orderByValue'     => [
 						'type'    => 'string',
 						'default' => '',
 					],
-					'isShowingTitle'       => [
+					'isShowingTitle'   => [
 						'type'    => 'boolean',
 						'default' => true,
 					],
-					'isShowingDate'        => [
+					'isShowingDate'    => [
 						'type'    => 'boolean',
 						'default' => false,
 					],
-					'isShowingAuthor'      => [
+					'isShowingAuthor'  => [
 						'type'    => 'boolean',
 						'default' => false,
 					],
-					'isShowingViewAll'     => [
+					'isShowingViewAll' => [
 						'type'    => 'boolean',
 						'default' => false,
 					],
-					'viewAllLinkLabel'     => [
+					'viewAllLinkLabel' => [
 						'type'    => 'string',
 						'default' => '',
 					],
-					'isShowingStoryPlayer' => [
-						'type'    => 'boolean',
-						'default' => false,
-					],
-					'authors'              => [
+					'authors'          => [
 						'type'    => 'array',
 						'default' => [],
 					],
-					'imageOnRight'         => [
+					'imageOnRight'     => [
 						'type'    => 'boolean',
 						'default' => false,
 					],
-					'isStyleSquared'       => [
+					'isStyleSquared'   => [
 						'type'    => 'boolean',
 						'default' => false,
 					],
@@ -263,7 +259,6 @@ class Web_Stories_Block {
 				'show_author'               => ! empty( $attributes['isShowingAuthor'] ) ? $attributes['isShowingAuthor'] : false,
 				'show_stories_archive_link' => ! empty( $attributes['isShowingViewAll'] ) ? $attributes['isShowingViewAll'] : false,
 				'stories_archive_label'     => ! empty( $attributes['viewAllLinkLabel'] ) ? $attributes['viewAllLinkLabel'] : __( 'View all stories', 'web-stories' ),
-				'show_story_player'         => ! empty( $attributes['isShowingStoryPlayer'] ) ? $attributes['isShowingStoryPlayer'] : false,
 				'list_view_image_alignment' => ! empty( $attributes['imageOnRight'] ) ? 'right' : 'left',
 				'has_square_corners'        => ! empty( $attributes['isStyleSquared'] ) ? $attributes['isStyleSquared'] : false,
 			];

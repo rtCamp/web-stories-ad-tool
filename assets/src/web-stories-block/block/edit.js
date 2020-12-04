@@ -85,7 +85,6 @@ WebStoriesEdit.propTypes = {
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.string,
-    isShowingStoryPlayer: PropTypes.bool,
     authors: PropTypes.array,
     imageOnRight: PropTypes.bool,
     isStyleSquared: PropTypes.bool,

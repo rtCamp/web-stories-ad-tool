@@ -54,7 +54,6 @@ import AuthorSelection from './authorSelection';
  * @property {boolean} isShowingAuthor Whether or not to display story's author.
  * @property {boolean} isShowingViewAll Whether or not to display stories archive link.
  * @property {string} viewAllLinkLabel Archive link's label.
- * @property {boolean} isShowingStoryPlayer Whether or not to display story's cover image.
  * @property {boolean} imageOnRight Whether or not to display images on right side in list view type.
  * @property {Array} authors An array of authors objects which are currently selected.
  * @property {()=>void} setAttributes Callable function for saving attribute values.
@@ -78,7 +77,6 @@ const StoriesInspectorControls = (props) => {
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    isShowingStoryPlayer,
     setAttributes,
     authors,
     imageOnRight,
@@ -126,16 +124,6 @@ const StoriesInspectorControls = (props) => {
           </Notice>
         )}
         <ToggleControl
-          className={'grid' !== viewType ? 'is-disabled' : ''}
-          label={__('Replace cover image with story player', 'web-stories')}
-          checked={'grid' !== viewType ? false : isShowingStoryPlayer}
-          onChange={() => {
-            if ('grid' === viewType) {
-              setAttributes({ isShowingStoryPlayer: !isShowingStoryPlayer });
-            }
-          }}
-        />
-        <ToggleControl
           label={__('Show title', 'web-stories')}
           checked={isShowingTitle}
           onChange={() => setAttributes({ isShowingTitle: !isShowingTitle })}
@@ -169,7 +157,7 @@ const StoriesInspectorControls = (props) => {
             }}
           />
         )}
-        {'circles' !== viewType && !isShowingStoryPlayer && (
+        {'circles' !== viewType && (
           <ToggleControl
             label={__('Show square corners', 'web-stories')}
             checked={isStyleSquared}
@@ -243,7 +231,6 @@ StoriesInspectorControls.propTypes = {
   isShowingAuthor: PropTypes.bool,
   isShowingViewAll: PropTypes.bool,
   viewAllLinkLabel: PropTypes.string,
-  isShowingStoryPlayer: PropTypes.bool,
   setAttributes: PropTypes.func.isRequired,
   authors: PropTypes.array,
   imageOnRight: PropTypes.bool,

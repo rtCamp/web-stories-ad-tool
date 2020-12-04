@@ -74,7 +74,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    isShowingStoryPlayer,
     carouselSettings,
     authors,
     imageOnRight,
@@ -172,7 +171,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   useEffect(() => {
     if ('circles' !== viewType) {
       setAttributes({
-        isShowingStoryPlayer: false,
         isShowingTitle: true,
         isShowingAuthor: true,
         isShowingDate: true,
@@ -181,7 +179,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
     if ('circles' === viewType) {
       setAttributes({
-        isShowingStoryPlayer: false,
         isShowingTitle: true,
         isShowingDate: false,
         isShowingAuthor: false,
@@ -201,7 +198,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   const alignmentClass = classNames({ [`align${align}`]: align });
   const blockClasses = classNames(
     {
-      'is-style-default': !isStyleSquared && !isShowingStoryPlayer,
+      'is-style-default': !isStyleSquared,
       'is-style-squared': isStyleSquared,
     },
     'web-stories',
@@ -226,7 +223,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         isShowingAuthor={isShowingAuthor}
         isShowingViewAll={isShowingViewAll}
         viewAllLinkLabel={viewAllLinkLabel}
-        isShowingStoryPlayer={isShowingStoryPlayer}
         carouselSettings={carouselSettings}
         authors={authors}
         imageOnRight={imageOnRight}
@@ -252,7 +248,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
                   date={story.date_gmt}
                   author={author ? author.name : ''}
                   poster={story.featured_media_url}
-                  isShowingStoryPlayer={isShowingStoryPlayer}
                   imageOnRight={imageOnRight}
                   isShowingAuthor={isShowingAuthor}
                   isShowingDate={isShowingDate}
@@ -283,7 +278,6 @@ LatestStoriesEdit.propTypes = {
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.string,
-    isShowingStoryPlayer: PropTypes.bool,
     carouselSettings: PropTypes.object,
     authors: PropTypes.array,
     imageOnRight: PropTypes.bool,

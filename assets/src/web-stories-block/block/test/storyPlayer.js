@@ -170,33 +170,4 @@ describe('StoryPlayer', () => {
       </div>
     `);
   });
-
-  it('should render an <amp-story-player> element if story player is enabled', () => {
-    const { container } = render(
-      <StoryPlayer url={url} isShowingStoryPlayer={true} />
-    );
-
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div
-        class="web-stories__controller"
-      >
-        <div
-          class="web-stories__story-wrapper"
-        >
-          <div
-            class="web-stories__inner-wrapper image-align-left"
-          >
-            <amp-story-player
-              height="430"
-              width="285"
-            >
-              <a
-                href="https://preview.amp.dev/documentation/examples/introduction/stories_in_amp"
-              />
-            </amp-story-player>
-          </div>
-        </div>
-      </div>
-    `);
-  });
 });

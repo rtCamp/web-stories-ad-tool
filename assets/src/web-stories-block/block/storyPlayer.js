@@ -23,68 +23,37 @@ import classNames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { useRef, useEffect, RawHTML } from '@wordpress/element';
+import { RawHTML } from '@wordpress/element';
 import { dateI18n, format, __experimentalGetSettings } from '@wordpress/date';
 
 function StoryPlayer({
-  url,
   title,
   poster,
   author,
   date,
-  isShowingStoryPlayer,
   isShowingAuthor,
   isShowingDate,
   isShowingTitle,
   imageOnRight,
 }) {
-  const singleStoryClasses = classNames('web-stories__story-wrapper', {
-    'has-poster': !isShowingStoryPlayer,
-  });
+  const singleStoryClasses = classNames('web-stories__story-wrapper');
   const imageAlignmentClass = classNames('web-stories__inner-wrapper', {
     [`image-align-right`]: imageOnRight,
     [`image-align-left`]: !imageOnRight,
   });
   const hasContentOverlay = isShowingTitle || isShowingAuthor || isShowingDate;
   const dateFormat = __experimentalGetSettings().formats.date;
-  const ref = useRef();
-
-  useEffect(() => {
-    if (!isShowingStoryPlayer) {
-      return;
-    }
-
-    if (ref.current && global.AmpStoryPlayer) {
-      const player = new global.AmpStoryPlayer(global, ref.current);
-      player.load();
-    }
-  }, [isShowingStoryPlayer]);
 
   return (
     <div className="web-stories__controller">
       <div className={singleStoryClasses}>
         <div className={imageAlignmentClass}>
-          {!isShowingStoryPlayer ? (
-            <div
-              className="web-stories__story-placeholder"
-              style={{
-                backgroundImage: poster ? `url('${poster}')` : undefined,
-              }}
-            />
-          ) : (
-            <amp-story-player height="430" width="285" ref={ref}>
-              <a
-                href={url}
-                style={{
-                  ['--story-player-poster']: poster
-                    ? `url('${poster}')`
-                    : undefined,
-                }}
-              >
-                {title ? <RawHTML>{title}</RawHTML> : ''}
-              </a>
-            </amp-story-player>
-          )}
+          <div
+            className="web-stories__story-placeholder"
+            style={{
+              backgroundImage: poster ? `url('${poster}')` : undefined,
+            }}
+          />
           {hasContentOverlay && (
             <div className="story-content-overlay web-stories__story-content-overlay">
               {isShowingTitle && (
@@ -114,12 +83,10 @@ function StoryPlayer({
 }
 
 StoryPlayer.propTypes = {
-  url: PropTypes.string.isRequired,
   title: PropTypes.string,
   poster: PropTypes.string,
   author: PropTypes.string,
   date: PropTypes.string,
-  isShowingStoryPlayer: PropTypes.bool,
   isShowingAuthor: PropTypes.bool,
   isShowingDate: PropTypes.bool,
   isShowingTitle: PropTypes.bool,

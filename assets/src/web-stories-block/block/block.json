@@ -66,10 +66,6 @@
       "type": "string",
       "default": ""
     },
-    "isShowingStoryPlayer": {
-      "type": "boolean",
-      "default": false
-    },
     "imageOnRight": {
       "type": "boolean",
       "default": false

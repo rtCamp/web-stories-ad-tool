@@ -360,14 +360,6 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		$single_story_classes   = [];
 		$single_story_classes[] = 'web-stories-list__story-wrapper';
 
-		if ( ! $this->is_view_type( 'grid' ) ) {
-			$single_story_classes[] = 'has-poster';
-		}
-
-		if ( $this->is_view_type( 'grid' ) && true !== $this->attributes['show_story_player'] ) {
-			$single_story_classes[] = 'has-poster';
-		}
-
 		$single_story_classes = array_filter( $single_story_classes );
 		$classes              = implode( ' ', $single_story_classes );
 
@@ -386,7 +378,6 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	 */
 	public function render_single_story_content() {
 		$single_story_classes = $this->get_single_story_classes();
-		$show_story_player    = ( true === $this->attributes['show_story_player'] && $this->is_view_type( 'grid' ) );
 
 		$lightbox_state          = "lightbox{$this->current()->get_id()}";
 		$lightbox_set_state_attr = ( $this->is_amp_request() ) ? sprintf(
@@ -401,12 +392,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 			<?php echo wp_kses( $lightbox_set_state_attr, 'on' ); ?>
 		>
 			<?php
-
-			if ( true === $show_story_player ) {
-				$this->render_story_with_story_player();
-			} else {
 				$this->render_story_with_poster();
-			}
 			?>
 		</div>
 		<?php
@@ -513,16 +499,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		<div class="story-content-overlay web-stories-list__story-content-overlay">
 			<?php if ( $this->attributes['show_title'] ) { ?>
 				<div class="story-content-overlay__title">
-					<?php if ( $this->attributes['show_story_player'] ) { ?>
-						<a href="<?php echo esc_url( $story_data->get_url() ); ?>">
-						<?php
-							echo esc_html( $story_data->get_title() );
-						?>
-						</a>
-						<?php
-					} else {
+					<?php
 						echo esc_html( $story_data->get_title() );
-					}
 					?>
 				</div>
 			<?php } ?>
