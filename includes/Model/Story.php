@@ -81,27 +81,6 @@ class Story {
 	protected $poster_square;
 
 	/**
-	 * Height for displaying story.
-	 *
-	 * @var int
-	 */
-	protected $height;
-
-	/**
-	 * Width for displaying story.
-	 *
-	 * @var int
-	 */
-	protected $width;
-
-	/**
-	 * Classes for story.
-	 *
-	 * @var string
-	 */
-	protected $classes;
-
-	/**
 	 * Date for the story.
 	 *
 	 * @var string
@@ -114,13 +93,6 @@ class Story {
 	 * @var string
 	 */
 	protected $author;
-
-	/**
-	 * Whether content overlay is enabled for story.
-	 *
-	 * @var bool
-	 */
-	protected $content_overlay;
 
 	/**
 	 * Story constructor.
@@ -244,33 +216,6 @@ class Story {
 	}
 
 	/**
-	 * Check whether content overlay is enabled for story.
-	 *
-	 * @return bool
-	 */
-	public function get_content_overlay() {
-		return $this->content_overlay;
-	}
-
-	/**
-	 * Height for the story.
-	 *
-	 * @return int
-	 */
-	public function get_height() {
-		return $this->height;
-	}
-
-	/**
-	 * Width for the story.
-	 *
-	 * @return int
-	 */
-	public function get_width() {
-		return $this->width;
-	}
-
-	/**
 	 * Get author of the story.
 	 *
 	 * @return string
@@ -288,12 +233,4 @@ class Story {
 		return $this->date;
 	}
 
-	/**
-	 * HTML classes for the story.
-	 *
-	 * @return string
-	 */
-	public function get_classes() {
-		return $this->classes;
-	}
 }

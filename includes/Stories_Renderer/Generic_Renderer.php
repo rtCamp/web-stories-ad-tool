@@ -75,14 +75,17 @@ class Generic_Renderer extends Renderer {
 	 *
 	 * @SuppressWarnings(PHPMD.UnusedLocalVariable)
 	 *
+	 * @param array $args Array of rendering arguments.
+	 *
 	 * @return string Rendered stories output.
 	 */
-	public function render() {
+	public function render( array $args = [] ) {
 
 		if ( ! $this->valid() ) {
 			return '';
 		}
 
+		parent::render( $args );
 		$container_classes = $this->get_container_classes();
 		$container_style   = $this->get_container_styles();
 
@@ -105,6 +108,7 @@ class Generic_Renderer extends Renderer {
 		</div>
 		<?php
 		$view_type = $this->get_view_type();
+		$content   = (string) ob_get_clean();
 
 		/**
 		 * Filters the Generic renderer stories content.
@@ -113,7 +117,7 @@ class Generic_Renderer extends Renderer {
 		 *
 		 * @param string $content Stories content.
 		 */
-		return apply_filters( "web_stories_{$view_type}_renderer_stories_content", (string) ob_get_clean() );
+		return apply_filters( "web_stories_{$view_type}_renderer_stories_content", $content );
 	}
 
 }
