@@ -16,8 +16,10 @@
 /**
  * External dependencies
  */
-import forEach from 'lodash/forEach';
-import isEmpty from 'lodash/isEmpty';
+/**
+ * Internal dependencies
+ */
+import { forEach, isEmpty } from '../utils';
 
 const { orderlist, views } = window.webStoriesMCEData;
 

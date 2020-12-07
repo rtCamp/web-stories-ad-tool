@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies
+ */
+import PropTypes from 'prop-types';
 /**
  * WordPress dependencies
  */
@@ -51,6 +54,15 @@ const TinyMCEToggle = ({ fieldObj, field }) => {
       readonly={isReadonly}
     />
   );
+};
+
+TinyMCEToggle.propTypes = {
+  fieldObj: PropTypes.shape({
+    show: PropTypes.bool,
+    label: PropTypes.string,
+    readonly: PropTypes.bool,
+  }),
+  field: PropTypes.string,
 };
 
 export default TinyMCEToggle;

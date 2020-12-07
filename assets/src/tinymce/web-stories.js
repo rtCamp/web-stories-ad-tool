@@ -21,8 +21,12 @@
  * WordPress dependencies
  */
 import { render } from '@wordpress/element';
-import { dispatch, registerStore } from '@wordpress/data';
+import { dispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+/**
+ * Internal dependencies
+ */
+import '../../../node_modules/@wordpress/components/build-style/style.css';
 /**
  * Internal dependencies
  */
@@ -44,7 +48,6 @@ import WebStoriesModal from './containers/Modal';
       },
     });
   });
-  console.log(registerStore);
 })();
 
 /**

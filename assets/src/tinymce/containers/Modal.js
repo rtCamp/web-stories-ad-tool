@@ -16,7 +16,9 @@
 /**
  * External dependencies
  */
-import { forEach } from 'lodash';
+/**
+ * Internal dependencies
+ */
 
 /**
  * Internal dependencies
@@ -26,6 +28,7 @@ import { forEach } from 'lodash';
  */
 import { withSelect, select } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
+import { forEach } from '../utils';
 import name from '../store/name';
 import WebStoriesModal from '../components/Modal';
 
@@ -33,11 +36,13 @@ const { webStoriesMCEData } = window;
 const prepareShortCode = () => {
   let shortCode = '[' + webStoriesMCEData.tag;
   const editorInstance = select(name).getEditor();
-  const settings = select(name).getSettings();
+  const settings = select(name).getCurrentViewSettings();
 
   if (editorInstance) {
     forEach(settings, (value, index) => {
-      shortCode = shortCode + ' ' + index.toString() + '=' + value.toString();
+      const Value =
+        'object' === typeof value ? value.show.toString() : value.toString();
+      shortCode = shortCode + ' ' + index.toString() + '=' + Value;
     });
   }
 
@@ -47,6 +52,7 @@ const prepareShortCode = () => {
 };
 
 /**
+ *
  * Pass extended props to the Modal component.
  *
  * @param {Function} select Store selector.

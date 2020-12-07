@@ -19,7 +19,7 @@
 /**
  * WordPress dependencies
  */
-import { createReduxStore, register } from '@wordpress/data';
+import { registerStore } from '@wordpress/data';
 import * as actions from './actions';
 import name from './name';
 import reducer from './reducers';
@@ -28,12 +28,10 @@ import * as selectors from './selectors';
 /**
  * Create a store.
  */
-const WebStoryMCEStore = createReduxStore(name,{
+const WebStoryMCEStore = registerStore(name, {
   actions: actions,
   reducer: reducer,
   selectors: selectors,
 });
-
-register(WebStoryMCEStore);
 
 export default WebStoryMCEStore;

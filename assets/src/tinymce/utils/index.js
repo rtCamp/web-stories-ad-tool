@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+export const { forEach } = _;
+export const { isEmpty } = _;
+
 /**
  * WordPress dependencies
  */
@@ -52,7 +55,7 @@ export const isCircleView = () => {
  */
 export const updateViewSettings = ({ fieldObj, field, isReadonly = false }) => {
   let currentViewSettings = select(name).getCurrentViewSettings();
-  let updatedSettings = {};
+  let updatedSettings = currentViewSettings;
 
   switch (typeof fieldObj) {
     case 'object':

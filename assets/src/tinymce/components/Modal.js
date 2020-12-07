@@ -16,10 +16,7 @@
 /**
  * External dependencies
  */
-import { isEmpty } from 'lodash';
-/**
- * Internal dependencies
- */
+import PropTypes from 'prop-types';
 /**
  * WordPress dependencies
  */
@@ -31,9 +28,15 @@ import {
 } from '@wordpress/components';
 import { dispatch, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+/**
+ * Internal dependencies
+ */
+import { isEmpty, isCircleView, updateViewSettings } from '../utils';
+
+const { _ } = window;
 
 import name from '../store/name';
-import { isCircleView, updateViewSettings } from '../utils';
+
 import TinyMCEToggle from './controls/Toggle';
 
 const WebStoriesModal = (props) => {
@@ -50,13 +53,14 @@ const WebStoriesModal = (props) => {
           closeButtonLabel={__('Close', 'web-stories')}
           title={__('Web Stories', 'web-stories')}
           className={'component_web_stories_mce_model'}
+          shouldCloseOnClickOutside={false}
         >
           {!isEmpty(view) && (
             <SelectControl
               label={__('Select View Type', 'web-stories')}
               value={view}
               options={window.webStoriesMCEData.views}
-              onChange={(view) => dispatch(name).setCurrentView(view)}
+              onChange={(view_type) => dispatch(name).setCurrentView(view_type)}
             />
           )}
 
@@ -84,6 +88,7 @@ const WebStoriesModal = (props) => {
               max={4}
               onChange={(cols) =>
                 updateViewSettings({
+                  // eslint-disable-next-line radix
                   fieldObj: parseInt(cols, 10),
                   field: 'columns',
                 })
@@ -96,8 +101,8 @@ const WebStoriesModal = (props) => {
               label={__('Select Order', 'web-stories')}
               value={order}
               options={window.webStoriesMCEData.orderlist}
-              onChange={(order) => {
-                updateViewSettings({ fieldObj: order, field: 'order' });
+              onChange={(o) => {
+                updateViewSettings({ fieldObj: o, field: 'order' });
               }}
             />
           )}
@@ -107,6 +112,11 @@ const WebStoriesModal = (props) => {
               isPrimary
               onClick={() => {
                 const editorInstance = select(name).getEditor();
+
+                // eslint-disable-next-line no-prototype-builtins
+                if (!_.hasOwnProperty('pluck')) {
+                  _.pluck = _.map;
+                }
 
                 if (editorInstance) {
                   const shortcode = prepareShortCode();
@@ -126,6 +136,26 @@ const WebStoriesModal = (props) => {
       )}
     </>
   );
+};
+
+const StateFulFieldShape = PropTypes.shape({
+  show: PropTypes.bool,
+  label: PropTypes.string,
+  readonly: PropTypes.bool,
+});
+
+WebStoriesModal.propTypes = {
+  modalOpen: PropTypes.bool,
+  settings: PropTypes.shape({
+    author: StateFulFieldShape,
+    title: StateFulFieldShape,
+    date: StateFulFieldShape,
+    number: PropTypes.number,
+    columns: PropTypes.number,
+    order: PropTypes.string,
+    view: PropTypes.string,
+  }),
+  prepareShortCode: PropTypes.func,
 };
 
 export default WebStoriesModal;
