@@ -1,26 +1,56 @@
-import { dispatch, select } from "@wordpress/data";
-import { ToggleControl } from "@wordpress/components";
-import { __ } from "@wordpress/i18n";
-import name from "../../store/name";
+/*
+ * Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-const TinyMCEToggle = ( { fieldObj, field } ) => {
-  let settingsObj = select(name).getSettings();
-  const currentView = select(name).getCurrentView();
+/**
+ * WordPress dependencies
+ */
+import { ToggleControl } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+/**
+ * Internal dependencies
+ */
+import { updateViewSettings } from '../../utils';
+
+/**
+ * Toggle component for TinyMCE popup.
+ *
+ * @param fieldObj.fieldObj
+ * @param fieldObj
+ * @param field
+ * @param fieldObj.field
+ * @return {JSX.Element}
+ * @class
+ */
+const TinyMCEToggle = ({ fieldObj, field }) => {
   const { show, readonly: isReadonly, label } = fieldObj;
 
   return (
-    <>
-      <ToggleControl
-        label={ ! isReadonly ? label : label + __( ' (Readonly)', 'web-stories' ) }
-        checked={ show }
-        onChange={() => {
-          settingsObj[currentView][field] = { ...fieldObj, show: !show };
-          dispatch( name ).setSettings( settingsObj );
-        }}
-        readonly={ isReadonly }
-      />
-    </>
+    <ToggleControl
+      label={!isReadonly ? label : label + __(' (Readonly)', 'web-stories')}
+      checked={show}
+      onChange={() => {
+        updateViewSettings({
+          fieldObj: fieldObj,
+          field: field,
+          isReadonly: isReadonly,
+        });
+      }}
+      readonly={isReadonly}
+    />
   );
-}
+};
 
 export default TinyMCEToggle;

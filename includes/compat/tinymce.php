@@ -67,7 +67,7 @@ if ( ! function_exists( 'web_stories_tinymce_scripts' ) ) {
 
 		wp_enqueue_style( 'wp-components' );
 	}
-	add_action( 'admin_enqueue_scripts', 'web_stories_tinymce_scripts' );
+	//add_action( 'admin_enqueue_scripts', 'web_stories_tinymce_scripts' );
 }
 
 if ( ! function_exists( 'web_stories_tinymce_root_element' ) ) {
