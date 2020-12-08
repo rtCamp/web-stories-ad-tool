@@ -60,7 +60,6 @@ const SelectedStoriesEdit = ({
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    carouselSettings,
     imageOnRight,
     isStyleSquared,
   } = attributes;
@@ -148,16 +147,7 @@ const SelectedStoriesEdit = ({
         setAttributes={setAttributes}
       />
       <StoriesInspectorControls
-        viewType={viewType}
-        numOfColumns={numOfColumns}
-        isShowingTitle={isShowingTitle}
-        isShowingDate={isShowingDate}
-        isShowingAuthor={isShowingAuthor}
-        isShowingViewAll={isShowingViewAll}
-        viewAllLinkLabel={viewAllLinkLabel}
-        carouselSettings={carouselSettings}
-        imageOnRight={imageOnRight}
-        isStyleSquared={isStyleSquared}
+        attributes={attributes}
         setAttributes={setAttributes}
         showFilters={false}
       />
@@ -227,7 +217,6 @@ SelectedStoriesEdit.propTypes = {
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.string,
-    carouselSettings: PropTypes.object,
     imageOnRight: PropTypes.bool,
     isStyleSquared: PropTypes.bool,
   }),

@@ -22,11 +22,11 @@ import { render, screen } from '@testing-library/react';
 /**
  * Internal dependencies
  */
-import StoriesPlaceholder from '../storiesPlaceholder';
+import StoriesLoading from '../storiesLoading';
 
-describe('StoriesPlaceholder', () => {
+describe('StoriesLoading', () => {
   it('should display spinner', () => {
-    render(<StoriesPlaceholder />);
+    render(<StoriesLoading />);
     expect(screen.getByText('Loading Stories…')).toBeInTheDocument();
   });
 });

@@ -44,7 +44,7 @@ import { addQueryArgs } from '@wordpress/url';
 import StoryPlayer from '../../storyPlayer';
 import StoriesInspectorControls from '../../storiesInspectorControls';
 import StoriesBlockControls from '../../storiesBlockControls';
-import StoriesPlaceholder from '../../storiesPlaceholder';
+import StoriesLoading from '../../storiesLoading';
 import { FETCH_STORIES_DEBOUNCE } from '../../constants';
 
 /**
@@ -74,7 +74,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     isShowingAuthor,
     isShowingViewAll,
     viewAllLinkLabel,
-    carouselSettings,
     authors,
     imageOnRight,
     isStyleSquared,
@@ -214,23 +213,11 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         setAttributes={setAttributes}
       />
       <StoriesInspectorControls
-        viewType={viewType}
-        numOfStories={numOfStories}
-        numOfColumns={numOfColumns}
-        orderByValue={orderByValue}
-        isShowingTitle={isShowingTitle}
-        isShowingDate={isShowingDate}
-        isShowingAuthor={isShowingAuthor}
-        isShowingViewAll={isShowingViewAll}
-        viewAllLinkLabel={viewAllLinkLabel}
-        carouselSettings={carouselSettings}
-        authors={authors}
-        imageOnRight={imageOnRight}
-        isStyleSquared={isStyleSquared}
+        attributes={attributes}
         setAttributes={setAttributes}
       />
 
-      {isFetchingStories && <StoriesPlaceholder />}
+      {isFetchingStories && <StoriesLoading />}
 
       {!isFetchingStories && storiesToDisplay && 0 < storiesToDisplay.length && (
         <div className={alignmentClass}>
@@ -278,7 +265,6 @@ LatestStoriesEdit.propTypes = {
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.string,
-    carouselSettings: PropTypes.object,
     authors: PropTypes.array,
     imageOnRight: PropTypes.bool,
     isStyleSquared: PropTypes.bool,

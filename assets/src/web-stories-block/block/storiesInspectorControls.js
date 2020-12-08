@@ -68,19 +68,21 @@ import AuthorSelection from './authorSelection';
  */
 const StoriesInspectorControls = (props) => {
   const {
-    viewType,
-    numOfStories,
-    numOfColumns,
-    orderByValue,
-    isShowingTitle,
-    isShowingDate,
-    isShowingAuthor,
-    isShowingViewAll,
-    viewAllLinkLabel,
+    attributes: {
+      viewType,
+      numOfStories,
+      numOfColumns,
+      orderByValue,
+      isShowingTitle,
+      isShowingDate,
+      isShowingAuthor,
+      isShowingViewAll,
+      viewAllLinkLabel,
+      authors,
+      imageOnRight,
+      isStyleSquared,
+    },
     setAttributes,
-    authors,
-    imageOnRight,
-    isStyleSquared,
     showFilters = true,
   } = props;
 
@@ -222,19 +224,21 @@ const StoriesInspectorControls = (props) => {
 };
 
 StoriesInspectorControls.propTypes = {
-  viewType: PropTypes.string,
-  numOfStories: PropTypes.number,
-  numOfColumns: PropTypes.number,
-  orderByValue: PropTypes.string,
-  isShowingTitle: PropTypes.bool,
-  isShowingDate: PropTypes.bool,
-  isShowingAuthor: PropTypes.bool,
-  isShowingViewAll: PropTypes.bool,
-  viewAllLinkLabel: PropTypes.string,
+  attributes: PropTypes.shape({
+    viewType: PropTypes.string,
+    numOfStories: PropTypes.number,
+    numOfColumns: PropTypes.number,
+    orderByValue: PropTypes.string,
+    isShowingTitle: PropTypes.bool,
+    isShowingDate: PropTypes.bool,
+    isShowingAuthor: PropTypes.bool,
+    isShowingViewAll: PropTypes.bool,
+    viewAllLinkLabel: PropTypes.string,
+    authors: PropTypes.array,
+    imageOnRight: PropTypes.bool,
+    isStyleSquared: PropTypes.bool,
+  }),
   setAttributes: PropTypes.func.isRequired,
-  authors: PropTypes.array,
-  imageOnRight: PropTypes.bool,
-  isStyleSquared: PropTypes.bool,
   showFilters: PropTypes.bool,
 };
 

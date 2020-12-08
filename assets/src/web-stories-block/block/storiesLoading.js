@@ -21,11 +21,11 @@ import { Spinner, Placeholder } from '@wordpress/components';
 import { _x } from '@wordpress/i18n';
 
 /**
- * StoriesPlaceholder component. Displays a spinner when stories are being fetched.
+ * StoriesLoading component. Displays a spinner when stories are being fetched.
  *
  * @return {*} JSX markup.
  */
-const StoriesPlaceholder = () => {
+const StoriesLoading = () => {
   return (
     <Placeholder
       className="web-stories placeholder"
@@ -40,4 +40,4 @@ const StoriesPlaceholder = () => {
   );
 };
 
-export default StoriesPlaceholder;
+export default StoriesLoading;
