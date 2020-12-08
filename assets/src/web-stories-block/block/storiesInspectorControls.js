@@ -74,6 +74,7 @@ const StoriesInspectorControls = (props) => {
       numOfColumns,
       orderByValue,
       isShowingTitle,
+      isShowingExcerpt,
       isShowingDate,
       isShowingAuthor,
       isShowingViewAll,
@@ -130,6 +131,16 @@ const StoriesInspectorControls = (props) => {
           label={__('Show title', 'web-stories')}
           checked={isShowingTitle}
           onChange={() => setAttributes({ isShowingTitle: !isShowingTitle })}
+        />
+        <ToggleControl
+          label={__('Show excerpt', 'web-stories')}
+          className={'circles' === viewType ? 'is-disabled' : ''}
+          checked={isShowingExcerpt}
+          onChange={() => {
+            if ('circles' !== viewType) {
+              setAttributes({ isShowingExcerpt: !isShowingExcerpt });
+            }
+          }}
         />
         <ToggleControl
           className={'circles' === viewType ? 'is-disabled' : ''}
@@ -248,6 +259,7 @@ StoriesInspectorControls.propTypes = {
     numOfColumns: PropTypes.number,
     orderByValue: PropTypes.string,
     isShowingTitle: PropTypes.bool,
+    isShowingExcerpt: PropTypes.bool,
     isShowingDate: PropTypes.bool,
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,

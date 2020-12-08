@@ -142,6 +142,10 @@ class Web_Stories_Block {
 						'type'    => 'boolean',
 						'default' => true,
 					],
+					'isShowingExcerpt' => [
+						'type'    => 'boolean',
+						'default' => false,
+					],
 					'isShowingDate'    => [
 						'type'    => 'boolean',
 						'default' => false,
@@ -259,6 +263,7 @@ class Web_Stories_Block {
 				'view_type'                 => ! empty( $attributes['viewType'] ) ? $attributes['viewType'] : 'grid',
 				'number_of_columns'         => ! empty( $attributes['numOfColumns'] ) ? $attributes['numOfColumns'] : 3,
 				'show_title'                => ! empty( $attributes['isShowingTitle'] ) ? $attributes['isShowingTitle'] : false,
+				'show_excerpt'              => ! empty( $attributes['isShowingExcerpt'] ) ? $attributes['isShowingExcerpt'] : false,
 				'show_date'                 => ! empty( $attributes['isShowingDate'] ) ? $attributes['isShowingDate'] : false,
 				'show_author'               => ! empty( $attributes['isShowingAuthor'] ) ? $attributes['isShowingAuthor'] : false,
 				'show_stories_archive_link' => ! empty( $attributes['isShowingViewAll'] ) ? $attributes['isShowingViewAll'] : false,

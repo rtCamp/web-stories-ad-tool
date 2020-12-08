@@ -28,12 +28,14 @@ import { dateI18n, format, __experimentalGetSettings } from '@wordpress/date';
 
 function StoryPlayer({
   title,
+  excerpt,
   poster,
   author,
   date,
   isShowingAuthor,
   isShowingDate,
   isShowingTitle,
+  isShowingExcerpt,
   imageOnRight,
   sizeOfCircles,
 }) {
@@ -58,10 +60,15 @@ function StoryPlayer({
           />
           {hasContentOverlay && (
             <div className="story-content-overlay web-stories__story-content-overlay">
-              {isShowingTitle && (
-                <div className="story-content-overlay__title">
-                  {title ? <RawHTML>{title}</RawHTML> : ''}
-                </div>
+              {isShowingTitle && title && (
+                <RawHTML className="story-content-overlay__title">
+                  {title}
+                </RawHTML>
+              )}
+              {isShowingExcerpt && excerpt && (
+                <RawHTML className="story-content-overlay__excerpt">
+                  {excerpt}
+                </RawHTML>
               )}
               <div className="story-content-overlay__author-date">
                 {isShowingAuthor && (
@@ -86,12 +93,14 @@ function StoryPlayer({
 
 StoryPlayer.propTypes = {
   title: PropTypes.string,
+  excerpt: PropTypes.string,
   poster: PropTypes.string,
   author: PropTypes.string,
   date: PropTypes.string,
   isShowingAuthor: PropTypes.bool,
   isShowingDate: PropTypes.bool,
   isShowingTitle: PropTypes.bool,
+  isShowingExcerpt: PropTypes.bool,
   imageOnRight: PropTypes.bool,
   sizeOfCircles: PropTypes.number,
 };

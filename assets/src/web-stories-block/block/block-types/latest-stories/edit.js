@@ -70,6 +70,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     numOfColumns,
     orderByValue,
     isShowingTitle,
+    isShowingExcerpt,
     isShowingDate,
     isShowingAuthor,
     isShowingViewAll,
@@ -180,8 +181,15 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     if ('circles' === viewType) {
       setAttributes({
         isShowingTitle: true,
+        isShowingExcerpt: false,
         isShowingDate: false,
         isShowingAuthor: false,
+      });
+    }
+
+    if ('list' === viewType) {
+      setAttributes({
+        isShowingExcerpt: true,
       });
     }
   }, [viewType, setAttributes]);
@@ -233,6 +241,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
                   key={story.id}
                   url={story.link}
                   title={story.title.rendered ? story.title.rendered : ''}
+                  excerpt={story.excerpt.rendered ? story.excerpt.rendered : ''}
                   date={story.date_gmt}
                   author={author ? author.name : ''}
                   poster={story.featured_media_url}
@@ -240,6 +249,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
                   isShowingAuthor={isShowingAuthor}
                   isShowingDate={isShowingDate}
                   isShowingTitle={isShowingTitle}
+                  isShowingExcerpt={isShowingExcerpt}
                   sizeOfCircles={sizeOfCircles}
                 />
               );
@@ -263,6 +273,7 @@ LatestStoriesEdit.propTypes = {
     numOfColumns: PropTypes.number,
     orderByValue: PropTypes.string,
     isShowingTitle: PropTypes.bool,
+    isShowingExcerpt: PropTypes.bool,
     isShowingDate: PropTypes.bool,
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,

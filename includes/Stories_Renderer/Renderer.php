@@ -506,9 +506,17 @@ abstract class Renderer implements RenderingInterface, Iterator {
 				</div>
 			<?php } ?>
 
+			<?php if ( $this->attributes['show_excerpt'] ) { ?>
+				<div class="story-content-overlay__excerpt">
+					<?php
+						echo esc_html( $story_data->get_excerpt() );
+					?>
+				</div>
+			<?php } ?>
+
 			<div class="story-content-overlay__author-date">
 				<?php if ( ! empty( $story_data->get_author() ) ) { ?>
-					<div>
+					<div class="story-content-overlay__author">
 						<?php
 
 						/* translators: %s: author name. */

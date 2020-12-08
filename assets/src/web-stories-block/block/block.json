@@ -54,6 +54,10 @@
       "type": "boolean",
       "default": true
     },
+    "isShowingExcerpt": {
+      "type": "boolean",
+      "default": false
+    },
     "isShowingDate": {
       "type": "boolean",
       "default": false

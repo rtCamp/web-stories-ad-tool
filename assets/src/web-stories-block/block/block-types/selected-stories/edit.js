@@ -56,6 +56,7 @@ const SelectedStoriesEdit = ({
     viewType,
     numOfColumns,
     isShowingTitle,
+    isShowingExcerpt,
     isShowingDate,
     isShowingAuthor,
     isShowingViewAll,
@@ -124,6 +125,15 @@ const SelectedStoriesEdit = ({
     if ('circles' === viewType) {
       setAttributes({
         isShowingTitle: true,
+        isShowingExcerpt: false,
+        isShowingDate: false,
+        isShowingAuthor: false,
+      });
+    }
+
+    if ('list' === viewType) {
+      setAttributes({
+        isShowingExcerpt: true,
       });
     }
   }, [viewType, setAttributes]);
@@ -170,6 +180,7 @@ const SelectedStoriesEdit = ({
                   key={story.id}
                   url={story.link}
                   title={title}
+                  excerpt={story.excerpt.rendered ? story.excerpt.rendered : ''}
                   date={story.date_gmt}
                   author={story._embedded.author[0].name}
                   poster={story.featured_media_url}
@@ -177,6 +188,7 @@ const SelectedStoriesEdit = ({
                   isShowingAuthor={willShowAuthor}
                   isShowingDate={willShowDate}
                   isShowingTitle={isShowingTitle}
+                  isShowingExcerpt={isShowingExcerpt}
                   sizeOfCircles={sizeOfCircles}
                 />
               );
@@ -215,6 +227,7 @@ SelectedStoriesEdit.propTypes = {
     viewType: PropTypes.string,
     numOfColumns: PropTypes.number,
     isShowingTitle: PropTypes.bool,
+    isShowingExcerpt: PropTypes.bool,
     isShowingDate: PropTypes.bool,
     isShowingAuthor: PropTypes.bool,
     isShowingViewAll: PropTypes.bool,

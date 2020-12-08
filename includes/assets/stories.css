@@ -67,15 +67,20 @@
   line-height: 16px;
 }
 
-.web-stories-list .story-content-overlay__author-date {
-  margin-top: 8px;
+.web-stories-list .story-content-overlay > * {
+  flex-shrink: 0;
+}
+
+.web-stories-list .story-content-overlay > *:not(:last-child) {
+  margin-bottom: 8px;
 }
 
 .web-stories-list .story-content-overlay__author {
-  margin-right: 8px;
+  margin-top: 8px;
 }
 
-.web-stories-list .story-content-overlay__title {
+.web-stories-list .story-content-overlay__title,
+.web-stories-list .story-content-overlay__excerpt {
   grid-column: 1/-1;
   font-size: 18px;
   line-height: 22px;
@@ -84,6 +89,13 @@
   -webkit-line-clamp: 2; /* Browser support: https://caniuse.com/?search=line-clamp */
   -webkit-box-orient: vertical; /* stylelint-disable-line property-no-vendor-prefix */
   overflow: hidden;
+}
+
+.web-stories-list .story-content-overlay__excerpt {
+  font-size: 16px;
+  font-weight: 400;
+  margin: initial;
+  -webkit-line-clamp: 3; /* Browser support: https://caniuse.com/?search=line-clamp */
 }
 
 /* Grid View Styles */
@@ -190,8 +202,9 @@
 }
 
 .web-stories-list.is-view-type-circles .web-stories-list__story-wrapper {
+  margin-right: 32px;
   flex-shrink: 0;
-  max-width: var(--size);
+  max-width: 150px;
   min-width: unset;
 }
 
@@ -204,8 +217,8 @@
 }
 
 .web-stories-list.is-view-type-circles .web-stories-list__story-placeholder {
-  height: var(--size);
-  width: var(--size);
+  height: 150px;
+  width: 150px;
   border-radius: 50%;
   background-clip: content-box;
   border: 3px solid #666;
