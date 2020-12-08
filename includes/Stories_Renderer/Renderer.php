@@ -340,6 +340,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 		$block_classes   = [];
 		$block_classes[] = 'web-stories-list';
+		$block_classes[] = ( ! empty( $this->attributes['show_title'] ) ) ? 'has-title' : '';
 		$block_classes[] = ( ! empty( $this->attributes['has_square_corners'] ) ) ? 'is-style-squared' : 'is-style-default';
 		$block_classes[] = ( ! empty( $this->attributes['view_type'] ) ) ? sprintf( 'is-view-type-%1$s', $this->attributes['view_type'] ) : 'is-view-type-circles';
 		$block_classes[] = ( ! empty( $this->attributes['number_of_columns'] ) ) ? sprintf( 'columns-%1$s', $this->attributes['number_of_columns'] ) : 'columns-3';
