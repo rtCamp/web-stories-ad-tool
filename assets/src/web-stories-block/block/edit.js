@@ -20,6 +20,11 @@
 import PropTypes from 'prop-types';
 
 /**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
  * Internal dependencies
  */
 import './edit.css';
@@ -27,9 +32,10 @@ import {
   BLOCK_TYPE_LATEST_STORIES,
   BLOCK_TYPE_SELECTED_STORIES,
   BLOCK_TYPE_URL,
+  BLOCK_TYPES,
+  VIEW_TYPES,
 } from './constants';
-import SelectBlockType from './selectBlockType';
-import SelectViewType from './selectViewType';
+import BlockConfigurationPanel from './storiesBlockConfigurationPanel';
 import LatestStoriesEdit from './block-types/latest-stories/edit';
 import SelectedStoriesEdit from './block-types/selected-stories/edit';
 import StoryURLEdit from './block-types/url/edit';
@@ -39,11 +45,29 @@ function WebStoriesEdit({ attributes, setAttributes, className, isSelected }) {
   const { blockType, viewType } = attributes;
 
   if (!blockType) {
-    return <SelectBlockType icon={icon} setAttributes={setAttributes} />;
+    return (
+      <BlockConfigurationPanel
+        icon={icon}
+        setAttributes={setAttributes}
+        instruction={__('Select Block Type', 'web-stories')}
+        columnCount={3}
+        selectionOptions={BLOCK_TYPES}
+        selectionType={'blockType'}
+      />
+    );
   }
 
   if (blockType !== BLOCK_TYPE_URL && !viewType) {
-    return <SelectViewType icon={icon} setAttributes={setAttributes} />;
+    return (
+      <BlockConfigurationPanel
+        icon={icon}
+        setAttributes={setAttributes}
+        instruction={__('Select Block View Type', 'web-stories')}
+        columnCount={4}
+        selectionOptions={VIEW_TYPES}
+        selectionType={'viewType'}
+      />
+    );
   }
 
   return blockType === BLOCK_TYPE_LATEST_STORIES ? (

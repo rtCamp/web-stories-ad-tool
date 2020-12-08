@@ -23,20 +23,23 @@ import styled from 'styled-components';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Card, CardBody, CardMedia, Placeholder } from '@wordpress/components';
+import {
+  Card,
+  CardBody,
+  CardMedia,
+  Placeholder,
+  Icon,
+} from '@wordpress/components';
 import { BlockIcon } from '@wordpress/block-editor';
-import { Icon } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
 import { light } from '../../design-system/theme/colors';
-import { BLOCK_TYPES } from './constants';
 
 const TypeGrid = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   grid-auto-rows: minmax(100px, auto);
 
@@ -53,14 +56,24 @@ const TypeMedia = styled(CardMedia)`
   justify-content: center;
 `;
 
+const TypeIcon = styled(Icon)`
+  fill: ${light.blue[5]} !important;
+`;
+
 const TypeCardBody = styled(CardBody)`
   text-align: center;
   font-weight: 600;
 `;
 
-function SelectBlockType({ icon, setAttributes }) {
+function BlockConfigurationPanel({
+  instruction,
+  columnCount,
+  icon,
+  setAttributes,
+  selectionOptions,
+  selectionType,
+}) {
   const label = __('Web Stories', 'web-stories');
-  const instruction = __('Select Block Type', 'web-stories');
 
   return (
     <Placeholder
@@ -68,26 +81,21 @@ function SelectBlockType({ icon, setAttributes }) {
       label={label}
       instructions={instruction}
     >
-      <TypeGrid>
-        {BLOCK_TYPES.map((blockType) => (
+      <TypeGrid style={{ gridTemplateColumns: `repeat(${columnCount}, 1fr)` }}>
+        {selectionOptions.map((option) => (
           <Card
-            key={blockType.id}
+            key={option.id}
             isBorderless={false}
             isElevated={false}
             size="extraSmall"
             onClick={() => {
-              setAttributes({ blockType: blockType.id });
+              setAttributes({ [selectionType]: option.id });
             }}
           >
             <TypeMedia>
-              <Icon
-                icon={blockType.icon}
-                fill={light.blue[5]}
-                width="50"
-                height="50"
-              />
+              <TypeIcon icon={option.icon} width="50" height="50" />
             </TypeMedia>
-            <TypeCardBody>{blockType.label}</TypeCardBody>
+            <TypeCardBody>{option.label}</TypeCardBody>
           </Card>
         ))}
       </TypeGrid>
@@ -95,9 +103,13 @@ function SelectBlockType({ icon, setAttributes }) {
   );
 }
 
-SelectBlockType.propTypes = {
+BlockConfigurationPanel.propTypes = {
+  selectionType: PropTypes.string,
+  selectionOptions: PropTypes.object,
+  instruction: PropTypes.string,
+  columnCount: PropTypes.number,
   icon: PropTypes.func,
   setAttributes: PropTypes.func.isRequired,
 };
 
-export default SelectBlockType;
+export default BlockConfigurationPanel;
