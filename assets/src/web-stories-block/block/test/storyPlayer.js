@@ -35,7 +35,8 @@ describe('StoryPlayer', () => {
   it('should render only empty div elements when nothing is provided', () => {
     const { container } = render(<StoryPlayer url={url} />);
 
-    expect(container.firstChild).toMatchInlineSnapshot(`
+    //expect(container.firstChild).toMatchInlineSnapshot(`
+    expect(container.firstChild.cloneNode()).toMatchSnapshot(`
       <div
         class="web-stories__controller"
       >
@@ -57,7 +58,8 @@ describe('StoryPlayer', () => {
   it('should set poster if only url and poster are provided', () => {
     const { container } = render(<StoryPlayer url={url} poster={poster} />);
 
-    expect(container.firstChild).toMatchInlineSnapshot(`
+    //expect(container.firstChild).toMatchInlineSnapshot(`
+    expect(container.firstChild.cloneNode()).toMatchSnapshot(`
       <div
         class="web-stories__controller"
       >
@@ -91,7 +93,8 @@ describe('StoryPlayer', () => {
       />
     );
 
-    expect(container.firstChild).toMatchInlineSnapshot(`
+    //expect(container.firstChild).toMatchInlineSnapshot(`
+    expect(container.firstChild.cloneNode()).toMatchSnapshot(`
       <div
         class="web-stories__controller"
       >
@@ -151,7 +154,8 @@ describe('StoryPlayer', () => {
       />
     );
 
-    expect(container.firstChild).toMatchInlineSnapshot(`
+    //expect(container.firstChild).toMatchInlineSnapshot(`
+    expect(container.firstChild.cloneNode()).toMatchSnapshot(`
       <div
         class="web-stories__controller"
       >
