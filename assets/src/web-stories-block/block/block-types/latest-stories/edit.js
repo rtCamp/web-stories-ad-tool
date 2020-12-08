@@ -77,6 +77,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     authors,
     imageOnRight,
     isStyleSquared,
+    sizeOfCircles,
   } = attributes;
 
   const [fetchedStories, setFetchedStories] = useState([]);
@@ -239,6 +240,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
                   isShowingAuthor={isShowingAuthor}
                   isShowingDate={isShowingDate}
                   isShowingTitle={isShowingTitle}
+                  sizeOfCircles={sizeOfCircles}
                 />
               );
             })}
@@ -268,6 +270,7 @@ LatestStoriesEdit.propTypes = {
     authors: PropTypes.array,
     imageOnRight: PropTypes.bool,
     isStyleSquared: PropTypes.bool,
+    sizeOfCircles: PropTypes.number,
   }),
   setAttributes: PropTypes.func.isRequired,
 };

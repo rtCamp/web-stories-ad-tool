@@ -42,6 +42,10 @@
       "type": "number",
       "default": 2
     },
+    "sizeOfCircles": {
+      "type": "number",
+      "default": 150
+    },
     "orderByValue": {
       "type": "string",
       "default": ""

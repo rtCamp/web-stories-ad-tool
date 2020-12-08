@@ -130,6 +130,10 @@ class Web_Stories_Block {
 						'type'    => 'number',
 						'default' => 2,
 					],
+					'sizeOfCircles'    => [
+						'type'    => 'number',
+						'default' => 150,
+					],
 					'orderByValue'     => [
 						'type'    => 'string',
 						'default' => '',
@@ -261,6 +265,7 @@ class Web_Stories_Block {
 				'stories_archive_label'     => ! empty( $attributes['viewAllLinkLabel'] ) ? $attributes['viewAllLinkLabel'] : __( 'View all stories', 'web-stories' ),
 				'list_view_image_alignment' => ! empty( $attributes['imageOnRight'] ) ? 'right' : 'left',
 				'has_square_corners'        => ! empty( $attributes['isStyleSquared'] ) ? $attributes['isStyleSquared'] : false,
+				'circle_size'               => ! empty( $attributes['sizeOfCircles'] ) ? $attributes['sizeOfCircles'] : 150,
 			];
 
 			$stories = new Story_Query( $story_attributes, $this->get_query_args() );

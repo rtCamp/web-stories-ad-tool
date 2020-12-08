@@ -390,6 +390,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		<div
 			class="<?php echo esc_attr( $single_story_classes ); ?>"
 			<?php echo wp_kses( $lightbox_set_state_attr, 'on' ); ?>
+			style="<?php echo esc_attr( sprintf( '--size:%1$spx', $this->attributes['circle_size'] ) ); ?>"
 		>
 			<?php
 				$this->render_story_with_poster();
@@ -408,7 +409,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 		$story_data            = $this->current();
 		$poster_url            = ( 'circles' === $this->get_view_type() ) ? $story_data->get_poster_square() : $story_data->get_poster_portrait();
-		$poster_style          = sprintf( 'background-image: url(%1$s);', esc_url_raw( $poster_url ) );
+		$poster_style          = sprintf( 'background-image: url(%1$s); --size:%2$spx', esc_url_raw( $poster_url ), esc_attr( $this->attributes['circle_size'] ) );
 		$inner_wrapper_classes = 'web-stories-list__inner-wrapper ';
 
 		if ( true === $this->is_view_type( 'carousel' ) ) {

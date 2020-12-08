@@ -219,8 +219,8 @@
 }
 
 .web-stories.is-view-type-circles .web-stories__story-placeholder {
-  height: 150px;
-  width: 150px;
+  height: var(--size);
+  width: var(--size);
   border-radius: 50%;
   background-clip: content-box;
   border: 3px solid #666;

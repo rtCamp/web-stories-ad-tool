@@ -81,6 +81,7 @@ const StoriesInspectorControls = (props) => {
       authors,
       imageOnRight,
       isStyleSquared,
+      sizeOfCircles,
     },
     setAttributes,
     showFilters = true,
@@ -186,6 +187,35 @@ const StoriesInspectorControls = (props) => {
           />
         )}
       </PanelBody>
+      <PanelBody
+        className="web-stories-settings"
+        title={__('Layout & Style Options', 'web-stories')}
+      >
+        {'grid' === viewType && (
+          <RangeControl
+            label={__('Number of columns', 'web-stories')}
+            value={numOfColumns}
+            onChange={(updatedNumOfColumns) =>
+              setAttributes({ numOfColumns: updatedNumOfColumns })
+            }
+            min={1}
+            max={4}
+            step={1}
+          />
+        )}
+        {'circles' === viewType && (
+          <RangeControl
+            label={__('Size of the circles', 'web-stories')}
+            value={sizeOfCircles}
+            onChange={(updatedSizeOfCircles) =>
+              setAttributes({ sizeOfCircles: updatedSizeOfCircles })
+            }
+            min={80}
+            max={200}
+            step={5}
+          />
+        )}
+      </PanelBody>
       {showFilters && (
         <PanelBody title={__('Sorting & Filtering', 'web-stories')}>
           <RangeControl
@@ -198,18 +228,6 @@ const StoriesInspectorControls = (props) => {
             max={20}
             step={1}
           />
-          {'grid' === viewType && (
-            <RangeControl
-              label={__('Number of columns', 'web-stories')}
-              value={numOfColumns}
-              onChange={(updatedNumOfColumns) =>
-                setAttributes({ numOfColumns: updatedNumOfColumns })
-              }
-              min={1}
-              max={4}
-              step={1}
-            />
-          )}
           <SelectControl
             label={__('Order by', 'web-stories')}
             options={orderByOptions}
@@ -237,6 +255,7 @@ StoriesInspectorControls.propTypes = {
     authors: PropTypes.array,
     imageOnRight: PropTypes.bool,
     isStyleSquared: PropTypes.bool,
+    sizeOfCircles: PropTypes.number,
   }),
   setAttributes: PropTypes.func.isRequired,
   showFilters: PropTypes.bool,

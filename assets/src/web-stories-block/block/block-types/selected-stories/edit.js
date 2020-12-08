@@ -62,6 +62,7 @@ const SelectedStoriesEdit = ({
     viewAllLinkLabel,
     imageOnRight,
     isStyleSquared,
+    sizeOfCircles,
   } = attributes;
 
   const [selectedStories, setSelectedStories] = useState(stories);
@@ -176,6 +177,7 @@ const SelectedStoriesEdit = ({
                   isShowingAuthor={willShowAuthor}
                   isShowingDate={willShowDate}
                   isShowingTitle={isShowingTitle}
+                  sizeOfCircles={sizeOfCircles}
                 />
               );
             })}
@@ -219,6 +221,7 @@ SelectedStoriesEdit.propTypes = {
     viewAllLinkLabel: PropTypes.string,
     imageOnRight: PropTypes.bool,
     isStyleSquared: PropTypes.bool,
+    sizeOfCircles: PropTypes.number,
   }),
   setAttributes: PropTypes.func.isRequired,
   isSelected: PropTypes.bool,

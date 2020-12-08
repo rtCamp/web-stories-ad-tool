@@ -35,6 +35,7 @@ function StoryPlayer({
   isShowingDate,
   isShowingTitle,
   imageOnRight,
+  sizeOfCircles,
 }) {
   const singleStoryClasses = classNames('web-stories__story-wrapper');
   const imageAlignmentClass = classNames('web-stories__inner-wrapper', {
@@ -52,6 +53,7 @@ function StoryPlayer({
             className="web-stories__story-placeholder"
             style={{
               backgroundImage: poster ? `url('${poster}')` : undefined,
+              '--size': `${sizeOfCircles}px`,
             }}
           />
           {hasContentOverlay && (
@@ -91,6 +93,7 @@ StoryPlayer.propTypes = {
   isShowingDate: PropTypes.bool,
   isShowingTitle: PropTypes.bool,
   imageOnRight: PropTypes.bool,
+  sizeOfCircles: PropTypes.number,
 };
 
 export default StoryPlayer;

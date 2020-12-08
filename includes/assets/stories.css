@@ -190,9 +190,8 @@
 }
 
 .web-stories-list.is-view-type-circles .web-stories-list__story-wrapper {
-  margin-right: 32px;
   flex-shrink: 0;
-  max-width: 150px;
+  max-width: var(--size);
   min-width: unset;
 }
 
@@ -205,8 +204,8 @@
 }
 
 .web-stories-list.is-view-type-circles .web-stories-list__story-placeholder {
-  height: 150px;
-  width: 150px;
+  height: var(--size);
+  width: var(--size);
   border-radius: 50%;
   background-clip: content-box;
   border: 3px solid #666;
