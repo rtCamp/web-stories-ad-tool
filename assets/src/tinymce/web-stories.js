@@ -34,10 +34,35 @@ import name from './store/name';
 import WebStoryMCEStore from './store';
 import WebStoriesModal from './containers/Modal';
 
+const { _ } = window;
+
 /**
  * Add button to tinyMCE editor.
  */
 (function () {
+  // eslint-disable-next-line no-prototype-builtins
+  if (!_.hasOwnProperty('pluck')) {
+    _.pluck = _.map;
+  }
+
+  /**
+   * Render tinyMCE settings modal.
+   *
+   * @class
+   */
+  const RenderModal = () => {
+    const target = document.getElementById('web-stories-tinymce');
+
+    if (target) {
+      render(<WebStoriesModal />, target);
+    }
+  };
+
+  /**
+   * Subscribe to state change in store.
+   */
+  WebStoryMCEStore.subscribe(() => RenderModal());
+
   tinymce.PluginManager.add('web_stories', function (editor) {
     editor.addButton('web_stories', {
       text: __('Web Stories', 'web-stories'),
@@ -49,21 +74,3 @@ import WebStoriesModal from './containers/Modal';
     });
   });
 })();
-
-/**
- * Render tinyMCE settings modal.
- *
- * @class
- */
-const RenderModal = () => {
-  const target = document.getElementById('web-stories-tinymce');
-
-  if (target) {
-    render(<WebStoriesModal />, target);
-  }
-};
-
-/**
- * Subscribe to state change in store.
- */
-WebStoryMCEStore.subscribe(() => RenderModal());

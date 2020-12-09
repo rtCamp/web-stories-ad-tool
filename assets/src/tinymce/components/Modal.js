@@ -32,9 +32,6 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import { isEmpty, isCircleView, updateViewSettings } from '../utils';
-
-const { _ } = window;
-
 import name from '../store/name';
 
 import TinyMCEToggle from './controls/Toggle';
@@ -112,12 +109,6 @@ const WebStoriesModal = (props) => {
               isPrimary
               onClick={() => {
                 const editorInstance = select(name).getEditor();
-
-                // eslint-disable-next-line no-prototype-builtins
-                if (!_.hasOwnProperty('pluck')) {
-                  _.pluck = _.map;
-                }
-
                 if (editorInstance) {
                   const shortcode = prepareShortCode();
                   editorInstance.insertContent(shortcode);
