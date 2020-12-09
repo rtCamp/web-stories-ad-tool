@@ -52,7 +52,7 @@ const settings = {
     attributes: {},
   },
   supports: {
-    align: ['wide', 'full'],
+    align: ['wide', 'full', 'left', 'right', 'center'],
   },
   edit,
   save,

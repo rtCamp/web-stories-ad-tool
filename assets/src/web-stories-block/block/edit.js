@@ -28,6 +28,10 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import './edit.css';
+import StoryEmbedEdit from '../../story-embed-block/block/edit';
+import BlockConfigurationPanel from './storiesBlockConfigurationPanel';
+import LatestStoriesEdit from './block-types/latest-stories/edit';
+import SelectedStoriesEdit from './block-types/selected-stories/edit';
 import {
   BLOCK_TYPE_LATEST_STORIES,
   BLOCK_TYPE_SELECTED_STORIES,
@@ -35,10 +39,6 @@ import {
   BLOCK_TYPES,
   VIEW_TYPES,
 } from './constants';
-import BlockConfigurationPanel from './storiesBlockConfigurationPanel';
-import LatestStoriesEdit from './block-types/latest-stories/edit';
-import SelectedStoriesEdit from './block-types/selected-stories/edit';
-import StoryURLEdit from './block-types/url/edit';
 import { icon } from './';
 
 function WebStoriesEdit({ attributes, setAttributes, className, isSelected }) {
@@ -80,7 +80,7 @@ function WebStoriesEdit({ attributes, setAttributes, className, isSelected }) {
       isSelected={isSelected}
     />
   ) : (
-    <StoryURLEdit
+    <StoryEmbedEdit
       icon={icon}
       attributes={attributes}
       setAttributes={setAttributes}
