@@ -38,8 +38,8 @@
 | Creator can Apply or Save Text Style from/to Their Preset Library | Apply Text Style Presets                         | 🏆 **100.00%** *(2 / 2)*    |
 |                                                                   | Display Panel                                    | 🏆 **100.00%** *(2 / 2)*    |
 |                                                                   | Manage Text Style Presets                        | 🏆 **100.00%** *(2 / 2)*    |
-|                                                                   | Save Text Style                                  | 🛴 **50.00%** *(1 / 2)*     |
-|                                                                   | *[total]*                                        | 🛴 **87.50%** *(7 / 8)*     |
+|                                                                   | Save Text Style                                  | 🏆 **100.00%** *(2 / 2)*    |
+|                                                                   | *[total]*                                        | 🏆 **100.00%** *(8 / 8)*    |
 | Creator can Apply or Save a Color from/to Their Preset Library    | Display Panel                                    | 🏆 **100.00%** *(1 / 1)*    |
 |                                                                   | Manage Color Presets                             | 🏆 **100.00%** *(1 / 1)*    |
 |                                                                   | *[total]*                                        | 🏆 **100.00%** *(2 / 2)*    |
@@ -72,4 +72,4 @@
 | User can interact with menu using mouse                           | Click toggle button to open                      | 🏆 **100.00%** *(4 / 4)*    |
 |                                                                   | *[total]*                                        | 🏆 **100.00%** *(4 / 4)*    |
 |                                                                   | click close button to close menu                 | 🏆 **100.00%** *(4 / 4)*    |
-| *\[total\]*                                                       | *\[total\]*                                      | 🛴 **76.22%** *(282 / 370)* |
+| *\[total\]*                                                       | *\[total\]*                                      | 🛴 **76.76%** *(284 / 370)* |
