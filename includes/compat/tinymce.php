@@ -31,6 +31,7 @@ if ( ! function_exists( 'tinymce_web_stories_button' ) ) {
 
 		return $buttons;
 	}
+
 	add_filter( 'mce_buttons', 'tinymce_web_stories_button' );
 }
 
@@ -47,6 +48,7 @@ if ( ! function_exists( 'web_stories_mce_plugin' ) ) {
 
 		return $plugins;
 	}
+
 	add_filter( 'mce_external_plugins', 'web_stories_mce_plugin' );
 }
 
@@ -57,15 +59,17 @@ if ( ! function_exists( 'web_stories_tinymce_scripts' ) ) {
 	 * @return void
 	 */
 	function web_stories_tinymce_scripts() {
-		wp_enqueue_script( 'underscore' );
+		if ( is_tinymce_editor() ) {
 
-		wp_enqueue_style(
-			'web-stories-mce-components',
-			trailingslashit( WEBSTORIES_ASSETS_URL ) . 'css/web-stories-button.css',
-			[],
-			false
-		);
+			wp_enqueue_style(
+				'web-stories-mce-components',
+				trailingslashit( WEBSTORIES_ASSETS_URL ) . 'css/web-stories-button.css',
+				[],
+				WEBSTORIES_VERSION
+			);
+		}
 	}
+
 	add_action( 'admin_enqueue_scripts', 'web_stories_tinymce_scripts' );
 }
 
@@ -77,8 +81,11 @@ if ( ! function_exists( 'web_stories_tinymce_root_element' ) ) {
 	 * @return void
 	 */
 	function web_stories_tinymce_root_element() {
-		echo '<div id="web-stories-tinymce"></div>';
+		if ( is_tinymce_editor() ) {
+			echo '<div id="web-stories-tinymce"></div>';
+		}
 	}
+
 	add_action( 'admin_footer', 'web_stories_tinymce_root_element' );
 }
 
@@ -89,6 +96,10 @@ if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 	 * @return void
 	 */
 	function web_stories_tinymce_data() {
+		if ( ! is_tinymce_editor() ) {
+			return;
+		}
+
 		$theme_support = Customizer::get_stories_theme_support();
 		$order         = $theme_support['order'];
 		$views         = $theme_support['view-type'];
@@ -143,4 +154,24 @@ if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 		echo "\n</script>";
 	}
 	add_action( 'admin_enqueue_scripts', 'web_stories_tinymce_data' );
+}
+
+if ( ! function_exists( 'is_tinymce_editor' ) ) {
+	/**
+	 * Check if current screen is TinyMCE editor.
+	 *
+	 * @return bool
+	 */
+	function is_tinymce_editor() {
+		global $current_screen;
+
+		if ( ( $current_screen instanceof \WP_Screen ) &&
+		property_exists( $current_screen, 'is_block_editor' ) &&
+		true === (bool) $current_screen->is_block_editor
+		) {
+			return true;
+		}
+
+		return true;
+	}
 }
