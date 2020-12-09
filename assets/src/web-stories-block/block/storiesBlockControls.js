@@ -25,6 +25,7 @@ import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import { Button, ToolbarGroup } from '@wordpress/components';
 import { BlockControls } from '@wordpress/block-editor';
+import { Fragment } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -69,38 +70,42 @@ const StoriesBlockControls = ({ blockType, viewType, setAttributes }) => {
   return (
     <BlockControls>
       <ToolbarGroup>
-        <Button
-          label={__('Grid view', 'web-stories')}
-          icon={GRID_VIEW_TYPE_ICON}
-          onClick={() => {
-            toggleView('grid');
-          }}
-          isPressed={'grid' === viewType}
-        />
-        <Button
-          label={__('List view', 'web-stories')}
-          icon={LIST_VIEW_TYPE_ICON}
-          onClick={() => {
-            toggleView('list');
-          }}
-          isPressed={'list' === viewType}
-        />
-        <Button
-          label={__('Circles view', 'web-stories')}
-          icon={CIRCLES_VIEW_TYPE_ICON}
-          onClick={() => {
-            toggleView('circles');
-          }}
-          isPressed={'circles' === viewType}
-        />
-        <Button
-          label={__('Carousel View', 'web-stories')}
-          icon={CAROUSEL_VIEW_TYPE_ICON}
-          onClick={() => {
-            toggleView('carousel');
-          }}
-          isPressed={'carousel' === viewType}
-        />
+        {blockType && 'url' !== blockType && (
+          <Fragment>
+            <Button
+              label={__('Grid view', 'web-stories')}
+              icon={GRID_VIEW_TYPE_ICON}
+              onClick={() => {
+                toggleView('grid');
+              }}
+              isPressed={'grid' === viewType}
+            />
+            <Button
+              label={__('List view', 'web-stories')}
+              icon={LIST_VIEW_TYPE_ICON}
+              onClick={() => {
+                toggleView('list');
+              }}
+              isPressed={'list' === viewType}
+            />
+            <Button
+              label={__('Circles view', 'web-stories')}
+              icon={CIRCLES_VIEW_TYPE_ICON}
+              onClick={() => {
+                toggleView('circles');
+              }}
+              isPressed={'circles' === viewType}
+            />
+            <Button
+              label={__('Carousel View', 'web-stories')}
+              icon={CAROUSEL_VIEW_TYPE_ICON}
+              onClick={() => {
+                toggleView('carousel');
+              }}
+              isPressed={'carousel' === viewType}
+            />
+          </Fragment>
+        )}
         <BlockTypeSwitcher
           selectedBlockType={blockType}
           setAttributes={setAttributes}

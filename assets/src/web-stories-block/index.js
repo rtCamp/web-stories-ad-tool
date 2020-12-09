@@ -24,6 +24,7 @@ import { registerBlockType } from '@wordpress/blocks';
  */
 import { initializeTracking } from '../tracking';
 import { name, settings } from './block';
+import './block/storiesFilters';
 
 __webpack_public_path__ = global.webStoriesBlockSettings.publicPath;
 
