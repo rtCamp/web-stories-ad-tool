@@ -41,17 +41,18 @@ import { addQueryArgs } from '@wordpress/url';
 /**
  * Internal dependencies
  */
-import StoryPlayer from '../../storyPlayer';
 import StoriesInspectorControls from '../../storiesInspectorControls';
 import StoriesBlockControls from '../../storiesBlockControls';
 import StoriesLoading from '../../storiesLoading';
 import { FETCH_STORIES_DEBOUNCE } from '../../constants';
+import StoriesPreview from '../../storiesPreview';
 
 /**
  * Module constants
  */
 const LATEST_STORIES_QUERY = {
   per_page: 20,
+  _embed: 'author',
 };
 
 /**
@@ -69,20 +70,12 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     numOfStories,
     numOfColumns,
     orderByValue,
-    isShowingTitle,
-    isShowingExcerpt,
-    isShowingDate,
-    isShowingAuthor,
-    isShowingViewAll,
     viewAllLinkLabel,
     authors,
-    imageOnRight,
     isStyleSquared,
-    sizeOfCircles,
   } = attributes;
 
   const [fetchedStories, setFetchedStories] = useState([]);
-  const [fetchedAuthors, setFetchedAuthors] = useState([]);
   const [isFetchingStories, setIsFetchingStories] = useState([]);
 
   /**
@@ -111,18 +104,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     fetchStories,
     FETCH_STORIES_DEBOUNCE
   );
-
-  useEffect(() => {
-    apiFetch({
-      path: addQueryArgs('/wp/v2/users', { per_page: -1 }),
-    })
-      .then((data) => {
-        setFetchedAuthors(data);
-      })
-      .catch(() => {
-        setFetchedAuthors([]);
-      });
-  }, []); // Empty array because we want to fetch authors only once on component mount.
 
   useEffect(() => {
     let order = 'desc',
@@ -169,31 +150,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   }, [numOfStories, debouncedFetchStories]);
   /* eslint-enable react-hooks/exhaustive-deps */
 
-  useEffect(() => {
-    if ('circles' !== viewType) {
-      setAttributes({
-        isShowingTitle: true,
-        isShowingAuthor: true,
-        isShowingDate: true,
-      });
-    }
-
-    if ('circles' === viewType) {
-      setAttributes({
-        isShowingTitle: true,
-        isShowingExcerpt: false,
-        isShowingDate: false,
-        isShowingAuthor: false,
-      });
-    }
-
-    if ('list' === viewType) {
-      setAttributes({
-        isShowingExcerpt: true,
-      });
-    }
-  }, [viewType, setAttributes]);
-
   const viewAllLabel = viewAllLinkLabel
     ? viewAllLinkLabel
     : __('View All Stories', 'web-stories');
@@ -209,7 +165,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
       'is-style-default': !isStyleSquared,
       'is-style-squared': isStyleSquared,
     },
-    'web-stories',
+    'web-stories-list',
     { [`is-view-type-${viewType}`]: viewType },
     { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
   );
@@ -228,38 +184,17 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
 
       {isFetchingStories && <StoriesLoading />}
 
-      {!isFetchingStories && storiesToDisplay && 0 < storiesToDisplay.length && (
-        <div className={alignmentClass}>
-          <div className={blockClasses}>
-            {storiesToDisplay.map((story) => {
-              const author = fetchedAuthors.find(
-                (singleAuthorObj) => story.author === singleAuthorObj.id
-              );
-
-              return (
-                <StoryPlayer
-                  key={story.id}
-                  url={story.link}
-                  title={story.title.rendered ? story.title.rendered : ''}
-                  excerpt={story.excerpt.rendered ? story.excerpt.rendered : ''}
-                  date={story.date_gmt}
-                  author={author ? author.name : ''}
-                  poster={story.featured_media_url}
-                  imageOnRight={imageOnRight}
-                  isShowingAuthor={isShowingAuthor}
-                  isShowingDate={isShowingDate}
-                  isShowingTitle={isShowingTitle}
-                  isShowingExcerpt={isShowingExcerpt}
-                  sizeOfCircles={sizeOfCircles}
-                />
-              );
-            })}
-          </div>
-          {isShowingViewAll && (
-            <div className="latest-stories__archive-link">{viewAllLabel}</div>
-          )}
-        </div>
-      )}
+      {!isFetchingStories &&
+        storiesToDisplay &&
+        0 < storiesToDisplay.length && (
+          <StoriesPreview
+            attributes={attributes}
+            alignmentClass={alignmentClass}
+            blockClasses={blockClasses}
+            storiesObject={storiesToDisplay}
+            viewAllLabel={viewAllLabel}
+          />
+        )}
     </>
   );
 };

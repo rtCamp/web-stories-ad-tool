@@ -37,9 +37,9 @@ import {
   theme as externalDesignSystemTheme,
   lightMode,
 } from '../../../../design-system';
-import StoryPlayer from '../../storyPlayer';
 import StoriesInspectorControls from '../../storiesInspectorControls';
 import StoriesBlockControls from '../../storiesBlockControls';
+import StoriesPreview from '../../storiesPreview';
 import EmbedPlaceholder from './embedPlaceholder';
 import FetchSelectedStories from './fetchSelectedStories';
 
@@ -55,15 +55,8 @@ const SelectedStoriesEdit = ({
     align,
     viewType,
     numOfColumns,
-    isShowingTitle,
-    isShowingExcerpt,
-    isShowingDate,
-    isShowingAuthor,
-    isShowingViewAll,
     viewAllLinkLabel,
-    imageOnRight,
     isStyleSquared,
-    sizeOfCircles,
   } = attributes;
 
   const [selectedStories, setSelectedStories] = useState(stories);
@@ -75,8 +68,6 @@ const SelectedStoriesEdit = ({
   const label = __('Web Stories', 'web-stories');
   const { config } = global.webStoriesBlockSettings;
 
-  const willShowDate = 'circles' === viewType ? false : isShowingDate;
-  const willShowAuthor = 'circles' === viewType ? false : isShowingAuthor;
   const viewAllLabel = viewAllLinkLabel
     ? viewAllLinkLabel
     : __('View All Stories', 'web-stories');
@@ -87,7 +78,7 @@ const SelectedStoriesEdit = ({
       'is-style-default': !isStyleSquared,
       'is-style-squared': isStyleSquared,
     },
-    'web-stories',
+    'web-stories-list',
     { [`is-view-type-${viewType}`]: viewType },
     { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
   );
@@ -112,31 +103,6 @@ const SelectedStoriesEdit = ({
     selectedStoriesObject,
     setIsFetchingSelectedStories,
   ]);
-
-  useEffect(() => {
-    if ('circles' !== viewType) {
-      setAttributes({
-        isShowingTitle: true,
-        isShowingAuthor: true,
-        isShowingDate: true,
-      });
-    }
-
-    if ('circles' === viewType) {
-      setAttributes({
-        isShowingTitle: true,
-        isShowingExcerpt: false,
-        isShowingDate: false,
-        isShowingAuthor: false,
-      });
-    }
-
-    if ('list' === viewType) {
-      setAttributes({
-        isShowingExcerpt: true,
-      });
-    }
-  }, [viewType, setAttributes]);
 
   if (isFetchingSelectedStories) {
     return (
@@ -163,41 +129,13 @@ const SelectedStoriesEdit = ({
         showFilters={false}
       />
       {selectedStoriesObject && 0 < selectedStoriesObject.length && (
-        <div className={alignmentClass}>
-          <div className={blockClasses}>
-            {selectedStoriesObject.map((story) => {
-              let title = '';
-
-              if (story.title.rendered) {
-                title =
-                  'circles' === viewType && story.title.rendered.length > 45
-                    ? `${story.title.rendered.substring(0, 45)}...`
-                    : story.title.rendered;
-              }
-
-              return (
-                <StoryPlayer
-                  key={story.id}
-                  url={story.link}
-                  title={title}
-                  excerpt={story.excerpt.rendered ? story.excerpt.rendered : ''}
-                  date={story.date_gmt}
-                  author={story._embedded.author[0].name}
-                  poster={story.featured_media_url}
-                  imageOnRight={imageOnRight}
-                  isShowingAuthor={willShowAuthor}
-                  isShowingDate={willShowDate}
-                  isShowingTitle={isShowingTitle}
-                  isShowingExcerpt={isShowingExcerpt}
-                  sizeOfCircles={sizeOfCircles}
-                />
-              );
-            })}
-          </div>
-          {isShowingViewAll && (
-            <div className="latest-stories__archive-link">{viewAllLabel}</div>
-          )}
-        </div>
+        <StoriesPreview
+          attributes={attributes}
+          alignmentClass={alignmentClass}
+          blockClasses={blockClasses}
+          storiesObject={selectedStoriesObject}
+          viewAllLabel={viewAllLabel}
+        />
       )}
       <ThemeProvider theme={activeTheme}>
         <ConfigProvider config={config}>

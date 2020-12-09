@@ -39,8 +39,8 @@ function StoryPlayer({
   imageOnRight,
   sizeOfCircles,
 }) {
-  const singleStoryClasses = classNames('web-stories__story-wrapper');
-  const imageAlignmentClass = classNames('web-stories__inner-wrapper', {
+  const singleStoryClasses = classNames('web-stories-list__story-wrapper');
+  const imageAlignmentClass = classNames('web-stories-list__inner-wrapper', {
     [`image-align-right`]: imageOnRight,
     [`image-align-left`]: !imageOnRight,
   });
@@ -48,44 +48,42 @@ function StoryPlayer({
   const dateFormat = __experimentalGetSettings().formats.date;
 
   return (
-    <div className="web-stories__controller">
-      <div className={singleStoryClasses}>
-        <div className={imageAlignmentClass}>
-          <div
-            className="web-stories__story-placeholder"
-            style={{
-              backgroundImage: poster ? `url('${poster}')` : undefined,
-              '--size': `${sizeOfCircles}px`,
-            }}
-          />
-          {hasContentOverlay && (
-            <div className="story-content-overlay web-stories__story-content-overlay">
-              {isShowingTitle && title && (
-                <RawHTML className="story-content-overlay__title">
-                  {title}
-                </RawHTML>
+    <div className={singleStoryClasses}>
+      <div className={imageAlignmentClass}>
+        <div
+          className="web-stories-list__story-placeholder"
+          style={{
+            backgroundImage: poster ? `url('${poster}')` : undefined,
+            '--size': `${sizeOfCircles}px`,
+          }}
+        />
+        {hasContentOverlay && (
+          <div className="story-content-overlay web-stories-list__story-content-overlay">
+            {isShowingTitle && title && (
+              <RawHTML className="story-content-overlay__title">
+                {title}
+              </RawHTML>
+            )}
+            {isShowingExcerpt && excerpt && (
+              <RawHTML className="story-content-overlay__excerpt">
+                {excerpt}
+              </RawHTML>
+            )}
+            <div className="story-content-overlay__author-date">
+              {isShowingAuthor && (
+                <div className="story-content-overlay__author">{`By ${author}`}</div>
               )}
-              {isShowingExcerpt && excerpt && (
-                <RawHTML className="story-content-overlay__excerpt">
-                  {excerpt}
-                </RawHTML>
+              {isShowingDate && (
+                <time
+                  dateTime={format('c', date)}
+                  className="story-content-overlay__date"
+                >
+                  {`On ${dateI18n(dateFormat, date)}`}
+                </time>
               )}
-              <div className="story-content-overlay__author-date">
-                {isShowingAuthor && (
-                  <div className="story-content-overlay__author">{`By ${author}`}</div>
-                )}
-                {isShowingDate && (
-                  <time
-                    dateTime={format('c', date)}
-                    className="story-content-overlay__date"
-                  >
-                    {`On ${dateI18n(dateFormat, date)}`}
-                  </time>
-                )}
-              </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

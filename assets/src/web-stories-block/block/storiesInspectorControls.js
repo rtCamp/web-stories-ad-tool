@@ -32,7 +32,7 @@ import {
   Notice,
 } from '@wordpress/components';
 import { InspectorControls } from '@wordpress/block-editor';
-import { RawHTML } from '@wordpress/element';
+import { RawHTML, useEffect } from '@wordpress/element';
 import { select } from '@wordpress/data';
 
 /**
@@ -87,6 +87,31 @@ const StoriesInspectorControls = (props) => {
     setAttributes,
     showFilters = true,
   } = props;
+
+  useEffect(() => {
+    if ('circles' !== viewType) {
+      setAttributes({
+        isShowingTitle: true,
+        isShowingAuthor: true,
+        isShowingDate: true,
+      });
+    }
+
+    if ('circles' === viewType) {
+      setAttributes({
+        isShowingTitle: true,
+        isShowingExcerpt: false,
+        isShowingDate: false,
+        isShowingAuthor: false,
+      });
+    }
+
+    if ('list' === viewType) {
+      setAttributes({
+        isShowingExcerpt: true,
+      });
+    }
+  }, [viewType, setAttributes]);
 
   const orderByOptions = [
     { label: __('Newest to oldest', 'web-stories'), value: '' },
