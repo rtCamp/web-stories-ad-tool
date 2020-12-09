@@ -54,7 +54,7 @@ function StoryPlayer({
           className="web-stories-list__story-placeholder"
           style={{
             backgroundImage: poster ? `url('${poster}')` : undefined,
-            '--size': `${sizeOfCircles}px`,
+            '--size': sizeOfCircles ? `${sizeOfCircles}px` : undefined,
           }}
         />
         {hasContentOverlay && (

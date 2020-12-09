@@ -24,54 +24,46 @@ import { render } from '@testing-library/react';
  */
 import StoryPlayer from '../storyPlayer';
 
-const url =
-  'https://preview.amp.dev/documentation/examples/introduction/stories_in_amp';
 const title = 'Stories in AMP';
 const poster = 'https://amp.dev/static/samples/img/story_dog2_portrait.jpg';
-const date = '2020-01-01T00:00:00';
+const date = '2020-11-18T13:36:35';
 const author = 'Admin';
+const excerpt =
+  'Ullamcorper integer senectus netus dapibus consectetur orci imperdiet gravida volutpat nulla, aliquet penatibus elit sollicitudin turpis aenean suscipit vel a, at et congue nullam tincidunt semper eget auctor vehicula. Netus commodo mauris pharetra non diam fusce convallis nibh tempor nisi fringilla, lorem bibendum aenean nostra dis congue mus primis sapien vivamus tortor proin, metus leo quam arcu et augue lacinia integer suscipit ridiculus. Nulla diam viverra fringilla nostra, neque augue cubilia blandit felis, habitant leo aliquam. Fusce dictumst cursus nibh penatibus interdum duis natoque sed, lacinia ut convallis nam scelerisque lorem cubilia curabitur vel, mollis aliquam mattis commodo litora pretium suscipit.';
 
 describe('StoryPlayer', () => {
   it('should render only empty div elements when nothing is provided', () => {
-    const { container } = render(<StoryPlayer url={url} />);
+    const { container } = render(<StoryPlayer />);
 
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div
-        class="web-stories__controller"
+        class="web-stories-list__story-wrapper"
       >
         <div
-          class="web-stories__story-wrapper has-poster"
+          class="web-stories-list__inner-wrapper image-align-left"
         >
           <div
-            class="web-stories__inner-wrapper image-align-left"
-          >
-            <div
-              class="web-stories__story-placeholder"
-            />
-          </div>
+            class="web-stories-list__story-placeholder"
+          />
         </div>
       </div>
     `);
   });
 
   it('should set poster if only url and poster are provided', () => {
-    const { container } = render(<StoryPlayer url={url} poster={poster} />);
+    const { container } = render(<StoryPlayer poster={poster} />);
 
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div
-        class="web-stories__controller"
+        class="web-stories-list__story-wrapper"
       >
         <div
-          class="web-stories__story-wrapper has-poster"
+          class="web-stories-list__inner-wrapper image-align-left"
         >
           <div
-            class="web-stories__inner-wrapper image-align-left"
-          >
-            <div
-              class="web-stories__story-placeholder"
-              style="background-image: url(https://amp.dev/static/samples/img/story_dog2_portrait.jpg);"
-            />
-          </div>
+            class="web-stories-list__story-placeholder"
+            style="background-image: url(https://amp.dev/static/samples/img/story_dog2_portrait.jpg);"
+          />
         </div>
       </div>
     `);
@@ -80,7 +72,6 @@ describe('StoryPlayer', () => {
   it('should show title, date and author if they are provided and enabled', () => {
     const { container } = render(
       <StoryPlayer
-        url={url}
         title={title}
         isShowingTitle={true}
         date={date}
@@ -88,32 +79,34 @@ describe('StoryPlayer', () => {
         author={author}
         isShowingAuthor={true}
         poster={poster}
+        isShowingExcerpt={true}
+        excerpt={excerpt}
       />
     );
 
     expect(container.firstChild).toMatchInlineSnapshot(`
-      <div
-        class="web-stories__controller"
-      >
         <div
-          class="web-stories__story-wrapper has-poster"
+          class="web-stories-list__story-wrapper"
         >
           <div
-            class="web-stories__inner-wrapper image-align-left"
+            class="web-stories-list__inner-wrapper image-align-left"
           >
             <div
-              class="web-stories__story-placeholder"
+              class="web-stories-list__story-placeholder"
               style="background-image: url(https://amp.dev/static/samples/img/story_dog2_portrait.jpg);"
             />
             <div
-              class="story-content-overlay web-stories__story-content-overlay"
+              class="story-content-overlay web-stories-list__story-content-overlay"
             >
               <div
                 class="story-content-overlay__title"
               >
-                <div>
-                  Stories in AMP
-                </div>
+                Stories in AMP
+              </div>
+              <div
+                class="story-content-overlay__excerpt"
+              >
+                Ullamcorper integer senectus netus dapibus consectetur orci imperdiet gravida volutpat nulla, aliquet penatibus elit sollicitudin turpis aenean suscipit vel a, at et congue nullam tincidunt semper eget auctor vehicula. Netus commodo mauris pharetra non diam fusce convallis nibh tempor nisi fringilla, lorem bibendum aenean nostra dis congue mus primis sapien vivamus tortor proin, metus leo quam arcu et augue lacinia integer suscipit ridiculus. Nulla diam viverra fringilla nostra, neque augue cubilia blandit felis, habitant leo aliquam. Fusce dictumst cursus nibh penatibus interdum duis natoque sed, lacinia ut convallis nam scelerisque lorem cubilia curabitur vel, mollis aliquam mattis commodo litora pretium suscipit.
               </div>
               <div
                 class="story-content-overlay__author-date"
@@ -125,22 +118,20 @@ describe('StoryPlayer', () => {
                 </div>
                 <time
                   class="story-content-overlay__date"
-                  datetime="2020-01-01T00:00:00+06:00"
+                  datetime="2020-11-18T13:36:35+05:30"
                 >
-                  On January 1, 2020
+                  On November 18, 2020
                 </time>
               </div>
             </div>
           </div>
         </div>
-      </div>
     `);
   });
 
   it('should not show title, date and author if they are provided but disabled', () => {
     const { container } = render(
       <StoryPlayer
-        url={url}
         title={title}
         isShowingTitle={false}
         date={date}
@@ -148,24 +139,22 @@ describe('StoryPlayer', () => {
         author={author}
         isShowingAuthor={false}
         poster={poster}
+        isShowingExcerpt={true}
+        excerpt={excerpt}
       />
     );
 
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div
-        class="web-stories__controller"
+        class="web-stories-list__story-wrapper"
       >
         <div
-          class="web-stories__story-wrapper has-poster"
+          class="web-stories-list__inner-wrapper image-align-left"
         >
           <div
-            class="web-stories__inner-wrapper image-align-left"
-          >
-            <div
-              class="web-stories__story-placeholder"
-              style="background-image: url(https://amp.dev/static/samples/img/story_dog2_portrait.jpg);"
-            />
-          </div>
+            class="web-stories-list__story-placeholder"
+            style="background-image: url(https://amp.dev/static/samples/img/story_dog2_portrait.jpg);"
+          />
         </div>
       </div>
     `);

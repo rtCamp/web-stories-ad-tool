@@ -31,7 +31,9 @@ import LoaderContainer from '../loaderContainer';
 describe('LoaderContainer', () => {
   it('should render provided children with spinner component', () => {
     render(
-      <LoaderContainer>{__('Loading stories…', 'web-stories')}</LoaderContainer>
+      <LoaderContainer>
+        <div>{__('Loading stories…', 'web-stories')}</div>
+      </LoaderContainer>
     );
     expect(screen.getByText('Loading stories...')).toBeInTheDocument();
   });
