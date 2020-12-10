@@ -1,5 +1,6 @@
 /* Carousel view styles */
-.web-stories-list.is-view-type-carousel {
+.web-stories-list.is-view-type-carousel,
+.web-stories-list.is-view-type-circles {
   display: flex;
   overflow-x: scroll;
 }
