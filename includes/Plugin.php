@@ -171,7 +171,7 @@ class Plugin {
 	public function register() {
 		// Plugin compatibility / polyfills.
 		add_action( 'init', [ $this, 'load_amp_plugin_compat' ] );
-		add_action( 'init', [ $this, 'tinymce_buttons' ] );
+		add_action( 'init', [ $this, 'includes' ] );
 
 		// Settings.
 		$this->settings = new Settings();
@@ -272,8 +272,14 @@ class Plugin {
 		require_once WEBSTORIES_PLUGIN_DIR_PATH . 'includes/compat/amp.php';
 	}
 
-	public function tinymce_buttons() {
+	/**
+	 * Inlcude necessary files.
+	 *
+	 * @return void
+	 */
+	public function includes() {
 		require_once WEBSTORIES_PLUGIN_DIR_PATH . 'includes/compat/tinymce.php';
+		require_once WEBSTORIES_PLUGIN_DIR_PATH . 'includes/functions.php';
 	}
 
 	/**
