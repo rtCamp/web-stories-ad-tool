@@ -68,7 +68,6 @@ class Story_Query {
 	 *     @type bool   $show_title                Whether to show story title or not. Default false.
 	 *     @type bool   $show_author               Whether to show story author or not. Default false.
 	 *     @type bool   $show_date                 Whether to show story date or not. Default false.
-	 *     @type bool   $show_story_player         Whether to show story player or show story poster. Default false.
 	 *     @type bool   $show_stories_archive_link Whether to show view all link or not. Default false.
 	 *     @type string $stories_archive_label     The label for view all link. Default 'View all stories'.
 	 *     @type string $list_view_image_alignment The list mode image alignment. Default 'left'.
@@ -148,7 +147,6 @@ class Story_Query {
 			'show_title'                => false,
 			'show_author'               => false,
 			'show_date'                 => false,
-			'show_story_player'         => false,
 			'show_stories_archive_link' => false,
 			'stories_archive_label'     => __( 'View all stories', 'web-stories' ),
 			'list_view_image_alignment' => 'left',
