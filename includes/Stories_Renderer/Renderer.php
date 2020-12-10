@@ -309,7 +309,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		?>
 		<div class="web-stories-list__archive-link">
 			<a href="<?php echo esc_url( $web_stories_archive ); ?>">
-				<?php echo esc_html( $this->attributes['stories_archive_label'] ); ?>
+				<span><?php echo esc_html( $this->attributes['stories_archive_label'] ); ?></span>
 			</a>
 		</div>
 		<?php

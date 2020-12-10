@@ -97,6 +97,7 @@ class Carousel_Renderer extends Renderer {
 							$this->render_single_story_content();
 							$this->next();
 						}
+						$this->maybe_render_archive_link_card();
 						?>
 					</div>
 					<div tabindex="-1" aria-label="Previous" class="glider-prev">←</div>
@@ -120,6 +121,7 @@ class Carousel_Renderer extends Renderer {
 							$this->render_single_story_content();
 							$this->next();
 						}
+						$this->maybe_render_archive_link_card();
 						?>
 					</amp-carousel>
 					<?php
@@ -127,7 +129,6 @@ class Carousel_Renderer extends Renderer {
 				}
 				?>
 			</div>
-			<?php $this->maybe_render_archive_link(); ?>
 		</div>
 		<?php
 		$content = (string) ob_get_clean();
@@ -138,6 +139,28 @@ class Carousel_Renderer extends Renderer {
 		 * @param string $content Stories content.
 		 */
 		return apply_filters( 'web_stories_carousel_renderer_stories_content', $content );
+	}
+
+	/**
+	 * Renders web stories archive link card.
+	 *
+	 * @retrun void
+	 */
+	public function maybe_render_archive_link_card() {
+
+		if ( empty( $this->attributes['show_stories_archive_link'] ) || true !== $this->attributes['show_stories_archive_link'] ) {
+			return;
+		}
+
+		?>
+		<div class="web-stories-list__story-wrapper archive-link-card" style="--size:<?php echo esc_attr( $this->attributes['circle_size'] ); ?>px;">
+			<div class="web-stories-list__inner-wrapper">
+				<div class="web-stories-list__story-placeholder" style="--size:<?php echo esc_attr( $this->attributes['circle_size'] ); ?>px">
+					<?php $this->maybe_render_archive_link(); ?>
+				</div>
+			</div>
+		</div>
+		<?php
 	}
 
 }

@@ -98,6 +98,55 @@
   -webkit-line-clamp: 3; /* Browser support: https://caniuse.com/?search=line-clamp */
 }
 
+/* Archive Cards */
+/* Stories archive link styles */
+.web-stories-list__archive-link {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.archive-link-card {
+  vertical-align: top;
+}
+
+.archive-link-card::after,
+.archive-link-card::before {
+  display: none !important;
+}
+
+.archive-link-card .web-stories-list__archive-link {
+  margin-top: 0;
+}
+
+.archive-link-card .web-stories-list__story-placeholder {
+  position: relative;
+}
+
+.archive-link-card a {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  white-space: normal;
+  line-height: 1;
+}
+
+.is-view-type-circles .archive-link-card a {
+  border-radius: 50%;
+}
+
 /* Grid View Styles */
 .web-stories-list.is-view-type-grid {
   display: flex;
@@ -275,11 +324,6 @@
 
 .web-stories-list.is-view-type-carousel .web-stories-list__inner-wrapper {
   border: 1px solid #8080805e;
-}
-
-/* Stories archive link styles */
-.web-stories-list__archive-link {
-  margin-top: 16px;
 }
 
 /* Stories Block Styles */
