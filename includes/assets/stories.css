@@ -182,9 +182,6 @@
 
 /* Circles View Styles */
 .web-stories-list.is-view-type-circles {
-  display: flex;
-  overflow-x: scroll;
-  padding: 5px;
   position: relative;
 }
 
