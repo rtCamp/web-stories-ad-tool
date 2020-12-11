@@ -1,5 +1,11 @@
 <?php
 /**
+ * TinyMCE functions for classic editor support.
+ *
+ * @package Google\Web_Stories
+ */
+
+/**
  * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -146,7 +152,7 @@ if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 			'icon'      => WEBSTORIES_ASSETS_URL . '/src/tinymce/images/carousel.svg',
 			'tag'       => 'stories',
 			'views'     => $view_types,
-			'fields'    => $field_states
+			'fields'    => $field_states,
 		];
 
 		echo "<script type='text/javascript'>\n";
