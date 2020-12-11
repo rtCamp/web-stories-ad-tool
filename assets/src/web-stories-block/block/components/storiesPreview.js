@@ -74,9 +74,11 @@ function StoriesPreview(props) {
           );
         })}
       </div>
-      {isShowingViewAll && (
-        <div className="web-stories-list__archive-link">{viewAllLabel}</div>
-      )}
+      {isShowingViewAll &&
+        'circles' !== viewType &&
+        'carousel' !== viewType && (
+          <div className="web-stories-list__archive-link">{viewAllLabel}</div>
+        )}
     </div>
   );
 }

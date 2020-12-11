@@ -198,7 +198,7 @@ const StoriesInspectorControls = (props) => {
         )}
         {'circles' !== viewType && (
           <ToggleControl
-            label={__('Show square corners', 'web-stories')}
+            label={__('Show sharp corners', 'web-stories')}
             checked={isStyleSquared}
             onChange={() => {
               setAttributes({ isStyleSquared: !isStyleSquared });
