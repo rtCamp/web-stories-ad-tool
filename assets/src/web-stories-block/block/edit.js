@@ -29,7 +29,7 @@ import { __ } from '@wordpress/i18n';
  */
 import './edit.css';
 import StoryEmbedEdit from '../../story-embed-block/block/edit';
-import BlockConfigurationPanel from './storiesBlockConfigurationPanel';
+import BlockConfigurationPanel from './components/storiesBlockConfigurationPanel';
 import LatestStoriesEdit from './block-types/latest-stories/edit';
 import SelectedStoriesEdit from './block-types/selected-stories/edit';
 import {

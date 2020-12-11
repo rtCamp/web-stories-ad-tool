@@ -22,7 +22,7 @@ import { render } from '@testing-library/react';
 /**
  * Internal dependencies
  */
-import StoryPlayer from '../storyPlayer';
+import StoryPlayer from '../components/storyPlayer';
 
 const title = 'Stories in AMP';
 const poster = 'https://amp.dev/static/samples/img/story_dog2_portrait.jpg';

@@ -26,7 +26,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import Autocomplete from '../autocomplete';
+import Autocomplete from '../components/autocomplete';
 
 describe('autocomplete', () => {
   it('should trigger onChange callback when typing', () => {

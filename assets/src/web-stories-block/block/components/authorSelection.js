@@ -40,8 +40,8 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
+import { FETCH_AUTHORS_DEBOUNCE } from '../constants';
 import Autocomplete from './autocomplete';
-import { FETCH_AUTHORS_DEBOUNCE } from './constants';
 
 /**
  * Module Constants

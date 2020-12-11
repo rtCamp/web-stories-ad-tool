@@ -28,7 +28,7 @@ import { update } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import { BLOCK_TYPES } from './constants';
+import { BLOCK_TYPES } from '../constants';
 
 function BlockTypeSwitcher({ selectedBlockType, setAttributes }) {
   return (

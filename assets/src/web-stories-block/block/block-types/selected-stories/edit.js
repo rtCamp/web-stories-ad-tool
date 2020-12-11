@@ -37,9 +37,9 @@ import {
   theme as externalDesignSystemTheme,
   lightMode,
 } from '../../../../design-system';
-import StoriesInspectorControls from '../../storiesInspectorControls';
-import StoriesBlockControls from '../../storiesBlockControls';
-import StoriesPreview from '../../storiesPreview';
+import StoriesInspectorControls from '../../components/storiesInspectorControls';
+import StoriesBlockControls from '../../components/storiesBlockControls';
+import StoriesPreview from '../../components/storiesPreview';
 import EmbedPlaceholder from './embedPlaceholder';
 import FetchSelectedStories from './fetchSelectedStories';
 

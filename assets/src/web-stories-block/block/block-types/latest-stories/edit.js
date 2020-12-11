@@ -41,11 +41,11 @@ import { addQueryArgs } from '@wordpress/url';
 /**
  * Internal dependencies
  */
-import StoriesInspectorControls from '../../storiesInspectorControls';
-import StoriesBlockControls from '../../storiesBlockControls';
-import StoriesLoading from '../../storiesLoading';
+import StoriesInspectorControls from '../../components/storiesInspectorControls';
+import StoriesBlockControls from '../../components/storiesBlockControls';
+import StoriesLoading from '../../components/storiesLoading';
 import { FETCH_STORIES_DEBOUNCE } from '../../constants';
-import StoriesPreview from '../../storiesPreview';
+import StoriesPreview from '../../components/storiesPreview';
 
 /**
  * Module constants

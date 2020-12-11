@@ -28,7 +28,7 @@ import { Fragment } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import StoriesBlockControls from './storiesBlockControls';
+import StoriesBlockControls from './components/storiesBlockControls';
 
 /**
  * Filter 'web-stories-embed' block's block controls to add block switcher.

@@ -26,6 +26,7 @@ import { ReactComponent as icon } from './icon.svg';
 import metadata from './block';
 import edit from './edit';
 import save from './save';
+import { BLOCK_TYPE_LATEST_STORIES, GRID_VIEW_TYPE } from './constants';
 
 const { name, category, attributes } = metadata;
 
@@ -48,15 +49,17 @@ const settings = {
   ],
   attributes,
   example: {
-    // @todo: Add example that suits all three types of block
-    attributes: {},
+    attributes: {
+      blockType: BLOCK_TYPE_LATEST_STORIES,
+      viewType: GRID_VIEW_TYPE,
+      numberOfColumns: 2,
+    },
   },
   supports: {
     align: ['wide', 'full', 'left', 'right', 'center'],
   },
   edit,
   save,
-  // @todo: Add transformer
 };
 
 export { metadata, name, icon, settings };

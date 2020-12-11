@@ -22,7 +22,7 @@ import { render, screen } from '@testing-library/react';
 /**
  * Internal dependencies
  */
-import StoriesLoading from '../storiesLoading';
+import StoriesLoading from '../components/storiesLoading';
 
 describe('StoriesLoading', () => {
   it('should display spinner', () => {

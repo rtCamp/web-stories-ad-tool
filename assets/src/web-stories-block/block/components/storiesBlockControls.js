@@ -35,7 +35,7 @@ import {
   LIST_VIEW_TYPE_ICON,
   CIRCLES_VIEW_TYPE_ICON,
   CAROUSEL_VIEW_TYPE_ICON,
-} from './constants';
+} from '../constants';
 import BlockTypeSwitcher from './blockTypeSwitcher';
 
 /**

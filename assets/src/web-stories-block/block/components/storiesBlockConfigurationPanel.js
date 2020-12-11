@@ -35,7 +35,7 @@ import { BlockIcon } from '@wordpress/block-editor';
 /**
  * Internal dependencies
  */
-import { light } from '../../design-system/theme/colors';
+import { light } from '../../../design-system/theme/colors';
 
 const TypeGrid = styled.div`
   width: 100%;
