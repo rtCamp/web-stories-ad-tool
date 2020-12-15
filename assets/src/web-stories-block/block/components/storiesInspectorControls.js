@@ -95,12 +95,9 @@ const StoriesInspectorControls = (props) => {
         isShowingAuthor: true,
         isShowingDate: true,
       });
-    }
-
-    if ('circles' === viewType) {
+    } else {
       setAttributes({
         isShowingTitle: true,
-        isShowingExcerpt: false,
         isShowingDate: false,
         isShowingAuthor: false,
       });
@@ -109,6 +106,10 @@ const StoriesInspectorControls = (props) => {
     if ('list' === viewType) {
       setAttributes({
         isShowingExcerpt: true,
+      });
+    } else {
+      setAttributes({
+        isShowingExcerpt: false,
       });
     }
   }, [viewType, setAttributes]);
@@ -159,10 +160,10 @@ const StoriesInspectorControls = (props) => {
         />
         <ToggleControl
           label={__('Show excerpt', 'web-stories')}
-          className={'circles' === viewType ? 'is-disabled' : ''}
+          className={'list' !== viewType ? 'is-disabled' : ''}
           checked={isShowingExcerpt}
           onChange={() => {
-            if ('circles' !== viewType) {
+            if ('list' === viewType) {
               setAttributes({ isShowingExcerpt: !isShowingExcerpt });
             }
           }}

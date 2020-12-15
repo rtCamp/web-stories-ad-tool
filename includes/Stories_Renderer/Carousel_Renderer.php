@@ -26,6 +26,8 @@
 
 namespace Google\Web_Stories\Stories_Renderer;
 
+use Google\Web_Stories\Story_Post_Type;
+
 /**
  * Carousel_Renderer class.
  *
@@ -152,14 +154,23 @@ class Carousel_Renderer extends Renderer {
 			return;
 		}
 
+		$web_stories_archive = get_post_type_archive_link( Story_Post_Type::POST_TYPE_SLUG );
+
+		if ( empty( $web_stories_archive ) || ! is_string( $web_stories_archive ) ) {
+			return;
+		}
+
 		?>
-		<div class="web-stories-list__story-wrapper archive-link-card" style="--size:<?php echo esc_attr( $this->attributes['circle_size'] ); ?>px;">
+		<a class="web-stories-list__story-wrapper archive-link-card" href="<?php echo esc_url( $web_stories_archive ); ?>" style="--size:<?php echo esc_attr( $this->attributes['circle_size'] ); ?>px;">
 			<div class="web-stories-list__inner-wrapper">
-				<div class="web-stories-list__story-placeholder" style="--size:<?php echo esc_attr( $this->attributes['circle_size'] ); ?>px">
-					<?php $this->maybe_render_archive_link(); ?>
+				<div class="web-stories-list__story-placeholder" style="--size:<?php echo esc_attr( $this->attributes['circle_size'] ); ?>px"></div>
+				<div class="story-content-overlay web-stories-list__story-content-overlay">
+					<div class="story-content-overlay__title">
+						<span><?php echo esc_html( $this->attributes['stories_archive_label'] ); ?></span>
+					</div>
 				</div>
 			</div>
-		</div>
+		</a>
 		<?php
 	}
 

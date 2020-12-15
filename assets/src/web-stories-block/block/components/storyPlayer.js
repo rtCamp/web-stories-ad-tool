@@ -48,7 +48,12 @@ function StoryPlayer({
   const dateFormat = __experimentalGetSettings().formats.date;
 
   return (
-    <div className={singleStoryClasses}>
+    <div
+      className={singleStoryClasses}
+      style={{
+        '--size': sizeOfCircles ? `${sizeOfCircles}px` : undefined,
+      }}
+    >
       <div className={imageAlignmentClass}>
         <div
           className="web-stories-list__story-placeholder"
