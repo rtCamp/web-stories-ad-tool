@@ -73,12 +73,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ampproject/amp-wp",
-                "reference": "26034a78fadfb28c7f2bdb1e3004dc4136cad0c9"
+                "reference": "4a91d537fa89cba29508570a31c132c22888f939"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ampproject/amp-wp/zipball/26034a78fadfb28c7f2bdb1e3004dc4136cad0c9",
-                "reference": "26034a78fadfb28c7f2bdb1e3004dc4136cad0c9",
+                "url": "https://api.github.com/repos/ampproject/amp-wp/zipball/4a91d537fa89cba29508570a31c132c22888f939",
+                "reference": "4a91d537fa89cba29508570a31c132c22888f939",
                 "shasum": ""
             },
             "require": {
@@ -2111,12 +2111,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "1e48e1beacb6122df93aa61a6cc291254984be2a"
+                "reference": "640ff0b5dcacc0958534c8c0255b90697f3eb2a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/1e48e1beacb6122df93aa61a6cc291254984be2a",
-                "reference": "1e48e1beacb6122df93aa61a6cc291254984be2a",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/640ff0b5dcacc0958534c8c0255b90697f3eb2a8",
+                "reference": "640ff0b5dcacc0958534c8c0255b90697f3eb2a8",
                 "shasum": ""
             },
             "conflict": {
