@@ -28,7 +28,7 @@ let DEFAULT_STATE = {
   settings: {},
   modalOpen: false,
   editor: false,
-  currentView: 'grid',
+  currentView: 'circles',
 };
 
 forEach(views, (value) => {
