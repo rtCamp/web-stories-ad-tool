@@ -126,26 +126,7 @@ if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 			];
 		}
 
-		$fields       = [
-			'title',
-			'author',
-			'date',
-			'image_align',
-			'excerpt',
-			'archive_link',
-		];
-		$field_states = [];
-
-		foreach ( $views as $view_type => $view_label ) {
-			$field_state = ( new Story_Query( [ 'view_type' => $view_type ] ) )->get_renderer()->field();
-			foreach ( $fields as $field ) {
-				$field_states[ $view_type ][ $field ] = [
-					'show'     => $field_state->$field()->show(),
-					'label'    => $field_state->$field()->label(),
-					'readonly' => $field_state->$field()->readonly(),
-				];
-			}
-		}
+		$field_states = Google\Web_Stories\fields_states();
 
 		$data = [
 			'orderlist' => $order_list,
@@ -159,6 +140,7 @@ if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 		echo 'var webStoriesMCEData = ' . wp_json_encode( $data ) . ';';
 		echo "\n</script>";
 	}
+
 	add_action( 'admin_enqueue_scripts', 'web_stories_tinymce_data' );
 }
 
