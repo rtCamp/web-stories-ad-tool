@@ -29,6 +29,7 @@ import { __ } from '@wordpress/i18n';
  */
 import './edit.css';
 import StoryEmbedEdit from '../../story-embed-block/block/edit';
+import { ConfigProvider } from '../../dashboard/app/config';
 import BlockConfigurationPanel from './components/storiesBlockConfigurationPanel';
 import LatestStoriesEdit from './block-types/latest-stories/edit';
 import SelectedStoriesEdit from './block-types/selected-stories/edit';
@@ -40,6 +41,8 @@ import {
   VIEW_TYPES,
 } from './constants';
 import { icon } from './';
+
+const { config } = global.webStoriesBlockSettings;
 
 function WebStoriesEdit({ attributes, setAttributes, className, isSelected }) {
   const { blockType, viewType } = attributes;
@@ -70,23 +73,30 @@ function WebStoriesEdit({ attributes, setAttributes, className, isSelected }) {
     );
   }
 
-  return blockType === BLOCK_TYPE_LATEST_STORIES ? (
-    <LatestStoriesEdit attributes={attributes} setAttributes={setAttributes} />
-  ) : blockType === BLOCK_TYPE_SELECTED_STORIES ? (
-    <SelectedStoriesEdit
-      icon={icon}
-      attributes={attributes}
-      setAttributes={setAttributes}
-      isSelected={isSelected}
-    />
-  ) : (
-    <StoryEmbedEdit
-      icon={icon}
-      attributes={attributes}
-      setAttributes={setAttributes}
-      className={className}
-      isSelected={isSelected}
-    />
+  return (
+    <ConfigProvider config={config}>
+      {blockType === BLOCK_TYPE_LATEST_STORIES ? (
+        <LatestStoriesEdit
+          attributes={attributes}
+          setAttributes={setAttributes}
+        />
+      ) : blockType === BLOCK_TYPE_SELECTED_STORIES ? (
+        <SelectedStoriesEdit
+          icon={icon}
+          attributes={attributes}
+          setAttributes={setAttributes}
+          isSelected={isSelected}
+        />
+      ) : (
+        <StoryEmbedEdit
+          icon={icon}
+          attributes={attributes}
+          setAttributes={setAttributes}
+          className={className}
+          isSelected={isSelected}
+        />
+      )}
+    </ConfigProvider>
   );
 }
 

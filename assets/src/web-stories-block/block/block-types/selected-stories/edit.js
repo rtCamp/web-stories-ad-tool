@@ -31,7 +31,6 @@ import { useState, useEffect } from '@wordpress/element';
  * Internal dependencies
  */
 import ApiProvider from '../../../../dashboard/app/api/apiProvider';
-import { ConfigProvider } from '../../../../dashboard/app/config';
 import theme from '../../../../dashboard/theme';
 import {
   theme as externalDesignSystemTheme,
@@ -66,7 +65,6 @@ const SelectedStoriesEdit = ({
   );
 
   const label = __('Web Stories', 'web-stories');
-  const { config } = global.webStoriesBlockSettings;
 
   const viewAllLabel = viewAllLinkLabel
     ? viewAllLinkLabel
@@ -138,19 +136,17 @@ const SelectedStoriesEdit = ({
         />
       )}
       <ThemeProvider theme={activeTheme}>
-        <ConfigProvider config={config}>
-          <ApiProvider>
-            <EmbedPlaceholder
-              icon={icon}
-              label={label}
-              selectedStories={selectedStories}
-              setSelectedStories={setSelectedStories}
-              selectedStoriesObject={selectedStoriesObject}
-              setSelectedStoriesObject={setSelectedStoriesObject}
-              isEditing={isEditing}
-            />
-          </ApiProvider>
-        </ConfigProvider>
+        <ApiProvider>
+          <EmbedPlaceholder
+            icon={icon}
+            label={label}
+            selectedStories={selectedStories}
+            setSelectedStories={setSelectedStories}
+            selectedStoriesObject={selectedStoriesObject}
+            setSelectedStoriesObject={setSelectedStoriesObject}
+            isEditing={isEditing}
+          />
+        </ApiProvider>
       </ThemeProvider>
     </>
   );

@@ -30,23 +30,14 @@ import { __ } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
 
 /**
- * LatestStoriesEdit props.
- *
- * @typedef LatestStoriesEditProps
- *
- * @property {Object}   attributes    Block attributes.
- * @property {()=>void} setAttributes Callable function for saving attribute values.
- */
-
-/**
  * Internal dependencies
  */
 import StoriesInspectorControls from '../../components/storiesInspectorControls';
 import StoriesBlockControls from '../../components/storiesBlockControls';
 import StoriesLoading from '../../components/storiesLoading';
-import { FETCH_STORIES_DEBOUNCE } from '../../constants';
+import { FETCH_STORIES_DEBOUNCE, ORDER_BY_OPTIONS } from '../../constants';
 import StoriesPreview from '../../components/storiesPreview';
-
+import { useConfig } from '../../../../dashboard/app/config';
 /**
  * Module constants
  */
@@ -58,7 +49,9 @@ const LATEST_STORIES_QUERY = {
 /**
  * LatestStoriesEdit component
  *
- * @param {LatestStoriesEditProps} props Component props.
+ * @param {Object}   root0               Component props.
+ * @param {Object}   root0.attributes    Block attributes.
+ * @param {Function} root0.setAttributes Callable function for saving attribute values.
  *
  * @return {*} JSX markup for the editor.
  */
@@ -75,6 +68,8 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     isStyleSquared,
   } = attributes;
 
+  const { api } = useConfig();
+
   const [fetchedStories, setFetchedStories] = useState([]);
   const [isFetchingStories, setIsFetchingStories] = useState([]);
 
@@ -87,7 +82,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     try {
       setIsFetchingStories(true);
       const stories = await apiFetch({
-        path: addQueryArgs('/web-stories/v1/web-story', LATEST_STORIES_QUERY),
+        path: addQueryArgs(api.stories, LATEST_STORIES_QUERY),
       });
 
       if ('undefined' !== typeof stories && Array.isArray(stories)) {
@@ -106,49 +101,18 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   );
 
   useEffect(() => {
-    let order = 'desc',
-      orderBy = 'date';
+    if (orderByValue) {
+      const order = ORDER_BY_OPTIONS[orderByValue].order || 'desc';
+      const orderBy = ORDER_BY_OPTIONS[orderByValue].orderBy || 'date';
 
-    switch (orderByValue) {
-      case 'old-to-new':
-        order = 'asc';
-        break;
-      case 'alphabetical':
-        orderBy = 'title';
-        order = 'asc';
-        break;
-      case 'reverse-alphabetical':
-        orderBy = 'title';
-        break;
-      case 'random':
-        orderBy = 'rand';
-        break;
-      default:
-        orderBy = 'date';
-        order = 'desc';
+      LATEST_STORIES_QUERY.order = order;
+      LATEST_STORIES_QUERY.orderby = orderBy;
     }
 
     LATEST_STORIES_QUERY.author = authors.map((author) => author.id);
-    LATEST_STORIES_QUERY.order = order;
-    LATEST_STORIES_QUERY.orderby = orderBy;
 
     debouncedFetchStories();
-  }, [authors, orderByValue, debouncedFetchStories]);
-
-  useEffect(() => {
-    if (numOfStories <= fetchedStories.length) {
-      // No need to fetch stories when reducing number of stories.
-      return;
-    }
-
-    LATEST_STORIES_QUERY.per_page = numOfStories;
-
-    debouncedFetchStories();
-    /* eslint-disable react-hooks/exhaustive-deps */
-    /* Disabled because the hook shouldn't be dependent on fetchedStories's length, this hook is specifically when user
-    changes number of stories. fetchedStories variable may change even if user changes 'order' of stories or 'authors' filter. */
-  }, [numOfStories, debouncedFetchStories]);
-  /* eslint-enable react-hooks/exhaustive-deps */
+  }, [authors, numOfStories, orderByValue, debouncedFetchStories]);
 
   const viewAllLabel = viewAllLinkLabel
     ? viewAllLinkLabel
