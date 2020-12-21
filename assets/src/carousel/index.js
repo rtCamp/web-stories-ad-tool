@@ -14,26 +14,35 @@
  * limitations under the License.
  */
 
-/* global Glider */
-document.addEventListener('DOMContentLoaded', () => {
-  console.log( 'ready' );
+/**
+ * External dependencies
+ */
+import Glider from 'glider-js';
 
-  const carouselWrappers = document.querySelectorAll( '.web-stories-list__carousel' );
+/**
+ * WordPress dependencies
+ */
+import domReady from '@wordpress/dom-ready';
 
-  if ( ! carouselWrappers.length ) {
+domReady(() => {
+  const carouselWrappers = document.querySelectorAll(
+    '.web-stories-list__carousel'
+  );
+
+  if (!carouselWrappers.length) {
     return;
   }
 
-  Array.from(carouselWrappers).forEach( ( carouselWrapper ) => {
+  Array.from(carouselWrappers).forEach((carouselWrapper) => {
+    /* eslint-disable-next-line no-new -- we do not store the object as no further computation required with the built object. */
     new Glider(carouselWrapper, {
       // Mobile-first defaults
       slidesToShow: 1,
       slidesToScroll: 1,
       scrollLock: true,
-      dots: '#resp-dots',
       arrows: {
         prev: '.glider-prev',
-        next: '.glider-next'
+        next: '.glider-next',
       },
       responsive: [
         {
@@ -42,12 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
           settings: {
             // Set to `auto` and provide item width to adjust to viewport
             slidesToShow: 'auto',
-            slidesToScroll: 1,
-            itemWidth: 150,
-            duration: 0.25
-          }
-        }
-      ]
+            slidesToScroll: 'auto',
+            itemWidth: 250,
+            duration: 0.25,
+          },
+        },
+      ],
     });
-  } );
+  });
 });

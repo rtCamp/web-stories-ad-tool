@@ -132,7 +132,7 @@ class Web_Stories_Block {
 					],
 					'sizeOfCircles'    => [
 						'type'    => 'number',
-						'default' => 150,
+						'default' => 96,
 					],
 					'orderByValue'     => [
 						'type'    => 'string',

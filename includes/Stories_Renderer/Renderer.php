@@ -209,7 +209,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 			$this->enqueue_style( Embed_Base::STORY_PLAYER_HANDLE );
 			$this->enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
 
-			$this->enqueue_script( 'web-stories-scripts', [ Embed_Base::STORY_PLAYER_HANDLE ] );
+			// Web Stories Lightbox script.
+			$this->enqueue_script( 'lightbox', [ Embed_Base::STORY_PLAYER_HANDLE ] );
 
 		}
 	}
@@ -340,6 +341,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 		$block_classes   = [];
 		$block_classes[] = 'web-stories-list';
+		$block_classes[] = ( $this->is_amp_request() ) ? 'is-amp' : '';
 		$block_classes[] = ( ! empty( $this->attributes['show_title'] ) ) ? 'has-title' : '';
 		$block_classes[] = ( ! empty( $this->attributes['has_square_corners'] ) ) ? 'is-style-squared' : 'is-style-default';
 		$block_classes[] = ( ! empty( $this->attributes['view_type'] ) ) ? sprintf( 'is-view-type-%1$s', $this->attributes['view_type'] ) : 'is-view-type-circles';

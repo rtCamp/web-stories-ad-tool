@@ -38,6 +38,13 @@ use Google\Web_Stories\Story_Post_Type;
 class Carousel_Renderer extends Renderer {
 
 	/**
+	 * Script handle.
+	 *
+	 * @var string
+	 */
+	const SCRIPT_HANDLE = 'carousel-script';
+
+	/**
 	 * Perform initial setup for object.
 	 *
 	 * @return void
@@ -59,11 +66,7 @@ class Carousel_Renderer extends Renderer {
 		parent::assets();
 
 		if ( ! $this->is_amp_request() ) {
-
-			wp_enqueue_script( 'glider-js', WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/lib/glider-js/glider.min.js', [], '1.7.4', true );
-			wp_enqueue_style( 'glider-css', WEBSTORIES_PLUGIN_DIR_URL . 'includes/assets/lib/glider-js/glider.min.css', [], '1.7.4' );
-
-			$this->enqueue_script( 'carousel-script', [ 'glider-js' ] );
+			$this->enqueue_script( self::SCRIPT_HANDLE );
 		}
 	}
 
@@ -102,9 +105,8 @@ class Carousel_Renderer extends Renderer {
 						$this->maybe_render_archive_link_card();
 						?>
 					</div>
-					<div tabindex="-1" aria-label="Previous" class="glider-prev">←</div>
-					<div tabindex="0" aria-label="Next" class="glider-next">→</div>
-					<div role="tablist" class="dots"></div>
+					<div tabindex="0" aria-label="<?php esc_attr_e( 'Previous', 'web-stories' ); ?>" class="glider-prev">←</div>
+					<div tabindex="0" aria-label="<?php esc_attr_e( 'Next', 'web-stories' ); ?>" class="glider-next">→</div>
 					<?php
 					$this->render_stories_with_lightbox_noamp();
 				}

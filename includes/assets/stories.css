@@ -1,3 +1,6 @@
+/* Import 'glider-js' styles. */
+@import '../../node_modules/glider-js/glider.min.css';
+
 /*
  * Generic styles that apply to all view modes
  */
@@ -370,6 +373,15 @@
 
 .web-stories-list .story-lightbox__close-button--stick:first-child {
   transform: rotateZ(-45deg);
+}
+
+/*
+ * amp-story-player's 'shadow-root-intermediary' element shows black space on top,
+ * because of the 'a' links. Making 'a' absolutely positioned removes them from normal
+ * relative flow, removes the space.
+ */
+.web-stories-list:not(.is-amp) .web-stories-list__lightbox amp-story-player a {
+  position: absolute;
 }
 
 @media only screen and (max-width: 600px) {
