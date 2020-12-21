@@ -34,12 +34,9 @@ export const StoriesBlockApiContext = createContext({ state: {}, actions: {} });
 export default function StoriesBlockApiProvider({ children }) {
   const { api, editStoryURL } = useConfig();
 
-  const { currentUser, api: usersApi, authorSuggestions } = useUsersApi(
-    dataAdapter,
-    {
-      currentUserApi: api.currentUser,
-    }
-  );
+  const { api: usersApi, authorSuggestions } = useUsersApi(dataAdapter, {
+    usersApi: api.users,
+  });
 
   const { stories, api: storyApi } = useStoryApi(dataAdapter, {
     editStoryURL,
@@ -50,7 +47,6 @@ export default function StoriesBlockApiProvider({ children }) {
     () => ({
       state: {
         stories,
-        currentUser,
         authorSuggestions,
       },
       actions: {
@@ -58,7 +54,7 @@ export default function StoriesBlockApiProvider({ children }) {
         usersApi,
       },
     }),
-    [stories, currentUser, storyApi, usersApi, authorSuggestions]
+    [stories, storyApi, usersApi, authorSuggestions]
   );
 
   return (

@@ -63,10 +63,11 @@ const StoryFilter = styled.div`
   padding: 10px 0;
   margin-top: -12px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   background-color: #fff;
 
-  #typeahead-search {
+  #typeahead-search,
+  #typeahead-author-search {
     min-height: 18px;
     border: 0;
     background: transparent;
@@ -115,8 +116,9 @@ const SearchContainer = styled.div`
   display: inline-block;
   vertical-align: baseline;
   position: relative;
-  width: 100%;
   height: 29px;
+  margin-left: 8px;
+  flex: 0 1 20%;
   @media ${({ theme }) => theme.DEPRECATED_THEME.breakpoint.smallDisplayPhone} {
     left: ${({ theme }) =>
       `${theme.DEPRECATED_THEME.standardViewContentGutter.min}px`};
@@ -126,9 +128,6 @@ const SearchContainer = styled.div`
 `;
 
 const SearchInner = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
   width: min(${DASHBOARD_LEFT_NAV_WIDTH}px, 100%);
   display: flex;
   justify-content: flex-end;
@@ -136,7 +135,6 @@ const SearchInner = styled.div`
 
 const DropdownContainer = styled.div`
   margin: auto 8px;
-  align-self: flex-end;
 `;
 
 const DetailRow = styled.div`

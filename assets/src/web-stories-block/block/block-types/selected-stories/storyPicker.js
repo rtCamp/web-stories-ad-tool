@@ -142,6 +142,11 @@ function StoryPicker({
     })
   );
 
+  const { filter, page, search, sort, view } = useStoryView({
+    filters: STORY_STATUSES,
+    totalPages,
+  });
+
   const fetchWebStories = useCallback(async () => {
     const query = {
       page: page.value,
@@ -180,11 +185,6 @@ function StoryPicker({
       return stories[storyId];
     });
   }, [stories, storiesOrderById]);
-
-  const { filter, page, search, sort, view } = useStoryView({
-    filters: STORY_STATUSES,
-    totalPages,
-  });
 
   useEffect(() => {
     if (isSortingStories) {

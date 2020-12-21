@@ -25,36 +25,8 @@ import queryString from 'query-string';
  */
 import { STORIES_PER_REQUEST } from '../../../dashboard/constants';
 
-export default function useUserApi(dataAdapter, { currentUserApi }) {
-  const [currentUser, setCurrentUser] = useState({});
-  const [isUpdating, setIsUpdating] = useState(false);
+export default function useUserApi(dataAdapter, { usersApi }) {
   const [authorSuggestions, setAuthorSuggestions] = useState([]);
-
-  const fetchCurrentUser = useCallback(async () => {
-    try {
-      setCurrentUser(await dataAdapter.get(currentUserApi));
-    } catch (e) {
-      setCurrentUser({});
-    }
-  }, [dataAdapter, currentUserApi]);
-
-  const toggleWebStoriesTrackingOptIn = useCallback(async () => {
-    setIsUpdating(true);
-    try {
-      setCurrentUser(
-        await dataAdapter.post(currentUserApi, {
-          data: {
-            meta: {
-              web_stories_tracking_optin: !currentUser.meta
-                .web_stories_tracking_optin,
-            },
-          },
-        })
-      );
-    } finally {
-      setIsUpdating(false);
-    }
-  }, [dataAdapter, currentUser, currentUserApi]);
 
   const fetchAuthors = useCallback(
     async ({ searchTerm, page = 1, perPage = STORIES_PER_REQUEST }) => {
@@ -67,7 +39,7 @@ export default function useUserApi(dataAdapter, { currentUserApi }) {
 
       try {
         const path = queryString.stringifyUrl({
-          url: '/web-stories/v1/users/',
+          url: usersApi,
           query,
         });
 
@@ -76,22 +48,14 @@ export default function useUserApi(dataAdapter, { currentUserApi }) {
         setAuthorSuggestions([]);
       }
     },
-    [dataAdapter]
+    [dataAdapter, usersApi]
   );
 
   return useMemo(
     () => ({
-      api: { fetchCurrentUser, toggleWebStoriesTrackingOptIn, fetchAuthors },
-      currentUser: { data: currentUser, isUpdating },
+      api: { fetchAuthors },
       authorSuggestions: authorSuggestions,
     }),
-    [
-      fetchCurrentUser,
-      toggleWebStoriesTrackingOptIn,
-      currentUser,
-      isUpdating,
-      fetchAuthors,
-      authorSuggestions,
-    ]
+    [fetchAuthors, authorSuggestions]
   );
 }

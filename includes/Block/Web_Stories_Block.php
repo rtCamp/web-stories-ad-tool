@@ -192,35 +192,33 @@ class Web_Stories_Block {
 	private function get_script_settings() {
 		$rest_base = Story_Post_Type::POST_TYPE_SLUG;
 
-		return [
+		$edit_story_url = admin_url(
+			add_query_arg(
+				[
+					'action' => 'edit',
+				],
+				'post.php'
+			)
+		);
+
+		$settings = [
 			'publicPath' => WEBSTORIES_PLUGIN_DIR_URL . 'assets/js/',
-			'authors'    => $this->get_story_authors(),
 			'config'     => [
 				'maxNumOfStories' => $this->max_num_of_stories,
+				'editStoryURL'    => $edit_story_url,
 				'api'             => [
 					'stories' => sprintf( '/web-stories/v1/%s', $rest_base ),
+					'users'   => '/web-stories/v1/users/',
 				],
 			],
 		];
-	}
 
-	/**
-	 * Get a list of story authors
-	 *
-	 * @since
-	 *
-	 * @return array Author list
-	 */
-	protected function get_story_authors() {
-		// @see Roles listed in \Google\Web_Stories\Story_Post_Type::add_caps_to_roles() method
-		return get_users(
-			[
-				'role__in' => [ 'administrator', 'editor', 'author', 'contributor' ],
-				'orderby'  => 'display_name',
-				'number'   => -1,
-				'fields'   => [ 'ID', 'display_name' ],
-			]
-		);
+		/**
+		 * Filters settings passed to the web stories block.
+		 *
+		 * @param array $settings Array of settings passed to web stories block.
+		 */
+		return apply_filters( 'web_stories_block_settings', $settings );
 	}
 
 	/**
