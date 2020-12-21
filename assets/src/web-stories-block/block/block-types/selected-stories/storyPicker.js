@@ -24,12 +24,12 @@ import styled from 'styled-components';
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { Button, Modal } from '@wordpress/components';
-import { useState, useEffect, useMemo } from '@wordpress/element';
+import { useState, useEffect, useMemo, useCallback } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
-import useApi from '../../../../dashboard/app/api/useApi';
+import useApi from '../../api/useApi';
 import {
   VIEW_STYLE,
   STORY_STATUSES,
@@ -101,7 +101,8 @@ function StoryPicker({
   setIsSortingStories,
 }) {
   const [fetchingForTheFirstTime, setFetchingForTheFirstTime] = useState(true);
-  const [currentAuthor, setCurrentAuthor] = useState('0');
+  const [currentAuthor, setCurrentAuthor] = useState([]);
+  const [authorKeyword, setAuthorKeyword] = useState('');
   const { maxNumOfStories } = useConfig();
 
   const {
@@ -111,10 +112,13 @@ function StoryPicker({
     totalPages,
     allPagesFetched,
     isLoading,
+    fetchAuthors,
+    authorSuggestions,
   } = useApi(
     ({
       actions: {
         storyApi: { fetchStories },
+        usersApi: { fetchAuthors },
       },
       state: {
         stories: {
@@ -124,6 +128,7 @@ function StoryPicker({
           allPagesFetched,
           isLoading,
         },
+        authorSuggestions,
       },
     }) => ({
       fetchStories,
@@ -132,10 +137,12 @@ function StoryPicker({
       totalPages,
       allPagesFetched,
       isLoading,
+      fetchAuthors,
+      authorSuggestions,
     })
   );
 
-  const fetchWebStories = async () => {
+  const fetchWebStories = useCallback(async () => {
     const query = {
       page: page.value,
       searchTerm: search.keyword,
@@ -144,13 +151,29 @@ function StoryPicker({
       status: STORY_STATUS.PUBLISH,
     };
 
-    if (currentAuthor) {
-      query.author = parseInt(currentAuthor);
+    if (currentAuthor.length) {
+      query.author = parseInt(currentAuthor.pop().id);
     }
 
     await fetchStories(query);
     setFetchingForTheFirstTime(false);
-  };
+  }, [
+    page.value,
+    search.keyword,
+    view.style,
+    sort,
+    currentAuthor,
+    fetchStories,
+    setFetchingForTheFirstTime,
+  ]);
+
+  const fetchWebAuthors = useCallback(async () => {
+    const query = {
+      searchTerm: authorKeyword,
+    };
+
+    await fetchAuthors(query);
+  }, [authorKeyword, fetchAuthors]);
 
   const orderedStories = useMemo(() => {
     return storiesOrderById.map((storyId) => {
@@ -183,6 +206,10 @@ function StoryPicker({
     sort.value,
     view.style,
   ]);
+
+  useEffect(() => {
+    fetchWebAuthors();
+  }, [authorKeyword, fetchWebAuthors]);
 
   const addItemToSelectedStories = (storyId) => {
     if (selectedStories.length >= maxNumOfStories) {
@@ -242,16 +269,19 @@ function StoryPicker({
                     orderedStories={orderedStories}
                     pageSize={view.pageSize}
                     search={search}
-                    currentAuthor={currentAuthor}
-                    setCurrentAuthor={setCurrentAuthor}
                     sort={sort}
                     addItemToSelectedStories={addItemToSelectedStories}
+                    authors={authorSuggestions}
                     removeItemFromSelectedStories={
                       removeItemFromSelectedStories
                     }
                     allPagesFetched={allPagesFetched}
                     isLoading={isLoading}
                     page={page}
+                    authorKeyword={authorKeyword}
+                    setAuthorKeyword={setAuthorKeyword}
+                    currentAuthor={currentAuthor}
+                    setCurrentAuthor={setCurrentAuthor}
                   />
                 )}
               </ModalContentInner>

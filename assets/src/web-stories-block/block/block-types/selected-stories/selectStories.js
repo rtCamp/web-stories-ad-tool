@@ -24,7 +24,7 @@ import { useDebouncedCallback } from 'use-debounce';
  * WordPress dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import { useCallback, useEffect, useState } from '@wordpress/element';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -51,6 +51,7 @@ import TypeaheadSearch from '../../../../dashboard/app/views/shared/typeaheadSea
 import { UnitsProvider } from '../../../../edit-story/units';
 import { TransformProvider } from '../../../../edit-story/components/transform';
 import FontProvider from '../../../../dashboard/app/font/fontProvider';
+import TypeaheadAuthorSearch from '../../components/typeaheadAuthorSearch';
 import { StoryGridItem } from './components/cardGridItem';
 import ItemOverlay from './components/itemOverlay';
 import StoryPreview from './storyPreview';
@@ -138,20 +139,6 @@ const DropdownContainer = styled.div`
   align-self: flex-end;
 `;
 
-const AuthorDropdown = styled(Dropdown)`
-  & > div {
-    max-height: 350px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    border-radius: 8px;
-    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.25);
-
-    & > div {
-      box-shadow: none;
-    }
-  }
-`;
-
 const DetailRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -163,18 +150,32 @@ function SelectStories({
   orderedStories,
   pageSize,
   search,
-  currentAuthor,
-  setCurrentAuthor,
   sort,
   addItemToSelectedStories,
+  authors,
   removeItemFromSelectedStories,
   allPagesFetched,
   isLoading,
   page,
+  setAuthorKeyword,
+  currentAuthor,
+  setCurrentAuthor,
 }) {
-  const [authors, setAuthors] = useState([]);
   const [debouncedTypeaheadChange] = useDebouncedCallback((value) => {
     search.setKeyword(value);
+  }, TEXT_INPUT_DEBOUNCE);
+
+  const [debouncedTypeaheadAuthorChange] = useDebouncedCallback((value) => {
+    // Set the user input as the current search keyword.
+    setAuthorKeyword(value);
+
+    // On selecting author from the dropdown, '<Typeahead />' component sets the value from the
+    // suggestions array, which in our case is author ID. Check the value is a number.
+    if (value.length > 0 && !isNaN(value)) {
+      setCurrentAuthor(
+        authors.filter((author) => author.id === parseInt(value))
+      );
+    }
   }, TEXT_INPUT_DEBOUNCE);
 
   const onSortChange = useCallback(
@@ -183,24 +184,6 @@ function SelectStories({
     },
     [sort]
   );
-
-  useEffect(() => {
-    const items = [
-      {
-        label: __('All authors', 'web-stories'),
-        value: '0',
-      },
-    ];
-
-    global.webStoriesBlockSettings.authors.forEach((author) => {
-      items.push({
-        label: author.display_name,
-        value: author.ID.toString(),
-      });
-    });
-
-    setAuthors(items);
-  }, []);
 
   return (
     <>
@@ -215,18 +198,16 @@ function SelectStories({
             />
           </SearchInner>
         </SearchContainer>
-        <DropdownContainer>
-          <AuthorDropdown
-            alignment="flex-end"
-            ariaLabel={__('Choose an author to filter', 'web-stories')}
-            items={authors}
-            type={DROPDOWN_TYPES.MENU}
-            value={currentAuthor}
-            onChange={(author) => {
-              setCurrentAuthor(author.value);
-            }}
-          />
-        </DropdownContainer>
+        <SearchContainer>
+          <SearchInner>
+            <TypeaheadAuthorSearch
+              placeholder={__('Search by author', 'web-stories')}
+              currentValue={currentAuthor.name}
+              authors={authors}
+              handleChange={debouncedTypeaheadAuthorChange}
+            />
+          </SearchInner>
+        </SearchContainer>
         <DropdownContainer>
           <Dropdown
             alignment="flex-end"
@@ -326,10 +307,12 @@ SelectStories.propTypes = {
   setCurrentAuthor: PropTypes.func,
   sort: SortPropTypes,
   addItemToSelectedStories: PropTypes.func,
+  authors: PropTypes.array,
   removeItemFromSelectedStories: PropTypes.func,
   allPagesFetched: PropTypes.bool,
   isLoading: PropTypes.bool,
   page: PagePropTypes,
+  setAuthorKeyword: PropTypes.func,
 };
 
 export default SelectStories;

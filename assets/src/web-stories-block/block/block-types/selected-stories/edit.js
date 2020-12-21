@@ -30,7 +30,6 @@ import { useState, useEffect } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import ApiProvider from '../../../../dashboard/app/api/apiProvider';
 import theme from '../../../../dashboard/theme';
 import {
   theme as externalDesignSystemTheme,
@@ -38,6 +37,7 @@ import {
 } from '../../../../design-system';
 import StoriesInspectorControls from '../../components/storiesInspectorControls';
 import StoriesBlockControls from '../../components/storiesBlockControls';
+import StoriesBlockApiProvider from '../../api/apiProvider';
 import StoriesPreview from '../../components/storiesPreview';
 import EmbedPlaceholder from './embedPlaceholder';
 import FetchSelectedStories from './fetchSelectedStories';
@@ -136,7 +136,7 @@ const SelectedStoriesEdit = ({
         />
       )}
       <ThemeProvider theme={activeTheme}>
-        <ApiProvider>
+        <StoriesBlockApiProvider>
           <EmbedPlaceholder
             icon={icon}
             label={label}
@@ -146,7 +146,7 @@ const SelectedStoriesEdit = ({
             setSelectedStoriesObject={setSelectedStoriesObject}
             isEditing={isEditing}
           />
-        </ApiProvider>
+        </StoriesBlockApiProvider>
       </ThemeProvider>
     </>
   );
