@@ -83,6 +83,7 @@ class Story_Query extends \WP_UnitTestCase {
 			'stories_archive_label'     => 'View all stories',
 			'list_view_image_alignment' => 'left',
 			'class'                     => '',
+			'circle_size'               => 150,
 		];
 
 		self::$default_query_args = [
@@ -96,14 +97,12 @@ class Story_Query extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Test that instance of
+	 * Test the instance.
 	 *
 	 * @covers ::render
 	 */
 	public function test_render() {
-		$output = get_echo( [ self::$testee, 'render' ] );
-
-		$this->assertInstanceOf( Generic_Renderer::class, self::$testee->renderer );
+		$this->assertInstanceOf( Generic_Renderer::class, self::$testee->get_renderer() );
 	}
 
 	/**
@@ -115,6 +114,14 @@ class Story_Query extends \WP_UnitTestCase {
 
 		$story_posts = self::$testee->get_stories();
 		$this->assertSame( self::$story_id, $story_posts[0]->ID );
+	}
+
+	/**
+	 * Test count of number of stories.
+	 */
+	public function test_get_stories_count() {
+		$story_posts = self::$testee->get_stories();
+		$this->assertCount( 1, $story_posts );
 	}
 
 	/**
