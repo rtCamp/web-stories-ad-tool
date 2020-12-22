@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
 /**
  * WordPress dependencies
  */
-import { __, _x, sprintf } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
   TextControl,
   PanelBody,
@@ -38,6 +38,11 @@ import { select } from '@wordpress/data';
 /**
  * Internal dependencies
  */
+import {
+  CIRCLES_VIEW_TYPE,
+  LIST_VIEW_TYPE,
+  ORDER_BY_OPTIONS,
+} from '../constants';
 import AuthorSelection from './authorSelection';
 
 /**
@@ -89,7 +94,7 @@ const StoriesInspectorControls = (props) => {
   } = props;
 
   useEffect(() => {
-    if ('circles' !== viewType) {
+    if (CIRCLES_VIEW_TYPE !== viewType) {
       setAttributes({
         isShowingTitle: true,
         isShowingAuthor: true,
@@ -103,7 +108,7 @@ const StoriesInspectorControls = (props) => {
       });
     }
 
-    if ('list' === viewType) {
+    if (LIST_VIEW_TYPE === viewType) {
       setAttributes({
         isShowingExcerpt: true,
       });
@@ -114,19 +119,15 @@ const StoriesInspectorControls = (props) => {
     }
   }, [viewType, setAttributes]);
 
-  const orderByOptions = [
-    { label: __('Newest to oldest', 'web-stories'), value: '' },
-    { label: __('Oldest to newest', 'web-stories'), value: 'old-to-new' },
-    {
-      label: _x('A -> Z', 'Sorting order', 'web-stories'),
-      value: 'alphabetical',
-    },
-    {
-      label: _x('Z -> A', 'Sorting order', 'web-stories'),
-      value: 'reverse-alphabetical',
-    },
-    { label: __('Random Stories', 'web-stories'), value: 'random' },
-  ];
+  // Set up sort options.
+  const orderByOptions = Object.entries(ORDER_BY_OPTIONS).map(
+    ([key, option]) => {
+      return {
+        label: option.label,
+        value: key,
+      };
+    }
+  );
 
   const previewLink = select('core/editor').getEditedPostPreviewLink();
   const carouselMessage = sprintf(

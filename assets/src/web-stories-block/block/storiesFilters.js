@@ -30,6 +30,7 @@ import { Fragment } from '@wordpress/element';
  */
 import StoriesBlockControls from './components/storiesBlockControls';
 import { BLOCK_TYPE_URL } from './constants';
+import { name as blockName } from './';
 
 /**
  * Filter 'web-stories-embed' block's block controls to add block switcher.
@@ -48,7 +49,7 @@ const withBlockSwitcher = createHigherOrderComponent((BlockEdit) => {
     } = props;
 
     // Do not add block transform controls if not 'web-stories-list' block.
-    if ('web-stories/stories-list' !== name || BLOCK_TYPE_URL !== blockType) {
+    if (blockName !== name || BLOCK_TYPE_URL !== blockType) {
       return <BlockEdit {...props} />;
     }
 

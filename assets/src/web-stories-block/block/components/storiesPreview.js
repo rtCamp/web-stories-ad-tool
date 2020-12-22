@@ -46,13 +46,11 @@ function StoriesPreview(props) {
     <div className={alignmentClass}>
       <div className={blockClasses}>
         {stories.map((story) => {
-          let title = '';
-
           return (
             <StoryCard
               key={story.id}
               url={story.link}
-              title={title}
+              title={story.title.rendered}
               excerpt={story.excerpt.rendered ? story.excerpt.rendered : ''}
               date={story.date_gmt}
               author={story._embedded.author[0].name}

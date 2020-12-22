@@ -131,7 +131,7 @@ const SelectedStoriesEdit = ({
           attributes={attributes}
           alignmentClass={alignmentClass}
           blockClasses={blockClasses}
-          storiesObject={selectedStoriesObject}
+          stories={selectedStoriesObject}
           viewAllLabel={viewAllLabel}
         />
       )}

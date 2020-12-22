@@ -325,6 +325,27 @@
 }
 
 /* Lightbox styles */
+.web-stories-list .web-stories-list__lightbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background: black;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s linear;
+}
+
+.web-stories-list .web-stories-list__lightbox.show {
+  opacity: 1;
+  visibility: visible;
+  z-index: 99999;
+}
+
 .web-stories-list .story-lightbox__close-button {
   display: inline-block;
   position: fixed;

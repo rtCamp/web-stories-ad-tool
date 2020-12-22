@@ -35,7 +35,11 @@ import { addQueryArgs } from '@wordpress/url';
 import StoriesInspectorControls from '../../components/storiesInspectorControls';
 import StoriesBlockControls from '../../components/storiesBlockControls';
 import StoriesLoading from '../../components/storiesLoading';
-import { FETCH_STORIES_DEBOUNCE, ORDER_BY_OPTIONS } from '../../constants';
+import {
+  FETCH_STORIES_DEBOUNCE,
+  GRID_VIEW_TYPE,
+  ORDER_BY_OPTIONS,
+} from '../../constants';
 import StoriesPreview from '../../components/storiesPreview';
 import { useConfig } from '../../../../dashboard/app/config';
 /**
@@ -131,7 +135,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
     },
     'web-stories-list',
     { [`is-view-type-${viewType}`]: viewType },
-    { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
+    { [`columns-${numOfColumns}`]: GRID_VIEW_TYPE === viewType && numOfColumns }
   );
 
   return (

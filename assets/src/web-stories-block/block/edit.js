@@ -75,19 +75,23 @@ function WebStoriesEdit({ attributes, setAttributes, className, isSelected }) {
 
   return (
     <ConfigProvider config={config}>
-      {blockType === BLOCK_TYPE_LATEST_STORIES ? (
+      {blockType === BLOCK_TYPE_LATEST_STORIES && (
         <LatestStoriesEdit
           attributes={attributes}
           setAttributes={setAttributes}
         />
-      ) : blockType === BLOCK_TYPE_SELECTED_STORIES ? (
+      )}
+
+      {blockType === BLOCK_TYPE_SELECTED_STORIES && (
         <SelectedStoriesEdit
           icon={icon}
           attributes={attributes}
           setAttributes={setAttributes}
           isSelected={isSelected}
         />
-      ) : (
+      )}
+
+      {blockType === BLOCK_TYPE_URL && (
         <StoryEmbedEdit
           icon={icon}
           attributes={attributes}

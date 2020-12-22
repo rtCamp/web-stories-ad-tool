@@ -97,7 +97,7 @@ export const VIEW_TYPES = [
  * Stories 'order-by' values.
  */
 export const ORDER_BY_OPTIONS = {
-  date: {
+  'new-to-old': {
     label: __('Newest to oldest', 'web-stories'),
     order: 'desc',
     orderBy: 'date',
