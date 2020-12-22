@@ -7,10 +7,15 @@
 |                                                                   | Link with Page Attachment                        | 🏆 **100.00%** *(2 / 2)*    |
 |                                                                   | Remove applied link                              | 🛴 **66.67%** *(2 / 3)*     |
 |                                                                   | *[total]*                                        | 🚨 **38.10%** *(8 / 21)*    |
+| Creator Can Add Image/Video to Page                               | Drag image/video from desktop to canvas          | 🚨 **0.00%** *(0 / 1)*      |
+|                                                                   | Search media                                     | 🚨 **0.00%** *(0 / 1)*      |
+|                                                                   | Upload media via upload button                   | 🚨 **0.00%** *(0 / 3)*      |
+|                                                                   | *[total]*                                        | 🚨 **0.00%** *(0 / 4)*      |
 | Creator Can Manipulate an Image/Video on Canvas                   | Apply a solid or gradient overlay                | 🏆 **100.00%** *(6 / 6)*    |
 |                                                                   | Enter edit mode                                  | 🏆 **100.00%** *(5 / 5)*    |
+|                                                                   | Set different poster image                       | 🏆 **100.00%** *(2 / 2)*    |
 |                                                                   | Set overlay color(s) & other gradient properties | 🚨 **0.00%** *(0 / 4)*      |
-|                                                                   | *[total]*                                        | 🛴 **73.33%** *(11 / 15)*   |
+|                                                                   | *[total]*                                        | 🛴 **76.47%** *(13 / 17)*   |
 | Creator Can Style Text                                            | Apply B                                          | 🏔️ **94.74%** *(18 / 19)*  |
 |                                                                   | Apply I                                          | 🛴 **80.00%** *(8 / 10)*    |
 |                                                                   | Apply U                                          | 🛴 **77.78%** *(7 / 9)*     |
@@ -45,9 +50,15 @@
 |                                                                   | *[total]*                                        | 🏆 **100.00%** *(2 / 2)*    |
 | Creator can Transform an Element                                  | Align element to on another                      | 🚨 **0.00%** *(0 / 10)*     |
 |                                                                   | Align element to page                            | 🚨 **22.22%** *(2 / 9)*     |
+|                                                                   | Resize                                           | 🏆 **100.00%** *(1 / 1)*    |
+|                                                                   | Rotate                                           | 🏆 **100.00%** *(1 / 1)*    |
 |                                                                   | Selection integration                            | 🏆 **100.00%** *(6 / 6)*    |
 |                                                                   | Set height and width                             | 🏆 **100.00%** *(2 / 2)*    |
-|                                                                   | *[total]*                                        | 🚨 **37.04%** *(10 / 27)*   |
+|                                                                   | *[total]*                                        | 🚨 **41.38%** *(12 / 29)*   |
+| Creator can View and Modify Document Settings                     | Navigating without changes                       | 🏆 **100.00%** *(1 / 1)*    |
+|                                                                   | *[total]*                                        | 🏆 **100.00%** *(1 / 1)*    |
+| Creator can View and Modify Document                              | Author                                           | 🏆 **100.00%** *(2 / 2)*    |
+|                                                                   | *[total]*                                        | 🏆 **100.00%** *(2 / 2)*    |
 | Creator can transform an element                                  | Snap to place                                    | 🏆 **100.00%** *(1 / 1)*    |
 |                                                                   | *[total]*                                        | 🏆 **100.00%** *(1 / 1)*    |
 | Text Sets (Text and Shape Combinations)                           | Using Text Sets                                  | 🏆 **100.00%** *(5 / 5)*    |
@@ -59,4 +70,4 @@
 | User can interact with menu using mouse                           | Click toggle button to open                      | 🏆 **100.00%** *(4 / 4)*    |
 |                                                                   | *[total]*                                        | 🏆 **100.00%** *(4 / 4)*    |
 |                                                                   | click close button to close menu                 | 🏆 **100.00%** *(4 / 4)*    |
-| *\[total\]*                                                       | *\[total\]*                                      | 🛴 **77.68%** *(268 / 345)* |
+| *\[total\]*                                                       | *\[total\]*                                      | 🛴 **76.63%** *(282 / 368)* |
