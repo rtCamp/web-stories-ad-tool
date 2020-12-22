@@ -107,8 +107,7 @@ class Carousel_Renderer extends Renderer {
 					<div role="tablist" class="dots"></div>
 					<?php
 					$this->render_stories_with_lightbox_noamp();
-				}
-				if ( $this->is_amp_request() ) {
+				} else {
 					?>
 					<amp-carousel
 						width="1"
