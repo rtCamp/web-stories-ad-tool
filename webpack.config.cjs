@@ -201,7 +201,7 @@ const webStoriesScripts = {
   ...sharedConfig,
   entry: {
     lightbox: './assets/src/lightbox/index.js',
-    'carousel-script': './assets/src/carousel/index.js',
+    'carousel-view': './assets/src/carousel/index.js',
   },
   plugins: [
     process.env.BUNDLE_ANALZYER && new BundleAnalyzerPlugin(),
@@ -216,19 +216,6 @@ const webStoriesScripts = {
       color: '#357BB5',
     }),
   ].filter(Boolean),
-  optimization: {
-    ...sharedConfig.optimization,
-    splitChunks: {
-      cacheGroups: {
-        stories: {
-          name: 'web-stories-scripts',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true,
-        },
-      },
-    },
-  },
 };
 
 const storyEmbedBlock = {

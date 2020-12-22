@@ -18,6 +18,7 @@
  * External dependencies
  */
 import Glider from 'glider-js';
+import 'glider-js/glider.css';
 
 /**
  * WordPress dependencies

@@ -42,7 +42,7 @@ class Carousel_Renderer extends Renderer {
 	 *
 	 * @var string
 	 */
-	const SCRIPT_HANDLE = 'carousel-script';
+	const SCRIPT_HANDLE = 'carousel-view';
 
 	/**
 	 * Perform initial setup for object.
@@ -67,6 +67,7 @@ class Carousel_Renderer extends Renderer {
 
 		if ( ! $this->is_amp_request() ) {
 			$this->enqueue_script( self::SCRIPT_HANDLE );
+			$this->enqueue_style( self::SCRIPT_HANDLE );
 		}
 	}
 
