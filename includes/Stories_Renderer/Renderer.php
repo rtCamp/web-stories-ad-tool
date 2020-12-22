@@ -482,10 +482,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 			?>
 				<a href="<?php echo esc_url( $story_data->get_url() ); ?>"><?php echo esc_html( $story_data->get_title() ); ?></a>
 			<?php
-		}
-
-		// Generate lightbox html for the AMP page.
-		if ( $this->is_amp_request() ) {
+		} else {
+			// Generate lightbox html for the AMP page.
 			$this->generate_amp_lightbox_html();
 		}
 
@@ -595,17 +593,20 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		<div class="web-stories-list__lightbox">
 			<amp-story-player width="0" height="0" layout="responsive">
 				<script type="application/json">
-					{
-						"controls": [
-							{
-								"name": "close",
-								"position": "start"
-							},
-							{
-								"name": "skip-next"
-							}
-						]
-					}
+				<?php
+				$data = [
+					'controls' => [
+						[
+							'name'     => 'close',
+							'position' => 'start',
+						],
+						[
+							'name' => 'skip-next',
+						],
+					],
+				];
+				echo wp_json_encode( $data );
+				?>
 				</script>
 				<?php echo wp_kses_post( $this->lightbox_html ); ?>
 			</amp-story-player>
@@ -621,27 +622,31 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	protected function generate_amp_lightbox_html() {
 		$story          = $this->current();
 		$lightbox_state = "lightbox{$story->get_id()}";
-		$lightbox_class = "lightbox-{$story->get_id()}";
+		$lightbox_id    = "lightbox-{$story->get_id()}";
 		?>
-		<div
-			class="web-stories-list__lightbox <?php echo esc_attr( $lightbox_class ); ?>"
-			[class]="<?php echo( esc_attr( $lightbox_state ) ); ?> ? 'web-stories-list__lightbox show' : 'web-stories-list__lightbox'"
+		<amp-lightbox
+			id="<?php echo esc_attr( $lightbox_id ); ?>"
+			[open]="<?php echo esc_attr( $lightbox_state ); ?>"
+			layout="nodisplay"
+			on="lightboxClose:AMP.setState({<?php echo esc_attr( $lightbox_state ); ?>: false})"
 		>
-			<div
-				class="story-lightbox__close-button"
-				on="tap:AMP.setState({<?php echo( esc_attr( $lightbox_state ) ); ?>: false})"
-			>
-				<span class="story-lightbox__close-button--stick"></span>
-				<span class="story-lightbox__close-button--stick"></span>
+			<div class="web-stories-list__lightbox">
+				<div
+					class="story-lightbox__close-button"
+					on="tap:<?php echo esc_attr( $lightbox_id ); ?>.close"
+				>
+					<span class="story-lightbox__close-button--stick"></span>
+					<span class="story-lightbox__close-button--stick"></span>
+				</div>
+				<amp-story-player
+					width="0"
+					height="0"
+					layout="responsive"
+				>
+					<a href="<?php echo( esc_url( $story->get_url() ) ); ?>"><?php echo esc_html( $story->get_title() ); ?></a>
+				</amp-story-player>
 			</div>
-			<amp-story-player
-				width="0"
-				height="0"
-				layout="responsive"
-			>
-				<a href="<?php echo( esc_url( $story->get_url() ) ); ?>"><?php echo esc_html( $story->get_title() ); ?></a>
-			</amp-story-player>
-		</div>
+		</amp-lightbox>
 		<?php
 	}
 
@@ -653,6 +658,6 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	protected function render_stories_with_lightbox_amp() {
 
 		// Have to ignore this as the escaping functions are stripping off 'amp-bind' custom attribute '[class]'.
-		echo $this->lightbox_html; // phpcs:ignore -- Generated above with properly escaped data.
+		echo $this->lightbox_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Generated with properly escaped data.
 	}
 }
