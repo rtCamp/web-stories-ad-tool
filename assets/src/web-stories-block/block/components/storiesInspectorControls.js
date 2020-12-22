@@ -56,7 +56,7 @@ import AuthorSelection from './authorSelection';
  * @property {string} viewAllLinkLabel Archive link's label.
  * @property {boolean} imageOnRight Whether or not to display images on right side in list view type.
  * @property {Array} authors An array of authors objects which are currently selected.
- * @property {()=>void} setAttributes Callable function for saving attribute values.
+ * @property {Function} setAttributes Callable function for saving attribute values.
  */
 
 /**

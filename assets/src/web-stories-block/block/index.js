@@ -32,7 +32,7 @@ const { name, category, attributes } = metadata;
 
 const settings = {
   title: __('Web Stories List', 'web-stories'),
-  description: __('Embed visual stories.', 'web-stories'),
+  description: __('Embed Web Stories.', 'web-stories'),
   category,
   icon,
   keywords: [
@@ -46,6 +46,8 @@ const settings = {
     __('embed', 'web-stories'),
     /* translators: block keyword. */
     __('story', 'web-stories'),
+    /* translators: block keyword. */
+    __('stories', 'web-stories'),
   ],
   attributes,
   example: {

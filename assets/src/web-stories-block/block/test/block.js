@@ -25,7 +25,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import { name, settings } from '../';
 
 describe('Block Registration', () => {
-  it('should register block without errors', () => {
+  it('should register Web Stories block without errors', () => {
     const block = registerBlockType(name, settings);
     expect(block).not.toBeUndefined();
   });

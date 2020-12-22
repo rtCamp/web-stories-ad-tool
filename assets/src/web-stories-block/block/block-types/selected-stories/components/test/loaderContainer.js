@@ -35,6 +35,6 @@ describe('LoaderContainer', () => {
         <div>{__('Loading stories…', 'web-stories')}</div>
       </LoaderContainer>
     );
-    expect(screen.getByText('Loading stories...')).toBeInTheDocument();
+    expect(screen.getByText('Loading stories…')).toBeInTheDocument();
   });
 });

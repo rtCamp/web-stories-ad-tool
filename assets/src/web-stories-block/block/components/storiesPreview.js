@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
 /**
  * Internal dependencies
  */
-import StoryPlayer from './storyPlayer';
+import StoryCard from './storyCard';
 
 function StoriesPreview(props) {
   const {
@@ -39,24 +39,17 @@ function StoriesPreview(props) {
     viewAllLabel,
     alignmentClass,
     blockClasses,
-    storiesObject,
+    stories,
   } = props;
 
   return (
     <div className={alignmentClass}>
       <div className={blockClasses}>
-        {storiesObject.map((story) => {
+        {stories.map((story) => {
           let title = '';
 
-          if (story.title.rendered) {
-            title =
-              'circles' === viewType && story.title.rendered.length > 45
-                ? `${story.title.rendered.substring(0, 45)}...`
-                : story.title.rendered;
-          }
-
           return (
-            <StoryPlayer
+            <StoryCard
               key={story.id}
               url={story.link}
               title={title}
@@ -96,7 +89,7 @@ StoriesPreview.propTypes = {
   }),
   alignmentClass: PropTypes.string,
   blockClasses: PropTypes.string,
-  storiesObject: PropTypes.array,
+  stories: PropTypes.array,
   viewAllLabel: PropTypes.string,
 };
 

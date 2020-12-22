@@ -29,6 +29,7 @@ import { Fragment } from '@wordpress/element';
  * Internal dependencies
  */
 import StoriesBlockControls from './components/storiesBlockControls';
+import { BLOCK_TYPE_URL } from './constants';
 
 /**
  * Filter 'web-stories-embed' block's block controls to add block switcher.
@@ -37,9 +38,8 @@ import StoriesBlockControls from './components/storiesBlockControls';
  * filter the controls when the edit component is used as in 'web-stories-list' block.
  * This adds the block switcher control in the toolbar.
  *
- * @type {WPComponent}
  */
-const withBlockControls = createHigherOrderComponent((BlockEdit) => {
+const withBlockSwitcher = createHigherOrderComponent((BlockEdit) => {
   const blockControlsElement = (props) => {
     const {
       attributes: { blockType, viewType },
@@ -47,8 +47,8 @@ const withBlockControls = createHigherOrderComponent((BlockEdit) => {
       name,
     } = props;
 
-    // Do not add block tramnsform controls if not 'web-stories-list' block.
-    if ('web-stories/stories-list' !== name || 'url' !== blockType) {
+    // Do not add block transform controls if not 'web-stories-list' block.
+    if ('web-stories/stories-list' !== name || BLOCK_TYPE_URL !== blockType) {
       return <BlockEdit {...props} />;
     }
 
@@ -74,14 +74,14 @@ const withBlockControls = createHigherOrderComponent((BlockEdit) => {
   };
 
   return blockControlsElement;
-}, 'withBlockControls');
+}, 'withBlockSwitcher');
 
-withBlockControls.propTypes = {
+withBlockSwitcher.propTypes = {
   Component: PropTypes.func,
 };
 
 wp.hooks.addFilter(
   'editor.BlockEdit',
-  'my-plugin/with-inspector-controls',
-  withBlockControls
+  'web-stories/with-block-switcher',
+  withBlockSwitcher
 );

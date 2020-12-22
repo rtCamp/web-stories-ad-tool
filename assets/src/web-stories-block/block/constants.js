@@ -37,10 +37,7 @@ export const BLOCK_TYPES = [
   {
     id: BLOCK_TYPE_SELECTED_STORIES,
     label: __('Selected Stories', 'web-stories'),
-    description: __(
-      'Manually select web stories to show/embed.',
-      'web-stories'
-    ),
+    description: __('Manually select web stories.', 'web-stories'),
     icon: plusCircle,
   },
   {

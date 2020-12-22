@@ -48,7 +48,7 @@ describe('save', () => {
     `);
   });
 
-  it('should render nothing if poster is missing', () => {
+  it('should render without image if poster is missing', () => {
     const { container } = render(<Save attributes={{ url, title }} />);
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div

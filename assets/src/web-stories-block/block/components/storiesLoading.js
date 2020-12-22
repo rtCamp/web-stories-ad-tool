@@ -18,7 +18,7 @@
  * WordPress dependencies
  */
 import { Spinner, Placeholder } from '@wordpress/components';
-import { _x } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 
 /**
  * StoriesLoading component. Displays a spinner when stories are being fetched.
@@ -29,11 +29,7 @@ const StoriesLoading = () => {
   return (
     <Placeholder
       className="web-stories placeholder"
-      instructions={_x(
-        'Loading Stories…',
-        'Instructional message for users',
-        'web-stories'
-      )}
+      instructions={__('Loading Stories…', 'web-stories')}
     >
       <Spinner />
     </Placeholder>

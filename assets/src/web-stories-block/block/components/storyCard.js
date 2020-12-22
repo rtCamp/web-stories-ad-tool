@@ -26,7 +26,7 @@ import classNames from 'classnames';
 import { RawHTML } from '@wordpress/element';
 import { dateI18n, format, __experimentalGetSettings } from '@wordpress/date';
 
-function StoryPlayer({
+function StoryCard({
   title,
   excerpt,
   poster,
@@ -94,7 +94,7 @@ function StoryPlayer({
   );
 }
 
-StoryPlayer.propTypes = {
+StoryCard.propTypes = {
   title: PropTypes.string,
   excerpt: PropTypes.string,
   poster: PropTypes.string,
@@ -108,4 +108,4 @@ StoryPlayer.propTypes = {
   sizeOfCircles: PropTypes.number,
 };
 
-export default StoryPlayer;
+export default StoryCard;

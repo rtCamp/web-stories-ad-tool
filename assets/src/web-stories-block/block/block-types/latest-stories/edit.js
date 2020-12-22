@@ -155,7 +155,7 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
             attributes={attributes}
             alignmentClass={alignmentClass}
             blockClasses={blockClasses}
-            storiesObject={storiesToDisplay}
+            stories={storiesToDisplay}
             viewAllLabel={viewAllLabel}
           />
         )}
