@@ -4,4 +4,4 @@
 bin/build/*
 build/*
 !.storybook
-lib
+**/assets/lib/**

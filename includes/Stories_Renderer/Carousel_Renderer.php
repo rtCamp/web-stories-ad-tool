@@ -110,8 +110,7 @@ class Carousel_Renderer extends Renderer {
 					<div tabindex="0" aria-label="<?php esc_attr_e( 'Next', 'web-stories' ); ?>" class="glider-next">→</div>
 					<?php
 					$this->render_stories_with_lightbox_noamp();
-				}
-				if ( $this->is_amp_request() ) {
+				} else {
 					?>
 					<amp-carousel
 						width="1"
