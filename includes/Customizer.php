@@ -80,14 +80,14 @@ class Customizer {
 
 		$this->wp_customize = $wp_customize;
 
-		$theme_support = self::get_stories_theme_support();
+		$theme_support = get_stories_theme_support();
 
 		// Add Content section.
 		$wp_customize->add_section(
 			self::SECTION_SLUG,
 			[
 				'title'          => esc_html__( 'Web Story Options', 'web-stories' ),
-				'theme_supports' => 'web-story-options',
+				'theme_supports' => 'web-stories',
 			]
 		);
 

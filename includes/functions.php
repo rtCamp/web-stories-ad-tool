@@ -46,7 +46,7 @@ function stories( $args = [] ) {
  * @return array
  */
 function fields_states() {
-	$theme_support = Customizer::get_stories_theme_support();
+	$theme_support = get_stories_theme_support();
 	$views         = $theme_support['view-type'];
 
 	$fields = [
@@ -72,4 +72,45 @@ function fields_states() {
 	}
 
 	return $field_states;
+}
+
+/**
+ * Get theme support.
+ *
+ * @return array
+ */
+function get_stories_theme_support() {
+	$theme_support = get_theme_support( 'web-stories' );
+	$theme_support = ! empty( $theme_support[0] ) && is_array( $theme_support[0] ) ? $theme_support[0] : [];
+
+	$default_theme_support = [
+		'view-type'                 => [
+			'circles' => __( 'Circles', 'web-stories' )
+		],
+		'view-type-default'         => 'circles',
+		'grid-columns-default'      => 2,
+		'title'                     => true,
+		'title-default'             => true,
+		'author'                    => true,
+		'author-default'            => true,
+		'date'                      => false,
+		'date-default'              => false,
+		'stories-archive-link'      => false,
+		'stories-archive-label'     => __( 'View all stories', 'web-stories' ),
+		'number-of-stories'         => 10,
+		'order'                     => [
+			'latest'               => __( 'Latest', 'web-stories' ),
+			'oldest'               => __( 'Oldest', 'web-stories' ),
+			'alphabetical'         => __( 'A -> Z', 'web-stories' ),
+			'reverse-alphabetical' => __( 'Z -> A', 'web-stories' ),
+		],
+		'order-default'             => 'latest',
+		'show-story-poster-default' => true,
+	];
+
+	$theme_support                         = wp_parse_args( $theme_support, $default_theme_support );
+	$theme_support['number-of-stories']    = (int) $theme_support['number-of-stories'];
+	$theme_support['grid-columns-default'] = (int) $theme_support['grid-columns-default'];
+
+	return $theme_support;
 }
