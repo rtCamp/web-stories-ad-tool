@@ -43,6 +43,8 @@ function stories( $args = [] ) {
  *
  * Mainly uses FieldState and Fields classes.
  *
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ *
  * @return array
  */
 function fields_states() {
@@ -60,11 +62,6 @@ function fields_states() {
 
 	$field_states = [];
 
-	/**
-	 * Suppress unused local variable warning.
-	 *
-	 * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-	 */
 	foreach ( $views as $view_type => $view_label ) {
 		$field_state = ( new Story_Query( [ 'view_type' => $view_type ] ) )->get_renderer()->field();
 		foreach ( $fields as $field ) {
