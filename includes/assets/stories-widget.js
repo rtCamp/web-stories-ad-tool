@@ -26,7 +26,6 @@
       var fieldWrapper = widget.querySelector('.' + key + '_wrapper');
       if (field && fieldWrapper && 'checkbox' === field.getAttribute('type')) {
         field.checked = false; // Reset the value.
-        field.checked = value.show;
         fieldWrapper.style.display = value.readonly ? 'none' : 'block';
       }
     }
