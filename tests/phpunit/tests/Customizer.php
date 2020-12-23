@@ -62,7 +62,7 @@ class Customizer extends \WP_UnitTestCase {
 	 */
 	private function add_web_stories_theme_support() {
 		add_theme_support(
-			'web-story-options',
+			'web-stories',
 			[
 				'view-type'                 => [ 'circles', 'grid', 'list', 'carousel' ],
 				'view-type-default'         => 'circles',
@@ -93,8 +93,8 @@ class Customizer extends \WP_UnitTestCase {
 				[
 					$this->customizer,
 					'register_customizer_settings',
-				] 
-			) 
+				]
+			)
 		);
 	}
 
@@ -108,7 +108,7 @@ class Customizer extends \WP_UnitTestCase {
 			TheCustomizer::SECTION_SLUG,
 			[
 				'title'          => esc_html__( 'Web Story Options', 'web-stories' ),
-				'theme_supports' => 'web-story-options',
+				'theme_supports' => 'web-stories',
 			]
 		);
 
