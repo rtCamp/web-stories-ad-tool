@@ -21,8 +21,7 @@
  * limitations under the License.
  */
 
-use Google\Web_Stories\Story_Query;
-use Google\Web_Stories\Customizer;
+namespace Google\Web_Stories;
 
 if ( ! function_exists( 'tinymce_web_stories_button' ) ) {
 	/**
@@ -38,7 +37,7 @@ if ( ! function_exists( 'tinymce_web_stories_button' ) ) {
 		return $buttons;
 	}
 
-	add_filter( 'mce_buttons', 'tinymce_web_stories_button' );
+	add_filter( 'mce_buttons', __NAMESPACE__ . '\tinymce_web_stories_button' );
 }
 
 if ( ! function_exists( 'web_stories_mce_plugin' ) ) {
@@ -55,7 +54,7 @@ if ( ! function_exists( 'web_stories_mce_plugin' ) ) {
 		return $plugins;
 	}
 
-	add_filter( 'mce_external_plugins', 'web_stories_mce_plugin' );
+	add_filter( 'mce_external_plugins', __NAMESPACE__ . '\web_stories_mce_plugin' );
 }
 
 if ( ! function_exists( 'web_stories_tinymce_scripts' ) ) {
@@ -76,7 +75,7 @@ if ( ! function_exists( 'web_stories_tinymce_scripts' ) ) {
 		}
 	}
 
-	add_action( 'admin_enqueue_scripts', 'web_stories_tinymce_scripts' );
+	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\web_stories_tinymce_scripts' );
 }
 
 if ( ! function_exists( 'web_stories_tinymce_root_element' ) ) {
@@ -92,21 +91,23 @@ if ( ! function_exists( 'web_stories_tinymce_root_element' ) ) {
 		}
 	}
 
-	add_action( 'admin_footer', 'web_stories_tinymce_root_element' );
+	add_action( 'admin_footer', __NAMESPACE__ . '\web_stories_tinymce_root_element' );
 }
 
 if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 	/**
 	 * Put some tinymce related data on the page.
 	 *
+	 * @param string $hook Hook name for current admin page.
+	 *
 	 * @return void
 	 */
-	function web_stories_tinymce_data() {
-		if ( ! is_tinymce_editor() ) {
+	function web_stories_tinymce_data( $hook ) {
+		if ( ! is_tinymce_editor() || 'widgets.php' !== $hook ) {
 			return;
 		}
 
-		$theme_support = Customizer::get_stories_theme_support();
+		$theme_support = get_stories_theme_support();
 		$order         = $theme_support['order'];
 		$views         = $theme_support['view-type'];
 		$order_list    = [];
@@ -126,7 +127,7 @@ if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 			];
 		}
 
-		$field_states = Google\Web_Stories\fields_states();
+		$field_states = fields_states();
 
 		$data = [
 			'orderlist' => $order_list,
@@ -141,7 +142,7 @@ if ( ! function_exists( 'web_stories_tinymce_data' ) ) {
 		echo "\n</script>";
 	}
 
-	add_action( 'admin_enqueue_scripts', 'web_stories_tinymce_data' );
+	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\web_stories_tinymce_data' );
 }
 
 if ( ! function_exists( 'is_tinymce_editor' ) ) {
@@ -157,7 +158,7 @@ if ( ! function_exists( 'is_tinymce_editor' ) ) {
 		property_exists( $current_screen, 'is_block_editor' ) &&
 		true === (bool) $current_screen->is_block_editor
 		) {
-			return true;
+			return false;
 		}
 
 		return true;
