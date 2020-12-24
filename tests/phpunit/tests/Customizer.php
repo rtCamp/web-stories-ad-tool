@@ -18,6 +18,7 @@
 
 namespace Google\Web_Stories\Tests;
 
+use function Google\Web_Stories\get_stories_theme_support;
 use Google\Web_Stories\Customizer as TheCustomizer;
 use WP_Error;
 
@@ -42,6 +43,7 @@ class Customizer extends \WP_UnitTestCase {
 
 	public static function wpSetUpBeforeClass() {
 		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
+		require_once WEBSTORIES_PLUGIN_DIR_PATH . 'includes/functions.php';
 	}
 
 	/**
@@ -267,11 +269,12 @@ class Customizer extends \WP_UnitTestCase {
 	 * @covers ::get_stories_theme_support
 	 */
 	public function test_get_stories_theme_support() {
-
-		add_theme_support( 'web-story-options' );
+		add_theme_support( 'web-stories' );
 
 		$expected = [
-			'view-type'                 => [],
+			'view-type'                 => [
+				'circles' => __( 'Circles', 'web-stories' ),
+			],
 			'view-type-default'         => 'circles',
 			'grid-columns-default'      => 2,
 			'title'                     => true,
@@ -283,12 +286,17 @@ class Customizer extends \WP_UnitTestCase {
 			'stories-archive-link'      => false,
 			'stories-archive-label'     => __( 'View all stories', 'web-stories' ),
 			'number-of-stories'         => 10,
-			'order'                     => [],
-			'order-default'             => 'oldest',
+			'order'                     => [
+				'latest'               => __( 'Latest', 'web-stories' ),
+				'oldest'               => __( 'Oldest', 'web-stories' ),
+				'alphabetical'         => __( 'A -> Z', 'web-stories' ),
+				'reverse-alphabetical' => __( 'Z -> A', 'web-stories' ),
+			],
+			'order-default'             => 'latest',
 			'show-story-poster-default' => true,
 		];
 
-		$output = $this->customizer->get_stories_theme_support();
+		$output = get_stories_theme_support();
 
 		$this->assertEquals( $expected, $output );
 	}
