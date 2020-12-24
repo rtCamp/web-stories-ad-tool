@@ -24,7 +24,7 @@ import { useDebouncedCallback } from 'use-debounce';
  * WordPress dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import { useCallback, useEffect, useState } from '@wordpress/element';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -41,7 +41,6 @@ import {
   STORY_SORT_MENU_ITEMS,
 } from '../../../../dashboard/constants';
 import { getRelativeDisplayDate } from '../../../../date';
-import { DASHBOARD_LEFT_NAV_WIDTH } from '../../../../dashboard/constants/pageStructure';
 import {
   CardTitle,
   Dropdown,
@@ -51,6 +50,7 @@ import TypeaheadSearch from '../../../../dashboard/app/views/shared/typeaheadSea
 import { UnitsProvider } from '../../../../edit-story/units';
 import { TransformProvider } from '../../../../edit-story/components/transform';
 import FontProvider from '../../../../dashboard/app/font/fontProvider';
+import TypeaheadAuthorSearch from '../../components/typeaheadAuthorSearch';
 import { StoryGridItem } from './components/cardGridItem';
 import ItemOverlay from './components/itemOverlay';
 import StoryPreview from './storyPreview';
@@ -62,10 +62,11 @@ const StoryFilter = styled.div`
   padding: 10px 0;
   margin-top: -12px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   background-color: #fff;
 
-  #typeahead-search {
+  #typeahead-search,
+  #typeahead-author-search {
     min-height: 18px;
     border: 0;
     background: transparent;
@@ -111,11 +112,14 @@ const StoryGrid = styled.div(
 );
 
 const SearchContainer = styled.div`
-  display: inline-block;
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 60% 25% 15%;
   vertical-align: baseline;
   position: relative;
-  width: 100%;
   height: 29px;
+  width: 100%;
+
   @media ${({ theme }) => theme.DEPRECATED_THEME.breakpoint.smallDisplayPhone} {
     left: ${({ theme }) =>
       `${theme.DEPRECATED_THEME.standardViewContentGutter.min}px`};
@@ -124,32 +128,12 @@ const SearchContainer = styled.div`
   }
 `;
 
-const SearchInner = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: min(${DASHBOARD_LEFT_NAV_WIDTH}px, 100%);
-  display: flex;
-  justify-content: flex-end;
+const SearchStoryInner = styled.div`
+  grid-column: 2;
 `;
 
 const DropdownContainer = styled.div`
   margin: auto 8px;
-  align-self: flex-end;
-`;
-
-const AuthorDropdown = styled(Dropdown)`
-  & > div {
-    max-height: 350px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    border-radius: 8px;
-    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.25);
-
-    & > div {
-      box-shadow: none;
-    }
-  }
 `;
 
 const DetailRow = styled.div`
@@ -163,18 +147,32 @@ function SelectStories({
   orderedStories,
   pageSize,
   search,
-  currentAuthor,
-  setCurrentAuthor,
   sort,
   addItemToSelectedStories,
+  authors,
   removeItemFromSelectedStories,
   allPagesFetched,
   isLoading,
   page,
+  setAuthorKeyword,
+  currentAuthor,
+  setCurrentAuthor,
 }) {
-  const [authors, setAuthors] = useState([]);
   const [debouncedTypeaheadChange] = useDebouncedCallback((value) => {
     search.setKeyword(value);
+  }, TEXT_INPUT_DEBOUNCE);
+
+  const [debouncedTypeaheadAuthorChange] = useDebouncedCallback((value) => {
+    // Set the user input as the current search keyword.
+    setAuthorKeyword(value);
+
+    // On selecting author from the dropdown, '<Typeahead />' component sets the value from the
+    // suggestions array, which in our case is author ID. Check the value is a number.
+    if (value.length > 0 && !isNaN(value)) {
+      setCurrentAuthor(
+        authors.filter((author) => author.id === parseInt(value))
+      );
+    }
   }, TEXT_INPUT_DEBOUNCE);
 
   const onSortChange = useCallback(
@@ -184,49 +182,25 @@ function SelectStories({
     [sort]
   );
 
-  useEffect(() => {
-    const items = [
-      {
-        label: __('All authors', 'web-stories'),
-        value: '0',
-      },
-    ];
-
-    global.webStoriesBlockSettings.authors.forEach((author) => {
-      items.push({
-        label: author.display_name,
-        value: author.ID.toString(),
-      });
-    });
-
-    setAuthors(items);
-  }, []);
-
   return (
     <>
       <StoryFilter data-testid="story-filter">
         <SearchContainer>
-          <SearchInner>
+          <SearchStoryInner>
             <TypeaheadSearch
               placeholder={__('Search Stories', 'web-stories')}
               currentValue={search.keyword}
               stories={orderedStories}
               handleChange={debouncedTypeaheadChange}
             />
-          </SearchInner>
-        </SearchContainer>
-        <DropdownContainer>
-          <AuthorDropdown
-            alignment="flex-end"
-            ariaLabel={__('Choose an author to filter', 'web-stories')}
-            items={authors}
-            type={DROPDOWN_TYPES.MENU}
-            value={currentAuthor}
-            onChange={(author) => {
-              setCurrentAuthor(author.value);
-            }}
+          </SearchStoryInner>
+          <TypeaheadAuthorSearch
+            placeholder={__('Search by author', 'web-stories')}
+            currentValue={currentAuthor.name}
+            authors={authors}
+            handleChange={debouncedTypeaheadAuthorChange}
           />
-        </DropdownContainer>
+        </SearchContainer>
         <DropdownContainer>
           <Dropdown
             alignment="flex-end"
@@ -326,10 +300,12 @@ SelectStories.propTypes = {
   setCurrentAuthor: PropTypes.func,
   sort: SortPropTypes,
   addItemToSelectedStories: PropTypes.func,
+  authors: PropTypes.array,
   removeItemFromSelectedStories: PropTypes.func,
   allPagesFetched: PropTypes.bool,
   isLoading: PropTypes.bool,
   page: PagePropTypes,
+  setAuthorKeyword: PropTypes.func,
 };
 
 export default SelectStories;

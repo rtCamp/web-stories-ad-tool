@@ -18,63 +18,57 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies
  */
-import StoryPlayer from './storyPlayer';
+import { GRID_VIEW_TYPE } from '../constants';
+import { isShowing } from '../util';
+import StoryCard from './storyCard';
 
 function StoriesPreview(props) {
   const {
-    attributes: {
-      viewType,
-      imageOnRight,
-      isShowingTitle,
-      isShowingExcerpt,
-      sizeOfCircles,
-      isShowingViewAll,
-      isShowingAuthor,
-      isShowingDate,
-    },
+    attributes: { align, viewType, sizeOfCircles, fieldState, numOfColumns },
     viewAllLabel,
-    alignmentClass,
-    blockClasses,
-    storiesObject,
+    stories,
   } = props;
+
+  const alignmentClass = classNames({ [`align${align}`]: align });
+  const blockClasses = classNames(
+    {
+      'is-style-default': !isShowing('sharp_corners', fieldState[viewType]),
+      'is-style-squared': isShowing('sharp_corners', fieldState[viewType]),
+    },
+    'web-stories-list',
+    { [`is-view-type-${viewType}`]: viewType },
+    { [`columns-${numOfColumns}`]: GRID_VIEW_TYPE === viewType && numOfColumns }
+  );
 
   return (
     <div className={alignmentClass}>
       <div className={blockClasses}>
-        {storiesObject.map((story) => {
-          let title = '';
-
-          if (story.title.rendered) {
-            title =
-              'circles' === viewType && story.title.rendered.length > 45
-                ? `${story.title.rendered.substring(0, 45)}...`
-                : story.title.rendered;
-          }
-
+        {stories.map((story) => {
           return (
-            <StoryPlayer
+            <StoryCard
               key={story.id}
               url={story.link}
-              title={title}
+              title={story.title.rendered}
               excerpt={story.excerpt.rendered ? story.excerpt.rendered : ''}
               date={story.date_gmt}
               author={story._embedded.author[0].name}
               poster={story.featured_media_url}
-              imageOnRight={imageOnRight}
-              isShowingAuthor={isShowingAuthor}
-              isShowingDate={isShowingDate}
-              isShowingTitle={isShowingTitle}
-              isShowingExcerpt={isShowingExcerpt}
+              imageOnRight={isShowing('image_align', fieldState[viewType])}
+              isShowingAuthor={isShowing('author', fieldState[viewType])}
+              isShowingDate={isShowing('date', fieldState[viewType])}
+              isShowingTitle={isShowing('title', fieldState[viewType])}
+              isShowingExcerpt={isShowing('excerpt', fieldState[viewType])}
               sizeOfCircles={sizeOfCircles}
             />
           );
         })}
       </div>
-      {isShowingViewAll &&
+      {isShowing('archive_link', fieldState[viewType]) &&
         'circles' !== viewType &&
         'carousel' !== viewType && (
           <div className="web-stories-list__archive-link">{viewAllLabel}</div>
@@ -85,18 +79,13 @@ function StoriesPreview(props) {
 
 StoriesPreview.propTypes = {
   attributes: PropTypes.shape({
+    align: PropTypes.string,
     viewType: PropTypes.string,
-    imageOnRight: PropTypes.bool,
-    isShowingTitle: PropTypes.bool,
-    isShowingExcerpt: PropTypes.bool,
-    isShowingAuthor: PropTypes.bool,
-    isShowingDate: PropTypes.bool,
+    numOfColumns: PropTypes.number,
     sizeOfCircles: PropTypes.number,
-    isShowingViewAll: PropTypes.bool,
+    fieldState: PropTypes.object,
   }),
-  alignmentClass: PropTypes.string,
-  blockClasses: PropTypes.string,
-  storiesObject: PropTypes.array,
+  stories: PropTypes.array,
   viewAllLabel: PropTypes.string,
 };
 

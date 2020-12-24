@@ -15,25 +15,18 @@
  */
 
 /**
- * WordPress dependencies
- */
-import { Spinner, Placeholder } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
-
-/**
- * StoriesLoading component. Displays a spinner when stories are being fetched.
+ * Get current value for the provided field.
  *
- * @return {*} JSX markup.
+ * @param {string} field Field to get the current value.
+ * @param {Object} state Field state of the current viewType.
+ *
+ * @return {boolean} Current value.
  */
-const StoriesLoading = () => {
-  return (
-    <Placeholder
-      className="web-stories placeholder"
-      instructions={__('Loading Stories…', 'web-stories')}
-    >
-      <Spinner />
-    </Placeholder>
-  );
-};
+export const isShowing = (field, state) => {
+  if (undefined === state || !Object.entries(state).length) {
+    return false;
+  }
 
-export default StoriesLoading;
+  const { show } = state[field];
+  return show;
+};

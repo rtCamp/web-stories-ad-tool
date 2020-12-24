@@ -15,25 +15,11 @@
  */
 
 /**
- * WordPress dependencies
+ * Internal dependencies
  */
-import { Spinner, Placeholder } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { identity, useContextSelector } from '../../../dashboard/utils';
+import { StoriesBlockApiContext } from './apiProvider';
 
-/**
- * StoriesLoading component. Displays a spinner when stories are being fetched.
- *
- * @return {*} JSX markup.
- */
-const StoriesLoading = () => {
-  return (
-    <Placeholder
-      className="web-stories placeholder"
-      instructions={__('Loading Stories…', 'web-stories')}
-    >
-      <Spinner />
-    </Placeholder>
-  );
-};
-
-export default StoriesLoading;
+export default function useApi(selector = identity) {
+  return useContextSelector(StoriesBlockApiContext, selector);
+}

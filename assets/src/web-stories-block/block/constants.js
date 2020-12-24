@@ -37,10 +37,7 @@ export const BLOCK_TYPES = [
   {
     id: BLOCK_TYPE_SELECTED_STORIES,
     label: __('Selected Stories', 'web-stories'),
-    description: __(
-      'Manually select web stories to show/embed.',
-      'web-stories'
-    ),
+    description: __('Manually select web stories.', 'web-stories'),
     icon: plusCircle,
   },
   {
@@ -95,6 +92,38 @@ export const VIEW_TYPES = [
     icon: CAROUSEL_VIEW_TYPE_ICON,
   },
 ];
+
+/**
+ * Stories 'order-by' values.
+ */
+export const ORDER_BY_OPTIONS = {
+  'new-to-old': {
+    label: __('Newest to oldest', 'web-stories'),
+    order: 'desc',
+    orderBy: 'date',
+  },
+  'old-to-new': {
+    label: __('Oldest to newest', 'web-stories'),
+    order: 'asc',
+    orderBy: 'date',
+  },
+  alphabetical: {
+    label: __('A -> Z', 'web-stories'),
+    order: 'asc',
+    orderBy: 'title',
+  },
+  'reverse-alphabetical': {
+    label: __('Z -> A', 'web-stories'),
+    order: 'desc',
+    orderBy: 'title',
+  },
+  random: {
+    label: __('Random Stories', 'web-stories'),
+    order: 'desc',
+    orderBy: 'rand',
+  },
+};
+
 /**
  * Debounce duration constants.
  */

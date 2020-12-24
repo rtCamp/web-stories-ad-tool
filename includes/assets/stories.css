@@ -325,6 +325,27 @@
 }
 
 /* Lightbox styles */
+.web-stories-list .web-stories-list__lightbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background: black;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s linear;
+}
+
+.web-stories-list .web-stories-list__lightbox.show {
+  opacity: 1;
+  visibility: visible;
+  z-index: 99999;
+}
+
 .web-stories-list .story-lightbox__close-button {
   display: inline-block;
   position: fixed;
@@ -349,6 +370,19 @@
 
 .web-stories-list .story-lightbox__close-button--stick:first-child {
   transform: rotateZ(-45deg);
+}
+
+/*
+ * amp-story-player's 'shadow-root-intermediary' element shows black space on top,
+ * because of the 'a' links. Making 'a' absolutely positioned removes them from normal
+ * relative flow, removes the space.
+ */
+html:not([amp])
+  .web-stories-list
+  .web-stories-list__lightbox
+  amp-story-player
+  a {
+  position: absolute;
 }
 
 @media only screen and (max-width: 600px) {

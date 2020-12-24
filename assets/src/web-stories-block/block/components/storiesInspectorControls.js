@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
 /**
  * WordPress dependencies
  */
-import { __, _x, sprintf } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
   TextControl,
   PanelBody,
@@ -38,6 +38,14 @@ import { select } from '@wordpress/data';
 /**
  * Internal dependencies
  */
+import { useConfig } from '../../../dashboard/app/config';
+import {
+  CAROUSEL_VIEW_TYPE,
+  CIRCLES_VIEW_TYPE,
+  GRID_VIEW_TYPE,
+  ORDER_BY_OPTIONS,
+} from '../constants';
+import { isShowing } from '../util';
 import AuthorSelection from './authorSelection';
 
 /**
@@ -56,7 +64,7 @@ import AuthorSelection from './authorSelection';
  * @property {string} viewAllLinkLabel Archive link's label.
  * @property {boolean} imageOnRight Whether or not to display images on right side in list view type.
  * @property {Array} authors An array of authors objects which are currently selected.
- * @property {()=>void} setAttributes Callable function for saving attribute values.
+ * @property {Function} setAttributes Callable function for saving attribute values.
  */
 
 /**
@@ -73,60 +81,35 @@ const StoriesInspectorControls = (props) => {
       numOfStories,
       numOfColumns,
       orderByValue,
-      isShowingTitle,
-      isShowingExcerpt,
-      isShowingDate,
-      isShowingAuthor,
-      isShowingViewAll,
       viewAllLinkLabel,
       authors,
-      imageOnRight,
-      isStyleSquared,
       sizeOfCircles,
+      fieldState,
     },
     setAttributes,
     showFilters = true,
   } = props;
 
+  const { fieldStates } = useConfig();
+
   useEffect(() => {
-    if ('circles' !== viewType) {
+    // Set default field state on load.
+    if (!Object.entries(fieldState).length) {
       setAttributes({
-        isShowingTitle: true,
-        isShowingAuthor: true,
-        isShowingDate: true,
-      });
-    } else {
-      setAttributes({
-        isShowingTitle: true,
-        isShowingDate: false,
-        isShowingAuthor: false,
+        fieldState: fieldStates,
       });
     }
+  }, [fieldState, fieldStates, setAttributes]);
 
-    if ('list' === viewType) {
-      setAttributes({
-        isShowingExcerpt: true,
-      });
-    } else {
-      setAttributes({
-        isShowingExcerpt: false,
-      });
+  // Set up sort options.
+  const orderByOptions = Object.entries(ORDER_BY_OPTIONS).map(
+    ([key, option]) => {
+      return {
+        label: option.label,
+        value: key,
+      };
     }
-  }, [viewType, setAttributes]);
-
-  const orderByOptions = [
-    { label: __('Newest to oldest', 'web-stories'), value: '' },
-    { label: __('Oldest to newest', 'web-stories'), value: 'old-to-new' },
-    {
-      label: _x('A -> Z', 'Sorting order', 'web-stories'),
-      value: 'alphabetical',
-    },
-    {
-      label: _x('Z -> A', 'Sorting order', 'web-stories'),
-      value: 'reverse-alphabetical',
-    },
-    { label: __('Random Stories', 'web-stories'), value: 'random' },
-  ];
+  );
 
   const previewLink = select('core/editor').getEditedPostPreviewLink();
   const carouselMessage = sprintf(
@@ -144,7 +127,7 @@ const StoriesInspectorControls = (props) => {
         className="web-stories-settings"
         title={__('Story settings', 'web-stories')}
       >
-        {'carousel' === viewType && (
+        {CAROUSEL_VIEW_TYPE === viewType && (
           <Notice
             className="web-stories-carousel-message"
             isDismissible={false}
@@ -153,106 +136,81 @@ const StoriesInspectorControls = (props) => {
             <RawHTML>{carouselMessage}</RawHTML>
           </Notice>
         )}
-        <ToggleControl
-          label={__('Show title', 'web-stories')}
-          checked={isShowingTitle}
-          onChange={() => setAttributes({ isShowingTitle: !isShowingTitle })}
-        />
-        <ToggleControl
-          label={__('Show excerpt', 'web-stories')}
-          className={'list' !== viewType ? 'is-disabled' : ''}
-          checked={isShowingExcerpt}
-          onChange={() => {
-            if ('list' === viewType) {
-              setAttributes({ isShowingExcerpt: !isShowingExcerpt });
+
+        {fieldState[viewType] &&
+          Object.entries(fieldState[viewType]).map(([field, fieldObj]) => {
+            const { label, show, readonly } = fieldObj;
+
+            if (!readonly) {
+              return (
+                <ToggleControl
+                  key={`${field}__control`}
+                  label={label}
+                  checked={show}
+                  onChange={() => {
+                    if (!readonly) {
+                      const updatedSettings = {
+                        ...fieldState[viewType],
+                        [field]: { ...fieldObj, show: !show },
+                      };
+
+                      setAttributes({
+                        fieldState: {
+                          ...fieldState,
+                          [viewType]: updatedSettings,
+                        },
+                      });
+                    }
+                  }}
+                />
+              );
             }
-          }}
-        />
-        <ToggleControl
-          className={'circles' === viewType ? 'is-disabled' : ''}
-          label={__('Show date', 'web-stories')}
-          checked={'circles' === viewType ? false : isShowingDate}
-          onChange={() => {
-            if ('circles' !== viewType) {
-              setAttributes({ isShowingDate: !isShowingDate });
-            }
-          }}
-        />
-        <ToggleControl
-          className={'circles' === viewType ? 'is-disabled' : ''}
-          label={__('Show author', 'web-stories')}
-          checked={'circles' === viewType ? false : isShowingAuthor}
-          onChange={() => {
-            if ('circles' !== viewType) {
-              setAttributes({ isShowingAuthor: !isShowingAuthor });
-            }
-          }}
-        />
-        {'list' === viewType && (
-          <ToggleControl
-            label={__('Show image on right', 'web-stories')}
-            checked={imageOnRight}
-            onChange={() => {
-              setAttributes({ imageOnRight: !imageOnRight });
-            }}
-          />
-        )}
-        {'circles' !== viewType && (
-          <ToggleControl
-            label={__('Show sharp corners', 'web-stories')}
-            checked={isStyleSquared}
-            onChange={() => {
-              setAttributes({ isStyleSquared: !isStyleSquared });
-            }}
-          />
-        )}
-        <ToggleControl
-          label={__("Show 'View All Stories' link", 'web-stories')}
-          checked={isShowingViewAll}
-          onChange={() =>
-            setAttributes({ isShowingViewAll: !isShowingViewAll })
-          }
-        />
-        {isShowingViewAll && (
-          <TextControl
-            label={__("'View All Stories' Link label", 'web-stories')}
-            value={viewAllLinkLabel}
-            placeholder={__('View All Stories', 'web-stories')}
-            onChange={(newLabel) =>
-              setAttributes({ viewAllLinkLabel: newLabel })
-            }
-          />
-        )}
+
+            return false;
+          })}
+        {fieldState[viewType] &&
+          isShowing('archive_link', fieldState[viewType]) && (
+            <TextControl
+              label={__("'View All Stories' Link label", 'web-stories')}
+              value={viewAllLinkLabel}
+              placeholder={__('View All Stories', 'web-stories')}
+              onChange={(newLabel) =>
+                setAttributes({ viewAllLinkLabel: newLabel })
+              }
+            />
+          )}
       </PanelBody>
-      <PanelBody
-        className="web-stories-settings"
-        title={__('Layout & Style Options', 'web-stories')}
-      >
-        {'grid' === viewType && (
-          <RangeControl
-            label={__('Number of columns', 'web-stories')}
-            value={numOfColumns}
-            onChange={(updatedNumOfColumns) =>
-              setAttributes({ numOfColumns: updatedNumOfColumns })
-            }
-            min={1}
-            max={4}
-            step={1}
-          />
-        )}
-        {'circles' === viewType && (
-          <RangeControl
-            label={__('Size of the circles', 'web-stories')}
-            value={sizeOfCircles}
-            onChange={(updatedSizeOfCircles) =>
-              setAttributes({ sizeOfCircles: updatedSizeOfCircles })
-            }
-            min={80}
-            max={200}
-            step={5}
-          />
-        )}
-      </PanelBody>
+      {(CIRCLES_VIEW_TYPE === viewType || GRID_VIEW_TYPE === viewType) && (
+        <PanelBody
+          className="web-stories-settings"
+          title={__('Layout & Style Options', 'web-stories')}
+        >
+          {GRID_VIEW_TYPE === viewType && (
+            <RangeControl
+              label={__('Number of columns', 'web-stories')}
+              value={numOfColumns}
+              onChange={(updatedNumOfColumns) =>
+                setAttributes({ numOfColumns: updatedNumOfColumns })
+              }
+              min={1}
+              max={4}
+              step={1}
+            />
+          )}
+          {CIRCLES_VIEW_TYPE === viewType && (
+            <RangeControl
+              label={__('Size of the circles', 'web-stories')}
+              value={sizeOfCircles}
+              onChange={(updatedSizeOfCircles) =>
+                setAttributes({ sizeOfCircles: updatedSizeOfCircles })
+              }
+              min={80}
+              max={200}
+              step={5}
+            />
+          )}
+        </PanelBody>
+      )}
       {showFilters && (
         <PanelBody title={__('Sorting & Filtering', 'web-stories')}>
           <RangeControl
@@ -284,16 +242,10 @@ StoriesInspectorControls.propTypes = {
     numOfStories: PropTypes.number,
     numOfColumns: PropTypes.number,
     orderByValue: PropTypes.string,
-    isShowingTitle: PropTypes.bool,
-    isShowingExcerpt: PropTypes.bool,
-    isShowingDate: PropTypes.bool,
-    isShowingAuthor: PropTypes.bool,
-    isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.string,
     authors: PropTypes.array,
-    imageOnRight: PropTypes.bool,
-    isStyleSquared: PropTypes.bool,
     sizeOfCircles: PropTypes.number,
+    fieldState: PropTypes.object,
   }),
   setAttributes: PropTypes.func.isRequired,
   showFilters: PropTypes.bool,

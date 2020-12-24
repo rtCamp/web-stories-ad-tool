@@ -15,25 +15,10 @@
  */
 
 /**
- * WordPress dependencies
+ * Internal dependencies
  */
-import { Spinner, Placeholder } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import initializeWebStoryLightbox from './web-stories-lightbox';
 
-/**
- * StoriesLoading component. Displays a spinner when stories are being fetched.
- *
- * @return {*} JSX markup.
- */
-const StoriesLoading = () => {
-  return (
-    <Placeholder
-      className="web-stories placeholder"
-      instructions={__('Loading Stories…', 'web-stories')}
-    >
-      <Spinner />
-    </Placeholder>
-  );
-};
-
-export default StoriesLoading;
+window.addEventListener('load', () => {
+  initializeWebStoryLightbox();
+});
