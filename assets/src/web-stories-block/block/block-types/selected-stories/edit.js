@@ -18,7 +18,6 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { ThemeProvider } from 'styled-components';
 
 /**
@@ -48,15 +47,7 @@ const SelectedStoriesEdit = ({
   setAttributes,
   isSelected: isEditing,
 }) => {
-  const {
-    blockType,
-    stories,
-    align,
-    viewType,
-    numOfColumns,
-    viewAllLinkLabel,
-    isStyleSquared,
-  } = attributes;
+  const { blockType, stories, viewType, viewAllLinkLabel } = attributes;
 
   const [selectedStories, setSelectedStories] = useState(stories);
   const [selectedStoriesObject, setSelectedStoriesObject] = useState([]);
@@ -69,17 +60,6 @@ const SelectedStoriesEdit = ({
   const viewAllLabel = viewAllLinkLabel
     ? viewAllLinkLabel
     : __('View All Stories', 'web-stories');
-
-  const alignmentClass = classNames({ [`align${align}`]: align });
-  const blockClasses = classNames(
-    {
-      'is-style-default': !isStyleSquared,
-      'is-style-squared': isStyleSquared,
-    },
-    'web-stories-list',
-    { [`is-view-type-${viewType}`]: viewType },
-    { [`columns-${numOfColumns}`]: 'grid' === viewType && numOfColumns }
-  );
 
   const activeTheme = {
     DEPRECATED_THEME: theme,
@@ -129,8 +109,6 @@ const SelectedStoriesEdit = ({
       {selectedStoriesObject && 0 < selectedStoriesObject.length && (
         <StoriesPreview
           attributes={attributes}
-          alignmentClass={alignmentClass}
-          blockClasses={blockClasses}
           stories={selectedStoriesObject}
           viewAllLabel={viewAllLabel}
         />
@@ -160,14 +138,7 @@ SelectedStoriesEdit.propTypes = {
     align: PropTypes.string,
     viewType: PropTypes.string,
     numOfColumns: PropTypes.number,
-    isShowingTitle: PropTypes.bool,
-    isShowingExcerpt: PropTypes.bool,
-    isShowingDate: PropTypes.bool,
-    isShowingAuthor: PropTypes.bool,
-    isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.string,
-    imageOnRight: PropTypes.bool,
-    isStyleSquared: PropTypes.bool,
     sizeOfCircles: PropTypes.number,
   }),
   setAttributes: PropTypes.func.isRequired,

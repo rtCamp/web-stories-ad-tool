@@ -18,7 +18,6 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { useDebouncedCallback } from 'use-debounce';
 
 /**
@@ -35,13 +34,10 @@ import { addQueryArgs } from '@wordpress/url';
 import StoriesInspectorControls from '../../components/storiesInspectorControls';
 import StoriesBlockControls from '../../components/storiesBlockControls';
 import StoriesLoading from '../../components/storiesLoading';
-import {
-  FETCH_STORIES_DEBOUNCE,
-  GRID_VIEW_TYPE,
-  ORDER_BY_OPTIONS,
-} from '../../constants';
+import { FETCH_STORIES_DEBOUNCE, ORDER_BY_OPTIONS } from '../../constants';
 import StoriesPreview from '../../components/storiesPreview';
 import { useConfig } from '../../../../dashboard/app/config';
+
 /**
  * Module constants
  */
@@ -62,14 +58,11 @@ const LATEST_STORIES_QUERY = {
 const LatestStoriesEdit = ({ attributes, setAttributes }) => {
   const {
     blockType,
-    align,
     viewType,
     numOfStories,
-    numOfColumns,
     orderByValue,
     viewAllLinkLabel,
     authors,
-    isStyleSquared,
   } = attributes;
 
   const { api } = useConfig();
@@ -127,17 +120,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
       ? fetchedStories.slice(0, numOfStories)
       : fetchedStories;
 
-  const alignmentClass = classNames({ [`align${align}`]: align });
-  const blockClasses = classNames(
-    {
-      'is-style-default': !isStyleSquared,
-      'is-style-squared': isStyleSquared,
-    },
-    'web-stories-list',
-    { [`is-view-type-${viewType}`]: viewType },
-    { [`columns-${numOfColumns}`]: GRID_VIEW_TYPE === viewType && numOfColumns }
-  );
-
   return (
     <>
       <StoriesBlockControls
@@ -157,8 +139,6 @@ const LatestStoriesEdit = ({ attributes, setAttributes }) => {
         0 < storiesToDisplay.length && (
           <StoriesPreview
             attributes={attributes}
-            alignmentClass={alignmentClass}
-            blockClasses={blockClasses}
             stories={storiesToDisplay}
             viewAllLabel={viewAllLabel}
           />
@@ -175,16 +155,10 @@ LatestStoriesEdit.propTypes = {
     numOfStories: PropTypes.number,
     numOfColumns: PropTypes.number,
     orderByValue: PropTypes.string,
-    isShowingTitle: PropTypes.bool,
-    isShowingExcerpt: PropTypes.bool,
-    isShowingDate: PropTypes.bool,
-    isShowingAuthor: PropTypes.bool,
-    isShowingViewAll: PropTypes.bool,
     viewAllLinkLabel: PropTypes.string,
     authors: PropTypes.array,
-    imageOnRight: PropTypes.bool,
-    isStyleSquared: PropTypes.bool,
     sizeOfCircles: PropTypes.number,
+    fieldState: PropTypes.object,
   }),
   setAttributes: PropTypes.func.isRequired,
 };

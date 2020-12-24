@@ -50,41 +50,17 @@
       "type": "string",
       "default": ""
     },
-    "isShowingTitle": {
-      "type": "boolean",
-      "default": true
-    },
-    "isShowingExcerpt": {
-      "type": "boolean",
-      "default": false
-    },
-    "isShowingDate": {
-      "type": "boolean",
-      "default": false
-    },
-    "isShowingAuthor": {
-      "type": "boolean",
-      "default": false
-    },
-    "isShowingViewAll": {
-      "type": "boolean",
-      "default": false
-    },
     "viewAllLinkLabel": {
       "type": "string",
       "default": ""
-    },
-    "imageOnRight": {
-      "type": "boolean",
-      "default": false
     },
     "authors": {
       "type": "array",
       "default": []
     },
-    "isStyleSquared": {
-      "type": "boolean",
-      "default": false
+    "fieldState": {
+      "type": "object",
+      "default": {}
     }
   }
 }
