@@ -41,7 +41,6 @@ import {
   STORY_SORT_MENU_ITEMS,
 } from '../../../../dashboard/constants';
 import { getRelativeDisplayDate } from '../../../../date';
-import { DASHBOARD_LEFT_NAV_WIDTH } from '../../../../dashboard/constants/pageStructure';
 import {
   CardTitle,
   Dropdown,
@@ -113,12 +112,14 @@ const StoryGrid = styled.div(
 );
 
 const SearchContainer = styled.div`
-  display: inline-block;
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 60% 25% 15%;
   vertical-align: baseline;
   position: relative;
   height: 29px;
-  margin-left: 8px;
-  flex: 0 1 20%;
+  width: 100%;
+
   @media ${({ theme }) => theme.DEPRECATED_THEME.breakpoint.smallDisplayPhone} {
     left: ${({ theme }) =>
       `${theme.DEPRECATED_THEME.standardViewContentGutter.min}px`};
@@ -127,10 +128,8 @@ const SearchContainer = styled.div`
   }
 `;
 
-const SearchInner = styled.div`
-  width: min(${DASHBOARD_LEFT_NAV_WIDTH}px, 100%);
-  display: flex;
-  justify-content: flex-end;
+const SearchStoryInner = styled.div`
+  grid-column: 2;
 `;
 
 const DropdownContainer = styled.div`
@@ -187,24 +186,20 @@ function SelectStories({
     <>
       <StoryFilter data-testid="story-filter">
         <SearchContainer>
-          <SearchInner>
+          <SearchStoryInner>
             <TypeaheadSearch
               placeholder={__('Search Stories', 'web-stories')}
               currentValue={search.keyword}
               stories={orderedStories}
               handleChange={debouncedTypeaheadChange}
             />
-          </SearchInner>
-        </SearchContainer>
-        <SearchContainer>
-          <SearchInner>
-            <TypeaheadAuthorSearch
-              placeholder={__('Search by author', 'web-stories')}
-              currentValue={currentAuthor.name}
-              authors={authors}
-              handleChange={debouncedTypeaheadAuthorChange}
-            />
-          </SearchInner>
+          </SearchStoryInner>
+          <TypeaheadAuthorSearch
+            placeholder={__('Search by author', 'web-stories')}
+            currentValue={currentAuthor.name}
+            authors={authors}
+            handleChange={debouncedTypeaheadAuthorChange}
+          />
         </SearchContainer>
         <DropdownContainer>
           <Dropdown
