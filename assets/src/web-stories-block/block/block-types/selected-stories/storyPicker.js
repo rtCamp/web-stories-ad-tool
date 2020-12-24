@@ -172,7 +172,7 @@ function StoryPicker({
     setFetchingForTheFirstTime,
   ]);
 
-  const fetchWebAuthors = useCallback(async () => {
+  const fetchStoryAuthors = useCallback(async () => {
     const query = {
       searchTerm: authorKeyword,
     };
@@ -208,8 +208,8 @@ function StoryPicker({
   ]);
 
   useEffect(() => {
-    fetchWebAuthors();
-  }, [authorKeyword, fetchWebAuthors]);
+    fetchStoryAuthors();
+  }, [authorKeyword, fetchStoryAuthors]);
 
   const addItemToSelectedStories = (storyId) => {
     if (selectedStories.length >= maxNumOfStories) {

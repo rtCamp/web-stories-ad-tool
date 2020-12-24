@@ -377,7 +377,11 @@
  * because of the 'a' links. Making 'a' absolutely positioned removes them from normal
  * relative flow, removes the space.
  */
-.web-stories-list:not(.is-amp) .web-stories-list__lightbox amp-story-player a {
+html:not([amp])
+  .web-stories-list
+  .web-stories-list__lightbox
+  amp-story-player
+  a {
   position: absolute;
 }
 
