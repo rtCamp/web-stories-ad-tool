@@ -13,39 +13,109 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-(function () {
+(function ($) {
+  /**
+   * Store field states in local variable.
+   *
+   * @type {Object}
+   */
   var fieldState = window.webStoriesMCEData || {};
 
-  var react = function (event) {
-    var currentView = event.target.value;
-    var widget = event.target.closest('.widget');
+  /**
+   * Closure for making inputs reactive
+   * on view type selection change.
+   *
+   * @param {Object} target Event object.
+   * @param reset
+   */
+  var react = function (target, reset = false) {
+    var currentView = target.value;
+    var widget = target.closest('.widget');
     var state = fieldState.fields[currentView];
 
     for (var [key, value] of Object.entries(state)) {
       var field = widget.querySelector('.' + key + '.stories-widget-field');
       var fieldWrapper = widget.querySelector('.' + key + '_wrapper');
       if (field && fieldWrapper && 'checkbox' === field.getAttribute('type')) {
-        field.checked = false; // Reset the value.
+        if (reset) {
+          field.checked = false;
+        }
+        /**
+         * If this is readonly field.
+         * Assign the value automatically and hide it afterward.
+         */
+        if (value.readonly) {
+          field.checked = value.show;
+        }
         fieldWrapper.style.display = value.readonly ? 'none' : 'block';
       }
     }
   };
 
+  /**
+   * Returns the HTML Collection of view type selectors.
+   *
+   * @return {HTMLCollection} Array of elements.
+   */
+  var viewSelectors = function () {
+    return document.getElementsByClassName('view-type stories-widget-field');
+  };
+
+  /**
+   * Bind event on view type selection change.
+   */
   var bindEvent = function () {
-    var dropdowns = document.getElementsByClassName(
-      'view-type stories-widget-field'
-    );
+    var dropdowns = viewSelectors();
 
     if (dropdowns.length) {
       for (var i = 0; i < dropdowns.length; i++) {
-        dropdowns[i].onchange = react;
+        dropdowns[i].onchange = function (event) {
+          react(event.target, false);
+        };
       }
     }
   };
 
+  /**
+   * Fire event manually once.
+   */
+  var fireEvent = function () {
+    var dropdowns = viewSelectors();
+    var evt = document.createEvent('HTMLEvents');
+    evt.initEvent('change', false, true);
+    for (var l = 0; l < dropdowns.length; l++) {
+      dropdowns[l].dispatchEvent(evt);
+    }
+  };
+
+  /**
+   * Wait till document is interactive and then bind the event.
+   */
   document.onreadystatechange = function () {
     if (document.readyState === 'interactive') {
       bindEvent();
+      fireEvent();
     }
   };
-})();
+
+  /**
+   * Called when widget is updated or added.
+   *
+   * @param {Object} event Event object.
+   * @param {Object} widget Widget jQuery object.
+   */
+  var widgetChange = function (event, widget) {
+    var target = $(widget).find('.view-type.stories-widget-field');
+
+    if (target.length) {
+      react($(target).get(0), false);
+      bindEvent();
+    }
+  };
+
+  /**
+   * Listen to widget updated event and update the widget.
+   */
+  $(document).on('widget-updated', widgetChange);
+  $(document).on('widget-added', widgetChange);
+})(jQuery);

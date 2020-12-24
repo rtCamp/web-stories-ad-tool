@@ -23,6 +23,7 @@
 
 namespace Google\Web_Stories\Widgets;
 
+use Google\Web_Stories\Story_Query;
 use WP_Widget;
 use function Google\Web_Stories\get_stories_theme_support;
 
@@ -74,7 +75,21 @@ class Stories extends WP_Widget {
 			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
 		}
 
-		//ToDo: Implement Stories Display.
+		$story_attrs = [
+			'view_type'                 => $instance['view-type'],
+			'show_title'                => (bool) $instance['show_title'],
+			'show_author'               => (bool) $instance['show_author'],
+			'show_date'                 => (bool) $instance['show_date'],
+			'show_excerpt'              => (bool) $instance['show_excerpt'],
+			'list_view_image_alignment' => ( (bool) $instance['image_align_right'] ) ? 'right' : 'left',
+			'show_stories_archive_link' => (bool) $instance['archive_link'],
+		];
+
+		$story_args = [
+			'posts_per_page' => $instance['number'],
+		];
+
+		echo (new Story_Query( $story_attrs, $story_args ))->render();
 
 		echo $instance['after_widget'];
 	}
@@ -90,6 +105,13 @@ class Stories extends WP_Widget {
 		$title             = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( 'Stories', 'web-stories' );
 		$view_types        = $theme_support['view-type'];
 		$current_view_type = empty( $instance['view-type'] ) ? $theme_support['view-type-default'] : $instance['view-type'];
+		$show_title        = ! empty( $instance['show_title'] ) ? (int) $instance['show_title'] : '';
+		$show_author       = ! empty( $instance['show_author'] ) ? (int) $instance['show_author'] : '';
+		$show_date         = ! empty( $instance['show_date'] ) ? (int) $instance['show_date'] : '';
+		$show_excerpt      = ! empty( $instance['show_excerpt'] ) ? (int) $instance['show_excerpt'] : '';
+		$archive_link      = ! empty( $instance['archive_link'] ) ? (int) $instance['archive_link'] : '';
+		$image_align       = ! empty( $instance['image_align_right'] ) ? (int) $instance['image_align_right'] : '';
+		$number            = ! empty( $instance['number'] ) ? (int) $instance['number'] : 5;
 
 		$this->input(
 			[
@@ -97,6 +119,7 @@ class Stories extends WP_Widget {
 				'name'  => 'title',
 				'label' => __( 'Widget Title', 'web-stories' ),
 				'type'  => 'text',
+				'value' => $title,
 			]
 		);
 
@@ -107,7 +130,19 @@ class Stories extends WP_Widget {
 				'name'      => 'view-type',
 				'id'        => 'view-type',
 				'label'     => __( 'Select view type', 'web-stories' ),
-				'classname' => 'widefat view-type stories-widget-field'
+				'classname' => 'widefat view-type stories-widget-field',
+			]
+		);
+
+		$this->input(
+			[
+				'id'            => 'number',
+				'name'          => 'number',
+				'label'         => __( 'Number of stories (Maximum 20)', 'web-stories' ),
+				'type'          => 'number',
+				'classname'     => 'widefat number-stories stories-widget-field',
+				'wrapper_class' => 'number-stories_wrapper',
+				'value'         => $number,
 			]
 		);
 
@@ -119,6 +154,7 @@ class Stories extends WP_Widget {
 				'type'          => 'checkbox',
 				'classname'     => 'widefat title stories-widget-field',
 				'wrapper_class' => 'title_wrapper',
+				'value'         => $show_title,
 			]
 		);
 
@@ -130,6 +166,7 @@ class Stories extends WP_Widget {
 				'type'          => 'checkbox',
 				'classname'     => 'widefat excerpt stories-widget-field',
 				'wrapper_class' => 'excerpt_wrapper',
+				'value'         => $show_excerpt,
 			]
 		);
 
@@ -141,6 +178,7 @@ class Stories extends WP_Widget {
 				'type'          => 'checkbox',
 				'classname'     => 'widefat author stories-widget-field',
 				'wrapper_class' => 'author_wrapper',
+				'value'         => $show_author,
 			]
 		);
 
@@ -152,6 +190,7 @@ class Stories extends WP_Widget {
 				'type'          => 'checkbox',
 				'classname'     => 'widefat date stories-widget-field',
 				'wrapper_class' => 'date_wrapper',
+				'value'         => $show_date,
 			]
 		);
 
@@ -163,6 +202,7 @@ class Stories extends WP_Widget {
 				'type'          => 'checkbox',
 				'classname'     => 'widefat image_align stories-widget-field',
 				'wrapper_class' => 'image_align_wrapper',
+				'value'         => $image_align,
 			]
 		);
 
@@ -174,6 +214,7 @@ class Stories extends WP_Widget {
 				'type'          => 'checkbox',
 				'classname'     => 'widefat archive_link stories-widget-field',
 				'wrapper_class' => 'archive_link_wrapper',
+				'value'         => $archive_link,
 			]
 		);
 	}
@@ -187,10 +228,16 @@ class Stories extends WP_Widget {
 	 * @return array
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance          = array();
-		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? wp_strip_all_tags( $new_instance['title'] ) : '';
-
-		//ToDo: Implement Widget Update.
+		$instance                      = array();
+		$instance['title']             = ( ! empty( $new_instance['title'] ) ) ? wp_strip_all_tags( $new_instance['title'] ) : '';
+		$instance['view-type']         = ( ! empty( $new_instance['view-type'] ) ) ? $new_instance['view-type'] : '';
+		$instance['show_title']        = ( isset( $new_instance['show_title'] ) ) ? 1 : '';
+		$instance['show_author']       = ( isset( $new_instance['show_author'] ) ) ? 1 : '';
+		$instance['show_excerpt']      = ( isset( $new_instance['show_excerpt'] ) ) ? 1 : '';
+		$instance['show_date']         = ( isset( $new_instance['show_date'] ) ) ? 1 : '';
+		$instance['archive_link']      = ( isset( $new_instance['archive_link'] ) ) ? 1 : '';
+		$instance['image_align_right'] = ( isset( $new_instance['image_align_right'] ) ) ? 1 : '';
+		$instance['number']            = min( absint( $new_instance['number'] ), 20 );
 
 		return $instance;
 	}
@@ -206,13 +253,13 @@ class Stories extends WP_Widget {
 	}
 
 	/**
-	 *
+	 * Enqueue widget script.
 	 */
 	public function stories_widget_scripts() {
 		wp_enqueue_script(
 			'web-stories-widget',
 			trailingslashit( WEBSTORIES_PLUGIN_DIR_URL ) . 'includes/assets/stories-widget.js',
-			[],
+			['jquery'],
 			WEBSTORIES_VERSION,
 			true
 		);
@@ -251,7 +298,9 @@ class Stories extends WP_Widget {
 			<?php
 
 			foreach ( $args['options'] as $key => $type ) { ?>
-				<option value="<?php printf( '%s', $key ) ?>">
+				<option value="<?php printf( '%s', $key ) ?>"
+					<?php selected( $key, $args['selected'], true ); ?>
+				>
 					<?php printf( '%s', $type ) ?>
 				</option>
 				<?php
@@ -276,6 +325,7 @@ class Stories extends WP_Widget {
 				'id'            => wp_generate_uuid4(),
 				'name'          => wp_generate_uuid4(),
 				'label'         => '',
+				'value'         => '',
 				'classname'     => 'widefat',
 				'wrapper_class' => 'stories-field-wrapper',
 			]
@@ -290,7 +340,11 @@ class Stories extends WP_Widget {
 				class="<?php printf( '%s', (string) $args['classname'] ) ?>"
 				type="<?php printf( '%s', (string) $args['type'] ) ?>"
 				id="<?php echo $this->get_field_id( $args['id'] ) ?>"
-				name="<?php echo $this->get_field_id( $args['name'] ) ?>"
+				name="<?php echo $this->get_field_name( $args['name'] ) ?>"
+				value="<?php echo $args['value'] ?>"
+				<?php if ( 'checkbox' === $args['type'] ) {
+					checked( 1, $args['value'], true );
+				} ?>
 			/>
 
 		</p>
