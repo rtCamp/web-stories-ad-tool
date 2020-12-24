@@ -21,6 +21,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 namespace Google\Web_Stories;
 
 /**
@@ -34,4 +35,41 @@ function stories( $args = [] ) {
 	$story_query = new Story_Query( $args );
 	//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo $story_query->render();
+}
+
+/**
+ * Wrapper function for fetching field states
+ * based on the view types.
+ *
+ * Mainly uses FieldState and Fields classes.
+ *
+ * @return array
+ */
+function fields_states() {
+	$theme_support = Customizer::get_stories_theme_support();
+	$views         = $theme_support['view-type'];
+
+	$fields = [
+		'title',
+		'author',
+		'date',
+		'image_align',
+		'excerpt',
+		'archive_link',
+	];
+
+	$field_states = [];
+
+	foreach ( $views as $view_type => $view_label ) {
+		$field_state = ( new Story_Query( [ 'view_type' => $view_type ] ) )->get_renderer()->field();
+		foreach ( $fields as $field ) {
+			$field_states[ $view_type ][ $field ] = [
+				'show'     => $field_state->$field()->show(),
+				'label'    => $field_state->$field()->label(),
+				'readonly' => $field_state->$field()->readonly(),
+			];
+		}
+	}
+
+	return $field_states;
 }
