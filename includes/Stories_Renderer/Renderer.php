@@ -123,6 +123,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Constructor
 	 *
+	 * @since 1.3.0
+	 *
 	 * @param Stories $stories Stories instance.
 	 */
 	public function __construct( Stories $stories ) {
@@ -134,6 +136,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 	/**
 	 * Output markup for amp stories.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @param array $args Array of rendering arguments.
 	 *
@@ -152,6 +156,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Retrieve current story.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return mixed|void
 	 */
 	public function current() {
@@ -160,6 +166,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 	/**
 	 * Retrieve next story.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @retrun void
 	 */
@@ -170,6 +178,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Retrieve the key for current node in list.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return bool|float|int|string|void|null
 	 */
 	public function key() {
@@ -178,6 +188,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 	/**
 	 * Check if current position is valid.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @return bool|void
 	 */
@@ -188,6 +200,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Reset pointer to start of the list.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return void
 	 */
 	public function rewind() {
@@ -197,6 +211,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Perform initial setup for object.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return void
 	 */
 	public function init() {
@@ -205,6 +221,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 	/**
 	 * Return the fields state.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @return FieldState
 	 */
@@ -244,6 +262,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Initializes renderer functionality.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return void
 	 */
 	public function assets() {
@@ -264,6 +284,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Determine whether the current request is for an AMP page.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return boolean
 	 */
 	public function is_amp_request() {
@@ -273,6 +295,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 	/**
 	 * Returns story item data.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @SuppressWarnings(PHPMD.NPathComplexity)
 	 *
@@ -311,6 +335,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Verifies the current view type.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @param string $view_type View type to check.
 	 *
 	 * @return bool Whether or not current view type matches the one passed.
@@ -323,6 +349,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Get view type for stories.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return string
 	 */
 	protected function get_view_type() {
@@ -332,6 +360,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 	/**
 	 * Renders stories archive link if the 'show_stories_archive_link' attribute is set to true.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */
@@ -360,6 +390,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Gets the classes for renderer container.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return string
 	 */
 	protected function get_view_classes() {
@@ -372,10 +404,16 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 		if ( ! $this->is_view_type( 'circles' ) && ! empty( $this->attributes['has_square_corners'] ) ) {
 			$view_classes[] = 'is-style-squared';
+		} else {
+			$view_classes[] = 'is-style-default';
 		}
 
 		if ( $this->is_view_type( 'circles' ) && ! empty( $this->attributes['show_title'] ) ) {
 			$view_classes[] = 'has-title';
+		}
+
+		if ( $this->is_view_type( 'circles' ) || $this->is_view_type( 'carousel' ) ) {
+			$view_classes[] = 'is-carousel';
 		}
 
 		return implode( ' ', $view_classes );
@@ -383,6 +421,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 	/**
 	 * Gets the classes for renderer container.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @return string
 	 */
@@ -407,12 +447,19 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Gets the single story container classes.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return string
 	 */
 	protected function get_single_story_classes() {
 
 		$single_story_classes   = [];
-		$single_story_classes[] = 'web-stories-list__story-wrapper';
+		$single_story_classes[] = 'web-stories-list__story';
+
+		if ( ! empty( $this->attributes['list_view_image_alignment'] ) &&
+			( 'right' === $this->attributes['list_view_image_alignment'] || true === $this->attributes['list_view_image_alignment'] ) ) {
+			$single_story_classes[] = sprintf( 'image-align-right' );
+		}
 
 		$single_story_classes = array_filter( $single_story_classes );
 		$classes              = implode( ' ', $single_story_classes );
@@ -420,20 +467,43 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		/**
 		 * Filters the web stories renderer single story classes.
 		 *
+		 * @since 1.3.0
+		 *
 		 * @param string $class Single story classes.
 		 */
 		return apply_filters( 'web_stories_renderer_single_story_classes', $classes );
 	}
 
 	/**
+	 * Gets the single story container styles.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @return string Style string.
+	 */
+	protected function get_container_styles() {
+		$story_styles  = $this->is_view_type( 'circles' ) ? sprintf( '--ws-circle-size:%1$dpx', $this->attributes['circle_size'] ) : '';
+		$story_styles .= $this->is_view_type( 'carousel' ) ? sprintf( '--ws-story-max-width:%1$dpx', $this->width ) : '';
+
+		/**
+		 * Filters the web stories renderer single story classes.
+		 *
+		 * @since 1.3.0
+		 *
+		 * @param string $class Single story classes.
+		 */
+		return apply_filters( 'web_stories_renderer_container_styles', $story_styles );
+	}
+
+	/**
 	 * Render story markup.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */
 	public function render_single_story_content() {
 		$single_story_classes = $this->get_single_story_classes();
-		$story_styles         = $this->is_view_type( 'circles' ) ? sprintf( '--size:%1$spx', $this->attributes['circle_size'] ) : '';
-		$story_styles        .= $this->is_view_type( 'carousel' ) ? sprintf( '--width:%1$spx', $this->width ) : '';
 		$lightbox_state       = 'lightbox' . $this->current()->get_id();
 
 		if ( $this->is_amp_request() ) {
@@ -441,7 +511,6 @@ abstract class Renderer implements RenderingInterface, Iterator {
 			<div
 				class="<?php echo esc_attr( $single_story_classes ); ?>"
 				on="<?php echo esc_attr( sprintf( 'tap:AMP.setState({%1$s: ! %1$s})', $lightbox_state ) ); ?>"
-				style="<?php echo esc_attr( $story_styles ); ?>"
 			>
 				<?php
 				$this->render_story_with_poster();
@@ -450,10 +519,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 			<?php
 		} else {
 			?>
-			<div
-				class="<?php echo esc_attr( $single_story_classes ); ?>"
-				style="<?php echo esc_attr( $story_styles ); ?>"
-			>
+			<div class="<?php echo esc_attr( $single_story_classes ); ?>">
 				<?php
 					$this->render_story_with_poster();
 				?>
@@ -465,32 +531,35 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Renders a story with story's poster image.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return void
 	 */
 	protected function render_story_with_poster() {
 
-		$story_data            = $this->current();
-		$poster_url            = ( 'circles' === $this->get_view_type() ) ? $story_data->get_poster_square() : $story_data->get_poster_portrait();
-		$poster_style          = sprintf( 'background-image: url(%1$s);', esc_url_raw( $poster_url ) );
-		$inner_wrapper_classes = 'web-stories-list__inner-wrapper ';
-
-		if ( true === $this->is_view_type( 'carousel' ) ) {
-			$poster_style .= sprintf( ' min-width: %1$dpx;', $this->width );
-		}
-
-		if ( ! empty( $this->attributes['list_view_image_alignment'] ) ) {
-			$inner_wrapper_classes .= sprintf( 'image-align-%1$s', $this->attributes['list_view_image_alignment'] );
-		}
+		$story_data = $this->current();
+		$poster_url = ( 'circles' === $this->get_view_type() ) ? $story_data->get_poster_square() : $story_data->get_poster_portrait();
 
 		?>
-		<div class="<?php echo esc_attr( $inner_wrapper_classes ); ?>">
-			<div
-				class="web-stories-list__story-placeholder"
-				style="<?php echo esc_attr( $poster_style ); ?>"
-			></div>
-			<?php $this->get_content_overlay(); ?>
+		<div class="web-stories-list__story-poster">
+			<?php
+			if ( $this->is_amp_request() ) {
+				// Set the dimensions to '0' so that we can handle image ratio/size by CSS per view type.
+				?>
+				<amp-img
+					src="<?php echo esc_url( $poster_url ); ?>"
+					layout="responsive"
+					width="0"
+					height="0"
+					alt="<?php echo esc_attr( $story_data->get_title() ); ?>"
+				>
+				</amp-img>
+			<?php } else { ?>
+				<img src="<?php echo esc_url( $poster_url ); ?>" alt="<?php echo esc_attr( $story_data->get_title() ); ?>">
+			<?php } ?>
 		</div>
 		<?php
+		$this->get_content_overlay();
 
 		// Start collecting markup for the lightbox stories. This way we don't have to re-run the loop.
 		ob_start();
@@ -511,6 +580,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Renders the content overlay markup.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return void
 	 */
 	protected function get_content_overlay() {
@@ -521,7 +592,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		}
 
 		?>
-		<div class="story-content-overlay web-stories-list__story-content-overlay">
+		<div class="web-stories-list__story-content-overlay">
 			<?php if ( $this->attributes['show_title'] ) { ?>
 				<div class="story-content-overlay__title">
 					<?php
@@ -565,6 +636,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	/**
 	 * Renders the lightbox markup for non-amp pages.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return void
 	 */
 	protected function render_stories_with_lightbox_noamp() {
@@ -595,6 +668,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 	/**
 	 * Markup for the lightbox used on AMP pages.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */
@@ -631,6 +706,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 
 	/**
 	 * Renders the lightbox markup for non-amp pages.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */

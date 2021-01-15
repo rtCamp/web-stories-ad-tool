@@ -38,6 +38,8 @@ class Carousel_Renderer extends Renderer {
 	/**
 	 * Perform initial setup for object.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return void
 	 */
 	public function init() {
@@ -49,6 +51,8 @@ class Carousel_Renderer extends Renderer {
 
 	/**
 	 * Enqueue assets.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */
@@ -67,6 +71,8 @@ class Carousel_Renderer extends Renderer {
 	/**
 	 * Renders the stories output for given attributes.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @SuppressWarnings(PHPMD.UnusedLocalVariable)
 	 *
 	 * @param array $args Array of rendering arguments.
@@ -81,27 +87,31 @@ class Carousel_Renderer extends Renderer {
 
 		parent::render( $args );
 		$container_classes = $this->get_container_classes();
+		$container_styles  = $this->get_container_styles();
 
 		ob_start();
 		?>
 		<div class="<?php echo esc_attr( $container_classes ); ?>">
-			<amp-carousel
-				width="1"
-				height="1"
-				layout="intrinsic"
-				type="carousel"
-				role="region"
-				aria-label="<?php esc_attr_e( 'Web Stories', 'web-stories' ); ?>"
-			>
-				<?php
-				foreach ( $this->story_posts as $story ) {
-					$this->render_single_story_content();
-					$this->next();
-				}
-				?>
-			</amp-carousel>
-			<?php $this->maybe_render_archive_link(); ?>
+			<div class="web-stories-list__inner-wrapper" style="<?php echo esc_attr( $container_styles ); ?>">
+				<amp-carousel
+					width="1"
+					height="1"
+					layout="intrinsic"
+					type="carousel"
+					role="region"
+					aria-label="<?php esc_attr_e( 'Web Stories', 'web-stories' ); ?>"
+				>
+					<?php
+					foreach ( $this->story_posts as $story ) {
+						$this->render_single_story_content();
+						$this->next();
+					}
+					?>
+				</amp-carousel>
+			</div>
 			<?php
+			$this->maybe_render_archive_link();
+
 			if ( ! $this->is_amp_request() ) {
 				$this->render_stories_with_lightbox_noamp();
 			} else {
@@ -114,6 +124,8 @@ class Carousel_Renderer extends Renderer {
 
 		/**
 		 * Filters the Carousel renderer stories content.
+		 *
+		 * @since 1.3.0
 		 *
 		 * @param string $content Stories content.
 		 */

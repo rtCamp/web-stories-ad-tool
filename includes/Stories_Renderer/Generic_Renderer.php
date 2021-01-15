@@ -44,6 +44,8 @@ class Generic_Renderer extends Renderer {
 	/**
 	 * Perform initial setup for object.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @return void
 	 */
 	public function init() {
@@ -55,6 +57,8 @@ class Generic_Renderer extends Renderer {
 
 	/**
 	 * Renders the stories output for given attributes.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @SuppressWarnings(PHPMD.UnusedLocalVariable)
 	 *
@@ -70,23 +74,27 @@ class Generic_Renderer extends Renderer {
 
 		parent::render( $args );
 		$container_classes = $this->get_container_classes();
+		$container_styles  = $this->get_container_styles();
 
 		ob_start();
 		?>
 		<div class="<?php echo esc_attr( $container_classes ); ?>">
+			<div class="web-stories-list__inner-wrapper" style="<?php echo esc_attr( $container_styles ); ?>">
+				<?php
+				foreach ( $this->story_posts as $story ) {
+					$this->render_single_story_content();
+					$this->next();
+				}
+				?>
+			</div>
 			<?php
-			foreach ( $this->story_posts as $story ) {
-				$this->render_single_story_content();
-				$this->next();
-			}
+			$this->maybe_render_archive_link();
 
 			if ( ! $this->is_amp_request() ) {
 				$this->render_stories_with_lightbox_noamp();
 			} else {
 				$this->render_stories_with_lightbox_amp();
 			}
-
-			$this->maybe_render_archive_link();
 			?>
 		</div>
 		<?php
@@ -97,6 +105,8 @@ class Generic_Renderer extends Renderer {
 		 * Filters the Generic renderer stories content.
 		 *
 		 * The dynamic portion of the hook `$this->get_view_type()` refers to the story view type.
+		 *
+		 * @since 1.3.0
 		 *
 		 * @param string $content Stories content.
 		 */
