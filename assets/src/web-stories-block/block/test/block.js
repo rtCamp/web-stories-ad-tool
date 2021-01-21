@@ -22,13 +22,19 @@ import { registerBlockType } from '@wordpress/blocks';
 /**
  * Internal dependencies
  */
-import { initializeTracking } from '../tracking';
-import { name, settings } from './block';
-import { webStoriesBlockSettings } from './block/globals';
-import './block/storiesFilters';
+import { name, settings } from '../';
 
-__webpack_public_path__ = webStoriesBlockSettings.publicPath;
+jest.mock('../globals', () => ({
+  webStoriesBlockSettings: {
+    config: {
+      api: {},
+    },
+  },
+}));
 
-registerBlockType(name, settings);
-
-initializeTracking('Web Stories List Block', false);
+describe('Block Registration', () => {
+  it('should register Web Stories block without errors', () => {
+    const block = registerBlockType(name, settings);
+    expect(block).not.toBeUndefined();
+  });
+});
