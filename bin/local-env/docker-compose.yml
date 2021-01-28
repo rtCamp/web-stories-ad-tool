@@ -14,6 +14,7 @@ services:
         define( 'SCRIPT_DEBUG', true );
         define( 'FS_METHOD', 'direct' );
         define( 'WEBSTORIES_DEV_MODE', true );
+        define( 'WP_MEMORY_LIMIT', '1024M' );
     volumes:
       - wordpress_data:/var/www/html
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
