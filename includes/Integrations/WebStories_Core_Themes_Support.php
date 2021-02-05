@@ -27,7 +27,7 @@
 namespace Google\Web_Stories\Integrations;
 
 /**
- * Class Jetpack.
+ * Class WebStories_Core_Themes_Support.
  */
 class WebStories_Core_Themes_Support {
 
