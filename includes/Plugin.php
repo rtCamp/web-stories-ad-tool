@@ -32,6 +32,7 @@ use Google\Web_Stories\Integrations\AMP;
 use Google\Web_Stories\Integrations\Jetpack;
 use Google\Web_Stories\Integrations\NextGen_Gallery;
 use Google\Web_Stories\Integrations\Site_Kit;
+use Google\Web_Stories\Integrations\WebStories_Core_Themes_Support;
 use Google\Web_Stories\REST_API\Embed_Controller;
 use Google\Web_Stories\REST_API\Status_Check_Controller;
 use Google\Web_Stories\REST_API\Stories_Media_Controller;
@@ -310,6 +311,11 @@ class Plugin {
 		$site_kit = new Site_Kit( $this->analytics );
 		add_action( 'init', [ $site_kit, 'init' ] );
 		$this->integrations['site-kit'] = $site_kit;
+
+		// Embed Webstories using customizer settings for core themes.
+		$webstories_core_themes_support = new WebStories_Core_Themes_Support();
+		add_action( 'init', [ $webstories_core_themes_support, 'init' ] );
+		$this->integrations['webstories_core_themes_support'] = $webstories_core_themes_support;
 
 		$this->dashboard = new Dashboard( $this->experiments, $this->integrations['site-kit'] );
 		add_action( 'init', [ $this->dashboard, 'init' ] );
