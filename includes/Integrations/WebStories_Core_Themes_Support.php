@@ -86,6 +86,10 @@ class WebStories_Core_Themes_Support {
 	 * @since 1.3.0
 	 */
 	public static function embed_web_stories() {
+		$template = get_template();
+		if ( ! in_array( $template, self::get_supported_themes(), true ) ) {
+			return;
+		}
         
         if ( function_exists( 'Customizer::render_stories' ) ) {
             echo Customizer::render_stories();
