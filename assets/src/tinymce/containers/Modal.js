@@ -17,7 +17,7 @@
 /**
  * WordPress dependencies
  */
-import { withSelect, select } from '@wordpress/data';
+import { withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 
 /**
@@ -32,9 +32,9 @@ import { prepareShortCode } from '../utils';
  * Pass extended props to the Modal component.
  *
  * @param {Function} select Store selector.
- * @return {{categories: Array}}
+ *
+ * @return {Object} Injected props.
  */
-// eslint-disable-next-line no-shadow
 const mapSelectToProps = (select) => {
   return {
     modalOpen: select(name).getModal(),
