@@ -147,6 +147,7 @@ class Story_Query {
 			'show_title'                => false,
 			'show_author'               => false,
 			'show_date'                 => false,
+			'show_excerpt'              => false,
 			'show_stories_archive_link' => false,
 			'stories_archive_label'     => __( 'View all stories', 'web-stories' ),
 			'list_view_image_alignment' => 'left',
