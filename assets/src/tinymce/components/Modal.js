@@ -26,13 +26,14 @@ import {
   RangeControl,
   SelectControl,
   Button,
+  TextControl,
 } from '@wordpress/components';
 import { dispatch, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { isCircleView, updateViewSettings } from '../utils';
+import { updateViewSettings, isView } from '../utils';
 import { webStoriesData } from '../utils/globals';
 import name from '../store/name';
 
@@ -51,6 +52,8 @@ const WebStoriesModal = (props) => {
     excerpt,
     image_align,
     archive_link,
+    sharp_corners,
+    archive_label,
   } = settings;
   const { views, orderlist } = webStoriesData;
 
@@ -86,7 +89,22 @@ const WebStoriesModal = (props) => {
 
           <TinyMCEToggle field={'image_align'} fieldObj={image_align} />
 
+          <TinyMCEToggle field={'sharp_corners'} fieldObj={sharp_corners} />
+
           <TinyMCEToggle field={'archive_link'} fieldObj={archive_link} />
+
+          {archive_link.show && (
+            <TextControl
+              label={__('Archive Link Label', 'web-stories')}
+              value={archive_label}
+              onChange={(value) => {
+                updateViewSettings({
+                  fieldObj: value,
+                  field: 'archive_label',
+                });
+              }}
+            />
+          )}
 
           <RangeControl
             label={__('Number of Stories', 'web-stories')}
@@ -98,7 +116,7 @@ const WebStoriesModal = (props) => {
             }}
           />
 
-          {!isCircleView() && (
+          {isView('grid') && (
             <RangeControl
               label={__('Number of Columns', 'web-stories')}
               value={columns}
@@ -162,11 +180,13 @@ WebStoriesModal.propTypes = {
     excerpt: StateFulFieldShape,
     image_align: StateFulFieldShape,
     archive_link: StateFulFieldShape,
+    sharp_corners: StateFulFieldShape,
     date: StateFulFieldShape,
     number: PropTypes.number,
     columns: PropTypes.number,
     order: PropTypes.string,
     view: PropTypes.string,
+    archive_label: PropTypes.string,
   }),
   prepareShortCode: PropTypes.func,
 };
