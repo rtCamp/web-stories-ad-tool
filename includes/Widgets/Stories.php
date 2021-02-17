@@ -124,6 +124,7 @@ class Stories extends WP_Widget {
 		$archive_link      = ! empty( $instance['archive_link'] ) ? (int) $instance['archive_link'] : '';
 		$image_align       = ! empty( $instance['image_align_right'] ) ? (int) $instance['image_align_right'] : '';
 		$number            = ! empty( $instance['number'] ) ? (int) $instance['number'] : 5;
+		$archive_label     = isset( $instance['archive_label'] ) ? $instance['archive_label'] : __( 'View all stories', 'web-stories' );
 
 		$this->input(
 			[
@@ -156,6 +157,19 @@ class Stories extends WP_Widget {
 				'classname'     => 'widefat number-stories stories-widget-field',
 				'wrapper_class' => 'number-stories_wrapper',
 				'value'         => $number,
+				'label_before'  => true,
+			]
+		);
+
+		$this->input(
+			[
+				'id'            => 'archive_label',
+				'name'          => 'archive_label',
+				'label'         => __( 'Archive Label', 'web-stories' ),
+				'type'          => 'text',
+				'classname'     => 'widefat archive_label stories-widget-field',
+				'wrapper_class' => 'archive_label_wrapper',
+				'value'         => $archive_label,
 				'label_before'  => true,
 			]
 		);
@@ -256,6 +270,7 @@ class Stories extends WP_Widget {
 		$instance['archive_link']      = ( isset( $new_instance['archive_link'] ) ) ? 1 : '';
 		$instance['image_align_right'] = ( isset( $new_instance['image_align_right'] ) ) ? 1 : '';
 		$instance['number']            = min( absint( $new_instance['number'] ), 20 );
+		$instance['archive_label']     = isset( $new_instance['archive_label'] ) ? $new_instance['archive_label'] : '';
 
 		return $instance;
 	}
