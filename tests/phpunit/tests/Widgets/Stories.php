@@ -91,11 +91,12 @@ class Stories extends \WP_UnitTestCase {
 	 */
 	public function test_update() {
 		$new_instance = [
-			'title'         => '<p>Test Stories</p>',
-			'view-type'     => 'list',
-			'show_title'    => '',
-			'number'        => 100,
-			'archive_label' => 'View Stories'
+			'title'          => '<p>Test Stories</p>',
+			'view-type'      => 'list',
+			'show_title'     => '',
+			'number'         => 100,
+			'archive_label'  => 'View Stories',
+			'number_columns' => 2,
 		];
 
 		$old_instance = [];
@@ -111,6 +112,7 @@ class Stories extends \WP_UnitTestCase {
 			'image_align_right' => '',
 			'number'            => 20,
 			'archive_label'     => 'View Stories',
+			'number_columns'    => 2,
 		];
 
 		$instance = self::$testee->update( $new_instance, $old_instance );

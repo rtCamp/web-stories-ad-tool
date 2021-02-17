@@ -125,6 +125,7 @@ class Stories extends WP_Widget {
 		$image_align       = ! empty( $instance['image_align_right'] ) ? (int) $instance['image_align_right'] : '';
 		$number            = ! empty( $instance['number'] ) ? (int) $instance['number'] : 5;
 		$archive_label     = isset( $instance['archive_label'] ) ? $instance['archive_label'] : __( 'View all stories', 'web-stories' );
+		$number_columns    = isset( $instance['number_columns'] ) ? (int) $instance['number_columns'] : 1;
 
 		$this->input(
 			[
@@ -167,6 +168,19 @@ class Stories extends WP_Widget {
 				'name'          => 'archive_label',
 				'label'         => __( 'Archive Label', 'web-stories' ),
 				'type'          => 'text',
+				'classname'     => 'widefat archive_label stories-widget-field',
+				'wrapper_class' => 'archive_label_wrapper',
+				'value'         => $archive_label,
+				'label_before'  => true,
+			]
+		);
+
+		$this->input(
+			[
+				'id'            => 'number_columns',
+				'name'          => 'number_columns',
+				'label'         => __( 'Number of columns (For Grid View)', 'web-stories' ),
+				'type'          => 'number',
 				'classname'     => 'widefat archive_label stories-widget-field',
 				'wrapper_class' => 'archive_label_wrapper',
 				'value'         => $archive_label,
@@ -271,6 +285,7 @@ class Stories extends WP_Widget {
 		$instance['image_align_right'] = ( isset( $new_instance['image_align_right'] ) ) ? 1 : '';
 		$instance['number']            = min( absint( $new_instance['number'] ), 20 );
 		$instance['archive_label']     = isset( $new_instance['archive_label'] ) ? $new_instance['archive_label'] : '';
+		$instance['number_columns']    = isset( $new_instance['number_columns'] ) ? $new_instance['number_columns'] : 1;
 
 		return $instance;
 	}
