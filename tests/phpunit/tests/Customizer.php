@@ -276,17 +276,17 @@ class Customizer extends \WP_UnitTestCase {
 
 		$expected = [
 			'view-type'                 => [
-				'circles' => __( 'Circles', 'web-stories' ),
+				'circles' => __( 'Circle Carousel', 'web-stories' ),
 			],
 			'view-type-default'         => 'circles',
 			'grid-columns-default'      => 2,
 			'title'                     => true,
 			'title-default'             => true,
 			'author'                    => true,
-			'author-default'            => true,
+			'author-default'            => false,
 			'date'                      => false,
 			'date-default'              => false,
-			'stories-archive-link'      => false,
+			'stories-archive-link'      => true,
 			'stories-archive-label'     => __( 'View all stories', 'web-stories' ),
 			'number-of-stories'         => 10,
 			'order'                     => [

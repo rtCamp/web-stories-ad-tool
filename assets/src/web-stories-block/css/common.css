@@ -1,6 +1,8 @@
 /* Web Stories: Common block styles */
-.web-stories-list.has-archive-link {
-  margin-top: 38px;
+.web-stories-list__inner-wrapper {
+  max-width: max-content;
+  margin: 0 auto;
+  position: relative;
 }
 
 .web-stories-list__story {
@@ -30,10 +32,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  box-sizing: border-box;
 }
 
 .web-stories-list__story-poster amp-img img {
   object-fit: cover;
+  box-sizing: border-box;
 }
 
 .web-stories-list__story-poster::before {
@@ -79,7 +83,6 @@ html[amp] .web-stories-list__story-content-overlay {
 .web-stories-list .story-content-overlay__title {
   font-size: var(--ws-font-size-title);
   font-weight: 700;
-  margin-bottom: 15px;
 }
 
 .web-stories-list .story-content-overlay__author,
@@ -95,10 +98,14 @@ html[amp] .web-stories-list__story-content-overlay {
   overflow: hidden;
 }
 
+.web-stories-list .story-content-overlay__title:not(:last-child) {
+  margin-bottom: 15px;
+}
+
 .web-stories-list .story-content-overlay__excerpt {
   -webkit-line-clamp: 3;
   font-size: var(--ws-font-size-excerpt);
-  margin-bottom: 15px;
+  margin-bottom: 8px;
 }
 
 .web-stories-list.alignfull .web-stories-list__archive-link {
@@ -110,6 +117,7 @@ html[amp] .web-stories-list__story-content-overlay {
   display: block;
   text-align: center;
   margin: 32px auto 0 auto;
+  flex-basis: 100%;
 }
 
 .web-stories-list.is-view-type-grid .web-stories-list__archive-link a,
@@ -117,17 +125,4 @@ html[amp] .web-stories-list__story-content-overlay {
   padding: 7px 53px;
   border: 1px solid;
   border-radius: 100px;
-}
-
-.web-stories-list.is-view-type-carousel,
-.web-stories-list.is-view-type-circles {
-  position: relative;
-  margin-top: 32px;
-}
-
-.web-stories-list.is-view-type-carousel .web-stories-list__archive-link,
-.web-stories-list.is-view-type-circles .web-stories-list__archive-link {
-  position: absolute;
-  right: 0;
-  top: -32px;
 }

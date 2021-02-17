@@ -26,17 +26,13 @@
 
 namespace Google\Web_Stories\Stories_Renderer;
 
-use Google\Web_Stories\Interfaces\FieldState;
+use Google\Web_Stories\Customizer;
 use Google\Web_Stories\Embed_Base;
 use Google\Web_Stories\Interfaces\Renderer as RenderingInterface;
 use Google\Web_Stories\Model\Story;
-use Google\Web_Stories\Stories_Renderer\FieldState\BaseFieldState as GridView;
 use Google\Web_Stories\Story_Query as Stories;
 use Google\Web_Stories\Story_Post_Type;
 use Google\Web_Stories\Traits\Assets;
-use Google\Web_Stories\Stories_Renderer\FieldState\ListView;
-use Google\Web_Stories\Stories_Renderer\FieldState\CarouselView;
-use Google\Web_Stories\Stories_Renderer\FieldState\CircleView;
 use Iterator;
 use function Google\Web_Stories\is_amp;
 
@@ -64,6 +60,25 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	 * @var string
 	 */
 	const LIGHTBOX_SCRIPT_HANDLE = 'lightbox';
+
+	/**
+	 * Number of instances invoked. Kept it static to keep track.
+	 *
+	 * @var int
+	 */
+	protected static $instances = 0;
+
+	/**
+	 * Object ID for the Renderer class.
+	 * To enable support for multiple carousels and lightboxes
+	 * on the same page, we needed to identify each Renderer instance.
+	 *
+	 * This variable is used to add appropriate class to the Web Stories
+	 * wrapper.
+	 *
+	 * @var int
+	 */
+	protected $instance_id = 0;
 
 	/**
 	 * Stories object
@@ -105,14 +120,14 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	 *
 	 * @var int
 	 */
-	protected $height = 430;
+	protected $height = 308;
 
 	/**
 	 * Width for displaying story.
 	 *
 	 * @var int
 	 */
-	protected $width = 285;
+	protected $width = 185;
 
 	/**
 	 * Whether content overlay is enabled for story.
@@ -129,10 +144,9 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	 * @param Stories $stories Stories instance.
 	 */
 	public function __construct( Stories $stories ) {
-
 		$this->stories         = $stories;
 		$this->attributes      = $this->stories->get_story_attributes();
-		$this->content_overlay = $this->attributes['show_title'] || $this->attributes['show_date'] || $this->attributes['show_author'];
+		$this->content_overlay = $this->attributes['show_title'] || $this->attributes['show_date'] || $this->attributes['show_author'] || $this->attributes['show_excerpt'];
 	}
 
 	/**
@@ -145,6 +159,9 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	 * @return string
 	 */
 	public function render( array $args = [] ) {
+		++self::$instances;
+		$this->instance_id = self::$instances;
+
 		foreach ( $args as $key => $val ) {
 			if ( property_exists( $this, $key ) ) {
 				$this->{$key} = $val;
@@ -218,6 +235,8 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	 */
 	public function init() {
 		$this->story_posts = array_map( [ $this, 'prepare_story_modal' ], $this->stories->get_stories() );
+
+		add_action( 'wp_footer', [ $this, 'render_stories_lightbox' ] );
 	}
 
 	/**
@@ -460,10 +479,13 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	 */
 	public function render_single_story_content() {
 		$single_story_classes = $this->get_single_story_classes();
-		$lightbox_state       = 'lightbox' . $this->current()->get_id();
+		$lightbox_state       = 'lightbox' . $this->current()->get_id() . $this->instance_id;
 
-		// Web Stories Styles for AMP and non-AMP pages.
-		wp_enqueue_style( self::STYLE_HANDLE );
+		// No need to load these styles on admin as editor styles are being loaded by the block.
+		if ( ! is_admin() ) {
+			// Web Stories Styles for AMP and non-AMP pages.
+			wp_enqueue_style( self::STYLE_HANDLE );
+		}
 
 		if ( $this->is_amp_request() ) {
 			?>
@@ -481,7 +503,7 @@ abstract class Renderer implements RenderingInterface, Iterator {
 			wp_enqueue_script( Embed_Base::STORY_PLAYER_HANDLE );
 			wp_enqueue_script( self::LIGHTBOX_SCRIPT_HANDLE );
 			?>
-			<div class="<?php echo esc_attr( $single_story_classes ); ?>">
+			<div class="<?php echo esc_attr( $single_story_classes ); ?>" data-story-url="<?php echo esc_url( $this->current()->get_url() ); ?>">
 				<?php
 					$this->render_story_with_poster();
 				?>
@@ -523,20 +545,11 @@ abstract class Renderer implements RenderingInterface, Iterator {
 		<?php
 		$this->get_content_overlay();
 
-		// Start collecting markup for the lightbox stories. This way we don't have to re-run the loop.
-		ob_start();
-
-		// Collect story links to fill-in non-AMP lightbox 'amp-story-player'.
 		if ( ! $this->is_amp_request() ) {
-			?>
-				<a href="<?php echo esc_url( $story_data->get_url() ); ?>"><?php echo esc_html( $story_data->get_title() ); ?></a>
-			<?php
+			$this->generate_lightbox_html_noamp( $story_data );
 		} else {
-			// Generate lightbox html for the AMP page.
-			$this->generate_amp_lightbox_html();
+			$this->generate_amp_lightbox_html_amp( $story_data );
 		}
-
-		$this->lightbox_html .= ob_get_clean();
 	}
 
 	/**
@@ -596,49 +609,38 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	}
 
 	/**
-	 * Renders the lightbox markup for non-amp pages.
+	 * Generate HTML for the non-AMP page request.
 	 *
 	 * @since 1.3.0
+	 * @param Story $story_data Current Story.
 	 *
 	 * @return void
 	 */
-	protected function render_stories_with_lightbox_noamp() {
+	protected function generate_lightbox_html_noamp( $story_data ) {
+		// Start collecting markup for the lightbox stories. This way we don't have to re-run the loop.
+		ob_start();
+
+		// Collect story links to fill-in non-AMP lightbox 'amp-story-player'.
 		?>
-		<div class="web-stories-list__lightbox">
-			<amp-story-player width="3.6" height="6" layout="responsive">
-				<script type="application/json">
-				<?php
-				$data = [
-					'controls' => [
-						[
-							'name'     => 'close',
-							'position' => 'start',
-						],
-						[
-							'name' => 'skip-next',
-						],
-					],
-				];
-				echo wp_json_encode( $data );
-				?>
-				</script>
-				<?php echo wp_kses_post( $this->lightbox_html ); ?>
-			</amp-story-player>
-		</div>
+			<a href="<?php echo esc_url( $story_data->get_url() ); ?>"><?php echo esc_html( $story_data->get_title() ); ?></a>
 		<?php
+
+		$this->lightbox_html .= ob_get_clean();
 	}
 
 	/**
 	 * Markup for the lightbox used on AMP pages.
 	 *
 	 * @since 1.3.0
+	 * @param Story $story_data Current Story.
 	 *
 	 * @return void
 	 */
-	protected function generate_amp_lightbox_html() {
-		$story          = $this->current();
-		$lightbox_state = "lightbox{$story->get_id()}";
-		$lightbox_id    = "lightbox-{$story->get_id()}";
+	protected function generate_amp_lightbox_html_amp( $story_data ) {
+		// Start collecting markup for the lightbox stories. This way we don't have to re-run the loop.
+		ob_start();
+		$lightbox_state = 'lightbox' . $story_data->get_id() . $this->instance_id;
+		$lightbox_id    = 'lightbox-' . $story_data->get_id() . $this->instance_id;
 		?>
 		<amp-lightbox
 			id="<?php echo esc_attr( $lightbox_id ); ?>"
@@ -659,10 +661,49 @@ abstract class Renderer implements RenderingInterface, Iterator {
 					height="6"
 					layout="responsive"
 				>
-					<a href="<?php echo( esc_url( $story->get_url() ) ); ?>"><?php echo esc_html( $story->get_title() ); ?></a>
+					<a href="<?php echo( esc_url( $story_data->get_url() ) ); ?>"><?php echo esc_html( $story_data->get_title() ); ?></a>
 				</amp-story-player>
 			</div>
 		</amp-lightbox>
+		<?php
+		$this->lightbox_html .= ob_get_clean();
+	}
+
+	/**
+	 * Renders the lightbox markup for non-amp pages.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @return void
+	 */
+	public function render_stories_with_lightbox_noamp() {
+		?>
+		<div class="web-stories-list__lightbox">
+			<amp-story-player width="3.6" height="6" layout="responsive">
+				<script type="application/json">
+				<?php
+				$data = [
+					'controls'  => [
+						[
+							'name'     => 'close',
+							'position' => 'start',
+						],
+						[
+							'name' => 'skip-next',
+						],
+					],
+					'behaviour' => [
+						'autoplay' => false,
+						'on'       => 'end',
+						'action'   => 'circular-wrapping',
+					],
+				];
+				echo wp_json_encode( $data );
+				?>
+				</script>
+				<?php echo wp_kses_post( $this->lightbox_html ); ?>
+			</amp-story-player>
+		</div>
 		<?php
 	}
 
@@ -673,9 +714,33 @@ abstract class Renderer implements RenderingInterface, Iterator {
 	 *
 	 * @return void
 	 */
-	protected function render_stories_with_lightbox_amp() {
+	public function render_stories_with_lightbox_amp() {
 
 		// Have to ignore this as the escaping functions are stripping off 'amp-bind' custom attribute '[class]'.
 		echo $this->lightbox_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Generated with properly escaped data.
+
+	}
+
+	/**
+	 * Renders stories lightbox on 'wp_footer'.
+	 *
+	 * @return void
+	 */
+	public function render_stories_lightbox() {
+		// Return if we don't have anything to render.
+		if ( empty( $this->lightbox_html ) ) {
+			return;
+		}
+		?>
+		<div class="web-stories-list__lightbox-wrapper <?php echo esc_attr( 'ws-lightbox-' . $this->instance_id ); ?>">
+			<?php
+			if ( $this->is_amp_request() ) {
+				$this->render_stories_with_lightbox_amp();
+			} else {
+				$this->render_stories_with_lightbox_noamp();
+			}
+			?>
+		</div>
+		<?php
 	}
 }

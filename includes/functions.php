@@ -24,6 +24,7 @@
 namespace Google\Web_Stories;
 
 use Google\Web_Stories\Interfaces\FieldState;
+use Google\Web_Stories\Stories_Renderer\Renderer;
 use Google\Web_Stories\Stories_Renderer\FieldState\BaseFieldState as GridView;
 use Google\Web_Stories\Stories_Renderer\FieldState\CarouselView;
 use Google\Web_Stories\Stories_Renderer\FieldState\CircleView;

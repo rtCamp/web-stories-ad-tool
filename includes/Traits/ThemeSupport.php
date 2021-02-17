@@ -26,6 +26,8 @@
 
 namespace Google\Web_Stories\Traits;
 
+use function Google\Web_Stories\get_stories_order;
+
 /**
  * Trait ThemeSupport
  *
@@ -43,25 +45,20 @@ trait ThemeSupport {
 
 		$default_theme_support = [
 			'view-type'                 => [
-				'circles' => __( 'Circles', 'web-stories' ),
+				'circles' => __( 'Circle Carousel', 'web-stories' ),
 			],
 			'view-type-default'         => 'circles',
 			'grid-columns-default'      => 2,
 			'title'                     => true,
 			'title-default'             => true,
 			'author'                    => true,
-			'author-default'            => true,
+			'author-default'            => false,
 			'date'                      => false,
 			'date-default'              => false,
-			'stories-archive-link'      => false,
+			'stories-archive-link'      => true,
 			'stories-archive-label'     => __( 'View all stories', 'web-stories' ),
 			'number-of-stories'         => 10,
-			'order'                     => [
-				'latest'               => __( 'Latest', 'web-stories' ),
-				'oldest'               => __( 'Oldest', 'web-stories' ),
-				'alphabetical'         => __( 'A -> Z', 'web-stories' ),
-				'reverse-alphabetical' => __( 'Z -> A', 'web-stories' ),
-			],
+			'order'                     => get_stories_order(),
 			'order-default'             => 'latest',
 			'show-story-poster-default' => true,
 		];

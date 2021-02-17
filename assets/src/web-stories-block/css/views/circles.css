@@ -1,18 +1,29 @@
 /* Web Stories: Circles View */
-.web-stories-list.is-view-type-circles .web-stories-list__inner-wrapper {
+.web-stories-list.is-carousel .web-stories-list__carousel {
   display: flex;
-  flex-wrap: nowrap;
-  position: relative;
-  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+body > .web-stories-list.is-view-type-circles {
+  border-bottom: 1px solid #ccc;
+  padding: 12px 0;
+}
+
+.web-stories-list.is-view-type-circles .amp-carousel-slide {
+  vertical-align: top;
+}
+
+.web-stories-list.is-view-type-circles .glider-track {
+  justify-content: center;
+  margin: 0 auto;
 }
 
 .web-stories-list.is-view-type-circles .web-stories-list__story {
   max-width: var(--ws-circle-size);
-  min-width: initial;
+  min-width: var(--ws-circle-size);
   margin: 0 5px;
   text-align: center;
-  display: flex;
-  flex-direction: column;
+  display: inline-block;
 }
 
 .web-stories-list.is-view-type-circles .web-stories-list__story-poster img {
@@ -29,6 +40,11 @@
 .web-stories-list.is-view-type-circles .web-stories-list__story-poster::after,
 .web-stories-list.is-view-type-circles .web-stories-list__story-poster::before {
   display: none;
+}
+
+.web-stories-list.is-view-type-circles
+  .web-stories-list__story-content-overlay {
+  padding-bottom: 0;
 }
 
 .web-stories-list.is-view-type-circles .story-content-overlay__title {

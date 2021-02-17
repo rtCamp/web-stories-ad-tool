@@ -27,8 +27,9 @@ class Lightbox {
 
     this.lightboxInitialized = false;
     this.wrapperDiv = wrapperDiv;
-    this.lightboxElement = this.wrapperDiv.querySelector(
-      '.web-stories-list__lightbox'
+    this.instanceId = this.wrapperDiv.dataset.id;
+    this.lightboxElement = document.querySelector(
+      `.ws-lightbox-${this.instanceId} .web-stories-list__lightbox`
     );
     this.player = this.lightboxElement.querySelector('amp-story-player');
 
@@ -57,13 +58,6 @@ class Lightbox {
   }
 
   initializeLightbox() {
-    /**
-     * Stop stories from auto-play.
-     *
-     * https://github.com/ampproject/amphtml/issues/31334#issuecomment-733998656
-     */
-    this.player.pause();
-
     this.stories = this.player.getStories();
     this.bindStoryClickListeners();
     this.lightboxInitialized = true;
@@ -72,10 +66,14 @@ class Lightbox {
   bindStoryClickListeners() {
     const cards = this.wrapperDiv.querySelectorAll('.web-stories-list__story');
 
-    cards.forEach((card, index) => {
+    cards.forEach((card) => {
       card.addEventListener('click', (event) => {
         event.preventDefault();
-        this.player.show(this.stories[index].href);
+        const storyObject = this.stories.find(
+          (story) => story.href === card.dataset.storyUrl
+        );
+        this.player.show(storyObject.href);
+        this.player.play();
         this.lightboxElement.classList.toggle('show');
       });
     });
