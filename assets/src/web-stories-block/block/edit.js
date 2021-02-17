@@ -27,7 +27,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import StoryEmbedEdit from '../../story-embed-block/block/edit';
+import StoryEmbedEdit from './block-types/story-embed-block/edit';
 import { ConfigProvider } from './config';
 import BlockConfigurationPanel from './components/storiesBlockConfigurationPanel';
 import LatestStoriesEdit from './block-types/latest-stories/edit';

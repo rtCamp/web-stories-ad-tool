@@ -22,11 +22,13 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import save from '../../story-embed-block/block/save';
+import deprecated from './deprecated';
+import save from './save';
 import { ReactComponent as icon } from './icon.svg';
 import edit from './edit';
 import metadata from './block';
 import { BLOCK_TYPE_LATEST_STORIES, GRID_VIEW_TYPE } from './constants';
+import transforms from './transforms';
 
 const { name, category, attributes } = metadata;
 
@@ -60,8 +62,10 @@ const settings = {
   supports: {
     align: ['wide', 'full', 'left', 'right', 'center'],
   },
+  deprecated,
   edit,
   save,
+  transforms,
 };
 
 export { metadata, name, icon, settings };
