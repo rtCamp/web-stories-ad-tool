@@ -126,6 +126,9 @@ class Stories extends WP_Widget {
 		$image_align       = ! empty( $instance['image_align_right'] ) ? (int) $instance['image_align_right'] : '';
 		$number            = ! empty( $instance['number'] ) ? (int) $instance['number'] : 5;
 		$circle_size       = ! empty( $instance['circle_size'] ) ? (int) $instance['circle_size'] : 100;
+		$archive_label     = isset( $instance['archive_label'] ) ? $instance['archive_label'] : __( 'View all stories', 'web-stories' );
+		$number_columns    = isset( $instance['number_columns'] ) ? (int) $instance['number_columns'] : 1;
+		$sharp_corners     = ! empty( $instance['sharp_corners'] ) ? (int) $instance['sharp_corners'] : '';
 
 		$this->input(
 			[
@@ -158,6 +161,32 @@ class Stories extends WP_Widget {
 				'classname'     => 'widefat number-stories stories-widget-field',
 				'wrapper_class' => 'number-stories_wrapper',
 				'value'         => $number,
+				'label_before'  => true,
+			]
+		);
+
+		$this->input(
+			[
+				'id'            => 'archive_label',
+				'name'          => 'archive_label',
+				'label'         => __( 'Archive Label', 'web-stories' ),
+				'type'          => 'text',
+				'classname'     => 'widefat archive_label stories-widget-field',
+				'wrapper_class' => 'archive_label_wrapper',
+				'value'         => $archive_label,
+				'label_before'  => true,
+			]
+		);
+
+		$this->input(
+			[
+				'id'            => 'number_columns',
+				'name'          => 'number_columns',
+				'label'         => __( 'Number of columns (For Grid View)', 'web-stories' ),
+				'type'          => 'number',
+				'classname'     => 'widefat archive_label stories-widget-field',
+				'wrapper_class' => 'archive_label_wrapper',
+				'value'         => $number_columns,
 				'label_before'  => true,
 			]
 		);
@@ -252,6 +281,18 @@ class Stories extends WP_Widget {
 			]
 		);
 
+		$this->input(
+			[
+				'id'            => 'sharp_corners',
+				'name'          => 'sharp_corners',
+				'label'         => __( 'Show sharp corners', 'web-stories' ),
+				'type'          => 'checkbox',
+				'classname'     => 'widefat sharp_corners stories-widget-field',
+				'wrapper_class' => 'sharp_corners_wrapper',
+				'value'         => $sharp_corners,
+			]
+		);
+
 		return '';
 	}
 
@@ -277,6 +318,9 @@ class Stories extends WP_Widget {
 		$instance['image_align_right'] = ( isset( $new_instance['image_align_right'] ) ) ? 1 : '';
 		$instance['number']            = min( absint( $new_instance['number'] ), 20 );
 		$instance['circle_size']       = min( absint( $new_instance['circle_size'] ), 200 );
+		$instance['archive_label']     = isset( $new_instance['archive_label'] ) ? $new_instance['archive_label'] : '';
+		$instance['number_columns']    = isset( $new_instance['number_columns'] ) ? $new_instance['number_columns'] : 1;
+		$instance['sharp_corners']     = ( isset( $new_instance['sharp_corners'] ) ) ? 1 : '';
 
 		return $instance;
 	}

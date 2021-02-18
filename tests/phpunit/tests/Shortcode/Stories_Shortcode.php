@@ -131,10 +131,11 @@ class Stories_Shortcode extends \WP_UnitTestCase {
 			'show_date'                 => true,
 			'show_excerpt'              => true,
 			'show_story_archive_link'   => false,
-			'show_story_archive_label'  => true,
+			'stories_archive_label'     => 'Stories',
 			'list_view_image_alignment' => 'left',
 			'class'                     => 'dummy',
 			'circle_size'               => 200,
+			'sharp_corners'             => false,
 		];
 
 		$attributes = [
@@ -145,10 +146,11 @@ class Stories_Shortcode extends \WP_UnitTestCase {
 			'date'                      => 'true',
 			'excerpt'                   => 'true',
 			'archive_link'              => 'randomtext',
-			'archive_label'             => 'true',
+			'archive_label'             => 'Stories',
 			'list_view_image_alignment' => 'left',
 			'class'                     => 'dummy',
 			'circle_size'               => '200',
+			'sharp_corners'             => 'false',
 		];
 
 		$actual = $this->call_private_method( $shortcode, 'prepare_story_attrs', [ $attributes ] );

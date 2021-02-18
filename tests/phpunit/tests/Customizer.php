@@ -80,7 +80,7 @@ class Customizer extends \WP_UnitTestCase {
 				'stories-archive-link'      => true,
 				'stories-archive-label'     => 'View all stories',
 				'number-of-stories'         => 5,
-				'default-circle-size'       => 150,
+				'circle-size-default'       => 150,
 				'order'                     => [ 'alphabetical', 'reverse-alphabetical', 'latest', 'oldest' ],
 				'order-default'             => 'oldest',
 				'show-story-poster-default' => true,
@@ -125,7 +125,7 @@ class Customizer extends \WP_UnitTestCase {
 	 */
 	public function test_customizer_settings_added() {
 		$this->add_web_stories_theme_support();
-		$this->customizer_mock->expects( $this->exactly( 13 ) )->method( 'add_setting' );
+		$this->customizer_mock->expects( $this->exactly( 12 ) )->method( 'add_setting' );
 		$this->customizer->register_customizer_settings( $this->customizer_mock );
 	}
 
@@ -134,7 +134,7 @@ class Customizer extends \WP_UnitTestCase {
 	 */
 	public function test_customizer_show_stories_settings_added() {
 		$this->add_web_stories_theme_support();
-		$this->customizer_mock->expects( $this->exactly( 13 ) )->
+		$this->customizer_mock->expects( $this->exactly( 12 ) )->
 		method( 'add_setting' )->
 		withConsecutive(
 			[
@@ -295,6 +295,7 @@ class Customizer extends \WP_UnitTestCase {
 			'date'                      => false,
 			'date-default'              => false,
 			'stories-archive-link'      => true,
+			'sharp-corners'             => false,
 			'stories-archive-label'     => __( 'View all stories', 'web-stories' ),
 			'number-of-stories'         => 10,
 			'circle-size-default'       => 150,
@@ -333,7 +334,7 @@ class Customizer extends \WP_UnitTestCase {
 				'stories-archive-link'      => true,
 				'stories-archive-label'     => 'View all stories',
 				'number-of-stories'         => 5,
-				'default-circle-size'       => 150,
+				'circle-size-default'       => 150,
 				'order'                     => [ 'alphabetical', 'reverse-alphabetical', 'latest', 'oldest' ],
 				'order-default'             => 'oldest',
 				'show-story-poster-default' => true,
