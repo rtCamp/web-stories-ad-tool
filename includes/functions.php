@@ -31,16 +31,77 @@ use Google\Web_Stories\Stories_Renderer\FieldState\CircleView;
 use Google\Web_Stories\Stories_Renderer\FieldState\ListView;
 
 /**
- * Fetch stories based on customizer settings.
+ * Get stories object based on passed arguments.
+ *
+ * @param array $args Arguments to pass to Story_Query object.
+ *
+ * @return Story_Query
+ */
+function get_stories_object( $args = [] ) {
+	$attrs = [];
+
+	$default_attributes = [
+		'view_type'                 => 'circles',
+		'number-of-stories'         => get_option( 'posts_per_page' ),
+		'number_of_columns'         => 2,
+		'show_title'                => true,
+		'show_excerpt'              => false,
+		'show_author'               => false,
+		'show_date'                 => false,
+		'show_stories_archive_link' => false,
+		'stories_archive_label'     => '',
+		'list_view_image_alignment' => 'left',
+		'class'                     => '',
+		'circle_size'               => 100,
+	];
+
+	$intersection = array_intersect_key( $args, array_flip( $default_attributes ) );
+
+	/**
+	 * Create a new array of attributes.
+	 */
+	if ( $intersection ) {
+		foreach ( $intersection as $key => $val ) {
+			$attrs[ $key ] = $val;
+			unset( $args[ $key ] );
+		}
+	}
+
+	return new Story_Query( $attrs, $args );
+}
+
+/**
+ * Render stories based on the passed arguments.
+ *
+ * @param array $args Arguments for rendering stories.
+ *
+ * @return void
+ */
+function render_stories( $args = [] ) {
+	//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo get_stories_object( $args )->render();
+}
+
+/**
+ * Returns list of stories based on the arguments passed to it.
  *
  * @param array $args Arguments for fetching stories.
  *
- * @return string|void
+ * @return array
  */
-function stories( $args = [] ) {
-	$story_query = new Story_Query( $args );
+function get_stories( $args = [] ) {
+
+	return get_stories_object( $args )->get_stories();
+}
+
+/**
+ * Render stories based on customizer settings.
+ *
+ * @return void
+ */
+function render_theme_stories() {
 	//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-	echo $story_query->render();
+	echo get_plugin_instance()->customizer->render_stories();
 }
 
 /**
