@@ -51,6 +51,7 @@ const WebStoriesModal = (props) => {
     excerpt,
     image_align,
     archive_link,
+    circle_size,
   } = settings;
   const { views, orderlist } = webStoriesData;
 
@@ -97,6 +98,22 @@ const WebStoriesModal = (props) => {
               updateViewSettings({ fieldObj: items, field: 'number' });
             }}
           />
+
+          {isCircleView() && (
+            <RangeControl
+              label={__('Circle Size', 'web-stories')}
+              value={circle_size}
+              min={80}
+              max={200}
+              step={5}
+              onChange={(size) =>
+                updateViewSettings({
+                  fieldObj: parseInt(size),
+                  field: 'circle_size',
+                })
+              }
+            />
+          )}
 
           {!isCircleView() && (
             <RangeControl
@@ -167,6 +184,7 @@ WebStoriesModal.propTypes = {
     columns: PropTypes.number,
     order: PropTypes.string,
     view: PropTypes.string,
+    circle_size: PropTypes.number,
   }),
   prepareShortCode: PropTypes.func,
 };
