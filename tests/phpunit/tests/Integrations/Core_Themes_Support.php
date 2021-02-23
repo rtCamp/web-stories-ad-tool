@@ -17,6 +17,7 @@
 
 namespace Google\Web_Stories\Tests\Integrations;
 
+use Google\Web_Stories\Customizer;
 use Google\Web_Stories\Tests\Private_Access;
 
 /**
@@ -47,6 +48,7 @@ class Core_Themes_Support extends \WP_UnitTestCase {
 
 		// Set stylesheet from one of the supported themes.
 		update_option( 'stylesheet', 'twentytwentyone' );
+		update_option( Customizer::STORY_OPTION, [ 'show_stories' => true ] );
 		$this->stub = new \Google\Web_Stories\Integrations\Core_Themes_Support();
 	}
 
@@ -76,6 +78,7 @@ class Core_Themes_Support extends \WP_UnitTestCase {
 	public function test_init() {
 		$this->stub->init();
 
+		$this->assertEquals( 10, has_filter( 'body_class', [ $this->stub, 'add_core_theme_classes' ] ) );
 		$this->assertEquals( 10, has_action( 'wp_body_open', [ $this->stub, 'embed_web_stories' ] ) );
 	}
 
@@ -137,5 +140,19 @@ class Core_Themes_Support extends \WP_UnitTestCase {
 		$this->stub->init();
 
 		$this->assertFalse( get_theme_support( 'web-stories' ) );
+	}
+
+	/**
+	 *
+	 * @covers ::embed_web_stories
+	 */
+	public function embed_web_stories() {
+		ob_start();
+		$this->stub->embed_web_stories();
+
+		$actual = ob_get_clean();
+
+		$this->assertTrue( wp_script_is( 'web-stories-theme-style-twentytwentyone' ) );
+		$this->assertContains( 'web-stories-theme-header-section', $actual );
 	}
 }

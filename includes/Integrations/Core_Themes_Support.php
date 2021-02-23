@@ -27,11 +27,14 @@
 namespace Google\Web_Stories\Integrations;
 
 use Google\Web_Stories\Customizer;
+use Google\Web_Stories\Stories_Renderer\Renderer;
+use Google\Web_Stories\Traits\Assets;
 
 /**
  * Class Core_Themes_Support.
  */
 class Core_Themes_Support {
+	use Assets;
 
 	/**
 	 * Default array of core themes to add support to.
@@ -77,7 +80,27 @@ class Core_Themes_Support {
 	 */
 	public function embed_web_stories() {
 		$customizer = new Customizer();
-		echo $customizer->render_stories(); // phpcs:ignore -- WordPress.Security.EscapeOutput.OutputNotEscaped - Escaped web stories HTML.
+		$this->enqueue_style( 'web-stories-theme-style-' . get_stylesheet(), [ Renderer::STYLE_HANDLE ] );
+		?>
+		<div class="web-stories-theme-header-section">
+			<?php echo $customizer->render_stories(); // phpcs:ignore -- WordPress.Security.EscapeOutput.OutputNotEscaped - Escaped web stories HTML. ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Add a class if it is one of supported core themes.
+	 *
+	 * @since 1.3.0
+	 * @param array $classes Array of body classes.
+	 *
+	 * @return array Updated array of classes.
+	 */
+	public function add_core_theme_classes( $classes ) {
+
+		$classes[] = 'has-web-stories';
+
+		return $classes;
 	}
 
 	/**
@@ -94,6 +117,15 @@ class Core_Themes_Support {
 		}
 
 		$this->extend_theme_support();
+
+		$options = get_option( Customizer::STORY_OPTION );
+
+		// Load theme specific styles and render function only if selected to show stories.
+		if ( empty( $options['show_stories'] ) ) {
+			return;
+		}
+
+		add_filter( 'body_class', [ $this, 'add_core_theme_classes' ] );
 		add_action( 'wp_body_open', [ $this, 'embed_web_stories' ] );
 	}
 }

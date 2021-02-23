@@ -18,6 +18,7 @@
  * External dependencies
  */
 const path = require('path');
+const glob = require('glob');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -218,6 +219,21 @@ const webStoriesScripts = {
   ].filter(Boolean),
 };
 
+// Collect all core themes style sheet paths.
+const coreThemesBlockStylesPaths = glob.sync(
+  './assets/src/web-stories-block/css/core-themes/*.css'
+);
+
+// Build entry object for the Core Themes Styles.
+const coreThemeBlockStyles = coreThemesBlockStylesPaths.reduce((acc, curr) => {
+  const fileName = path.parse(curr).name.replace(/-/g, '');
+
+  return {
+    ...acc,
+    [`web-stories-theme-style-${fileName}`]: curr,
+  };
+}, {});
+
 const webStoriesBlock = {
   ...sharedConfig,
   entry: {
@@ -226,6 +242,7 @@ const webStoriesBlock = {
       './assets/src/web-stories-block/block/edit.css',
     ],
     'web-stories-list-styles': './assets/src/web-stories-block/css/style.css',
+    ...coreThemeBlockStyles,
   },
   plugins: [
     ...sharedConfig.plugins,
