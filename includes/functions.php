@@ -31,16 +31,41 @@ use Google\Web_Stories\Stories_Renderer\FieldState\CircleView;
 use Google\Web_Stories\Stories_Renderer\FieldState\ListView;
 
 /**
- * Fetch stories based on customizer settings.
+ * Render stories based on the passed arguments.
  *
- * @param array $args Arguments for fetching stories.
+ * @param array $attrs Arguments for fetching stories.
+ * @param array $query_args Query arguments for stories.
  *
- * @return string|void
+ * @return void
  */
-function stories( $args = [] ) {
-	$story_query = new Story_Query( $args );
+function render_stories( $attrs = [], $query_args = [] ) {
+	$stories_obj = new Story_Query( $attrs, $query_args );
 	//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-	echo $story_query->render();
+	echo $stories_obj->render();
+}
+
+/**
+ * Returns list of stories based on the arguments passed to it.
+ *
+ * @param array $attrs Arguments for fetching stories.
+ * @param array $query_args Query arguments for stories.
+ *
+ * @return array
+ */
+function get_stories( $attrs = [], $query_args = [] ) {
+	$stories_obj = new Story_Query( $attrs, $query_args );
+
+	return $stories_obj->get_stories();
+}
+
+/**
+ * Render stories based on customizer settings.
+ *
+ * @return void
+ */
+function render_theme_stories() {
+	//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo get_plugin_instance()->customizer->render_stories();
 }
 
 /**
