@@ -224,7 +224,7 @@ class Customizer {
 					'step' => 5,
 				],
 				'active_callback' => function() {
-					return $this->is_view_type( 'circles' );
+					return $this->is_option_enabled( 'show_stories' ) && $this->is_view_type( 'circles' );
 				},
 			]
 		);
@@ -276,6 +276,29 @@ class Customizer {
 			);
 		}
 
+		if ( true === $theme_support['excerpt'] ) {
+
+			$wp_customize->add_setting(
+				self::STORY_OPTION . '[show_excerpt]',
+				[
+					'default' => $theme_support['excerpt-default'],
+					'type'    => 'option',
+				]
+			);
+
+			$wp_customize->add_control(
+				self::STORY_OPTION . '[show_excerpt]',
+				[
+					'type'            => 'checkbox',
+					'section'         => self::SECTION_SLUG,
+					'label'           => __( 'Show story excerpt', 'web-stories' ),
+					'active_callback' => function() {
+						return $this->is_option_enabled( 'show_stories' ) && $this->is_view_type( 'list' );
+					},
+				]
+			);
+		}
+
 		if ( true === $theme_support['author'] ) {
 			$wp_customize->add_setting(
 				self::STORY_OPTION . '[show_author]',
@@ -320,6 +343,28 @@ class Customizer {
 			);
 		}
 
+		if ( true === $theme_support['sharp-corners'] ) {
+			$wp_customize->add_setting(
+				self::STORY_OPTION . '[sharp_corners]',
+				[
+					'default' => $theme_support['sharp-corners'],
+					'type'    => 'option',
+				]
+			);
+
+			$wp_customize->add_control(
+				self::STORY_OPTION . '[sharp_corners]',
+				[
+					'type'            => 'checkbox',
+					'section'         => self::SECTION_SLUG,
+					'label'           => __( 'Sharp Corners', 'web-stories' ),
+					'active_callback' => function() {
+						return ( $this->is_option_enabled( 'show_stories' ) && ! $this->is_view_type( 'circles' ) );
+					},
+				]
+			);
+		}
+
 		if ( true === $theme_support['stories-archive-link'] ) {
 			$wp_customize->add_setting(
 				self::STORY_OPTION . '[show_stories_archive_link]',
@@ -354,33 +399,12 @@ class Customizer {
 				[
 					'type'            => 'text',
 					'section'         => self::SECTION_SLUG,
-					'label'           => __( 'Stories archive label', 'web-stories' ),
+					'label'           => __( 'Archive Link Label', 'web-stories' ),
 					'active_callback' => function() {
 						return ( $this->is_option_enabled( 'show_stories' ) && $this->is_option_enabled( 'show_stories_archive_link' ) );
 					},
 				]
 			);
-
-			$wp_customize->add_setting(
-				self::STORY_OPTION . '[show_story_poster]',
-				[
-					'default' => $theme_support['show-story-poster-default'],
-					'type'    => 'option',
-				]
-			);
-
-			$wp_customize->add_control(
-				self::STORY_OPTION . '[show_story_poster]',
-				[
-					'type'            => 'checkbox',
-					'section'         => self::SECTION_SLUG,
-					'label'           => __( 'Show story poster', 'web-stories' ),
-					'active_callback' => function() {
-						return ( $this->is_option_enabled( 'show_stories' ) && $this->is_view_type( 'grid' ) );
-					},
-				]
-			);
-
 		}
 
 	}
@@ -497,12 +521,14 @@ class Customizer {
 		$default_array = [
 			'view_type'             => $theme_support['view-type-default'],
 			'show_title'            => $theme_support['title-default'],
+			'show_excerpt'          => $theme_support['excerpt-default'],
 			'show_author'           => $theme_support['author-default'],
 			'show_date'             => $theme_support['date-default'],
 			'stories_archive_label' => $theme_support['stories-archive-label'],
 			'show_story_poster'     => $theme_support['show-story-poster-default'],
 			'number_of_columns'     => $theme_support['grid-columns-default'],
 			'circle_size'           => $theme_support['circle-size-default'],
+			'sharp_corners'         => $theme_support['sharp-corners'],
 		];
 
 		$query_arguments = [

@@ -196,6 +196,13 @@ class Customizer extends \WP_UnitTestCase {
 				],
 			],
 			[
+				'story-options[show_excerpt]',
+				[
+					'default' => true,
+					'type'    => 'option',
+				],
+			],
+			[
 				'story-options[show_author]',
 				[
 					'default' => false,
@@ -290,11 +297,14 @@ class Customizer extends \WP_UnitTestCase {
 			'grid-columns-default'      => 2,
 			'title'                     => true,
 			'title-default'             => true,
+			'excerpt'                   => true,
+			'excerpt-default'           => true,
 			'author'                    => true,
 			'author-default'            => false,
 			'date'                      => false,
 			'date-default'              => false,
 			'stories-archive-link'      => true,
+			'sharp-corners'             => false,
 			'stories-archive-label'     => __( 'View all stories', 'web-stories' ),
 			'number-of-stories'         => 10,
 			'circle-size-default'       => 150,
