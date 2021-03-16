@@ -1,12 +1,12 @@
 | **CUJ**                                                           | **Action**                                       | **Completion**              |
 | ----------------------------------------------------------------- | ------------------------------------------------ | --------------------------- |
-| Creator Can Add A Link                                            | Apply a link to any element                      | 🚨 **33.33%** *(4 / 12)*    |
+| Creator Can Add A Link                                            | Apply a link to any element                      | 🚨 **25.00%** *(3 / 12)*    |
 |                                                                   | Apply a link to multi-selection                  | 🏆 **100.00%** *(1 / 1)*    |
 |                                                                   | Edit brand icon                                  | 🚨 **0.00%** *(0 / 2)*      |
 |                                                                   | Edit description                                 | 🚨 **0.00%** *(0 / 1)*      |
 |                                                                   | Link with Page Attachment                        | 🏆 **100.00%** *(2 / 2)*    |
 |                                                                   | Remove applied link                              | 🚨 **0.00%** *(0 / 1)*      |
-|                                                                   | *[total]*                                        | 🚨 **36.84%** *(7 / 19)*    |
+|                                                                   | *[total]*                                        | 🚨 **31.58%** *(6 / 19)*    |
 | Creator Can Add Image/Video to Page                               | Can add media                                    | 🏆 **100.00%** *(1 / 1)*    |
 |                                                                   | Can edit/delete media                            | 🏆 **100.00%** *(1 / 1)*    |
 |                                                                   | Drag image/video from desktop to canvas          | 🚨 **0.00%** *(0 / 1)*      |
@@ -18,15 +18,15 @@
 |                                                                   | Set different poster image                       | 🛴 **50.00%** *(1 / 2)*     |
 |                                                                   | Set overlay color(s) & other gradient properties | 🚨 **0.00%** *(0 / 4)*      |
 |                                                                   | *[total]*                                        | 🛴 **70.59%** *(12 / 17)*   |
-| Creator Can Style Text                                            | Apply B                                          | 🏔️ **94.74%** *(18 / 19)*  |
-|                                                                   | Apply I                                          | 🛴 **80.00%** *(8 / 10)*    |
-|                                                                   | Apply U                                          | 🛴 **77.78%** *(7 / 9)*     |
+| Creator Can Style Text                                            | Apply B                                          | 🛴 **89.47%** *(17 / 19)*   |
+|                                                                   | Apply I                                          | 🛴 **70.00%** *(7 / 10)*    |
+|                                                                   | Apply U                                          | 🛴 **66.67%** *(6 / 9)*     |
 |                                                                   | Select weight                                    | 🏆 **100.00%** *(9 / 9)*    |
-|                                                                   | Set kerning                                      | 🏆 **100.00%** *(5 / 5)*    |
+|                                                                   | Set kerning                                      | 🛴 **80.00%** *(4 / 5)*     |
 |                                                                   | Set line height                                  | 🏆 **100.00%** *(1 / 1)*    |
-|                                                                   | Set text color                                   | 🏆 **100.00%** *(5 / 5)*    |
+|                                                                   | Set text color                                   | 🛴 **80.00%** *(4 / 5)*     |
 |                                                                   | Use font picker                                  | 🏆 **100.00%** *(14 / 14)*  |
-|                                                                   | *[total]*                                        | 🏔️ **94.44%** *(34 / 36)*  |
+|                                                                   | *[total]*                                        | 🏔️ **91.67%** *(33 / 36)*  |
 | Creator can Add a Page Attachment                                 | Add Page Attachment                              | 🏆 **100.00%** *(2 / 2)*    |
 |                                                                   | Adding link to element in Attachment area        | 🏆 **100.00%** *(1 / 1)*    |
 |                                                                   | Remove Page Attachment                           | 🏆 **100.00%** *(1 / 1)*    |
@@ -75,4 +75,4 @@
 | User can interact with menu using mouse                           | Click toggle button to open                      | 🏆 **100.00%** *(4 / 4)*    |
 |                                                                   | *[total]*                                        | 🏆 **100.00%** *(4 / 4)*    |
 |                                                                   | click close button to close menu                 | 🏆 **100.00%** *(4 / 4)*    |
-| *\[total\]*                                                       | *\[total\]*                                      | 🛴 **77.55%** *(304 / 392)* |
+| *\[total\]*                                                       | *\[total\]*                                      | 🛴 **75.51%** *(296 / 392)* |
