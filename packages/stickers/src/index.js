@@ -26,6 +26,7 @@ import * as fitnessStickers from './fitness';
 import * as travelStickers from './travel';
 import * as wellbeingStickers from './wellbeing';
 import * as cookingStickersV2 from './cooking-02';
+import * as wellnessStickers from './wellness';
 
 export default {
   sample,
@@ -38,4 +39,5 @@ export default {
   ...travelStickers,
   ...wellbeingStickers,
   ...cookingStickersV2,
+  ...wellnessStickers,
 };
