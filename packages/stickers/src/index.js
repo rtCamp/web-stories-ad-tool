@@ -24,6 +24,7 @@ import * as fashionStickers from './fashion';
 import * as fitnessStickers from './fitness';
 import * as travelStickers from './travel';
 import * as wellbeingStickers from './wellbeing';
+import * as cookingStickersV2 from './cooking-02';
 
 export default {
   ...beautyStickers,
@@ -34,4 +35,5 @@ export default {
   ...fitnessStickers,
   ...travelStickers,
   ...wellbeingStickers,
+  ...cookingStickersV2,
 };
