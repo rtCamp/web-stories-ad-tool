@@ -25,6 +25,7 @@ import * as fashionStickers from './fashion';
 import * as fitnessStickers from './fitness';
 import { default as travelStickers } from './travel';
 import * as wellbeingStickers from './wellbeing';
+import * as artsAndCraftStickers from './arts-and-craft';
 
 export default {
   sample,
@@ -36,4 +37,5 @@ export default {
   ...fitnessStickers,
   ...travelStickers,
   ...wellbeingStickers,
+  ...artsAndCraftStickers,
 };
