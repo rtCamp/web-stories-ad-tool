@@ -21,7 +21,9 @@ import { default as travelInstagramIcon } from './instagramIcon';
 import { default as travelMap } from './mapFill';
 import { default as travelTwitterIcon } from './twitterIcon';
 import { default as travelYouTubeIcon } from './youTubeIcon';
+
 import * as itineraryStickers from './itinerary';
+import * as restaurantsStickers from './restaurants';
 
 export default {
   travelFacebookIcon,
@@ -30,4 +32,5 @@ export default {
   travelTwitterIcon,
   travelYouTubeIcon,
   ...itineraryStickers,
+  ...restaurantsStickers,
 };
