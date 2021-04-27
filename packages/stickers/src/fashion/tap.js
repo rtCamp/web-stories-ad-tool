@@ -14,20 +14,29 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies
+ * External dependencies
  */
-import { default as fashionArrowDark } from './arrowDark';
-import { default as fashionArrowLight } from './arrowLight';
-import { default as fashionStarburst } from './starburst';
-import { default as fashionStarburstSolid } from './starburstSolid';
-import { default as fashionStarburstWithArrow } from './starburstWithArrow';
-import { default as fashionTap } from './tap';
+import PropTypes from 'prop-types';
 
-export {
-  fashionArrowDark,
-  fashionArrowLight,
-  fashionStarburst,
-  fashionStarburstSolid,
-  fashionStarburstWithArrow,
-  fashionTap,
+function FashionTap({ style }) {
+  return (
+    <svg
+      style={style}
+      viewBox="0 0 50 50"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle opacity="0.7" cx="25" cy="25" r="25" fill="#70FFA9" />
+      <circle cx="25" cy="25" r="11.9048" fill="white" />
+    </svg>
+  );
+}
+
+FashionTap.propTypes = {
+  style: PropTypes.object,
+};
+
+export default {
+  aspectRatio: 50 / 50,
+  svg: FashionTap,
 };
