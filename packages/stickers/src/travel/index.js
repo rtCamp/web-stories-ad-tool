@@ -22,10 +22,15 @@ import { default as travelMap } from './mapFill';
 import { default as travelTwitterIcon } from './twitterIcon';
 import { default as travelYouTubeIcon } from './youTubeIcon';
 
-export {
+import * as itineraryStickers from './itinerary';
+import * as restaurantsStickers from './restaurants';
+
+export default {
   travelFacebookIcon,
   travelInstagramIcon,
   travelMap,
   travelTwitterIcon,
   travelYouTubeIcon,
+  ...itineraryStickers,
+  ...restaurantsStickers,
 };

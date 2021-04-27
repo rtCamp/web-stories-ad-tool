@@ -16,18 +16,24 @@
 /**
  * Internal dependencies
  */
-import { default as fashionArrowDark } from './arrowDark';
-import { default as fashionArrowLight } from './arrowLight';
-import { default as fashionStarburst } from './starburst';
-import { default as fashionStarburstSolid } from './starburstSolid';
-import { default as fashionStarburstWithArrow } from './starburstWithArrow';
-import { default as fashionTap } from './tap';
+import { default as travelTomatoes } from './tomatoes';
+import { default as travelPepper } from './pepper';
+import { default as travelOnion } from './onion';
+import { default as travelLeaves } from './leaves';
+import { default as travelDirections } from './directions';
+import { default as travelCheese } from './cheese';
+import { default as travelBrush01 } from './brush01';
+import { default as travelBrush02 } from './brush02';
+import { default as travelBrush03 } from './brush03';
 
 export {
-  fashionArrowDark,
-  fashionArrowLight,
-  fashionStarburst,
-  fashionStarburstSolid,
-  fashionStarburstWithArrow,
-  fashionTap,
+  travelTomatoes,
+  travelPepper,
+  travelOnion,
+  travelLeaves,
+  travelDirections,
+  travelCheese,
+  travelBrush01,
+  travelBrush02,
+  travelBrush03,
 };

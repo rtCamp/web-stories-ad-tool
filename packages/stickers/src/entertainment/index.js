@@ -18,5 +18,6 @@
  */
 import { default as entertainmentMusicNote } from './musicNote';
 import { default as entertainmentStar } from './entertainmentStar';
+import { default as heptagram } from './heptagram';
 
-export { entertainmentMusicNote, entertainmentStar };
+export { entertainmentMusicNote, entertainmentStar, heptagram };
