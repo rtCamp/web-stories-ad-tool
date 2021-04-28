@@ -27,7 +27,6 @@ import { default as travelStickers } from './travel';
 import * as wellbeingStickers from './wellbeing';
 import * as cookingStickersV2 from './cooking-02';
 import * as wellnessStickers from './wellness';
-import * as travelItineraryStickers from './travel-itinerary';
 import * as artsAndCraftStickers from './arts-and-craft';
 
 export default {
@@ -42,6 +41,5 @@ export default {
   ...wellbeingStickers,
   ...cookingStickersV2,
   ...wellnessStickers,
-  ...travelItineraryStickers,
   ...artsAndCraftStickers,
 };
