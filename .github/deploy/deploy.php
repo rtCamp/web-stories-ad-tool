@@ -71,7 +71,7 @@ task( 'setup:webstories', function () {
 	run( 'cd {{release_path}} && \
 	export CI=true && \
 	export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true && \
-	[ -d "node_modules" ] && echo "Removing node_modules" && rm -rf node_modules && \
+	echo "Removing node_modules if exists" && rm -rf node_modules && \
 	npm ci && \
 	npx rollup --config packages/migration/src/rollup.config.migrate.js && \
 	composer install --prefer-dist --no-suggest --no-progress --no-interaction && \
