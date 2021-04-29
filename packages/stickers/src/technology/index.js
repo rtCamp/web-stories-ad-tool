@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Internal dependencies
  */
-import { MASKS } from '../index';
+import * as appStickers from './apps';
 
-describe('Masks', () => {
-  it('every path should end with a closepath function', () => {
-    Object.values(MASKS).map((mask) =>
-      expect(mask.path.toUpperCase().endsWith('Z')).toStrictEqual(true)
-    );
-  });
-});
+export default {
+  ...appStickers,
+};
