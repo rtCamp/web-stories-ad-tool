@@ -29,6 +29,7 @@ import * as cookingStickersV2 from './cooking-02';
 import * as wellnessStickers from './wellness';
 import * as artsAndCraftStickers from './arts-and-craft';
 import { default as technologyStickers } from './technology';
+import { default as homeGardenStickers } from './home-garden';
 
 export default {
   sample,
@@ -44,4 +45,5 @@ export default {
   ...wellnessStickers,
   ...artsAndCraftStickers,
   ...technologyStickers,
+  ...homeGardenStickers,
 };
