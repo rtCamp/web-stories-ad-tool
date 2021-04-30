@@ -18,7 +18,6 @@
  * External dependencies
  */
 const path = require('path');
-const glob = require('glob');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -274,44 +273,6 @@ const webStoriesScripts = {
   ].filter(Boolean),
 };
 
-// Collect all core themes style sheet paths.
-const coreThemesBlockStylesPaths = glob.sync(
-  './assets/src/web-stories-block/css/core-themes/*.css'
-);
-
-// Build entry object for the Core Themes Styles.
-const coreThemeBlockStyles = coreThemesBlockStylesPaths.reduce((acc, curr) => {
-  const fileName = path.parse(curr).name;
-
-  return {
-    ...acc,
-    [`web-stories-theme-style-${fileName}`]: curr,
-  };
-}, {});
-
-const webStoriesBlock = {
-  ...sharedConfig,
-  entry: {
-    'web-stories-block': [
-      './assets/src/web-stories-block/index.js',
-      './assets/src/web-stories-block/block/edit.css',
-    ],
-    'web-stories-list-styles': './assets/src/web-stories-block/css/style.css',
-    'web-stories-embed': './assets/src/web-stories-block/css/embed.css',
-    ...coreThemeBlockStyles,
-  },
-  plugins: [
-    ...sharedConfig.plugins,
-    new DependencyExtractionWebpackPlugin({
-      injectPolyfill: true,
-    }),
-    new WebpackBar({
-      name: 'Web Stories Block',
-      color: '#357BB5',
-    }),
-  ].filter(Boolean),
-};
-
 const activationNotice = {
   ...sharedConfig,
   entry: {
@@ -363,7 +324,6 @@ const storiesMCEButton = {
 module.exports = [
   editorAndDashboard,
   activationNotice,
-  webStoriesBlock,
   webStoriesScripts,
   widgetScript,
   storiesMCEButton,

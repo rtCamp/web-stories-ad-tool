@@ -1,9 +1,0 @@
-@import 'variables.css';
-@import 'common.css';
-@import 'lightbox.css';
-
-/* View Types */
-@import 'views/grid.css';
-@import 'views/circles.css';
-@import 'views/list.css';
-@import 'views/carousel.css';
