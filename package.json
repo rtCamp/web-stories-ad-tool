@@ -221,7 +221,6 @@
     "format:css": "npm run lint:css:fix",
     "format:js": "npm run lint:js:fix",
     "format:md": "prettier --write '**/*.md'",
-    "format:php": "npm run lint:php:fix",
     "format:xml": "prettier --write '**/*.{xml,xml.dist}'",
     "format:yml": "prettier --write '**/*.yml'",
     "lint": "npm-run-all --parallel lint:*",
@@ -230,10 +229,6 @@
     "lint:js": "eslint .",
     "lint:js:fix": "eslint --fix .",
     "lint:js:report": "eslint --output-file build/lint-js-report.json --format json .",
-    "lint:php": "composer phpcs",
-    "lint:php:fix": "composer phpcbf",
-    "lint:phpstan": "composer phpstan",
-    "lint:phpmd": "composer phpmd",
     "lint:md": "markdownlint .",
     "postinstall": "patch-package",
     "storybook": "start-storybook --quiet",
@@ -298,7 +293,6 @@
       "eslint --fix",
       "markdownlint -f"
     ],
-    "*.php": "npm run lint:php:fix",
     "*.(xml|xml.dist)": "prettier --write",
     "*.yml": "prettier --write"
   },
