@@ -49,7 +49,6 @@
     "@web-stories-wp/templates": "*",
     "@web-stories-wp/text-sets": "*",
     "@web-stories-wp/tracking": "*",
-    "@web-stories-wp/widget": "*",
     "@wordpress/api-fetch": "^3.23.0",
     "@wordpress/components": "^13.0.1",
     "@wordpress/compose": "^3.23.0",

@@ -291,24 +291,8 @@ const activationNotice = {
   ].filter(Boolean),
 };
 
-const widgetScript = {
-  ...sharedConfig,
-  entry: {
-    'web-stories-widget': './packages/widget/src/index.js',
-  },
-  plugins: [
-    ...sharedConfig.plugins,
-    new DependencyExtractionWebpackPlugin({}),
-    new WebpackBar({
-      name: 'WP Widget Script',
-      color: '#F757A5',
-    }),
-  ].filter(Boolean),
-};
-
 module.exports = [
   editorAndDashboard,
   activationNotice,
   webStoriesScripts,
-  widgetScript,
 ];
