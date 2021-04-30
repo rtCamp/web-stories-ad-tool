@@ -5,15 +5,15 @@
 <html lang="en-US">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<title>Story Ad Creation Tool</title>
+	<title>Web Stories Ad Creation Tool</title>
 
 	<!-- /wp-admin/load-styles.php?load[chunk_0]=common -->
 	<link rel='stylesheet' href='<?php echo $url; ?>assets/wp/load-style-php.css'/>
 	<link rel='stylesheet' crossorigin='anonymous' href='https://fonts.googleapis.com/css?family=Google+Sans%7CGoogle+Sans%3Ab%7CGoogle+Sans%3A500&#038;display=swap&#038;ver=1.7.0-alpha.0'/>
-	<link rel='stylesheet' href='<?php echo $url; ?>web-stories-wp/assets/css/vendors-edit-story.css'/>
-	<link rel='stylesheet' href='<?php echo $url; ?>web-stories-wp/assets/css/vendors-edit-story-rtl.css'/>
-	<link rel='stylesheet' href='<?php echo $url; ?>web-stories-wp/assets/css/edit-story-rtl.css'/>
-	<link rel='stylesheet' href='<?php echo $url; ?>web-stories-wp/assets/css/edit-story.css'/>
+	<link rel='stylesheet' href='<?php echo $url; ?>assets/css/vendors-edit-story.css'/>
+	<link rel='stylesheet' href='<?php echo $url; ?>assets/css/vendors-edit-story-rtl.css'/>
+	<link rel='stylesheet' href='<?php echo $url; ?>assets/css/edit-story-rtl.css'/>
+	<link rel='stylesheet' href='<?php echo $url; ?>assets/css/edit-story.css'/>
 	<script>
 		var webStoriesAdConfig = {
 		  url: '<?php echo $url; ?>'
@@ -26,8 +26,8 @@
 	  document.body.className = document.body.className.replace( 'no-js', 'js' );
 	</script>
 
-	<div class="web-stories-wp">
-		<h1 class="screen-reader-text hide-if-no-js">Web Stories</h1>
+	<div class="app">
+		<h1 class="screen-reader-text hide-if-no-js">Web Stories Ad Creation Tool</h1>
 		<div id="web-stories-editor" class="web-stories-editor-app-container hide-if-no-js">
 			<h1 class="loading-message align-center">Please wait...</h1>
 		</div>
@@ -35,7 +35,7 @@
 		<div class="wrap hide-if-js web-stories-wp-no-js">
 			<h1 class="wp-heading-inline">Web Stories</h1>
 			<div class="notice notice-error notice-alt">
-				<p>Web Stories Ad requires JavaScript. Please enable JavaScript in your browser settings.</p>
+				<p>Web Stories Ad Creation Tool requires JavaScript. Please enable JavaScript in your browser settings.</p>
 			</div>
 		</div>
 	</div>

@@ -30,11 +30,6 @@ import {
 } from '../design-system';
 
 export const GlobalStyle = createGlobalStyle`
-  /* WP admin menu arrow color */
-  ul#adminmenu a.wp-has-current-submenu::after {
-    border-right-color: ${theme.colors.bg.secondary};
-  }
-
   /**
    * Override the shell (WP) the default styling used for stories content.
    */
@@ -46,7 +41,7 @@ export const GlobalStyle = createGlobalStyle`
    * Scrollbars are scoped to <Editor> to make sure we don't mess with
    * WP dialogs like the Backbone Media Gallery dialog.
    */
-  body.edit-story #wpbody * {
+  body.edit-story .app * {
     ${themeHelpers.scrollbarCSS};
   }
 `;
