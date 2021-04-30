@@ -255,25 +255,6 @@ const editorAndDashboard = {
   },
 };
 
-const webStoriesScripts = {
-  ...sharedConfig,
-  entry: {
-    lightbox: './packages/stories-lightbox/src/index.js',
-    'carousel-view': './packages/stories-carousel/src/index.js',
-  },
-  plugins: [
-    ...sharedConfig.plugins,
-    new DependencyExtractionWebpackPlugin({
-      injectPolyfill: true,
-    }),
-    new WebpackBar({
-      name: 'WP Frontend Scripts',
-      color: '#EEE070',
-    }),
-  ].filter(Boolean),
-};
-
 module.exports = [
   editorAndDashboard,
-  webStoriesScripts,
 ];
