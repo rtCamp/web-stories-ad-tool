@@ -306,25 +306,9 @@ const widgetScript = {
   ].filter(Boolean),
 };
 
-const storiesMCEButton = {
-  ...sharedConfig,
-  entry: {
-    'tinymce-button': './packages/tinymce-button/src/index.js',
-  },
-  plugins: [
-    ...sharedConfig.plugins,
-    new DependencyExtractionWebpackPlugin({}),
-    new WebpackBar({
-      name: 'WP TinyMCE Button',
-      color: '#4deaa2',
-    }),
-  ].filter(Boolean),
-};
-
 module.exports = [
   editorAndDashboard,
   activationNotice,
   webStoriesScripts,
   widgetScript,
-  storiesMCEButton,
 ];
