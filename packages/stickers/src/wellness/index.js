@@ -26,6 +26,7 @@ import { default as capsules } from './capsules';
 import { default as hotDish } from './hotDish';
 import { default as oven } from './oven';
 import { default as potatoes } from './potatoes';
+import { default as homeWorkoutShape } from './home-workout/shape';
 
 export {
   scribbledUnderline,
@@ -38,4 +39,5 @@ export {
   hotDish,
   oven,
   potatoes,
+  homeWorkoutShape,
 };
