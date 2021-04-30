@@ -446,7 +446,6 @@
         "packages/**/*.js"
       ],
       "excludedFiles": [
-        "packages/activation-notice/**/*.js",
         "packages/i18n/**/*.js"
       ],
       "rules":{

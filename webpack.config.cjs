@@ -273,26 +273,7 @@ const webStoriesScripts = {
   ].filter(Boolean),
 };
 
-const activationNotice = {
-  ...sharedConfig,
-  entry: {
-    'web-stories-activation-notice':
-      './packages/activation-notice/src/index.js',
-  },
-  plugins: [
-    ...sharedConfig.plugins,
-    new DependencyExtractionWebpackPlugin({
-      requestToExternal,
-    }),
-    new WebpackBar({
-      name: 'Activation Notice',
-      color: '#fcd8ba',
-    }),
-  ].filter(Boolean),
-};
-
 module.exports = [
   editorAndDashboard,
-  activationNotice,
   webStoriesScripts,
 ];
