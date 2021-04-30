@@ -14,10 +14,29 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies
+ * External dependencies
  */
-import { default as travelList } from './list';
-import { default as travelLocation } from './location';
-import { default as travelToolTip } from './tooltip';
+import PropTypes from 'prop-types';
 
-export { travelList, travelLocation, travelToolTip };
+const TravelToolTip = ({ style }) => (
+  <svg
+    style={style}
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 80 33.6"
+    fill="none"
+  >
+    <path
+      d="M80,2v23c0,1.1-0.9,2-2,2H45.7l-5,6.2c-0.4,0.5-1.2,0.5-1.6,0l-5-6.2H2c-1.1,0-2-0.9-2-2V2c0-1.1,0.9-2,2-2h76 C79.1,0,80,0.9,80,2z"
+      fill="#fff"
+    />
+  </svg>
+);
+
+TravelToolTip.propTypes = {
+  style: PropTypes.object,
+};
+
+export default {
+  aspectRatio: 80 / 33.6,
+  svg: TravelToolTip,
+};
