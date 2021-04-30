@@ -25,6 +25,7 @@ import * as fashionStickers from './fashion';
 import * as fitnessStickers from './fitness';
 import { default as travelStickers } from './travel';
 import * as wellbeingStickers from './wellbeing';
+import * as wellnessStickers from './wellness';
 import * as artsAndCraftStickers from './arts-and-craft';
 import { default as technologyStickers } from './technology';
 import { default as homeGardenStickers } from './home-garden';
@@ -39,6 +40,7 @@ export default {
   ...fitnessStickers,
   ...travelStickers,
   ...wellbeingStickers,
+  ...wellnessStickers,
   ...artsAndCraftStickers,
   ...technologyStickers,
   ...homeGardenStickers,
