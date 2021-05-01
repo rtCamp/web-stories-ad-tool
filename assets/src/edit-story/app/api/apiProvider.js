@@ -59,18 +59,35 @@ function APIProvider({ children }) {
     withoutImages: [],
   });
 
-  const getStoryById = useCallback(
-    (storyId) => {
-      const path = addQueryArgs(`${stories}${storyId}/`, {
-        context: 'edit',
-        _embed: 'wp:featuredmedia,wp:lockuser,author',
-        web_stories_demo: false,
-      });
+  const getStoryById = useCallback(() => {
+    // @todo Remove items not required for story ad.
+    const initialStoryPost = {
+      date: '',
+      modified: '',
+      password: '',
+      slug: '',
+      status: 'auto-draft',
+      link: '',
+      title: {
+        raw: '',
+      },
+      excerpt: {
+        raw: '',
+      },
+      permalink_template: '',
+      story_data: [],
+      publisher_logo_url: null,
+      style_presets: {
+        colors: [],
+        textStyles: [],
+      },
+      featured_media_url: '',
+      preview_link: '',
+      _embedded: {},
+    };
 
-      return apiFetch({ path });
-    },
-    [stories]
-  );
+    return Promise.resolve(initialStoryPost);
+  }, []);
 
   const getStoryLockById = useCallback(
     (storyId) => {

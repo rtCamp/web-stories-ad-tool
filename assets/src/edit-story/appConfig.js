@@ -77,7 +77,7 @@ export default {
       video: ['video/mp4', 'video/webm'],
     },
     postType: 'web-story',
-    storyId: 343,
+    storyId: 1,
     dashboardLink: '',
     assetsURL: `${url}assets/`,
     cdnURL: 'https://wp.stories.google/static/main/',
