@@ -26,6 +26,7 @@ import { useCallback } from 'react';
 import Context from './context';
 
 function APIProvider({ children }) {
+  // @todo All mocked fetch references need to be removed.
   const mockedFetch = useCallback(() => Promise.resolve({}), []);
 
   const getStoryById = useCallback(() => {
@@ -57,21 +58,6 @@ function APIProvider({ children }) {
   }, []);
 
   // @todo To be removed.
-  const getStoryLockById = mockedFetch;
-
-  // @todo To be removed.
-  const setStoryLockById = mockedFetch;
-
-  // @todo To be removed.
-  const deleteStoryLockById = mockedFetch;
-
-  // @todo To be removed.
-  const getDemoStoryById = mockedFetch;
-
-  // @todo To Be removed.
-  const saveStoryById = mockedFetch;
-
-  // @todo To be removed.
   const getMedia = useCallback(
     () =>
       Promise.resolve({
@@ -84,18 +70,6 @@ function APIProvider({ children }) {
       }),
     []
   );
-
-  const autoSaveById = mockedFetch;
-
-  const uploadMedia = mockedFetch;
-
-  const updateMedia = mockedFetch;
-
-  const deleteMedia = mockedFetch;
-
-  const getLinkMetadata = mockedFetch;
-
-  const getAuthors = mockedFetch;
 
   const getCurrentUser = useCallback(() => {
     return Promise.resolve({
@@ -131,10 +105,6 @@ function APIProvider({ children }) {
     });
   }, []);
 
-  const updateCurrentUser = mockedFetch;
-
-  const saveMetaBoxes = mockedFetch;
-
   /**
    * Status check, submit html string.
    *
@@ -148,34 +118,28 @@ function APIProvider({ children }) {
     []
   );
 
-  const getPageTemplates = mockedFetch;
-
-  const getCustomPageTemplates = mockedFetch;
-
-  const addPageTemplate = mockedFetch;
-
   const state = {
     actions: {
-      autoSaveById,
+      autoSaveById: mockedFetch,
       getStoryById,
-      getDemoStoryById,
-      getStoryLockById,
-      setStoryLockById,
-      deleteStoryLockById,
+      getDemoStoryById: mockedFetch,
+      getStoryLockById: mockedFetch,
+      setStoryLockById: mockedFetch,
+      deleteStoryLockById: mockedFetch,
       getMedia,
-      getLinkMetadata,
-      saveStoryById,
-      getAuthors,
-      uploadMedia,
-      updateMedia,
-      deleteMedia,
-      saveMetaBoxes,
+      getLinkMetadata: mockedFetch,
+      saveStoryById: mockedFetch,
+      getAuthors: mockedFetch,
+      uploadMedia: mockedFetch,
+      updateMedia: mockedFetch,
+      deleteMedia: mockedFetch,
+      saveMetaBoxes: mockedFetch,
       getStatusCheck,
-      addPageTemplate,
-      getCustomPageTemplates,
-      getPageTemplates,
+      addPageTemplate: mockedFetch,
+      getCustomPageTemplates: mockedFetch,
+      getPageTemplates: mockedFetch,
       getCurrentUser,
-      updateCurrentUser,
+      updateCurrentUser: mockedFetch,
     },
   };
 
