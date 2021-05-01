@@ -18,14 +18,19 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
+import getAllTemplates from '@web-stories-wp/templates';
 
 /**
  * Internal dependencies
  */
+import { useConfig } from '../config';
 import Context from './context';
+import removeImagesFromPageTemplates from './removeImagesFromPageTemplates';
 
 function APIProvider({ children }) {
+  const { cdnURL, assetsURL } = useConfig();
+
   // @todo All mocked fetch references need to be removed.
   const mockedFetch = useCallback(() => Promise.resolve({}), []);
 
@@ -56,6 +61,11 @@ function APIProvider({ children }) {
       _embedded: {},
     });
   }, []);
+
+  const pageTemplates = useRef({
+    base: [],
+    withoutImages: [],
+  });
 
   // @todo To be removed.
   const getMedia = useCallback(
@@ -118,6 +128,23 @@ function APIProvider({ children }) {
     []
   );
 
+  const getPageTemplates = useCallback(
+    async ({ showImages = false } = {}) => {
+      // check if pageTemplates have been loaded yet
+      if (pageTemplates.current.base.length === 0) {
+        pageTemplates.current.base = await getAllTemplates({ cdnURL });
+        pageTemplates.current.withoutImages = removeImagesFromPageTemplates({
+          templates: pageTemplates.current.base,
+          assetsURL,
+          showImages,
+        });
+      }
+
+      return pageTemplates.current[showImages ? 'base' : 'withoutImages'];
+    },
+    [cdnURL, assetsURL]
+  );
+
   const state = {
     actions: {
       autoSaveById: mockedFetch,
@@ -137,7 +164,7 @@ function APIProvider({ children }) {
       getStatusCheck,
       addPageTemplate: mockedFetch,
       getCustomPageTemplates: mockedFetch,
-      getPageTemplates: mockedFetch,
+      getPageTemplates,
       getCurrentUser,
       updateCurrentUser: mockedFetch,
     },

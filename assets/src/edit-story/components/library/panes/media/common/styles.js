@@ -34,6 +34,7 @@ export const PaneInner = styled.div`
 export const PaneHeader = styled.div`
   padding-top: 24px;
   flex: 0 1 auto;
+  margin-bottom: 15px;
 `;
 
 export const MediaGalleryContainer = styled.div`

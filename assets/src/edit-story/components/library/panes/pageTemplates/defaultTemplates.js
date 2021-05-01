@@ -19,7 +19,7 @@
  */
 import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { _x, sprintf, __ } from '@web-stories-wp/i18n';
-import { getTimeTracker, trackEvent } from '@web-stories-wp/tracking';
+import { getTimeTracker } from '@web-stories-wp/tracking';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
@@ -134,11 +134,6 @@ function DefaultTemplates({ pageSize }) {
 
   const handleSelectPageTemplateType = useCallback((key) => {
     setSelectedPageTemplateType(key);
-    trackEvent('search', {
-      search_type: 'page_templates',
-      search_term: '',
-      search_category: key,
-    });
   }, []);
 
   const handleToggleClick = useCallback(() => {

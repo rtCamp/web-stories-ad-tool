@@ -48,11 +48,12 @@ import paneId from './paneId';
 import ProviderTab from './providerTab';
 
 const ProviderTabSection = styled.div`
-  display: flex;
+  display: none;
+  justify-content: center;
   flex-wrap: wrap;
   margin-top: 16px;
   margin-bottom: 16px;
-  padding: 0 1em;
+  padding: 0 1.5em;
 `;
 
 const MediaSubheading = styled(Headline).attrs(() => ({
