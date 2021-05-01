@@ -19,14 +19,13 @@
  */
 import styled from 'styled-components';
 import { useCallback } from 'react';
-import { __, sprintf } from '@web-stories-wp/i18n';
+import { __ } from '@web-stories-wp/i18n';
 
 /**
  * Internal dependencies
  */
-import { Icons, Text, THEME_CONSTANTS } from '../../../../design-system';
+import { Icons } from '../../../../design-system';
 import { useStory, useHistory, useConfig, useLayout } from '../../../app';
-import { createPage, duplicatePage } from '../../../elements';
 import PageMenuButton from './pageMenuButton';
 import AnimationToggle from './animationToggle';
 
@@ -48,10 +47,6 @@ const Divider = styled.span`
   width: 1px;
 `;
 
-const CountSpace = styled.div`
-  width: var(--pagemenu-count-space);
-`;
-
 const IconSpace = styled.div`
   width: var(--pagemenu-icon-space);
 `;
@@ -61,22 +56,10 @@ function PageMenu() {
     state: { canUndo, canRedo },
     actions: { undo, redo },
   } = useHistory();
-  const {
-    currentPageNumber,
-    currentPage,
-    deleteCurrentPage,
-    addPage,
-    hasAnimations,
-  } = useStory(
-    ({
-      state: { currentPageNumber, currentPage },
-      actions: { deleteCurrentPage, addPage },
-    }) => {
+  const { currentPage, hasAnimations } = useStory(
+    ({ state: { currentPage } }) => {
       return {
-        currentPageNumber,
         currentPage,
-        deleteCurrentPage,
-        addPage,
         hasAnimations: currentPage?.animations?.length > 0,
       };
     }
@@ -85,19 +68,6 @@ function PageMenu() {
     pageWidth: state.state.pageWidth,
   }));
   const { isRTL } = useConfig();
-
-  const handleDeletePage = useCallback(() => deleteCurrentPage(), [
-    deleteCurrentPage,
-  ]);
-
-  const handleAddPage = useCallback(() => addPage({ page: createPage() }), [
-    addPage,
-  ]);
-
-  const handleDuplicatePage = useCallback(
-    () => addPage({ page: duplicatePage(currentPage) }),
-    [addPage, currentPage]
-  );
 
   const isWidePage = pageWidth > 280;
 
@@ -111,40 +81,6 @@ function PageMenu() {
 
   return (
     <Wrapper isWidePage={isWidePage}>
-      <Text size={THEME_CONSTANTS.TYPOGRAPHY.PRESET_SIZES.X_SMALL}>
-        {sprintf(
-          /* translators: %s: page number. */
-          __('Page %s', 'web-stories'),
-          currentPageNumber
-        )}
-      </Text>
-      <CountSpace />
-      <PageMenuButton
-        title={__('Delete page', 'web-stories')}
-        onClick={handleDeletePage}
-        aria-label={__('Delete Page', 'web-stories')}
-      >
-        <Icons.Trash />
-      </PageMenuButton>
-      <IconSpace />
-      <PageMenuButton
-        title={__('Duplicate page', 'web-stories')}
-        onClick={handleDuplicatePage}
-        aria-label={__('Duplicate Page', 'web-stories')}
-      >
-        <Icons.PagePlus />
-      </PageMenuButton>
-      <IconSpace />
-      <PageMenuButton
-        title={__('New page', 'web-stories')}
-        onClick={handleAddPage}
-        aria-label={__('Add New Page', 'web-stories')}
-      >
-        <Icons.PlusOutline />
-      </PageMenuButton>
-      <IconSpace />
-      <Divider />
-      <IconSpace />
       <PageMenuButton
         title={__('Undo', 'web-stories')}
         shortcut="mod+z"

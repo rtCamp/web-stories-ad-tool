@@ -18,21 +18,20 @@
  * External dependencies
  */
 import styled from 'styled-components';
-import { memo, useRef, useCallback } from 'react';
+import { memo, useCallback, useRef } from 'react';
 import { __ } from '@web-stories-wp/i18n';
 
 /**
  * Internal dependencies
  */
 import { STORY_ANIMATION_STATE } from '../../../animation';
-import { PAGE_WIDTH, DESIGN_SPACE_MARGIN } from '../../constants';
-import { useStory, useCanvas, useLayout, useTransform } from '../../app';
+import { DESIGN_SPACE_MARGIN, PAGE_WIDTH } from '../../constants';
+import { useCanvas, useLayout, useStory, useTransform } from '../../app';
 import useCanvasKeys from '../../app/canvas/useCanvasKeys';
 import PageMenu from './pagemenu';
-import { Layer, MenuArea, NavNextArea, NavPrevArea, PageArea } from './layout';
+import { Layer, MenuArea, PageArea } from './layout';
 import FrameElement from './frameElement';
 import Selection from './selection';
-import PageNav from './pagenav';
 
 const FramesPageArea = styled(PageArea)`
   pointer-events: initial;
@@ -115,12 +114,6 @@ function FramesLayer() {
       >
         <PageMenu />
       </MenuArea>
-      <NavPrevArea>
-        <PageNav isNext={false} />
-      </NavPrevArea>
-      <NavNextArea>
-        <PageNav />
-      </NavNextArea>
       <Selection />
     </Layer>
   );
