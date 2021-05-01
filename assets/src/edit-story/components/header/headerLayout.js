@@ -24,7 +24,6 @@ import { __ } from '@web-stories-wp/i18n';
  * Internal dependencies
  */
 import Buttons from './buttons';
-import Title from './title';
 import HeaderProvider from './provider';
 
 const Background = styled.header.attrs({
@@ -37,12 +36,12 @@ const Background = styled.header.attrs({
   background-color: ${({ theme }) => theme.colors.bg.primary};
 `;
 
-const Head = styled.div`
+const LeftCell = styled.div`
   flex: 1 1 auto;
   padding: 1em;
 `;
 
-const ButtonCell = styled.div`
+const RightCell = styled.div`
   grid-area: buttons;
 `;
 
@@ -50,12 +49,10 @@ function HeaderLayout() {
   return (
     <HeaderProvider>
       <Background>
-        <Head>
-          <Title />
-        </Head>
-        <ButtonCell>
+        <LeftCell />
+        <RightCell>
           <Buttons />
-        </ButtonCell>
+        </RightCell>
       </Background>
     </HeaderProvider>
   );

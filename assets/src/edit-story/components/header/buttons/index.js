@@ -18,19 +18,12 @@
  * External dependencies
  */
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
 
 /**
  * Internal dependencies
  */
-import { addQueryArgs } from '../../../../design-system';
 import { useStory } from '../../../app';
 import CircularProgress from '../../circularProgress';
-import PostPublishDialog from '../postPublishDialog';
-import Preview from './preview';
-import SwitchToDraft from './switchToDraft';
-import Update from './update';
-import Publish from './publish';
 
 const ButtonList = styled.nav`
   display: flex;
@@ -71,53 +64,15 @@ function Loading() {
 }
 
 function Buttons() {
-  const { status, storyId, link, isFreshlyPublished } = useStory(
-    ({
-      state: {
-        story: { status, storyId, link },
-        meta: { isFreshlyPublished },
-      },
-    }) => ({
-      status,
-      storyId,
-      link,
-      isFreshlyPublished,
-    })
-  );
-  const [showDialog, setShowDialog] = useState(false);
-  useEffect(() => setShowDialog(Boolean(isFreshlyPublished)), [
-    isFreshlyPublished,
-  ]);
-
-  const isDraft = 'draft' === status;
-
-  const confirmURL = addQueryArgs('post-new.php', {
-    ['from-web-story']: storyId,
-  });
-
   return (
-    <>
-      <ButtonList>
-        <List>
-          <IconWithSpinner>
-            <Preview />
-            <Loading />
-          </IconWithSpinner>
-          <Space />
-          {isDraft ? <Update /> : <SwitchToDraft />}
-          <Space />
-          {isDraft && <Publish />}
-          {!isDraft && <Update />}
-          <Space />
-        </List>
-      </ButtonList>
-      <PostPublishDialog
-        open={showDialog}
-        onClose={() => setShowDialog(false)}
-        confirmURL={confirmURL}
-        storyURL={link}
-      />
-    </>
+    <ButtonList>
+      <List>
+        <IconWithSpinner>
+          <Loading />
+        </IconWithSpinner>
+        <Space />
+      </List>
+    </ButtonList>
   );
 }
 export default Buttons;
