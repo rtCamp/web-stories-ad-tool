@@ -72,14 +72,18 @@ function APIProvider({ children }) {
   const saveStoryById = mockFetch;
 
   // @todo To be removed.
-  const getMedia = useCallback(() => Promise.resolve({
-    body: [],
-    status: 200,
-    headers: {
-      'X-WP-Total': 12,
-      'X-WP-TotalPages': 1,
-    },
-  }), []);
+  const getMedia = useCallback(
+    () =>
+      Promise.resolve({
+        body: [],
+        status: 200,
+        headers: {
+          'X-WP-Total': 12,
+          'X-WP-TotalPages': 1,
+        },
+      }),
+    []
+  );
 
   const autoSaveById = mockFetch;
 
@@ -91,41 +95,40 @@ function APIProvider({ children }) {
 
   const getLinkMetadata = mockFetch;
 
-  const getAuthors = useCallback(() => Promise.resolve([]), []);
+  const getAuthors = mockFetch;
 
   const getCurrentUser = useCallback(() => {
     return Promise.resolve({
-        id: 1,
-        name: 'dev',
-        url: '',
-        description: '',
-        link: '',
-        slug: 'dev',
-        avatar_urls: {
-          24: '',
+      id: 1,
+      name: 'dev',
+      url: '',
+      description: '',
+      link: '',
+      slug: 'dev',
+      avatar_urls: {
+        24: '',
+      },
+      meta: {
+        web_stories_tracking_optin: false,
+        web_stories_media_optimization: true,
+        web_stories_onboarding: {
+          safeZone: true,
         },
-        meta: {
-          web_stories_tracking_optin: false,
-          web_stories_media_optimization: true,
-          web_stories_onboarding: {
-            safeZone: true,
+      },
+      amp_dev_tools_enabled: true,
+      _links: {
+        self: [
+          {
+            href: '',
           },
-        },
-        amp_dev_tools_enabled: true,
-        _links: {
-          self: [
-            {
-              href: '',
-            },
-          ],
-          collection: [
-            {
-              href: '',
-            },
-          ],
-        },
-      }
-    );
+        ],
+        collection: [
+          {
+            href: '',
+          },
+        ],
+      },
+    });
   }, []);
 
   const updateCurrentUser = mockFetch;

@@ -18,7 +18,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useCallback, useState, useRef, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce/lib';
 import { __ } from '@web-stories-wp/i18n';
 
@@ -26,23 +26,19 @@ import { __ } from '@web-stories-wp/i18n';
  * Internal dependencies
  */
 import { useResizeEffect } from '../../../design-system';
-import { useAPI } from '../../app/api';
 import { useStory } from '../../app/story';
 
 import { useHighlights } from '../../app/highlights';
-import { DOCUMENT, DESIGN, PREPUBLISH } from './constants';
+import { DESIGN, DOCUMENT, PREPUBLISH } from './constants';
 import PrepublishInspector, {
-  usePrepublishChecklist,
   ChecklistIcon,
+  usePrepublishChecklist,
 } from './prepublish';
 import Context from './context';
 import DesignInspector from './design';
 import DocumentInspector from './document';
 
 function InspectorProvider({ children }) {
-  const {
-    actions: { getAuthors },
-  } = useAPI();
   const { selectedElementIds, currentPage } = useStory(({ state }) => ({
     selectedElementIds: state.selectedElementIds,
     currentPage: state.currentPage,
@@ -66,12 +62,9 @@ function InspectorProvider({ children }) {
 
   const initialTab = DESIGN;
   const [tab, setTab] = useState(initialTab);
-  const [users, setUsers] = useState([]);
   const [inspectorContentHeight, setInspectorContentHeight] = useState(null);
   const inspectorContentRef = useRef();
   const tabRef = useRef(tab);
-
-  const [isUsersLoading, setIsUsersLoading] = useState(false);
 
   const setInspectorContentNode = useCallback((node) => {
     inspectorContentRef.current = node;
@@ -107,30 +100,16 @@ function InspectorProvider({ children }) {
     [currentCheckpoint]
   );
 
-  const loadUsers = useCallback(() => {
-    if (!isUsersLoading && users.length === 0) {
-      setIsUsersLoading(true);
-      getAuthors()
-        .then((data) => {
-          const saveData = data.map(({ id, name }) => ({
-            id,
-            name,
-          }));
-          setUsers(saveData);
-        })
-        .finally(() => {
-          setIsUsersLoading(false);
-        });
-    }
-  }, [isUsersLoading, users.length, getAuthors]);
+  // @todo To be removed.
+  const loadUsers = useCallback(() => {}, []);
 
   const state = {
     state: {
       tab,
       initialTab,
-      users,
+      users: [],
       inspectorContentHeight,
-      isUsersLoading,
+      isUsersLoading: false,
     },
     refs: {
       inspector: inspectorRef,
