@@ -18,50 +18,19 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useCallback, useRef } from 'react';
-import { DATA_VERSION } from '@web-stories-wp/migration';
-import getAllTemplates from '@web-stories-wp/templates';
-
-/**
- * WordPress dependencies
- */
-import apiFetch from '@wordpress/api-fetch';
+import { useCallback } from 'react';
 
 /**
  * Internal dependencies
  */
-import { addQueryArgs } from '../../../design-system';
-import base64Encode from '../../utils/base64Encode';
-import { useConfig } from '../config';
 import Context from './context';
-import removeImagesFromPageTemplates from './removeImagesFromPageTemplates';
 
 function APIProvider({ children }) {
-  const {
-    api: {
-      stories,
-      media,
-      link,
-      users,
-      statusCheck,
-      metaBoxes,
-      currentUser,
-      storyLocking,
-      pageTemplates: customPageTemplates,
-    },
-    encodeMarkup,
-    cdnURL,
-    assetsURL,
-  } = useConfig();
-
-  const pageTemplates = useRef({
-    base: [],
-    withoutImages: [],
-  });
+  const mockFetch = useCallback(() => Promise.resolve({}), []);
 
   const getStoryById = useCallback(() => {
     // @todo Remove items not required for story ad.
-    const initialStoryPost = {
+    return Promise.resolve({
       date: '',
       modified: '',
       password: '',
@@ -84,353 +53,103 @@ function APIProvider({ children }) {
       featured_media_url: '',
       preview_link: '',
       _embedded: {},
-    };
-
-    return Promise.resolve(initialStoryPost);
+    });
   }, []);
 
-  const getStoryLockById = useCallback(
-    (storyId) => {
-      const path = addQueryArgs(`${stories}${storyId}/lock`, {
-        _embed: 'author',
-      });
+  // @todo To be removed.
+  const getStoryLockById = mockFetch;
 
-      return apiFetch({ path });
+  // @todo To be removed.
+  const setStoryLockById = mockFetch;
+
+  // @todo To be removed.
+  const deleteStoryLockById = mockFetch;
+
+  // @todo To be removed.
+  const getDemoStoryById = mockFetch;
+
+  // @todo To Be removed.
+  const saveStoryById = mockFetch;
+
+  // @todo To be removed.
+  const getMedia = useCallback(() => Promise.resolve({
+    body: [],
+    status: 200,
+    headers: {
+      'X-WP-Total': 12,
+      'X-WP-TotalPages': 1,
     },
-    [stories]
-  );
+  }), []);
 
-  const setStoryLockById = useCallback(
-    (storyId) => {
-      const path = `${stories}${storyId}/lock`;
+  const autoSaveById = mockFetch;
 
-      return apiFetch({ path, method: 'POST' });
-    },
-    [stories]
-  );
+  const uploadMedia = mockFetch;
 
-  const deleteStoryLockById = useCallback(
-    (storyId, nonce) => {
-      const data = new window.FormData();
-      data.append('_wpnonce', nonce);
+  const updateMedia = mockFetch;
 
-      const url = addQueryArgs(storyLocking, { _method: 'DELETE' });
+  const deleteMedia = mockFetch;
 
-      window.navigator.sendBeacon?.(url, data);
-    },
-    [storyLocking]
-  );
+  const getLinkMetadata = mockFetch;
 
-  const getDemoStoryById = useCallback(
-    (storyId) => {
-      const path = addQueryArgs(`${stories}${storyId}/`, {
-        context: 'edit',
-        _embed: 'wp:featuredmedia,author',
-        web_stories_demo: true,
-      });
-
-      return apiFetch({ path });
-    },
-    [stories]
-  );
-
-  const getStorySaveData = useCallback(
-    ({
-      pages,
-      featuredMedia,
-      globalStoryStyles,
-      publisherLogo,
-      autoAdvance,
-      defaultPageDuration,
-      currentStoryStyles,
-      content,
-      author,
-      ...rest
-    }) => {
-      return {
-        story_data: {
-          version: DATA_VERSION,
-          pages,
-          autoAdvance,
-          defaultPageDuration,
-          currentStoryStyles,
-        },
-        featured_media: featuredMedia.id,
-        style_presets: globalStoryStyles,
-        publisher_logo: publisherLogo,
-        content: encodeMarkup ? base64Encode(content) : content,
-        author: author.id,
-        ...rest,
-      };
-    },
-    [encodeMarkup]
-  );
-
-  const saveStoryById = useCallback(
-    /**
-     * Fire REST API call to save story.
-     *
-     * @param {import('../../types').Story} story Story object.
-     * @return {Promise} Return apiFetch promise.
-     */
-    (story) => {
-      const { storyId } = story;
-      return apiFetch({
-        path: `${stories}${storyId}/`,
-        data: getStorySaveData(story),
-        method: 'POST',
-      });
-    },
-    [stories, getStorySaveData]
-  );
-
-  const autoSaveById = useCallback(
-    /**
-     * Fire REST API call to save story.
-     *
-     * @param {import('../../types').Story} story Story object.
-     * @return {Promise} Return apiFetch promise.
-     */
-    (story) => {
-      const { storyId } = story;
-      return apiFetch({
-        path: `${stories}${storyId}/autosaves/`,
-        data: getStorySaveData(story),
-        method: 'POST',
-      });
-    },
-    [stories, getStorySaveData]
-  );
-
-  const getMedia = useCallback(
-    ({ mediaType, searchTerm, pagingNum, cacheBust }) => {
-      let apiPath = media;
-      const perPage = 100;
-      apiPath = addQueryArgs(apiPath, {
-        context: 'edit',
-        per_page: perPage,
-        page: pagingNum,
-        _web_stories_envelope: true,
-      });
-
-      if (mediaType) {
-        apiPath = addQueryArgs(apiPath, { media_type: mediaType });
-      }
-
-      if (searchTerm) {
-        apiPath = addQueryArgs(apiPath, { search: searchTerm });
-      }
-
-      // cacheBusting is due to the preloading logic preloading and caching
-      // some requests. (see preload_paths in Dashboard.php)
-      // Adding cache_bust forces the path to look different from the preloaded
-      // paths and hence skipping the cache. (cache_bust itself doesn't do
-      // anything)
-      if (cacheBust) {
-        apiPath = addQueryArgs(apiPath, { cache_bust: true });
-      }
-
-      return apiFetch({ path: apiPath }).then((response) => {
-        return { data: response.body, headers: response.headers };
-      });
-    },
-    [media]
-  );
-
-  /**
-   * Upload file to via REST API.
-   *
-   * @param {File}    file           Media File to Save.
-   * @param {?Object} additionalData Additional data to include in the request.
-   *
-   * @return {Promise} Media Object Promise.
-   */
-  const uploadMedia = useCallback(
-    (file, additionalData) => {
-      // Create upload payload
-      const data = new window.FormData();
-      data.append('file', file, file.name || file.type.replace('/', '.'));
-      Object.entries(additionalData).forEach(([key, value]) =>
-        data.append(key, value)
-      );
-
-      // TODO: Intercept window.fetch here to support progressive upload indicator when uploading
-      return apiFetch({
-        path: media,
-        body: data,
-        method: 'POST',
-      });
-    },
-    [media]
-  );
-
-  /**
-   * Update Existing media.
-   *
-   * @param  {number} mediaId
-   * @param  {Object} data Object of properties to update on attachment.
-   * @return {Promise} Media Object Promise.
-   */
-  const updateMedia = useCallback(
-    (mediaId, data) => {
-      return apiFetch({
-        path: `${media}${mediaId}/`,
-        data,
-        method: 'POST',
-      });
-    },
-    [media]
-  );
-
-  /**
-   * Delete existing media.
-   *
-   * @param  {number} mediaId
-   * @return {Promise} Media Object Promise.
-   */
-  const deleteMedia = useCallback(
-    (mediaId) => {
-      // `apiFetch` by default turns `DELETE` requests into `POST` requests
-      // with `X-HTTP-Method-Override: DELETE` headers.
-      // However, some Web Application Firewall (WAF) solutions prevent this.
-      // `?_method=DELETE` is an alternative solution to override the request method.
-      // See https://developer.wordpress.org/rest-api/using-the-rest-api/global-parameters/#_method-or-x-http-method-override-header
-      return apiFetch({
-        path: addQueryArgs(`${media}${mediaId}/`, { _method: 'DELETE' }),
-        data: { force: true },
-        method: 'POST',
-      });
-    },
-    [media]
-  );
-
-  /**
-   * Gets metadata (title, favicon, etc.) from
-   * a provided URL.
-   *
-   * @param  {number} url
-   * @return {Promise} Result promise
-   */
-  const getLinkMetadata = useCallback(
-    (url) => {
-      const path = addQueryArgs(link, { url });
-      return apiFetch({
-        path,
-      });
-    },
-    [link]
-  );
-
-  const getAuthors = useCallback(
-    (search = null) => {
-      return apiFetch({
-        path: addQueryArgs(users, { per_page: '100', who: 'authors', search }),
-      });
-    },
-    [users]
-  );
+  const getAuthors = useCallback(() => Promise.resolve([]), []);
 
   const getCurrentUser = useCallback(() => {
-    return apiFetch({
-      path: currentUser,
-    });
-  }, [currentUser]);
+    return Promise.resolve({
+        id: 1,
+        name: 'dev',
+        url: '',
+        description: '',
+        link: '',
+        slug: 'dev',
+        avatar_urls: {
+          24: '',
+        },
+        meta: {
+          web_stories_tracking_optin: false,
+          web_stories_media_optimization: true,
+          web_stories_onboarding: {
+            safeZone: true,
+          },
+        },
+        amp_dev_tools_enabled: true,
+        _links: {
+          self: [
+            {
+              href: '',
+            },
+          ],
+          collection: [
+            {
+              href: '',
+            },
+          ],
+        },
+      }
+    );
+  }, []);
 
-  const updateCurrentUser = useCallback(
-    (data) => {
-      return apiFetch({
-        path: currentUser,
-        method: 'POST',
-        data,
-      });
-    },
-    [currentUser]
-  );
+  const updateCurrentUser = mockFetch;
 
-  // See https://github.com/WordPress/gutenberg/blob/148e2b28d4cdd4465c4fe68d97fcee154a6b209a/packages/edit-post/src/store/effects.js#L72-L126
-  const saveMetaBoxes = useCallback(
-    (story, formData) => {
-      // Additional data needed for backward compatibility.
-      // If we do not provide this data, the post will be overridden with the default values.
-      const additionalData = [
-        story.comment_status ? ['comment_status', story.comment_status] : false,
-        story.ping_status ? ['ping_status', story.ping_status] : false,
-        story.sticky ? ['sticky', story.sticky] : false,
-        story.author ? ['post_author', story.author.id] : false,
-      ].filter(Boolean);
-
-      additionalData.forEach(([key, value]) => formData.append(key, value));
-
-      return apiFetch({
-        url: metaBoxes,
-        method: 'POST',
-        body: formData,
-        parse: false,
-      });
-    },
-    [metaBoxes]
-  );
+  const saveMetaBoxes = mockFetch;
 
   /**
    * Status check, submit html string.
+   *
+   * @todo To be removed.
    *
    * @param {string} HTML string.
    * @return {Promise} Result promise
    */
   const getStatusCheck = useCallback(
-    (content) => {
-      return apiFetch({
-        path: statusCheck,
-        data: { content: encodeMarkup ? base64Encode(content) : content },
-        method: 'POST',
-      });
-    },
-    [statusCheck, encodeMarkup]
+    () => Promise.resolve({ success: true }),
+    []
   );
 
-  const getPageTemplates = useCallback(
-    async ({ showImages = false } = {}) => {
-      // check if pageTemplates have been loaded yet
-      if (pageTemplates.current.base.length === 0) {
-        pageTemplates.current.base = await getAllTemplates({ cdnURL });
-        pageTemplates.current.withoutImages = removeImagesFromPageTemplates({
-          templates: pageTemplates.current.base,
-          assetsURL,
-        });
-      }
+  const getPageTemplates = mockFetch;
 
-      return pageTemplates.current[showImages ? 'base' : 'withoutImages'];
-    },
-    [cdnURL, assetsURL]
-  );
+  const getCustomPageTemplates = mockFetch;
 
-  // @todo Add paging.
-  const getCustomPageTemplates = useCallback(() => {
-    let apiPath = customPageTemplates;
-    const perPage = 100;
-    apiPath = addQueryArgs(apiPath, {
-      context: 'edit',
-      per_page: perPage,
-      page: 1,
-    });
-    return apiFetch({ path: apiPath }).then((response) =>
-      response.map((template) => template['story_data'])
-    );
-  }, [customPageTemplates]);
-
-  const addPageTemplate = useCallback(
-    (page) => {
-      return apiFetch({
-        path: `${customPageTemplates}/`,
-        data: {
-          story_data: page,
-          status: 'publish',
-        },
-        method: 'POST',
-      }).then((response) => response['story_data']);
-    },
-    [customPageTemplates]
-  );
+  const addPageTemplate = mockFetch;
 
   const state = {
     actions: {
