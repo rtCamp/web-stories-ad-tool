@@ -26,7 +26,6 @@ import { __ } from '@web-stories-wp/i18n';
 import { CarouselScrollForward, CarouselScrollBack } from './carouselScroll';
 import PrimaryMenu from './primaryMenu';
 import SecondaryMenu from './secondaryMenu';
-import CarouselList from './carouselList';
 import useCarousel from './useCarousel';
 import { MENU_GUTTER, BUTTON_WIDTH, BUTTON_GAP } from './constants';
 
@@ -68,9 +67,6 @@ function CarouselLayout() {
     <Wrapper aria-label={__('Page Carousel', 'web-stories')}>
       <Area area="prev-navigation">
         <CarouselScrollBack />
-      </Area>
-      <Area area="carousel">
-        <CarouselList />
       </Area>
       <Area area="next-navigation">
         <CarouselScrollForward />
