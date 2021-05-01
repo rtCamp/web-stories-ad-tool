@@ -19,7 +19,6 @@
  */
 import PropTypes from 'prop-types';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDebouncedCallback } from 'use-debounce/lib';
 import { __ } from '@web-stories-wp/i18n';
 
 /**
@@ -29,11 +28,7 @@ import { useResizeEffect } from '../../../design-system';
 import { useStory } from '../../app/story';
 
 import { useHighlights } from '../../app/highlights';
-import { DESIGN, DOCUMENT, PREPUBLISH } from './constants';
-import PrepublishInspector, {
-  ChecklistIcon,
-  usePrepublishChecklist,
-} from './prepublish';
+import { DESIGN, DOCUMENT } from './constants';
 import Context from './context';
 import DesignInspector from './design';
 import DocumentInspector from './document';
@@ -43,12 +38,6 @@ function InspectorProvider({ children }) {
     selectedElementIds: state.selectedElementIds,
     currentPage: state.currentPage,
   }));
-
-  const { refreshChecklist, currentCheckpoint } = usePrepublishChecklist();
-  const [refreshChecklistDebounced] = useDebouncedCallback(
-    refreshChecklist,
-    500
-  );
 
   const { tab: highlightedTab } = useHighlights(({ tab }) => ({ tab }));
 
@@ -77,13 +66,6 @@ function InspectorProvider({ children }) {
   );
 
   useEffect(() => {
-    tabRef.current = tab;
-    if (tab === PREPUBLISH) {
-      refreshChecklistDebounced();
-    }
-  }, [tab, refreshChecklistDebounced, refreshChecklist]);
-
-  useEffect(() => {
     if (selectedElementIds.length > 0 && tabRef.current === DOCUMENT) {
       setTab(DESIGN);
     }
@@ -94,11 +76,6 @@ function InspectorProvider({ children }) {
       setTab(DESIGN);
     }
   }, [currentPage]);
-
-  const ChecklistTabIcon = useCallback(
-    () => <ChecklistIcon checkpoint={currentCheckpoint} className="alert" />,
-    [currentCheckpoint]
-  );
 
   // @todo To be removed.
   const loadUsers = useCallback(() => {}, []);
@@ -130,13 +107,6 @@ function InspectorProvider({ children }) {
           id: DOCUMENT,
           title: __('Document', 'web-stories'),
           Pane: DocumentInspector,
-        },
-
-        {
-          icon: ChecklistTabIcon,
-          id: PREPUBLISH,
-          title: __('Checklist', 'web-stories'),
-          Pane: PrepublishInspector,
         },
       ],
     },
