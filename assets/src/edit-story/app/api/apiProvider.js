@@ -26,7 +26,7 @@ import { useCallback } from 'react';
 import Context from './context';
 
 function APIProvider({ children }) {
-  const mockFetch = useCallback(() => Promise.resolve({}), []);
+  const mockedFetch = useCallback(() => Promise.resolve({}), []);
 
   const getStoryById = useCallback(() => {
     // @todo Remove items not required for story ad.
@@ -57,19 +57,19 @@ function APIProvider({ children }) {
   }, []);
 
   // @todo To be removed.
-  const getStoryLockById = mockFetch;
+  const getStoryLockById = mockedFetch;
 
   // @todo To be removed.
-  const setStoryLockById = mockFetch;
+  const setStoryLockById = mockedFetch;
 
   // @todo To be removed.
-  const deleteStoryLockById = mockFetch;
+  const deleteStoryLockById = mockedFetch;
 
   // @todo To be removed.
-  const getDemoStoryById = mockFetch;
+  const getDemoStoryById = mockedFetch;
 
   // @todo To Be removed.
-  const saveStoryById = mockFetch;
+  const saveStoryById = mockedFetch;
 
   // @todo To be removed.
   const getMedia = useCallback(
@@ -85,17 +85,17 @@ function APIProvider({ children }) {
     []
   );
 
-  const autoSaveById = mockFetch;
+  const autoSaveById = mockedFetch;
 
-  const uploadMedia = mockFetch;
+  const uploadMedia = mockedFetch;
 
-  const updateMedia = mockFetch;
+  const updateMedia = mockedFetch;
 
-  const deleteMedia = mockFetch;
+  const deleteMedia = mockedFetch;
 
-  const getLinkMetadata = mockFetch;
+  const getLinkMetadata = mockedFetch;
 
-  const getAuthors = mockFetch;
+  const getAuthors = mockedFetch;
 
   const getCurrentUser = useCallback(() => {
     return Promise.resolve({
@@ -131,9 +131,9 @@ function APIProvider({ children }) {
     });
   }, []);
 
-  const updateCurrentUser = mockFetch;
+  const updateCurrentUser = mockedFetch;
 
-  const saveMetaBoxes = mockFetch;
+  const saveMetaBoxes = mockedFetch;
 
   /**
    * Status check, submit html string.
@@ -148,11 +148,11 @@ function APIProvider({ children }) {
     []
   );
 
-  const getPageTemplates = mockFetch;
+  const getPageTemplates = mockedFetch;
 
-  const getCustomPageTemplates = mockFetch;
+  const getCustomPageTemplates = mockedFetch;
 
-  const addPageTemplate = mockFetch;
+  const addPageTemplate = mockedFetch;
 
   const state = {
     actions: {
