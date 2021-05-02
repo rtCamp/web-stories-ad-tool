@@ -36,61 +36,54 @@ import {
   BUTTON_SIZES,
   BUTTON_TYPES,
   BUTTON_VARIANTS,
+  Icons,
 } from '../../../../design-system';
-import {
-  ChecklistIcon,
-  usePrepublishChecklist,
-  PPC_CHECKPOINT_STATE,
-} from '../../inspector/prepublish';
-
 import Tooltip from '../../tooltip';
 
-const Button = styled(DefaultButton)`
-  padding: 4px 6px;
-  height: 32px;
+const ButtonWithWarning = styled(DefaultButton)`
+  padding: 4px 8px;
   svg {
-    width: 24px;
-    height: auto;
+    margin-right: -2px;
+    margin-left: 2px;
   }
 `;
 
-function ButtonWithChecklistWarning({ text, ...buttonProps }) {
-  const { refreshChecklist, currentCheckpoint } = usePrepublishChecklist();
+const ButtonWithoutWarning = styled(DefaultButton)`
+  min-height: 32px;
+  min-width: 126px;
+  text-align: center;
+`;
+
+function ButtonWithChecklistWarning({ text, hasErrors, ...buttonProps }) {
+  const Button = hasErrors ? ButtonWithWarning : ButtonWithoutWarning;
 
   const button = (
     <Button
       variant={BUTTON_VARIANTS.RECTANGLE}
       type={BUTTON_TYPES.PRIMARY}
       size={BUTTON_SIZES.SMALL}
-      onPointerEnter={refreshChecklist}
       {...buttonProps}
     >
       {text}
-      <ChecklistIcon checkpoint={currentCheckpoint} />
+      {hasErrors && <Icons.ExclamationOutline height={24} width={24} />}
     </Button>
   );
 
-  const TOOLTIP_TEXT = {
-    [PPC_CHECKPOINT_STATE.ALL]: __(
-      'Make updates before publishing to improve discoverability and performance on search engines',
-      'web-stories'
-    ),
-    [PPC_CHECKPOINT_STATE.ONLY_RECOMMENDED]: __(
-      'Review checklist to improve performance before publishing',
-      'web-stories'
-    ),
-    [PPC_CHECKPOINT_STATE.UNAVAILABLE]: null,
-  };
-
-  return (
-    <Tooltip title={TOOLTIP_TEXT[currentCheckpoint]} hasTail>
+  return hasErrors ? (
+    <Tooltip
+      title={__('CTA link is empty or invalid under meta tab', 'web-stories')}
+      hasTail
+    >
       {button}
     </Tooltip>
+  ) : (
+    button
   );
 }
 
 ButtonWithChecklistWarning.propTypes = {
   text: PropTypes.node.isRequired,
+  hasErrors: PropTypes.bool.isRequired,
 };
 
 export default ButtonWithChecklistWarning;

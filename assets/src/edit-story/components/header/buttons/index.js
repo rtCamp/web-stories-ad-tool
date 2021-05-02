@@ -22,8 +22,11 @@ import styled from 'styled-components';
 /**
  * Internal dependencies
  */
-import { useStory } from '../../../app';
 import CircularProgress from '../../circularProgress';
+import useAdStory from '../../../app/storyAd/useAdStory';
+import DownloadZip from './downloadZip';
+
+const LOADER_SIZE = 26;
 
 const ButtonList = styled.nav`
   display: flex;
@@ -44,20 +47,24 @@ const Space = styled.div`
 const Spinner = styled.div`
   position: absolute;
   top: 0;
+  left: 0;
 `;
 
 const IconWithSpinner = styled.div`
   position: relative;
+  width: ${LOADER_SIZE}px;
+  height: ${LOADER_SIZE}px;
 `;
 
 function Loading() {
-  const { isSaving } = useStory((state) => ({
-    isSaving: state.state.meta.isSaving,
-  }));
+  const {
+    state: { isDownloading },
+  } = useAdStory();
+
   return (
-    isSaving && (
+    isDownloading && (
       <Spinner>
-        <CircularProgress size={32} />
+        <CircularProgress size={LOADER_SIZE} />
       </Spinner>
     )
   );
@@ -70,6 +77,8 @@ function Buttons() {
         <IconWithSpinner>
           <Loading />
         </IconWithSpinner>
+        <Space />
+        <DownloadZip />
         <Space />
       </List>
     </ButtonList>

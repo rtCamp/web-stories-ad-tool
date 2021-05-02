@@ -23,8 +23,11 @@ import { __ } from '@web-stories-wp/i18n';
 /**
  * Internal dependencies
  */
+import useAdStory from '../../app/storyAd/useAdStory';
+import CircularProgress from '../circularProgress';
 import Buttons from './buttons';
 import HeaderProvider from './provider';
+import ImportButton from './buttons/importButton';
 
 const Background = styled.header.attrs({
   role: 'group',
@@ -36,23 +39,56 @@ const Background = styled.header.attrs({
   background-color: ${({ theme }) => theme.colors.bg.primary};
 `;
 
-const LeftCell = styled.div`
-  flex: 1 1 auto;
+const LeftButtonCell = styled.div`
+  display: flex;
   padding: 1em;
 `;
 
-const RightCell = styled.div`
+const ButtonCell = styled.div`
   grid-area: buttons;
 `;
+
+const LOADER_SIZE = 24;
+
+const Spinner = styled.div`
+  position: absolute;
+  top: 0;
+  left: 10px;
+`;
+
+const IconWithSpinner = styled.div`
+  position: relative;
+  width: ${LOADER_SIZE}px;
+  height: ${LOADER_SIZE}px;
+`;
+
+function Loading() {
+  const {
+    state: { isImporting },
+  } = useAdStory();
+
+  return (
+    isImporting && (
+      <Spinner>
+        <CircularProgress size={LOADER_SIZE} />
+      </Spinner>
+    )
+  );
+}
 
 function HeaderLayout() {
   return (
     <HeaderProvider>
       <Background>
-        <LeftCell />
-        <RightCell>
+        <LeftButtonCell>
+          <ImportButton />
+          <IconWithSpinner>
+            <Loading />
+          </IconWithSpinner>
+        </LeftButtonCell>
+        <ButtonCell>
           <Buttons />
-        </RightCell>
+        </ButtonCell>
       </Background>
     </HeaderProvider>
   );
