@@ -29,6 +29,9 @@ function isHexColorString(s) {
   return /^#(?:[a-f0-9]{3}){1,2}$/i.test(s);
 }
 
+const ASPECT_RATIO = PAGE_HEIGHT / PAGE_WIDTH;
+const MAX_PAGE_WIDTH = 630;
+
 function CustomStyles() {
   const safeToFullRatio = PAGE_RATIO / FULLBLEED_RATIO;
   const fullToSafeRatio = 1 / safeToFullRatio;
@@ -52,13 +55,20 @@ function CustomStyles() {
     : '#1B1D1C';
 
   const storyAdStyle = `
-    .grid-layer-main {
+   .grid-layer-main {
       margin: auto;
-      width: ${PAGE_WIDTH}px;
-      height: ${PAGE_HEIGHT}px;
-      font-size: calc(${PAGE_HEIGHT}px/10);
+      width: 100vw;
+      height: calc( 100vw * ${ASPECT_RATIO} );
+      max-width: ${MAX_PAGE_WIDTH}px;
+      max-height: 100vh;
+      font-size: calc( 100vw * ${ASPECT_RATIO}/10);
       pointer-events: none;
       position: relative;
+    }
+    @media ( min-width: ${MAX_PAGE_WIDTH}px ) {
+      .grid-layer-main {
+        font-size: calc( ${MAX_PAGE_WIDTH * ASPECT_RATIO}/10);
+      }
     }
     body,html {
       overflow: hidden ;
@@ -68,6 +78,7 @@ function CustomStyles() {
     }
     .page-wrapper {
       height: 100%;
+      width: 100%;
       display: flex;
       justify-content: center;
       position: absolute;
