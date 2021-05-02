@@ -37,11 +37,6 @@
 		</div>
 	</div>
 
-	<script src='<?php echo $url; ?>assets/wp/wp-polyfill.min.js'></script>
-	<script src='<?php echo $url; ?>assets/wp/load-scripts.js'></script> <!-- /wp-admin/load-scripts.php?load[chunk_0]=wp-i18n -->
-	<script src='<?php echo $url; ?>assets/wp/url.min.js'></script>
-	<script src='<?php echo $url; ?>assets/wp/api-fetch.min.js'></script>
-
 	<?php
 	$chunks_file =  __DIR__ . '/assets/js/edit-story.chunks.php';
 	$chunks = is_readable( $chunks_file ) ? require $chunks_file : [];

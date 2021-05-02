@@ -22,7 +22,7 @@ const path = require('path');
 /**
  * WordPress dependencies
  */
-const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
+const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin'); // @todo To be removed.
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /**
