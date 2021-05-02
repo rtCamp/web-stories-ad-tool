@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-export { default as ExcerptPanel } from './excerpt';
-export { default as PageAdvancementPanel } from './pageAdvancement';
-export { default as PublishPanel } from './publish';
-export { default as SlugPanel } from './slug';
-export { default as StatusPanel } from './status';
-export { default as StoryAdPanel } from './storyAd';
+/**
+ * Internal dependencies
+ */
+import { createContext } from '../../../design-system';
+
+export default createContext({ state: {}, actions: {} });

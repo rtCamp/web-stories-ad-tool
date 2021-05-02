@@ -50,6 +50,7 @@ import { GlobalStyle as ModalGlobalStyle } from './components/modal';
 import { GlobalStyle as CalendarStyle } from './components/form/dateTime/calendarStyle';
 import KeyboardOnlyOutlines from './utils/keyboardOnlyOutline';
 import { MetaBoxesProvider } from './integrations/wordpress/metaBoxes';
+import { StoryAdProvider } from './app/storyAd';
 
 function App({ config }) {
   const { storyId, isRTL } = config;
@@ -65,30 +66,32 @@ function App({ config }) {
                   <HistoryProvider size={50}>
                     <SnackbarProvider>
                       <MetaBoxesProvider>
-                        <StoryProvider storyId={storyId}>
-                          <CurrentUserProvider>
-                            <PostLock />
-                            <FontProvider>
-                              <MediaProvider>
-                                <AutoSaveHandler />
-                                <TransformProvider>
-                                  <DropTargetsProvider>
-                                    <HelpCenterProvider>
-                                      <GlobalStyle />
-                                      <DevTools />
-                                      <DefaultMoveableGlobalStyle />
-                                      <CropMoveableGlobalStyle />
-                                      <ModalGlobalStyle />
-                                      <CalendarStyle />
-                                      <KeyboardOnlyOutlines />
-                                      <Layout />
-                                    </HelpCenterProvider>
-                                  </DropTargetsProvider>
-                                </TransformProvider>
-                              </MediaProvider>
-                            </FontProvider>
-                          </CurrentUserProvider>
-                        </StoryProvider>
+                        <StoryAdProvider>
+                          <StoryProvider storyId={storyId}>
+                            <CurrentUserProvider>
+                              <PostLock />
+                              <FontProvider>
+                                <MediaProvider>
+                                  <AutoSaveHandler />
+                                  <TransformProvider>
+                                    <DropTargetsProvider>
+                                      <HelpCenterProvider>
+                                        <GlobalStyle />
+                                        <DevTools />
+                                        <DefaultMoveableGlobalStyle />
+                                        <CropMoveableGlobalStyle />
+                                        <ModalGlobalStyle />
+                                        <CalendarStyle />
+                                        <KeyboardOnlyOutlines />
+                                        <Layout />
+                                      </HelpCenterProvider>
+                                    </DropTargetsProvider>
+                                  </TransformProvider>
+                                </MediaProvider>
+                              </FontProvider>
+                            </CurrentUserProvider>
+                          </StoryProvider>
+                        </StoryAdProvider>
                       </MetaBoxesProvider>
                     </SnackbarProvider>
                   </HistoryProvider>

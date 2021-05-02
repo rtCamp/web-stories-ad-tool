@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
+/**
+ * Internal dependencies
+ */
+import { StoryAdPanel } from '../../panels/document';
+
 function DocumentInspector() {
-  // @todo Add story ad controls here.
-  return null;
+  return <StoryAdPanel />;
 }
 
 export default DocumentInspector;
