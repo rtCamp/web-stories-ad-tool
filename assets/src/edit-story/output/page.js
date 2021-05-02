@@ -18,20 +18,16 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { __ } from '@web-stories-wp/i18n';
 
 /**
  * Internal dependencies
  */
 import { getTotalDuration, StoryAnimation } from '../../animation';
-import { PAGE_HEIGHT, PAGE_WIDTH } from '../constants';
 import StoryPropTypes from '../types';
 import generatePatternStyles from '../utils/generatePatternStyles';
 import isElementBelowLimit from '../utils/isElementBelowLimit';
 import OutputElement from './element';
 import getLongestMediaElement from './utils/getLongestMediaElement';
-
-const ASPECT_RATIO = `${PAGE_WIDTH}:${PAGE_HEIGHT}`;
 
 function OutputPage({ page, autoAdvance, defaultPageDuration }) {
   const { id, animations, elements, backgroundColor } = page;
@@ -75,19 +71,16 @@ function OutputPage({ page, autoAdvance, defaultPageDuration }) {
   );
 
   return (
-    <amp-story-page
+    <div
       id={id}
-      auto-advance-after={autoAdvance ? autoAdvanceAfter : undefined}
+      className="page-wrapper"
+      data-auto-advance-after={autoAdvance ? autoAdvanceAfter : undefined}
     >
       <StoryAnimation.Provider animations={animations} elements={elements}>
         <StoryAnimation.AMPAnimations />
 
         {backgroundElement && (
-          <amp-story-grid-layer
-            template="vertical"
-            aspect-ratio={ASPECT_RATIO}
-            class="grid-layer"
-          >
+          <div className="grid-layer">
             <div className="page-fullbleed-area" style={backgroundStyles}>
               <div className="page-safe-area">
                 <OutputElement element={backgroundElement} />
@@ -101,14 +94,10 @@ function OutputPage({ page, autoAdvance, defaultPageDuration }) {
                 )}
               </div>
             </div>
-          </amp-story-grid-layer>
+          </div>
         )}
 
-        <amp-story-grid-layer
-          template="vertical"
-          aspect-ratio={ASPECT_RATIO}
-          class="grid-layer"
-        >
+        <div className="grid-layer grid-layer-main">
           <div className="page-fullbleed-area">
             <div className="page-safe-area">
               {validElements.map((element) => (
@@ -116,18 +105,9 @@ function OutputPage({ page, autoAdvance, defaultPageDuration }) {
               ))}
             </div>
           </div>
-        </amp-story-grid-layer>
+        </div>
       </StoryAnimation.Provider>
-      {hasPageAttachment && (
-        <amp-story-page-attachment
-          layout="nodisplay"
-          href={page.pageAttachment.url}
-          data-cta-text={
-            page.pageAttachment.ctaText || __('Learn more', 'web-stories')
-          }
-        />
-      )}
-    </amp-story-page>
+    </div>
   );
 }
 
