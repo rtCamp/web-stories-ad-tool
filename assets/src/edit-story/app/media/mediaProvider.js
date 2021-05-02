@@ -18,6 +18,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 /**
  * Internal dependencies
@@ -29,12 +30,16 @@ import Context from './context';
 
 function MediaProvider({ children }) {
   const { state, actions } = useMediaReducer();
+  const [localStoryAdMedia, setLocalStoryAdMedia] = useState([]);
 
   const local = useLocalContextValueProvider(state.local, actions.local);
   const media3p = useMedia3pContextValueProvider(
     state.media3p,
     actions.media3p
   );
+
+  local.state.localStoryAdMedia = localStoryAdMedia;
+  local.actions.setLocalStoryAdMedia = setLocalStoryAdMedia;
 
   const context = { local, media3p };
   return <Context.Provider value={context}>{children}</Context.Provider>;
