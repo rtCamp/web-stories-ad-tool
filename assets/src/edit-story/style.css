@@ -92,6 +92,14 @@ ul {
   list-style: none;
 }
 
+.hide-if-no-js {
+  display: none;
+}
+
+.js .hide-if-no-js {
+  display: block;
+}
+
 .screen-reader-text {
   border: 0;
   clip: rect(1px, 1px, 1px, 1px);
@@ -129,6 +137,11 @@ body.js.edit-story #web-stories-editor .loading-message {
   text-align: center;
   margin: 0;
   padding: 0.67em 0;
+}
+
+.web-stories-wp-no-js {
+  text-align: center;
+  padding: 50px;
 }
 
 /* Copied from forms.css in WordPress, avoids issues with "Collapse menu" button */
