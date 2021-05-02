@@ -27,26 +27,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
-/**
- * WordPress dependencies
- */
-const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
-
-/**
- * Prevents externalizing certain packages.
- *
- * @param {string} request Requested module
- * @return {(string|undefined|boolean)} Script global
- */
-function requestToExternal(request) {
-  const packages = ['react', 'react-dom', 'react-dom/server'];
-  if (packages.includes(request)) {
-    return false;
-  }
-
-  return undefined;
-}
-
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const isProduction = process.env.NODE_ENV === 'production';
 const mode = isProduction ? 'production' : 'development';
@@ -225,9 +205,6 @@ const editorAndDashboard = {
   },
   plugins: [
     ...sharedConfig.plugins,
-    new DependencyExtractionWebpackPlugin({
-      requestToExternal,
-    }),
     new WebpackBar({
       name: 'Editor & Dashboard',
     }),
