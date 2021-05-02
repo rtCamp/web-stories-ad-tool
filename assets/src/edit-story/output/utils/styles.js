@@ -17,7 +17,12 @@
 /**
  * Internal dependencies
  */
-import { FULLBLEED_RATIO, PAGE_RATIO } from '../../constants';
+import {
+  FULLBLEED_RATIO,
+  PAGE_RATIO,
+  PAGE_HEIGHT,
+  PAGE_WIDTH,
+} from '../../constants';
 import theme from '../../theme';
 
 function isHexColorString(s) {
@@ -45,6 +50,31 @@ function CustomStyles() {
   const pageBackgroundColor = isHexColorString(workspaceColor)
     ? workspaceColor
     : '#1B1D1C';
+
+  const storyAdStyle = `
+    .grid-layer-main {
+      margin: auto;
+      width: ${PAGE_WIDTH}px;
+      height: ${PAGE_HEIGHT}px;
+      font-size: calc(${PAGE_HEIGHT}px/10);
+      pointer-events: none;
+      position: relative;
+    }
+    body,html {
+      overflow: hidden ;
+      font-size: calc(var(--story-page-vh, 8px)*2.5);
+      height: 100%;
+      margin: 0;
+    }
+    .page-wrapper {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  `;
 
   return (
     <style
@@ -102,6 +132,7 @@ function CustomStyles() {
                 bottom: 0;
                 margin: 0;
               }
+              ${storyAdStyle}
               `,
       }}
     />
