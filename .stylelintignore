@@ -2,7 +2,6 @@
 .storybook
 __mocks__
 assets/css
-assets/wp
 bin
 build
 docs

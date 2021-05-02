@@ -1,7 +1,6 @@
 **/node_modules/**
 **/vendor/**
 **/assets/js/*.js
-**/assets/wp/*.js
 **/packages/migration/src/module.js
 bin/build/*
 build/*

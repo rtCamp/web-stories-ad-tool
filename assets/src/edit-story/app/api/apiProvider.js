@@ -67,20 +67,6 @@ function APIProvider({ children }) {
     withoutImages: [],
   });
 
-  // @todo To be removed.
-  const getMedia = useCallback(
-    () =>
-      Promise.resolve({
-        body: [],
-        status: 200,
-        headers: {
-          'X-WP-Total': 12,
-          'X-WP-TotalPages': 1,
-        },
-      }),
-    []
-  );
-
   const getCurrentUser = useCallback(() => {
     return Promise.resolve({
       id: 1,
@@ -153,7 +139,7 @@ function APIProvider({ children }) {
       getStoryLockById: mockedFetch,
       setStoryLockById: mockedFetch,
       deleteStoryLockById: mockedFetch,
-      getMedia,
+      getMedia: mockedFetch,
       getLinkMetadata: mockedFetch,
       saveStoryById: mockedFetch,
       getAuthors: mockedFetch,
