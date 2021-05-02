@@ -14,27 +14,9 @@
  * limitations under the License.
  */
 
-/**
- * Internal dependencies
- */
-import {
-  PublishPanel,
-  ExcerptPanel,
-  SlugPanel,
-  StatusPanel,
-  PageAdvancementPanel,
-} from '../../panels/document';
-
 function DocumentInspector() {
-  return (
-    <>
-      <StatusPanel />
-      <PublishPanel />
-      <ExcerptPanel />
-      <SlugPanel />
-      <PageAdvancementPanel />
-    </>
-  );
+  // @todo Add story ad controls here.
+  return null;
 }
 
 export default DocumentInspector;

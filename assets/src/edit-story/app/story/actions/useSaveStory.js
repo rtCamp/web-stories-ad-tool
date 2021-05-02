@@ -20,7 +20,6 @@
 import { __ } from '@web-stories-wp/i18n';
 import { useCallback, useState } from 'react';
 import { useFeatures } from 'flagged';
-import { getTimeTracker } from '@web-stories-wp/tracking';
 
 /**
  * Internal dependencies
@@ -28,7 +27,6 @@ import { getTimeTracker } from '@web-stories-wp/tracking';
 import objectPick from '../../../utils/objectPick';
 import { useAPI } from '../../api';
 import { useConfig } from '../../config';
-import useRefreshPostEditURL from '../../../utils/useRefreshPostEditURL';
 import { useSnackbar } from '../../../../design-system';
 import getStoryPropsToSave from '../utils/getStoryPropsToSave';
 import { useHistory } from '../../history';
@@ -54,19 +52,10 @@ function useSaveStory({ storyId, pages, story, updateStory }) {
   const { metadata } = useConfig();
   const { showSnackbar } = useSnackbar();
   const [isSaving, setIsSaving] = useState(false);
-  const [isFreshlyPublished, setIsFreshlyPublished] = useState(false);
-
-  const refreshPostEditURL = useRefreshPostEditURL(storyId);
 
   const saveStory = useCallback(
     (props) => {
       setIsSaving(true);
-
-      const isStoryAlreadyPublished = ['publish', 'future'].includes(
-        story.status
-      );
-
-      const trackTiming = getTimeTracker('load_save_story');
 
       return saveStoryById({
         storyId,
@@ -80,11 +69,6 @@ function useSaveStory({ storyId, pages, story, updateStory }) {
             previewLink: post.preview_link,
           };
           updateStory({ properties });
-
-          refreshPostEditURL();
-
-          const isStoryPublished = ['publish', 'future'].includes(post.status);
-          setIsFreshlyPublished(!isStoryAlreadyPublished && isStoryPublished);
         })
         .catch(() => {
           showSnackbar({
@@ -95,7 +79,6 @@ function useSaveStory({ storyId, pages, story, updateStory }) {
         .finally(() => {
           setIsSaving(false);
           resetNewChanges();
-          trackTiming();
         });
     },
     [
@@ -106,13 +89,12 @@ function useSaveStory({ storyId, pages, story, updateStory }) {
       saveStoryById,
       storyId,
       updateStory,
-      refreshPostEditURL,
       showSnackbar,
       resetNewChanges,
     ]
   );
 
-  return { saveStory, isSaving, isFreshlyPublished };
+  return { saveStory, isSaving, isFreshlyPublished: false };
 }
 
 export default useSaveStory;
