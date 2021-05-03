@@ -25,20 +25,40 @@ import { __ } from '@web-stories-wp/i18n';
  * Internal dependencies
  */
 import { UploadDropTarget, UploadDropTargetMessage } from '../uploadDropTarget';
-import { useLocalMedia } from '../../app/media';
+import { useMedia } from '../../app/media';
+import getStoryAdImageMediaData from '../../app/media/utils/getStoryAdImageMediaData';
 
 const MESSAGE_ID = 'edit-story-library-upload-message';
 
 function LibraryUploadDropTarget({ children }) {
-  const { uploadMedia } = useLocalMedia((state) => ({
-    uploadMedia: state.actions.uploadMedia,
-  }));
-  const onDropHandler = useCallback(
-    (files) => {
-      uploadMedia(files);
-    },
-    [uploadMedia]
+  const { localStoryAdMedia: media, setLocalStoryAdMedia } = useMedia(
+    ({
+      local: {
+        state: { localStoryAdMedia },
+        actions: { setLocalStoryAdMedia },
+      },
+    }) => ({
+      localStoryAdMedia,
+      setLocalStoryAdMedia,
+    })
   );
+
+  const onDropHandler = useCallback(
+    async (files) => {
+      const mediaItems = [...media];
+
+      await Promise.all(
+        files.map(async (file) => {
+          const mediaData = await getStoryAdImageMediaData(file);
+          mediaItems.push(mediaData);
+        })
+      );
+
+      setLocalStoryAdMedia(mediaItems);
+    },
+    [media, setLocalStoryAdMedia]
+  );
+
   return (
     <UploadDropTarget onDrop={onDropHandler} labelledBy={MESSAGE_ID}>
       {children}

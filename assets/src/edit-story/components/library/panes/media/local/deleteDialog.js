@@ -20,7 +20,6 @@
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 import { __ } from '@web-stories-wp/i18n';
-import { trackError } from '@web-stories-wp/tracking';
 
 /**
  * Internal dependencies
@@ -30,8 +29,7 @@ import {
   THEME_CONSTANTS,
   useSnackbar,
 } from '../../../../../../design-system';
-import { useAPI } from '../../../../../app/api';
-import { useLocalMedia } from '../../../../../app/media';
+import { useLocalMedia, useMedia } from '../../../../../app/media';
 import { useStory } from '../../../../../app/story';
 import Dialog from '../../../../dialog';
 
@@ -45,9 +43,33 @@ import Dialog from '../../../../dialog';
  * @return {null|*} The dialog element.
  */
 function DeleteDialog({ mediaId, type, onClose }) {
-  const {
-    actions: { deleteMedia },
-  } = useAPI();
+  const { localStoryAdMedia: media, setLocalStoryAdMedia } = useMedia(
+    ({
+      local: {
+        state: { localStoryAdMedia },
+        actions: { setLocalStoryAdMedia },
+      },
+    }) => ({
+      localStoryAdMedia,
+      setLocalStoryAdMedia,
+    })
+  );
+
+  const deleteMedia = useCallback(
+    (id) => {
+      const currentMediaIndex = media.findIndex(
+        (mediaItem) => id === mediaItem?.id
+      );
+      const newMedia = [...media];
+
+      if (currentMediaIndex > -1) {
+        newMedia.splice(currentMediaIndex, 1);
+        setLocalStoryAdMedia(newMedia);
+      }
+    },
+    [media, setLocalStoryAdMedia]
+  );
+
   const { showSnackbar } = useSnackbar();
   const { deleteMediaElement } = useLocalMedia((state) => ({
     deleteMediaElement: state.actions.deleteMediaElement,
@@ -63,7 +85,6 @@ function DeleteDialog({ mediaId, type, onClose }) {
       deleteMediaElement({ id: mediaId });
       deleteElementsByResourceId({ id: mediaId });
     } catch (err) {
-      trackError('local_media_deletion', err.message);
       showSnackbar({
         message: __('Failed to delete media item.', 'web-stories'),
         dismissable: true,
@@ -81,8 +102,7 @@ function DeleteDialog({ mediaId, type, onClose }) {
   const imageDialogTitle = __('Delete Image?', 'web-stories');
   const videoDialogTitle = __('Delete Video?', 'web-stories');
   const imageDialogDescription = __(
-    'You are about to permanently delete this image from your site. ' +
-      'The image will appear broken in any WordPress content that uses it. ',
+    'You are about to delete this image',
     'web-stories'
   );
   const videoDialogDescription = __(

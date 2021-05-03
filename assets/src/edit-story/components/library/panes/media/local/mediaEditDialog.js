@@ -20,9 +20,8 @@
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 import { useCallback, useState } from 'react';
-import { formatDate, toDate, isValid } from '@web-stories-wp/date';
+import { formatDate, isValid, toDate } from '@web-stories-wp/date';
 import { __, sprintf } from '@web-stories-wp/i18n';
-import { trackError } from '@web-stories-wp/tracking';
 /**
  * Internal dependencies
  */
@@ -32,8 +31,7 @@ import {
   THEME_CONSTANTS,
   useSnackbar,
 } from '../../../../../../design-system';
-import { useAPI } from '../../../../../app/api';
-import { useLocalMedia } from '../../../../../app/media';
+import { useLocalMedia, useMedia } from '../../../../../app/media';
 import StoryPropTypes from '../../../../../types';
 import { getSmallestUrlForWidth } from '../../../../../elements/media/util';
 import Dialog from '../../../../dialog';
@@ -108,9 +106,34 @@ function MediaEditDialog({ resource, onClose }) {
     poster,
     mimeType,
   } = resource;
-  const {
-    actions: { updateMedia },
-  } = useAPI();
+
+  const { localStoryAdMedia: media, setLocalStoryAdMedia } = useMedia(
+    ({
+      local: {
+        state: { localStoryAdMedia },
+        actions: { setLocalStoryAdMedia },
+      },
+    }) => ({
+      localStoryAdMedia,
+      setLocalStoryAdMedia,
+    })
+  );
+
+  const updateMedia = useCallback(
+    (mediaId, data) => {
+      const currentIndex = media.findIndex(
+        (mediaItem) => mediaId === mediaItem.id
+      );
+
+      if (currentIndex > -1) {
+        const newMedia = [...media];
+        newMedia[currentIndex] = { ...newMedia[currentIndex], ...data };
+        setLocalStoryAdMedia(newMedia);
+      }
+    },
+    [media, setLocalStoryAdMedia]
+  );
+
   const { updateMediaElement } = useLocalMedia((state) => ({
     updateMediaElement: state.actions.updateMediaElement,
   }));
@@ -125,12 +148,11 @@ function MediaEditDialog({ resource, onClose }) {
   const updateMediaItem = useCallback(async () => {
     try {
       // Update server.
-      await updateMedia(id, { alt_text: altText });
+      await updateMedia(id, { alt: altText });
       // Update internal state.
       updateMediaElement({ id, data: { alt: altText } });
       onClose();
     } catch (err) {
-      trackError('local_media_edit', err.message);
       showSnackbar({
         message: __('Failed to update, please try again.', 'web-stories'),
         dismissable: true,
