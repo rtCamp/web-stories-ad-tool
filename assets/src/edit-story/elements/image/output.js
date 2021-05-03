@@ -19,7 +19,6 @@
  */
 import StoryPropTypes from '../../types';
 import MediaOutput from '../media/output';
-import { calculateSrcSet } from '../media/util';
 
 /**
  * Returns AMP HTML for saving into post content for displaying in the FE.
@@ -35,11 +34,6 @@ function ImageOutput({ element, box }) {
     src: resource.src,
     alt: element.alt !== undefined ? element.alt : resource.alt,
   };
-
-  const srcSet = calculateSrcSet(element.resource);
-  if (srcSet) {
-    props.srcSet = srcSet;
-  }
 
   return (
     <MediaOutput box={box} element={element} data-leaf-element="true">
