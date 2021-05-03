@@ -32,7 +32,7 @@ import OutputStory from '../story';
  * @param {Array<Object>} pages List of pages.
  * @param {Object} metadata Metadata.
  * @param {Object} featureFlags Boolean flags to enable/disable features
- * @param storyAd
+ * @param {Object} storyAd Story Ad.
  * @return {string} Story markup.
  */
 export default function getStoryMarkup(
