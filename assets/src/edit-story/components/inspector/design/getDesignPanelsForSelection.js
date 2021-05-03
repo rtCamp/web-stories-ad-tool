@@ -23,21 +23,20 @@ import {
   BorderRadiusPanel,
   BorderStylePanel,
   CaptionsPanel,
+  ColorPresetPanel,
+  ElementAlignmentPanel,
   FilterPanel,
   ImageAccessibilityPanel,
-  LinkPanel,
   LayerStylePanel,
   PageAttachmentPanel,
   PageBackgroundPanel,
   ShapeStylePanel,
   SizePositionPanel,
+  StylePresetPanel,
   TextBoxPanel,
   TextStylePanel,
   VideoAccessibilityPanel,
-  ElementAlignmentPanel,
   VideoOptionsPanel,
-  StylePresetPanel,
-  ColorPresetPanel,
   VideoProcessingPanel,
 } from '../../panels/design';
 import PanelTypes from '../../panels/design/types';
@@ -113,7 +112,7 @@ function getDesignPanelsForSelection(elements) {
     .map((type) => {
       switch (type) {
         case PanelTypes.ANIMATION:
-          return { type, Panel: AnimationPanel };
+          return null;
         case PanelTypes.PAGE_BACKGROUND:
           // Only display when isBackground.
           return null;
@@ -129,7 +128,7 @@ function getDesignPanelsForSelection(elements) {
         case PanelTypes.SIZE_POSITION:
           return { type, Panel: SizePositionPanel };
         case PanelTypes.LINK:
-          return { type, Panel: LinkPanel };
+          return null;
         case PanelTypes.TEXT_STYLE:
           return { type, Panel: TextStylePanel };
         case PanelTypes.TEXT_BOX:
