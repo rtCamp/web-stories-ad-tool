@@ -131,8 +131,16 @@ function DownloadZip() {
       })
     );
 
+    const readMeText = `
+    In order to view or test this ad as a standalone AMP page locally before uploading it to your platform, it needs to be run on any https-enabled server. For example, you may use the "Web Server for Chrome" chrome extension and view the ad by enabling its HTTPS option.
+
+    Uploading the ad to google ad manager:
+    1. Choose "Code Type" as "AMP", copy the entire content of index.html without formatting and paste it inside the "AMP HTML" textbox.
+    2. All assets of the story ad have been downloaded as part of the zip and have a relative path in index.html, upload those assets and change its file path by inserting macros.
+    `;
+
     zip.file('index.html', markup);
-    zip.file('README.txt', 'TBD');
+    zip.file('README.txt', readMeText);
 
     zip.generateAsync({ type: 'blob' }).then((content) => {
       saveAs(content, 'story-ad.zip');

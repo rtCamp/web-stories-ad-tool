@@ -67,7 +67,7 @@ function CustomStyles() {
     }
     @media ( min-width: ${MAX_PAGE_WIDTH}px ) {
       .grid-layer-main {
-        font-size: calc( ${MAX_PAGE_WIDTH * ASPECT_RATIO}/10);
+        font-size: calc( ${MAX_PAGE_WIDTH * ASPECT_RATIO}px/10);
       }
     }
     body,html {
