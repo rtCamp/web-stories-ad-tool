@@ -25,7 +25,7 @@ import { DATA_VERSION } from '@web-stories-wp/migration';
 /**
  * WordPress dependencies
  */
-import { isURL } from '@wordpress/url';
+import { addQueryArgs, isURL } from '@wordpress/url';
 
 /**
  * Internal dependencies
@@ -38,6 +38,7 @@ import {
 import { useStory } from '../../../app';
 import useAdStory from '../../../app/storyAd/useAdStory';
 import getStoryPropsToSave from '../../../app/story/utils/getStoryPropsToSave';
+import { PAGE_RATIO, PAGE_WIDTH } from '../../../constants';
 import ButtonWithChecklistWarning from './buttonWithChecklistWarning';
 
 const COMMON_MIME_TYPE_MAPPING = {
@@ -102,7 +103,20 @@ function DownloadZip() {
                 return;
               }
 
-              const resp = await fetch(src);
+              let imageSrc = src;
+
+              /**
+               * Download double size image of the page ratio as unsplash image size can be very
+               * large and we aren't using srcset to keep things simple for the user.
+               */
+              if (src.startsWith('https://images.unsplash.com')) {
+                imageSrc = addQueryArgs(src, {
+                  w: PAGE_WIDTH * 2,
+                  h: (PAGE_WIDTH * 2) / PAGE_RATIO,
+                });
+              }
+
+              const resp = await fetch(imageSrc);
               const respBlob = await resp.blob();
               const fileName = `${mediaType}-${index + 1}.${extension}`;
               const file = new File([respBlob], fileName);
