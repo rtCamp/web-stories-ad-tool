@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const url = window.location.origin;
+const url = window.location.origin + window.location.pathname;
 
 // @todo Remove items not required for story ad.
 export default {
@@ -79,7 +79,7 @@ export default {
     postType: 'web-story',
     storyId: 1,
     dashboardLink: '',
-    assetsURL: `${url}/assets/`,
+    assetsURL: `${url}assets/`,
     cdnURL: 'https://wp.stories.google/static/main/',
     maxUpload: 536870912,
     isDemo: false,
@@ -132,5 +132,5 @@ export default {
     customMetaBoxes: true,
     customPageTemplates: false,
   },
-  publicPath: `${url}/`,
+  publicPath: `${url}`,
 };

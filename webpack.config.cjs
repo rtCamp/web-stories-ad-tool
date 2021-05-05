@@ -31,11 +31,13 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const isProduction = process.env.NODE_ENV === 'production';
 const mode = isProduction ? 'production' : 'development';
 
+const appFolder = isProduction ? 'dist' : '';
+
 const sharedConfig = {
   mode,
   devtool: !isProduction ? 'source-map' : undefined,
   output: {
-    path: path.resolve(process.cwd() ),
+    path: path.resolve(process.cwd(), appFolder ),
     filename: 'assets/js/[name].js',
     chunkFilename: 'assets/js/[name]-[chunkhash].js',
     publicPath: '',

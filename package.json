@@ -1,6 +1,6 @@
 {
-  "name": "web-stories-wp",
-  "title": "Web Stories",
+  "name": "web-stories-ad-creation-tool",
+  "title": "Web Stories Ad Creation Tool",
   "private": true,
   "description": "Visual storytelling for WordPress.",
   "author": "Google",
@@ -12,7 +12,7 @@
     "storytelling",
     "wordpress"
   ],
-  "homepage": "https://github.com/google/web-stories-wp",
+  "homepage": "https://rtCamp.github.io/google/web-stories-wp",
   "repository": {
     "type": "git",
     "url": "https://github.com/google/web-stories-wp.git"
@@ -153,6 +153,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-testing-library": "^3.10.2",
+    "gh-pages": "^3.1.0",
     "glob": "^7.1.6",
     "html-webpack-plugin": "^4.5.2",
     "husky": "^4.3.7",
@@ -268,7 +269,9 @@
     "workflow:migrate:templates": "migration packages/templates/src/raw",
     "postworkflow:migrate:templates": "npx prettier --write packages/templates/src/raw",
     "workflow:migrate:ftue-story": "migration includes/data/stories",
-    "postworkflow:migrate:ftue-story": "npx prettier --write includes/data/stories"
+    "postworkflow:migrate:ftue-story": "npx prettier --write includes/data/stories",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "husky": {
     "hooks": {
