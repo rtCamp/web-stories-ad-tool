@@ -98,23 +98,6 @@ function ImportButton() {
 
     const mediaItems = [...localStoryAdMedia];
 
-    await Promise.all(
-      Object.keys(mediaFileNames).map(async (fileType) => {
-        await Promise.all(
-          mediaFileNames[fileType].map(async (fileName) => {
-            const media = await files[fileName]?.async('blob');
-
-            if ('image' === fileType && media) {
-              const mediaItem = await getStoryAdImageMediaData(media);
-              mediaItems.push(mediaItem);
-            }
-          })
-        );
-      })
-    );
-
-    setLocalStoryAdMedia(mediaItems);
-
     const configData = await files['config.json'].async('text');
     const importedState = JSON.parse(configData);
 
@@ -123,6 +106,30 @@ function ImportButton() {
       story: { ...reducerState.story, ...importedState.story },
       capabilities: reducerState.capabilities,
     };
+
+    await Promise.all(
+      Object.keys(mediaFileNames).map(async (fileType) => {
+        await Promise.all(
+          mediaFileNames[fileType].map(async (fileName) => {
+            const media = await files[fileName]?.async('blob');
+
+            if ('image' === fileType && media) {
+              const mediaItem = await getStoryAdImageMediaData(media);
+
+              const elementIndex = stateToRestore.pages[0].elements.findIndex(
+                (element) => element?.resource?.src === fileName
+              );
+              stateToRestore.pages[0].elements[elementIndex].resource.src =
+                mediaItem.src;
+
+              mediaItems.push(mediaItem);
+            }
+          })
+        );
+      })
+    );
+
+    setLocalStoryAdMedia(mediaItems);
 
     if (stateToRestore.storyAd) {
       updateCTALink(stateToRestore.storyAd.ctaLink);

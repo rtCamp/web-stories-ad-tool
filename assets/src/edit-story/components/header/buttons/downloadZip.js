@@ -61,16 +61,8 @@ function DownloadZip() {
     actions: { updateIsDownloadingStatus },
   } = useAdStory();
 
-  const currentPage = pages[0];
-
-  const storyData = {
-    current,
-    selection,
-    story: { globalStoryStyles: story?.globalStoryStyles },
-    version: DATA_VERSION,
-    pages,
-    storyAd: { ctaLink, ctaText, landingPageType },
-  };
+  // Deep clone page object.
+  const currentPage = pages[0] ? JSON.parse(JSON.stringify(pages[0])) : {};
 
   const zipStoryAd = async (storyContent) => {
     let markup = `<!doctype html>${storyContent}`;
@@ -87,8 +79,6 @@ function DownloadZip() {
 
     const zip = new JSZip();
 
-    zip.file('config.json', JSON.stringify(storyData));
-
     await Promise.all(
       Object.keys(elements).map(async (mediaType) => {
         const mediaElements = elements[mediaType];
@@ -96,7 +86,7 @@ function DownloadZip() {
         if (mediaElements.length) {
           await Promise.all(
             mediaElements.map(async (mediaElement, index) => {
-              const { src, mimeType } = mediaElement.resource;
+              const { src, mimeType, id } = mediaElement.resource;
               const extension = COMMON_MIME_TYPE_MAPPING[mimeType];
 
               if (!extension) {
@@ -121,6 +111,14 @@ function DownloadZip() {
               const fileName = `${mediaType}-${index + 1}.${extension}`;
               const file = new File([respBlob], fileName);
 
+              const elementIndex = currentPage.elements.findIndex(
+                (element) => element?.resource?.id === id
+              );
+
+              if (elementIndex) {
+                currentPage.elements[elementIndex].resource.src = fileName;
+              }
+
               const encodedUrl = src.replaceAll('&', '&amp;'); // To match url in the rendered markup.
               markup = markup.replace(encodedUrl, fileName);
 
@@ -130,6 +128,17 @@ function DownloadZip() {
         }
       })
     );
+
+    const storyData = {
+      current,
+      selection,
+      story: { globalStoryStyles: story?.globalStoryStyles },
+      version: DATA_VERSION,
+      pages: [currentPage],
+      storyAd: { ctaLink, ctaText, landingPageType },
+    };
+
+    zip.file('config.json', JSON.stringify(storyData));
 
     const readMeText = `
     In order to view or test this ad as a standalone AMP page locally before uploading it to your platform, it needs to be run on any https-enabled server. For example, you may use the "Web Server for Chrome" chrome extension and view the ad by enabling its HTTPS option.
