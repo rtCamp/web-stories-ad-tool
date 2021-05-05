@@ -72,55 +72,6 @@ export const TIPS = {
       ),
     ],
   },
-  [KEYS.PREVIEW_STORY]: {
-    title: __('Preview your Web Story', 'web-stories'),
-    figureSrc: 'images/help-center/preview_module_5',
-    description: [
-      __(
-        'Use Preview Mode to view your Story before publishing.',
-        'web-stories'
-      ),
-      __(
-        'Make sure buttons, links, logos, and text aren’t too close to the edge of your screen and that no Story element overlaps with the navigation bar.',
-        'web-stories'
-      ),
-    ],
-  },
-  [KEYS.ADD_LINKS]: {
-    title: __('Add links to Story elements', 'web-stories'),
-    figureSrc: 'images/help-center/add_link_module_6',
-    description: [
-      __(
-        'Go to the Design tab. Scroll down to <strong>Links</strong> and enter a URL. To remove a link, select the "X" <screenreader> (clear)</screenreader> button next to the URL box.',
-        'web-stories'
-      ),
-    ],
-  },
-  [KEYS.ENABLE_SWIPE]: {
-    title: __('Enable swipe-up option', 'web-stories'),
-    figureSrc: 'images/help-center/page_attachment_module_7',
-    description: [
-      __(
-        'Go to the Design tab. Navigate to <strong>Page Attachment</strong> and enter a web address and a call to action to describe the link.',
-        'web-stories'
-      ),
-    ],
-  },
-  [KEYS.EMBED_WEB_STORIES]: {
-    title: __('Embed Web Stories', 'web-stories'),
-    /* TODO #7212 `figureSrcImg` and `figureAlt` are temporary until
-    we get an animation. Once we have the animation then these
-    attributes should be removed. */
-    figureSrcImg: 'images/help-center/story_embed_module_1',
-    figureAlt: __('Embed web story graphic', 'web-stories'),
-    description: [
-      __(
-        'When you create a new post in WordPress, you can embed any of your Stories. <a>Learn more</a>',
-        'web-stories'
-      ),
-    ],
-    href: __('https://wp.stories.google/docs/', 'web-stories'),
-  },
 };
 
 export const DONE_TIP_ENTRY = [

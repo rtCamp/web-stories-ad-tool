@@ -21,3 +21,4 @@ phpcs.xml
 phpunit.xml
 phpunit-multisite.xml
 /dist
+/index.html
