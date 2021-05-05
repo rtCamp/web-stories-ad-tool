@@ -35,9 +35,9 @@ const sharedConfig = {
   mode,
   devtool: !isProduction ? 'source-map' : undefined,
   output: {
-    path: path.resolve(process.cwd(), 'assets', 'js'),
-    filename: '[name].js',
-    chunkFilename: '[name]-[chunkhash].js',
+    path: path.resolve(process.cwd() ),
+    filename: 'assets/js/[name].js',
+    chunkFilename: 'assets/js/[name]-[chunkhash].js',
     publicPath: '',
     /**
      * If multiple webpack runtimes (from different compilations) are used on the same webpage,
@@ -132,10 +132,10 @@ const sharedConfig = {
   plugins: [
     process.env.BUNDLE_ANALYZER && new BundleAnalyzerPlugin(),
     new MiniCssExtractPlugin({
-      filename: '../css/[name].css',
+      filename: 'assets/css/[name].css',
     }),
     new RtlCssPlugin({
-      filename: `../css/[name]-rtl.css`,
+      filename: `assets/css/[name]-rtl.css`,
     }),
     new webpack.EnvironmentPlugin({
       DISABLE_PREVENT: false,
@@ -168,59 +168,21 @@ const sharedConfig = {
   },
 };
 
-// Template for html-webpack-plugin to generate JS/CSS chunk manifests in PHP.
-const templateContent = ({ htmlWebpackPlugin }) => {
-  // Extract filename without extension from arrays of JS and CSS chunks.
-  // E.g. "../css/some-chunk.css" -> "some-chunk"
-  const filenameOf = (pathname) =>
-    pathname.substr(pathname.lastIndexOf('/') + 1);
-
-  const chunkName = htmlWebpackPlugin.options.chunks[0];
-  const omitPrimaryChunk = (f) => f != chunkName;
-
-  const js = htmlWebpackPlugin.files.js
-    .map((pathname) => {
-      const f = filenameOf(pathname);
-      return f.substring(0, f.length - '.js'.length);
-    })
-    .filter(omitPrimaryChunk);
-
-  const css = htmlWebpackPlugin.files.css
-    .map((pathname) => {
-      const f = filenameOf(pathname);
-      return f.substring(0, f.length - '.css'.length);
-    })
-    .filter(omitPrimaryChunk);
-
-  return `<?php return array(
-    'css' => ${JSON.stringify(css)},
-    'js' => ${JSON.stringify(js)});`;
-};
-
 const editorAndDashboard = {
   ...sharedConfig,
   entry: {
     'edit-story': './assets/src/edit-story/index.js',
-    'stories-dashboard': './assets/src/dashboard/index.js',
   },
   plugins: [
     ...sharedConfig.plugins,
     new WebpackBar({
-      name: 'Editor & Dashboard',
+      name: 'Editor',
     }),
     new HtmlWebpackPlugin({
-      filename: 'edit-story.chunks.php',
-      inject: false, // Don't inject default <script> tags, etc.
-      minify: false, // PHP not HTML so don't attempt to minify.
-      templateContent,
+      inject: true, // Don't inject default <script> tags, etc.
+      minify: false,
+      template: path.resolve(process.cwd(), 'assets', 'src/edit-story/index.html'),
       chunks: ['edit-story'],
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'stories-dashboard.chunks.php',
-      inject: false, // Don't inject default <script> tags, etc.
-      minify: false, // PHP not HTML so don't attempt to minify.
-      templateContent,
-      chunks: ['stories-dashboard'],
     }),
   ],
   optimization: {
