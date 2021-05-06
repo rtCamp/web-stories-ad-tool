@@ -27,6 +27,7 @@ import { isURL } from '@wordpress/url';
  * Internal dependencies
  */
 import useAdStory from '../../app/storyAd/useAdStory';
+import { CTA_OPTIONS } from '../../constants/storyAd';
 
 // Copied style from the original cta button.
 const Link = styled.a`
@@ -57,13 +58,16 @@ function ButtonCTA() {
     state: { ctaLink, ctaText },
   } = useAdStory();
 
-  if (!isURL(ctaLink) || !ctaText) {
+  const selectedOption = CTA_OPTIONS.find((option) => option.value === ctaText);
+  const ctaButtonText = selectedOption?.label;
+
+  if (!isURL(ctaLink) || !ctaButtonText) {
     return null;
   }
 
   return (
     <Link target="_blank" href={ctaLink} rel="noreferrer">
-      {ctaText}
+      {ctaButtonText}
     </Link>
   );
 }

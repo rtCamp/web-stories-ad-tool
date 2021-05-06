@@ -27,7 +27,10 @@ import { SimplePanel } from '../../panel';
 import { DropDown, Input, PLACEMENT } from '../../../../../design-system';
 import { Row } from '../../../form';
 import useAdStory from '../../../../app/storyAd/useAdStory';
-import { ctaOptions, landPageOptions } from './selectorOptions';
+import {
+  CTA_OPTIONS,
+  LANDING_PAGE_OPTION,
+} from '../../../../constants/storyAd';
 
 const FieldRow = styled(Row)`
   margin-bottom: 12px;
@@ -62,7 +65,7 @@ function StoryAdPanel() {
       <FieldRow>
         <DropDown
           emptyText={__('No options available', 'web-stories')}
-          options={ctaOptions}
+          options={CTA_OPTIONS}
           hasError={false}
           hint={''}
           placeholder={__('Select CTA Text', 'web-stories')}
@@ -80,7 +83,7 @@ function StoryAdPanel() {
       <FieldRow>
         <DropDown
           emptyText={__('No options available', 'web-stories')}
-          options={landPageOptions}
+          options={LANDING_PAGE_OPTION}
           hasError={false}
           hint={''}
           placeholder={__('Select Landing Page Type', 'web-stories')}

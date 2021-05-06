@@ -18,7 +18,7 @@
  */
 import { __ } from '@web-stories-wp/i18n';
 
-const ctaOptions = [
+const CTA_OPTIONS = [
   {
     label: __('Apply Now', 'web-stories'),
     value: 'APPLY_NOW',
@@ -105,7 +105,7 @@ const ctaOptions = [
   },
 ];
 
-const landPageOptions = [
+const LANDING_PAGE_OPTION = [
   {
     label: __('Sponsored Story', 'web-stories'),
     value: 'STORY',
@@ -120,4 +120,4 @@ const landPageOptions = [
   },
 ];
 
-export { ctaOptions, landPageOptions };
+export { CTA_OPTIONS, LANDING_PAGE_OPTION };
