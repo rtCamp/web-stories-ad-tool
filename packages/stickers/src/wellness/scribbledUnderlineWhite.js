@@ -18,7 +18,7 @@
  */
 import PropTypes from 'prop-types';
 
-function ScribbledUnderline({ style }) {
+function ScribbledUnderlineWhite({ style }) {
   return (
     <svg
       style={style}
@@ -34,11 +34,11 @@ function ScribbledUnderline({ style }) {
   );
 }
 
-ScribbledUnderline.propTypes = {
+ScribbledUnderlineWhite.propTypes = {
   style: PropTypes.object,
 };
 
 export default {
   aspectRatio: 182 / 11,
-  svg: ScribbledUnderline,
+  svg: ScribbledUnderlineWhite,
 };

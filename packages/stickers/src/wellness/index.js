@@ -17,6 +17,7 @@
  * Internal dependencies
  */
 import { default as scribbledUnderline } from './scribbledUnderline';
+import { default as scribbledUnderlineWhite } from './scribbledUnderlineWhite';
 import { default as scribbledUnderline2 } from './scribbledUnderline2';
 import { default as scribbledArrow } from './scribbledArrow';
 import { default as curvedArrow } from './curvedArrow';
@@ -30,6 +31,7 @@ import { default as homeWorkoutShape } from './home-workout/shape';
 
 export {
   scribbledUnderline,
+  scribbledUnderlineWhite,
   scribbledUnderline2,
   scribbledArrow,
   curvedArrow,
