@@ -29,21 +29,40 @@ import {
   UploadDropTargetMessage,
   UploadDropTargetOverlay,
 } from '../uploadDropTarget';
+import getStoryAdImageMediaData from '../../app/media/utils/getStoryAdImageMediaData';
+import { useMedia } from '../../app';
 
 import { Layer as CanvasLayer, PageArea } from './layout';
-import useUploadWithPreview from './useUploadWithPreview';
 
 const MESSAGE_ID = 'edit-story-canvas-upload-message';
 
 function CanvasUploadDropTarget({ children }) {
-  const uploadWithPreview = useUploadWithPreview();
+  const { localStoryAdMedia: media, setLocalStoryAdMedia } = useMedia(
+    ({
+      local: {
+        state: { localStoryAdMedia },
+        actions: { setLocalStoryAdMedia },
+      },
+    }) => ({
+      localStoryAdMedia,
+      setLocalStoryAdMedia,
+    })
+  );
+
   const onDropHandler = useCallback(
-    (files) => {
-      if (files && files.length > 0) {
-        uploadWithPreview(files);
-      }
+    async (files) => {
+      const mediaItems = [...media];
+
+      await Promise.all(
+        files.map(async (file) => {
+          const mediaData = await getStoryAdImageMediaData(file);
+          mediaItems.push(mediaData);
+        })
+      );
+
+      setLocalStoryAdMedia(mediaItems);
     },
-    [uploadWithPreview]
+    [media, setLocalStoryAdMedia]
   );
   return (
     <UploadDropTarget onDrop={onDropHandler} labelledBy={MESSAGE_ID}>
