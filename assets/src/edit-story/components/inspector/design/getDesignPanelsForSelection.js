@@ -112,7 +112,7 @@ function getDesignPanelsForSelection(elements) {
     .map((type) => {
       switch (type) {
         case PanelTypes.ANIMATION:
-          return null;
+          return { type, Panel: AnimationPanel };
         case PanelTypes.PAGE_BACKGROUND:
           // Only display when isBackground.
           return null;
