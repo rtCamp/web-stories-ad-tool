@@ -200,6 +200,7 @@
     "webpack": "^4.46.0",
     "webpack-bundle-analyzer": "^4.3.0",
     "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2",
     "webpackbar": "^4.0.0"
   },
   "scripts": {
@@ -208,7 +209,7 @@
     "build:js": "NODE_ENV=production webpack --config webpack.config.cjs",
     "postbuild:js": "rm -rf assets/js/web-stories-list-styles* assets/js/web-stories-theme-style*",
     "predev": "rm -rf assets/css/* assets/js/*",
-    "dev": "webpack --config webpack.config.cjs --watch",
+    "dev": "webpack serve --config webpack.config.cjs --progress",
     "postdev": "rm -rf assets/js/web-stories-list-styles* assets/js/web-stories-theme-style*",
     "env:start": "./bin/local-env/start.sh",
     "env:stop": "./bin/local-env/stop.sh",
