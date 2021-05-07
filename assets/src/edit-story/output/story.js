@@ -41,6 +41,11 @@ function OutputStory({ pages, storyAd }) {
           content="width=device-width,minimum-scale=1,initial-scale=1"
         />
         <script async src="https://cdn.ampproject.org/amp4ads-v0.js" />
+        <script
+          async
+          custom-element="amp-animation"
+          src="https://cdn.ampproject.org/v0/amp-animation-0.1.js"
+        />
         {fontDeclarations.map((url) => (
           <link key={url} href={url} rel="stylesheet" />
         ))}
