@@ -24,8 +24,9 @@ import * as fashionStickers from './fashion';
 import * as fitnessStickers from './fitness';
 import * as travelStickers from './travel';
 import * as wellbeingStickers from './wellbeing';
-import * as cookingStickersV2 from './cooking-02';
-import * as wellnessStickers from './wellness';
+import * as guideTobakingBreadStrickers from './beginers-guide-to-baking-bread';
+import * as sangriaArtichokeStickers from './sangria-artichoke';
+import * as crispyChickenThighStickers from './crispy-chicken-thigh';
 
 export default {
   ...beautyStickers,
@@ -36,6 +37,7 @@ export default {
   ...fitnessStickers,
   ...travelStickers,
   ...wellbeingStickers,
-  ...cookingStickersV2,
-  ...wellnessStickers,
+  ...guideTobakingBreadStrickers,
+  ...sangriaArtichokeStickers,
+  ...crispyChickenThighStickers,
 };
