@@ -25,11 +25,12 @@ import * as fashionStickers from './fashion';
 import * as fitnessStickers from './fitness';
 import { default as travelStickers } from './travel';
 import * as wellbeingStickers from './wellbeing';
-import * as cookingStickersV2 from './cooking-02';
-import * as wellnessStickers from './wellness';
 import * as artsAndCraftStickers from './arts-and-craft';
 import { default as technologyStickers } from './technology';
 import { default as homeGardenStickers } from './home-garden';
+import * as guideTobakingBreadStrickers from './beginers-guide-to-baking-bread';
+import * as sangriaArtichokeStickers from './sangria-artichoke';
+import * as crispyChickenThighStickers from './crispy-chicken-thigh';
 
 export default {
   sample,
@@ -41,9 +42,10 @@ export default {
   ...fitnessStickers,
   ...travelStickers,
   ...wellbeingStickers,
-  ...cookingStickersV2,
-  ...wellnessStickers,
   ...artsAndCraftStickers,
   ...technologyStickers,
   ...homeGardenStickers,
+  ...guideTobakingBreadStrickers,
+  ...sangriaArtichokeStickers,
+  ...crispyChickenThighStickers,
 };
