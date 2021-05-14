@@ -16,8 +16,6 @@
 /**
  * Internal dependencies
  */
-import * as appStickers from './apps';
+import { default as homeWorkoutShape } from './shape';
 
-export default {
-  ...appStickers,
-};
+export { homeWorkoutShape };
