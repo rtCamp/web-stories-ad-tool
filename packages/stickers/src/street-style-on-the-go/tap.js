@@ -18,29 +18,25 @@
  */
 import PropTypes from 'prop-types';
 
-function Dough({ style }) {
+function FashionTap({ style }) {
   return (
     <svg
       style={style}
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 47 21"
+      viewBox="0 0 50 50"
       fill="none"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      <path
-        d="M16.6458 6.87563C16.8125 8.5 20.3125 9.5 23.3125 8.5M13.9792 20H33.3125C37.3125 20 45.3125 18.95 45.3125 14.7499C45.3125 9.49975 37.3125 2.28173 31.3125 2.28173C25.3125 2.28173 17.3125 -0.999746 9.3125 2.93842C5.09625 5.01396 1.3125 10.1547 1.3125 13.4361C1.3125 16.7174 2.64583 20 13.9792 20Z"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
+      <circle opacity="0.7" cx="25" cy="25" r="25" fill="#70FFA9" />
+      <circle cx="25" cy="25" r="11.9048" fill="white" />
     </svg>
   );
 }
 
-Dough.propTypes = {
+FashionTap.propTypes = {
   style: PropTypes.object,
 };
 
 export default {
-  aspectRatio: 47 / 21,
-  svg: Dough,
+  aspectRatio: 50 / 50,
+  svg: FashionTap,
 };

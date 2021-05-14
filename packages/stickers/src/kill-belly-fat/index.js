@@ -16,12 +16,6 @@
 /**
  * Internal dependencies
  */
-import { default as breadBun } from './breadBun';
-import { default as yeastPackage } from './yeastPackage';
-import { default as thermoStat } from './thermoStat';
-import { default as jar } from './jar';
-import { default as dough } from './dough';
-import { default as flourBag } from './flourBag';
-import { default as flourBowl } from './flourBowl';
+import { default as homeWorkoutShape } from './shape';
 
-export { breadBun, yeastPackage, thermoStat, jar, dough, flourBag, flourBowl };
+export { homeWorkoutShape };

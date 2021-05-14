@@ -16,16 +16,6 @@
 /**
  * Internal dependencies
  */
-import { default as travelFacebookIcon } from './facebookIcon';
-import { default as travelInstagramIcon } from './instagramIcon';
-import { default as travelMap } from './mapFill';
-import { default as travelTwitterIcon } from './twitterIcon';
-import { default as travelYouTubeIcon } from './youTubeIcon';
+import { default as heptagram } from './heptagram';
 
-export {
-  travelFacebookIcon,
-  travelInstagramIcon,
-  travelMap,
-  travelTwitterIcon,
-  travelYouTubeIcon,
-};
+export { heptagram };

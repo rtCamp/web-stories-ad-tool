@@ -16,8 +16,6 @@
 /**
  * Internal dependencies
  */
-import * as appStickers from './apps';
+import { default as fashionTap } from './tap';
 
-export default {
-  ...appStickers,
-};
+export { fashionTap };
