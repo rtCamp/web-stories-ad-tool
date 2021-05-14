@@ -16,8 +16,6 @@
 /**
  * Internal dependencies
  */
-import * as techniqueStickers from './technique';
+import { default as fashionTap } from './tap';
 
-export default {
-  ...techniqueStickers,
-};
+export { fashionTap };

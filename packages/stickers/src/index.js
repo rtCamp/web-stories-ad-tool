@@ -22,12 +22,16 @@ import * as diyStickers from './diy';
 import * as entertainmentStickers from './entertainment';
 import * as fashionStickers from './fashion';
 import * as fitnessStickers from './fitness';
-import { default as travelStickers } from './travel';
+import * as travelStickers from './travel';
 import * as wellbeingStickers from './wellbeing';
-import * as wellnessStickers from './wellness';
-import * as artsAndCraftStickers from './arts-and-craft';
-import { default as technologyStickers } from './technology';
-import { default as homeGardenStickers } from './home-garden';
+import * as almondosFilmsStickers from './women-in-almondos-films';
+import * as bestPizzaInNYCStickers from './best-pizza-in-nyc';
+import * as twelveHoursInBarcelonaStickers from './12-hours-in-barcelona';
+import * as bestFitnessAppsStickers from './best-fitness-apps';
+import * as streetStyleOnTheGoStickers from './street-style-on-the-go';
+import * as plantBasedDyesStickers from './plant-based-dyes';
+import * as indoorGardenOasisStickers from './indoor-garden-oasis';
+import * as killBellyFatStickers from './kill-belly-fat';
 
 export default {
   ...beautyStickers,
@@ -38,8 +42,12 @@ export default {
   ...fitnessStickers,
   ...travelStickers,
   ...wellbeingStickers,
-  ...wellnessStickers,
-  ...artsAndCraftStickers,
-  ...technologyStickers,
-  ...homeGardenStickers,
+  ...almondosFilmsStickers,
+  ...bestPizzaInNYCStickers,
+  ...twelveHoursInBarcelonaStickers,
+  ...bestFitnessAppsStickers,
+  ...streetStyleOnTheGoStickers,
+  ...plantBasedDyesStickers,
+  ...indoorGardenOasisStickers,
+  ...killBellyFatStickers,
 };
