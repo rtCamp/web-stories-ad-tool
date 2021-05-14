@@ -21,7 +21,6 @@ import { default as fashionArrowLight } from './arrowLight';
 import { default as fashionStarburst } from './starburst';
 import { default as fashionStarburstSolid } from './starburstSolid';
 import { default as fashionStarburstWithArrow } from './starburstWithArrow';
-import { default as fashionTap } from './tap';
 
 export {
   fashionArrowDark,
@@ -29,5 +28,4 @@ export {
   fashionStarburst,
   fashionStarburstSolid,
   fashionStarburstWithArrow,
-  fashionTap,
 };
