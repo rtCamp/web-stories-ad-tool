@@ -16,6 +16,6 @@
 /**
  * Internal dependencies
  */
-import { default as homeWorkoutShape } from './home-workout/shape';
+import { default as heptagram } from './heptagram';
 
-export { homeWorkoutShape };
+export { heptagram };
