@@ -23,6 +23,7 @@ import PropTypes from 'prop-types';
  * Internal dependencies
  */
 import StoryPropTypes from '../types';
+import getUsedAmpExtensions from './utils/getUsedAmpExtensions';
 import CustomCSS from './utils/styles';
 import getFontDeclarations from './utils/getFontDeclarations';
 import OutputPage from './page';
@@ -31,6 +32,7 @@ function OutputStory({ pages, storyAd }) {
   const fontDeclarations = getFontDeclarations(pages);
 
   const { ctaLink, ctaText, landingPageType } = storyAd || {};
+  const ampExtensions = getUsedAmpExtensions(pages);
 
   return (
     <html amp4ads="" lang="en">
@@ -40,12 +42,9 @@ function OutputStory({ pages, storyAd }) {
           name="viewport"
           content="width=device-width,minimum-scale=1,initial-scale=1"
         />
-        <script async src="https://cdn.ampproject.org/amp4ads-v0.js" />
-        <script
-          async
-          custom-element="amp-animation"
-          src="https://cdn.ampproject.org/v0/amp-animation-0.1.js"
-        />
+        {ampExtensions.map(({ name, src }) => (
+          <script key={src} async="async" src={src} custom-element={name} />
+        ))}
         {fontDeclarations.map((url) => (
           <link key={url} href={url} rel="stylesheet" />
         ))}

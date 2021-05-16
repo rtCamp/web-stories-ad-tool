@@ -25,32 +25,28 @@
 /**
  * Goes through all pages in a story to find the needed AMP extensions for them.
  *
- * Always includes the runtime as well as the amp-story extension.
+ * Always includes the amp4ads as runtime.
  *
  * @param {Array} pages List of pages.
  * @return {Array<Extension>} List of used AMP extensions.
  */
 const getUsedAmpExtensions = (pages) => {
   const extensions = [
-    // runtime.
-    { src: 'https://cdn.ampproject.org/v0.js' },
-    {
-      name: 'amp-story',
-      src: 'https://cdn.ampproject.org/v0/amp-story-1.0.js',
-    },
+    // amp4ads as runtime.
+    { src: 'https://cdn.ampproject.org/amp4ads-v0.js' },
   ];
 
-  const ampVideo = {
-    name: 'amp-video',
-    src: 'https://cdn.ampproject.org/v0/amp-video-0.1.js',
+  const ampAnimation = {
+    name: 'amp-animation',
+    src: 'https://cdn.ampproject.org/v0/amp-animation-0.1.js',
   };
 
   for (const { elements } of pages) {
     for (const { type } of elements) {
       switch (type) {
         // Todo: eventually check for amp-fit-text if ever added.
-        case 'video':
-          extensions.push(ampVideo);
+        case 'animations':
+          extensions.push(ampAnimation);
           break;
         default:
           break;
