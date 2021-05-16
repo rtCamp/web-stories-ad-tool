@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 import { getTimeTracker } from '@web-stories-wp/tracking';
 
 /**
@@ -66,6 +66,8 @@ export default function useContextValueProvider(reducerState, reducerActions) {
   const {
     actions: { getMedia, updateMedia },
   } = useAPI();
+
+  const [localStoryAdMedia, setLocalStoryAdMedia] = useState([]);
 
   const fetchMedia = useCallback(
     (
@@ -191,6 +193,7 @@ export default function useContextValueProvider(reducerState, reducerActions) {
       ...reducerState,
       isUploading,
       isTranscoding,
+      localStoryAdMedia,
     },
     actions: {
       setNextPage,
@@ -203,6 +206,7 @@ export default function useContextValueProvider(reducerState, reducerActions) {
       deleteMediaElement,
       updateMediaElement,
       optimizeVideo,
+      setLocalStoryAdMedia,
     },
   };
 }
