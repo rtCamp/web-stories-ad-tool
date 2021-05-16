@@ -41,12 +41,20 @@ const getUsedAmpExtensions = (pages) => {
     src: 'https://cdn.ampproject.org/v0/amp-animation-0.1.js',
   };
 
+  const ampVideo = {
+    name: 'amp-video',
+    src: 'https://cdn.ampproject.org/v0/amp-video-0.1.js',
+  };
+
   for (const { elements } of pages) {
     for (const { type } of elements) {
       switch (type) {
         // Todo: eventually check for amp-fit-text if ever added.
         case 'animations':
           extensions.push(ampAnimation);
+          break;
+        case 'video':
+          extensions.push(ampVideo);
           break;
         default:
           break;
