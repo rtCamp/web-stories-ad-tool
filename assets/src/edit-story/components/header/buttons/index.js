@@ -45,40 +45,21 @@ const Space = styled.div`
   width: 8px;
 `;
 
-const Spinner = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-`;
-
-const IconWithSpinner = styled.div`
-  position: relative;
-  width: ${LOADER_SIZE}px;
-  height: ${LOADER_SIZE}px;
-`;
-
 function Loading() {
   const {
     state: { isDownloading },
   } = useAdStory();
 
-  return (
-    isDownloading && (
-      <Spinner>
-        <CircularProgress size={LOADER_SIZE} />
-      </Spinner>
-    )
-  );
+  return isDownloading && <CircularProgress size={LOADER_SIZE} />;
 }
 
 function Buttons() {
   return (
     <ButtonList>
       <List>
-        <IconWithSpinner>
-          <Preview />
-          <Loading />
-        </IconWithSpinner>
+        <Loading />
+        <Space />
+        <Preview />
         <Space />
         <DownloadZip />
         <Space />
@@ -86,4 +67,5 @@ function Buttons() {
     </ButtonList>
   );
 }
+
 export default Buttons;
