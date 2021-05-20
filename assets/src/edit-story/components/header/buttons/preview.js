@@ -74,7 +74,10 @@ function Preview() {
    */
   const openPreviewLink = useCallback(() => {
     localStorage.setItem(STORAGE_NAME, markup);
-    window.open(window.location.origin + '/preview', PREVIEW_TARGET);
+    window.open(
+      window.location.origin + window.location.pathname + 'preview',
+      PREVIEW_TARGET
+    );
   }, [markup]);
 
   const label = __('Preview', 'web-stories');
