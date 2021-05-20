@@ -48,7 +48,7 @@ import paneId from './paneId';
 import ProviderTab from './providerTab';
 
 const ProviderTabSection = styled.div`
-  display: none;
+  display: flex;
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 16px;
