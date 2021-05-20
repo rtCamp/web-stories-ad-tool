@@ -26,6 +26,7 @@ const RtlCssPlugin = require('rtlcss-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const CopyPlugin = require("copy-webpack-plugin");
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const isProduction = process.env.NODE_ENV === 'production';
@@ -185,6 +186,11 @@ const editorAndDashboard = {
       minify: false,
       template: path.resolve(process.cwd(), 'assets', 'src/edit-story/index.html'),
       chunks: ['edit-story'],
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: "preview", to: "preview" },
+      ],
     }),
   ],
   optimization: {
