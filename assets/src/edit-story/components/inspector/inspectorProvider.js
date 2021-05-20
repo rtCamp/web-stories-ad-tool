@@ -105,7 +105,7 @@ function InspectorProvider({ children }) {
         },
         {
           id: DOCUMENT,
-          title: __('Meta', 'web-stories'),
+          title: __('CTA', 'web-stories'),
           Pane: DocumentInspector,
         },
       ],
