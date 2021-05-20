@@ -189,7 +189,8 @@ const editorAndDashboard = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: "preview", to: "preview" }
+        { from: "preview", to: "preview" },
+        { from: "favicon.ico", to: "" }
       ],
     }),
   ],
