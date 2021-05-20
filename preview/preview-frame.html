@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+	<title>Generating Preview..</title>
+	<style>
+		#loading-text {
+			text-align: center;
+			font-size: 30px;
+			color: #dfdfdf;
+		}
+	</style>
+	<script>
+      function newContent() {
+        const content = localStorage.getItem( 'previewMarkup' );
+
+        if ( content ) {
+          document.open();
+          document.write( content );
+          document.close();
+        } else {
+          document.getElementById( 'loading-text' ).textContent = document.title = 'Preview Expired';
+        }
+      }
+	</script>
+</head>
+<body onload="newContent();">
+	<p id="loading-text">Generating Preview..</p>
+</body>
+</html>
