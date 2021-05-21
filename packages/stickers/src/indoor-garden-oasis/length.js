@@ -16,8 +16,10 @@
 /**
  * External dependencies
  */
+import { _x } from '@web-stories-wp/i18n';
 import PropTypes from 'prop-types';
 
+const title = _x('Leaf Length', 'sticker name', 'web-stories');
 function HomeGardenLength({ style }) {
   return (
     <svg
@@ -26,6 +28,7 @@ function HomeGardenLength({ style }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>{title}</title>
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -43,4 +46,5 @@ HomeGardenLength.propTypes = {
 export default {
   aspectRatio: 44 / 60,
   svg: HomeGardenLength,
+  title,
 };

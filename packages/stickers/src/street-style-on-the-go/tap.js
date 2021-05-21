@@ -16,7 +16,10 @@
 /**
  * External dependencies
  */
+import { _x } from '@web-stories-wp/i18n';
 import PropTypes from 'prop-types';
+
+const title = _x('Tap', 'sticker name', 'web-stories');
 
 function FashionTap({ style }) {
   return (
@@ -26,6 +29,7 @@ function FashionTap({ style }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>{title}</title>
       <circle opacity="0.7" cx="25" cy="25" r="25" fill="#70FFA9" />
       <circle cx="25" cy="25" r="11.9048" fill="white" />
     </svg>
@@ -39,4 +43,5 @@ FashionTap.propTypes = {
 export default {
   aspectRatio: 50 / 50,
   svg: FashionTap,
+  title,
 };
