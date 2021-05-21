@@ -30,6 +30,7 @@ import * as stayAtAceHotelKyotoStickers from './stay-at-ace-hotel-kyoto';
 import * as videoCallsSavedTheDayStickers from './how-video-calls-saved-the-day';
 import * as pickTheRightLaptopStickers from './pick-the-right-laptop';
 import * as quizForYourBestSkinStickers from './quiz-for-your-best-skin';
+import * as atHomeOfficeStickers from './diy-budget-friendly-home-office';
 
 export default {
   ...beautyStickers,
@@ -46,4 +47,5 @@ export default {
   ...videoCallsSavedTheDayStickers,
   ...pickTheRightLaptopStickers,
   ...quizForYourBestSkinStickers,
+  ...atHomeOfficeStickers,
 };
