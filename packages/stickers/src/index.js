@@ -25,6 +25,7 @@ import * as fitnessStickers from './fitness';
 import * as travelStickers from './travel';
 import * as wellbeingStickers from './wellbeing';
 import * as crownSeasonsRecappedStickers from './crown-seasons-recapped';
+import * as honeymooningInItalyStickers from './honeymooning-in-italy';
 
 export default {
   ...beautyStickers,
@@ -36,4 +37,5 @@ export default {
   ...travelStickers,
   ...wellbeingStickers,
   ...crownSeasonsRecappedStickers,
+  ...honeymooningInItalyStickers,
 };
