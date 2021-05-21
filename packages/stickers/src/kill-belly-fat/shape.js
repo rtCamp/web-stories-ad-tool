@@ -16,7 +16,10 @@
 /**
  * External dependencies
  */
+import { _x } from '@web-stories-wp/i18n';
 import PropTypes from 'prop-types';
+
+const title = _x('Curved Slab', 'sticker name', 'web-stories');
 
 function HomeWorkoutShape({ style }) {
   return (
@@ -26,6 +29,7 @@ function HomeWorkoutShape({ style }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>{title}</title>
       <path
         d="M0.385451 0H0.347076V40H57.4701V0H57.2931C48.5117 3.57576 38.9056 5.54593 28.8393 5.54593C18.773 5.54593 9.16686 3.57576 0.385451 0Z"
         fill="black"
@@ -41,4 +45,5 @@ HomeWorkoutShape.propTypes = {
 export default {
   aspectRatio: 58 / 40,
   svg: HomeWorkoutShape,
+  title,
 };

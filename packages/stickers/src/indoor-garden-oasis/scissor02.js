@@ -16,7 +16,10 @@
 /**
  * External dependencies
  */
+import { _x } from '@web-stories-wp/i18n';
 import PropTypes from 'prop-types';
+
+const title = _x('Curved Scissors', 'sticker name', 'web-stories');
 
 function HomeGardenScissor02({ style }) {
   return (
@@ -26,6 +29,7 @@ function HomeGardenScissor02({ style }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>{title}</title>
       <path
         d="M16.9717 33.125C16.2578 33.4375 15.9901 34.1407 16.0794 35.3125C16.5255 38.2813 16.5255 40.9375 16.0794 44.7656C15.9009 46.0938 16.704 46.7188 17.507 46.875C17.6855 46.875 17.864 46.9531 18.0424 46.9531C19.2024 46.9531 20.5409 46.25 21.1655 44.9219C23.1286 40.625 22.504 36.4844 19.5593 33.9063C18.5778 33.125 17.5963 32.8125 16.9717 33.125ZM20.0947 44.6094C19.5594 45.7031 18.3994 46.25 17.6855 46.0938C16.9717 45.9375 16.9717 45.2344 17.0609 44.8438C17.507 40.8594 17.507 38.2032 17.0609 35.1563C16.9717 34.2969 17.1501 33.9063 17.3286 33.8282C17.5963 33.75 18.1317 33.9063 18.7563 34.4532C21.4332 36.7969 21.9686 40.625 20.0947 44.6094Z"
         fill="#235524"
@@ -49,4 +53,5 @@ HomeGardenScissor02.propTypes = {
 export default {
   aspectRatio: 26 / 50,
   svg: HomeGardenScissor02,
+  title,
 };
