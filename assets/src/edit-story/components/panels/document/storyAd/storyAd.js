@@ -38,13 +38,21 @@ const FieldRow = styled(Row)`
 
 function StoryAdPanel() {
   const {
-    actions: { updateCTALink, updateCtaText, updateLandingPageType },
-    state: { ctaLink, ctaText, landingPageType },
+    actions: {
+      updateCTALink,
+      updateCtaText,
+      updateCustomCtaText,
+      updateLandingPageType,
+    },
+    state: { ctaLink, ctaText, customCtaText, landingPageType },
   } = useAdStory();
 
   const handleCTALinkChange = (event) => {
-    const link = event.currentTarget.value;
-    updateCTALink(link);
+    updateCTALink(event.currentTarget.value);
+  };
+
+  const handleCustomCTAChange = (event) => {
+    updateCustomCtaText(event.currentTarget.value);
   };
 
   return (
@@ -79,6 +87,17 @@ function StoryAdPanel() {
           placement={PLACEMENT.BOTTOM}
         />
       </FieldRow>
+
+      {'CUSTOM_TEXT' === ctaText && (
+        <FieldRow>
+          <Input
+            value={customCtaText}
+            onChange={handleCustomCTAChange}
+            placeholder={__('Enter Custom CTA Text', 'web-stories')}
+            aria-label={__('Custom CTA Text', 'web-stories')}
+          />
+        </FieldRow>
+      )}
 
       <FieldRow>
         <DropDown

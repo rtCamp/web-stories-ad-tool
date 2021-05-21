@@ -45,6 +45,7 @@ function ImportButton() {
     actions: {
       updateCTALink,
       updateCtaText,
+      updateCustomCtaText,
       updateLandingPageType,
       updateIsImportingStatus,
     },
@@ -134,6 +135,7 @@ function ImportButton() {
     if (stateToRestore.storyAd) {
       updateCTALink(stateToRestore.storyAd.ctaLink);
       updateCtaText(stateToRestore.storyAd.ctaText);
+      updateCustomCtaText(stateToRestore.storyAd.customCtaText);
       updateLandingPageType(stateToRestore.storyAd.landingPageType);
     }
 

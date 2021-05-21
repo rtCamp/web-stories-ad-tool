@@ -57,7 +57,7 @@ function DownloadZip() {
   const { pages, current, selection, story } = reducerState;
 
   const {
-    state: { ctaLink, ctaText, landingPageType, isDownloading },
+    state: { ctaLink, ctaText, customCtaText, landingPageType, isDownloading },
     actions: { updateIsDownloadingStatus },
   } = useAdStory();
 
@@ -135,7 +135,7 @@ function DownloadZip() {
       story: { globalStoryStyles: story?.globalStoryStyles },
       version: DATA_VERSION,
       pages: [currentPage],
-      storyAd: { ctaLink, ctaText, landingPageType },
+      storyAd: { ctaLink, ctaText, customCtaText, landingPageType },
     };
 
     zip.file('config.json', JSON.stringify(storyData));
@@ -157,7 +157,7 @@ function DownloadZip() {
   };
 
   const download = async () => {
-    const storyAd = { ctaLink, ctaText, landingPageType };
+    const storyAd = { ctaLink, ctaText, customCtaText, landingPageType };
 
     updateIsDownloadingStatus(true);
 

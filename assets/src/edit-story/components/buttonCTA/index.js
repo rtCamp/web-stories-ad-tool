@@ -55,11 +55,12 @@ const Link = styled.a`
 
 function ButtonCTA() {
   const {
-    state: { ctaLink, ctaText },
+    state: { ctaLink, ctaText, customCtaText },
   } = useAdStory();
 
   const selectedOption = CTA_OPTIONS.find((option) => option.value === ctaText);
-  const ctaButtonText = selectedOption?.label;
+  const buttonText = selectedOption?.label;
+  const ctaButtonText = 'CUSTOM_TEXT' === ctaText ? customCtaText : buttonText;
 
   if (!isURL(ctaLink) || !ctaButtonText) {
     return null;

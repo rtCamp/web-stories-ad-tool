@@ -44,7 +44,7 @@ function Preview() {
     internal: { reducerState },
   } = useStory();
   const {
-    state: { ctaLink, ctaText, landingPageType },
+    state: { ctaLink, ctaText, customCtaText, landingPageType },
   } = useAdStory();
 
   const { pages, story } = reducerState;
@@ -65,7 +65,7 @@ function Preview() {
     pages,
     metadata: {},
     flags: {},
-    storyAd: { ctaLink, ctaText, landingPageType },
+    storyAd: { ctaLink, ctaText, customCtaText, landingPageType },
   });
 
   const markup = `<!doctype html>${content}`;

@@ -31,8 +31,9 @@ import OutputPage from './page';
 function OutputStory({ pages, storyAd }) {
   const fontDeclarations = getFontDeclarations(pages);
 
-  const { ctaLink, ctaText, landingPageType } = storyAd || {};
+  const { ctaLink, ctaText, customCtaText, landingPageType } = storyAd || {};
   const ampExtensions = getUsedAmpExtensions(pages);
+  const ctaType = 'CUSTOM_TEXT' === ctaText ? customCtaText : ctaText;
 
   return (
     <html amp4ads="" lang="en">
@@ -57,7 +58,7 @@ function OutputStory({ pages, storyAd }) {
         <CustomCSS />
 
         <meta name="amp-cta-url" content={ctaLink} />
-        <meta name="amp-cta-type" content={ctaText} />
+        <meta name="amp-cta-type" content={ctaType} />
         <meta name="amp-cta-landing-page-type" content={landingPageType} />
       </head>
       <body>

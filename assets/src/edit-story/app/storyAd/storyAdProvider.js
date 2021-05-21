@@ -27,7 +27,8 @@ import Context from './context';
 
 function StoryAdProvider({ children }) {
   const [ctaLink, updateCTALink] = useState('');
-  const [ctaText, updateCtaText] = useState('ORDER_NOW');
+  const [ctaText, updateCtaText] = useState('BOOK_NOW');
+  const [customCtaText, updateCustomCtaText] = useState('');
   const [landingPageType, updateLandingPageType] = useState('AMP');
   const [isImporting, updateIsImportingStatus] = useState(false);
   const [isDownloading, updateIsDownloadingStatus] = useState(false);
@@ -36,6 +37,7 @@ function StoryAdProvider({ children }) {
     actions: {
       updateCTALink,
       updateCtaText,
+      updateCustomCtaText,
       updateLandingPageType,
       updateIsImportingStatus,
       updateIsDownloadingStatus,
@@ -43,6 +45,7 @@ function StoryAdProvider({ children }) {
     state: {
       ctaLink,
       ctaText,
+      customCtaText,
       landingPageType,
       isImporting,
       isDownloading,

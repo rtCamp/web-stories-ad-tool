@@ -20,6 +20,10 @@ import { __ } from '@web-stories-wp/i18n';
 
 const CTA_OPTIONS = [
   {
+    label: __('Custom Text', 'web-stories'),
+    value: 'CUSTOM_TEXT',
+  },
+  {
     label: __('Apply Now', 'web-stories'),
     value: 'APPLY_NOW',
   },
