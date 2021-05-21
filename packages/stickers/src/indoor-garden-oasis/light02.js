@@ -16,7 +16,10 @@
 /**
  * External dependencies
  */
+import { _x } from '@web-stories-wp/i18n';
 import PropTypes from 'prop-types';
+
+const title = _x('Light', 'sticker name', 'web-stories');
 
 function HomeGardenLight02({ style }) {
   return (
@@ -26,6 +29,7 @@ function HomeGardenLight02({ style }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>{title}</title>
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -85,4 +89,5 @@ HomeGardenLight02.propTypes = {
 export default {
   aspectRatio: 42 / 38,
   svg: HomeGardenLight02,
+  title,
 };

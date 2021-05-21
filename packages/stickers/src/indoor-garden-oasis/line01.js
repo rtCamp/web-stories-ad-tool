@@ -16,7 +16,10 @@
 /**
  * External dependencies
  */
+import { _x } from '@web-stories-wp/i18n';
 import PropTypes from 'prop-types';
+
+const title = _x('Line', 'sticker name', 'web-stories');
 
 function HomeGardenLine01({ style }) {
   return (
@@ -26,6 +29,7 @@ function HomeGardenLine01({ style }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>{title}</title>
       <path
         d="M1.08797 3.49363C19.6676 0.748202 38.4117 0.551989 56.7743 2.91001C57.2697 2.96143 57.488 2.22379 57.0021 2.1403C38.576 -0.233129 19.7588 -0.0202542 1.11573 2.70976C0.614194 2.79433 0.586433 3.5782 1.08797 3.49363Z"
         fill="#235524"
@@ -41,4 +45,5 @@ HomeGardenLine01.propTypes = {
 export default {
   aspectRatio: 58 / 4,
   svg: HomeGardenLine01,
+  title,
 };

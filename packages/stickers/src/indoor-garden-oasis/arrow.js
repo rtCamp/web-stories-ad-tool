@@ -16,7 +16,10 @@
 /**
  * External dependencies
  */
+import { _x } from '@web-stories-wp/i18n';
 import PropTypes from 'prop-types';
+
+const title = _x('Arrow', 'sticker name', 'web-stories');
 
 function HomeGardenArrow({ style }) {
   return (
@@ -26,6 +29,7 @@ function HomeGardenArrow({ style }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>{title}</title>
       <path
         d="M1.82318 15.0943C17.6232 14.1943 33.4232 12.9943 49.1232 11.4943C50.6232 11.3943 50.6232 8.99435 49.1232 9.09435C33.4232 10.5943 17.6232 11.7943 1.82318 12.6943C0.323181 12.7943 0.323181 15.1943 1.82318 15.0943Z"
         fill="#FCEFAB"
@@ -49,4 +53,5 @@ HomeGardenArrow.propTypes = {
 export default {
   aspectRatio: 52 / 22,
   svg: HomeGardenArrow,
+  title,
 };

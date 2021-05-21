@@ -16,7 +16,10 @@
 /**
  * External dependencies
  */
+import { _x } from '@web-stories-wp/i18n';
 import PropTypes from 'prop-types';
+
+const title = _x('Bag', 'sticker name', 'web-stories');
 
 function HomeGardenBag({ style }) {
   return (
@@ -26,6 +29,7 @@ function HomeGardenBag({ style }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>{title}</title>
       <path
         d="M19.3719 12.8035C13.1102 12.8035 7.97003 17.9437 7.97003 24.2988C7.97003 30.6539 13.1102 35.7941 19.3719 35.7941C25.6336 35.7941 30.7738 30.6539 30.7738 24.2988C30.6803 17.9437 25.6336 12.8035 19.3719 12.8035ZM19.3719 34.7661C13.671 34.7661 8.99807 30.0932 8.99807 24.2988C8.99807 18.5044 13.671 13.8315 19.3719 13.8315C25.0728 13.8315 29.7457 18.5044 29.7457 24.2988C29.7457 30.0932 25.0728 34.7661 19.3719 34.7661Z"
         fill="#235524"
@@ -95,4 +99,5 @@ HomeGardenBag.propTypes = {
 export default {
   aspectRatio: 39 / 50,
   svg: HomeGardenBag,
+  title,
 };
