@@ -13,7 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const url = window.location.origin + window.location.pathname;
+/**
+ * Internal dependencies
+ */
+import getCurrentUrl from './utils/getCurrentUrl';
+
+const url = getCurrentUrl();
 
 // @todo Remove items not required for story ad.
 export default {

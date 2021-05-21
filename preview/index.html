@@ -75,12 +75,23 @@
 	</style>
 </head>
 <body>
-<div id="preview-container">
-	<iframe id="iframe" src="preview-frame.html" ></iframe>
-</div>
+<div id="preview-container"></div>
 <div class="overlay">
 	<div class="overlay__icon"></div>
 	<p class="overlay__text">Expand the height of your window to view this experience</p>
 </div>
+
+<script>
+  (function( loc ) {
+	var container = document.getElementById( 'preview-container' ),
+		iframe = document.createElement( 'iframe' ),
+		url = loc.origin + loc.pathname,
+		slash = url.endsWith( '/' ) ? '' : '/';
+
+    iframe.src = url + slash + 'preview-frame.html';
+    iframe.setAttribute( 'id', 'iframe' );
+    container.appendChild( iframe );
+  })( window.location )
+</script>
 </body>
 </html>

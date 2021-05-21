@@ -34,6 +34,7 @@ import {
 import Tooltip from '../../tooltip';
 import getStoryPropsToSave from '../../../app/story/utils/getStoryPropsToSave';
 import useAdStory from '../../../app/storyAd/useAdStory';
+import getCurrentUrl from '../../../utils/getCurrentUrl';
 
 const PREVIEW_TARGET = 'story-preview';
 const STORAGE_NAME = 'previewMarkup';
@@ -74,10 +75,8 @@ function Preview() {
    */
   const openPreviewLink = useCallback(() => {
     localStorage.setItem(STORAGE_NAME, markup);
-    window.open(
-      window.location.origin + window.location.pathname + 'preview',
-      PREVIEW_TARGET
-    );
+
+    window.open(getCurrentUrl() + 'preview', PREVIEW_TARGET);
   }, [markup]);
 
   const label = __('Preview', 'web-stories');
