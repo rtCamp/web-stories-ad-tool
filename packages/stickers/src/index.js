@@ -25,6 +25,7 @@ import * as noDaysOffStickers from './no-days-off';
 import * as experienceThailandStickers from './experience-thailand';
 import * as wellbeingSleepStickers from './sleep';
 import * as crownSeasonsRecappedStickers from './crown-seasons-recapped';
+import * as honeymooningInItalyStickers from './honeymooning-in-italy';
 
 export default {
   ...beautyStickers,
@@ -36,4 +37,5 @@ export default {
   ...experienceThailandStickers,
   ...wellbeingSleepStickers,
   ...crownSeasonsRecappedStickers,
+  ...honeymooningInItalyStickers,
 };
