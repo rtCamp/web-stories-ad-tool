@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { createRef, useCallback } from 'react';
+import { createRef, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { __ } from '@web-stories-wp/i18n';
 
@@ -40,7 +40,7 @@ import { PANE_PADDING } from '../../shared';
 import PaginatedMediaGallery from '../common/paginatedMediaGallery';
 import resourceList from '../../../../../utils/resourceList';
 import useLibrary from '../../../useLibrary';
-import getStoryAdImageMediaData from '../../../../../app/media/utils/getStoryAdImageMediaData';
+import getResourceFromLocalFile from '../../../../../app/media/utils/getResourceFromLocalFile';
 import { useConfig, useMedia } from '../../../../../app';
 import paneId from './paneId';
 
@@ -60,7 +60,19 @@ const PaneHeader = styled(DefaultPaneHeader)`
 function MediaPane(props) {
   const fileInputRef = createRef();
   const setNextPage = () => {};
-  const { allowedImageMimeTypes } = useConfig();
+
+  const {
+    allowedMimeTypes: {
+      image: allowedImageMimeTypes,
+      video: allowedVideoMimeTypes,
+    },
+  } = useConfig();
+
+  const allowedMimeTypes = useMemo(
+    () => [...allowedImageMimeTypes, ...allowedVideoMimeTypes],
+    [allowedImageMimeTypes, allowedVideoMimeTypes]
+  );
+
   const { localStoryAdMedia: media, setLocalStoryAdMedia } = useMedia(
     ({
       local: {
@@ -83,8 +95,9 @@ function MediaPane(props) {
 
     await Promise.all(
       [...files].map(async (file) => {
-        if (allowedImageMimeTypes.includes(file.type)) {
-          const mediaData = await getStoryAdImageMediaData(file);
+        if (allowedMimeTypes.includes(file.type)) {
+          const mediaData = await getResourceFromLocalFile(file);
+          mediaData.local = false; // this disables the UploadingIndicator
           mediaItems.push(mediaData);
         }
       })
@@ -114,8 +127,6 @@ function MediaPane(props) {
     [insertElement]
   );
 
-  const acceptedMimeTypes = allowedImageMimeTypes.join(',');
-
   return (
     <StyledPane id={paneId} {...props}>
       <PaneInner>
@@ -123,7 +134,7 @@ function MediaPane(props) {
           <FilterArea>
             <input
               type="file"
-              accept={acceptedMimeTypes}
+              accept={allowedMimeTypes}
               ref={fileInputRef}
               onChange={handleFileInput}
               hidden
