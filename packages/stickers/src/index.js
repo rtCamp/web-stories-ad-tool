@@ -28,6 +28,7 @@ import * as crownSeasonsRecappedStickers from './crown-seasons-recapped';
 import * as honeymooningInItalyStickers from './honeymooning-in-italy';
 import * as stayAtAceHotelKyotoStickers from './stay-at-ace-hotel-kyoto';
 import * as videoCallsSavedTheDayStickers from './how-video-calls-saved-the-day';
+import * as pickTheRightLaptopStickers from './pick-the-right-laptop';
 
 export default {
   ...beautyStickers,
@@ -42,4 +43,5 @@ export default {
   ...honeymooningInItalyStickers,
   ...stayAtAceHotelKyotoStickers,
   ...videoCallsSavedTheDayStickers,
+  ...pickTheRightLaptopStickers,
 };
