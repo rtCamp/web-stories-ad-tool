@@ -24,6 +24,7 @@ import * as fashionOnTheGoStickers from './fashion-on-the-go';
 import * as noDaysOffStickers from './no-days-off';
 import * as experienceThailandStickers from './experience-thailand';
 import * as wellbeingSleepStickers from './sleep';
+import * as crownSeasonsRecappedStickers from './crown-seasons-recapped';
 
 export default {
   ...beautyStickers,
@@ -34,4 +35,5 @@ export default {
   ...noDaysOffStickers,
   ...experienceThailandStickers,
   ...wellbeingSleepStickers,
+  ...crownSeasonsRecappedStickers,
 };
