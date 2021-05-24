@@ -73,7 +73,7 @@ export default {
       weekdaysInitials: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
       weekStartsOn: 1,
     },
-    allowedFileTypes: ['jpe', 'jpeg', 'jpg', 'png'],
+    allowedFileTypes: ['gif', 'jpe', 'jpeg', 'jpg', 'png', 'mp4v', 'mp4'],
     allowedImageFileTypes: ['jpe', 'jpeg', 'jpg', 'png'],
     allowedImageMimeTypes: ['image/png', 'image/jpeg'],
     allowedMimeTypes: {
