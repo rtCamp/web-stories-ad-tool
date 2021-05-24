@@ -70,6 +70,8 @@ function DownloadZip() {
     const zip = new JSZip();
 
     const mediaTypes = ['image', 'video'];
+    let mediaIndex = 1;
+
     await Promise.all(
       currentPage.elements.map(async (element) => {
         const mediaType = element.type;
@@ -77,7 +79,7 @@ function DownloadZip() {
         if (!mediaTypes.includes(mediaType)) {
           return;
         }
-        const { id } = element;
+
         const { src, mimeType, poster } = element.resource;
         const extension = COMMON_MIME_TYPE_MAPPING[mimeType];
 
@@ -85,22 +87,25 @@ function DownloadZip() {
           return;
         }
 
-        let imageSrc = src;
+        let mediaSrc = src;
 
         /**
          * Download double size image of the page ratio as unsplash image size can be very
          * large and we aren't using srcset to keep things simple for the user.
          */
         if (src.startsWith('https://images.unsplash.com')) {
-          imageSrc = addQueryArgs(src, {
+          mediaSrc = addQueryArgs(src, {
             w: PAGE_WIDTH * 2,
             h: (PAGE_WIDTH * 2) / PAGE_RATIO,
           });
         }
 
-        const resp = await fetch(imageSrc);
+        const index = mediaIndex;
+        mediaIndex++;
+
+        const resp = await fetch(mediaSrc);
         const respBlob = await resp.blob();
-        const fileName = `${mediaType}-${id}.${extension}`;
+        const fileName = `${mediaType}-${index}.${extension}`;
         const file = new File([respBlob], fileName);
 
         let posterFileName;
@@ -108,7 +113,7 @@ function DownloadZip() {
         if (poster) {
           const posterResp = await fetch(poster);
           const posterRespBlob = await posterResp.blob();
-          posterFileName = `${mediaType}-${id}-poster.jpeg`;
+          posterFileName = `${mediaType}-${index}-poster.jpeg`;
           posterFile = new File([posterRespBlob], posterFileName);
         }
 
