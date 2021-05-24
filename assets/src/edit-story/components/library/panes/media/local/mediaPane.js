@@ -91,6 +91,7 @@ function MediaPane(props) {
     }
 
     const { files } = event.target;
+
     const mediaItems = [...media];
 
     await Promise.all(

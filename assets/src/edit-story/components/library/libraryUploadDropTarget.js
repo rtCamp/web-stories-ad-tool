@@ -26,7 +26,7 @@ import { __ } from '@web-stories-wp/i18n';
  */
 import { UploadDropTarget, UploadDropTargetMessage } from '../uploadDropTarget';
 import { useMedia } from '../../app/media';
-import getStoryAdImageMediaData from '../../app/media/utils/getStoryAdImageMediaData';
+import { getResourceFromLocalFile } from '../../app/media/utils';
 
 const MESSAGE_ID = 'edit-story-library-upload-message';
 
@@ -49,7 +49,8 @@ function LibraryUploadDropTarget({ children }) {
 
       await Promise.all(
         files.map(async (file) => {
-          const mediaData = await getStoryAdImageMediaData(file);
+          const mediaData = await getResourceFromLocalFile(file);
+          mediaData.local = false; // this disables the UploadingIndicator
           mediaItems.push(mediaData);
         })
       );

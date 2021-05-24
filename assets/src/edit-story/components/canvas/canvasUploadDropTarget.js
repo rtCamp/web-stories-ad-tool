@@ -29,9 +29,9 @@ import {
   UploadDropTargetMessage,
   UploadDropTargetOverlay,
 } from '../uploadDropTarget';
-import getStoryAdImageMediaData from '../../app/media/utils/getStoryAdImageMediaData';
 import { useMedia } from '../../app';
 
+import { getResourceFromLocalFile } from '../../app/media/utils';
 import { Layer as CanvasLayer, PageArea } from './layout';
 
 const MESSAGE_ID = 'edit-story-canvas-upload-message';
@@ -55,7 +55,8 @@ function CanvasUploadDropTarget({ children }) {
 
       await Promise.all(
         files.map(async (file) => {
-          const mediaData = await getStoryAdImageMediaData(file);
+          const mediaData = await getResourceFromLocalFile(file);
+          mediaData.local = false; // this disables the UploadingIndicator
           mediaItems.push(mediaData);
         })
       );

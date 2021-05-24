@@ -32,8 +32,8 @@ import {
   BUTTON_VARIANTS,
 } from '../../../../design-system';
 import { useMedia, useStory } from '../../../app';
-import getStoryAdImageMediaData from '../../../app/media/utils/getStoryAdImageMediaData';
 import useAdStory from '../../../app/storyAd/useAdStory';
+import { getResourceFromLocalFile } from '../../../app/media/utils';
 
 const ImportButtonContainer = styled.div``;
 
@@ -108,25 +108,53 @@ function ImportButton() {
       capabilities: reducerState.capabilities,
     };
 
+    const { elements } = stateToRestore.pages[0] || {};
+
     await Promise.all(
-      Object.keys(mediaFileNames).map(async (fileType) => {
-        await Promise.all(
-          mediaFileNames[fileType].map(async (fileName) => {
-            const media = await files[fileName]?.async('blob');
+      Object.keys(files).map(async (fileName) => {
+        const currentFile = files[fileName];
 
-            if ('image' === fileType && media) {
-              const mediaItem = await getStoryAdImageMediaData(media);
-
-              const elementIndex = stateToRestore.pages[0].elements.findIndex(
-                (element) => element?.resource?.src === fileName
-              );
-              stateToRestore.pages[0].elements[elementIndex].resource.src =
-                mediaItem.src;
-
-              mediaItems.push(mediaItem);
-            }
-          })
+        const elementIndex = elements.findIndex(
+          (element) => element?.resource?.src === fileName
         );
+
+        const { resource } = elementIndex >= 0 ? elements[elementIndex] : {};
+
+        if (['image', 'video'].includes(resource?.type)) {
+          const { alt, mimeType, title, width, height } = resource;
+          const blob = await currentFile?.async('blob');
+          const mediaFile = new File([blob], currentFile.name, {
+            type: mimeType,
+          });
+
+          if (!mediaFile) {
+            return;
+          }
+
+          const mediaItem = await getResourceFromLocalFile(mediaFile);
+
+          if (mediaItem?.alt) {
+            mediaItem.alt = alt || '';
+          }
+
+          if (mediaItem?.title) {
+            mediaItem.title = title || '';
+          }
+
+          if (mediaItem?.height) {
+            mediaItem.height = height;
+          }
+
+          if (mediaItem?.width) {
+            mediaItem.width = width;
+          }
+
+          mediaItem.local = false;
+
+          elements[elementIndex].resource.src = mediaItem.src;
+
+          mediaItems.push(mediaItem);
+        }
       })
     );
 
