@@ -17,9 +17,9 @@
 /**
  * External dependencies
  */
-import { createRef, useCallback, useMemo } from 'react';
+import { useRef, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { __ } from '@web-stories-wp/i18n';
+import { __, sprintf } from '@web-stories-wp/i18n';
 
 /**
  * Internal dependencies
@@ -29,6 +29,8 @@ import {
   BUTTON_SIZES,
   BUTTON_TYPES,
   BUTTON_VARIANTS,
+  THEME_CONSTANTS,
+  Text,
 } from '../../../../../../design-system';
 import {
   MediaGalleryMessage,
@@ -42,6 +44,7 @@ import resourceList from '../../../../../utils/resourceList';
 import useLibrary from '../../../useLibrary';
 import getResourceFromLocalFile from '../../../../../app/media/utils/getResourceFromLocalFile';
 import { useConfig, useMedia } from '../../../../../app';
+import Dialog from '../../../../dialog';
 import paneId from './paneId';
 
 export const ROOT_MARGIN = 300;
@@ -57,15 +60,20 @@ const PaneHeader = styled(DefaultPaneHeader)`
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 `;
 
+const bytesToMB = (bytes) => Math.round(bytes / Math.pow(1024, 2));
+
 function MediaPane(props) {
-  const fileInputRef = createRef();
+  const fileInputRef = useRef();
   const setNextPage = () => {};
+
+  const [errorMessages, setErrorMessages] = useState([]);
 
   const {
     allowedMimeTypes: {
       image: allowedImageMimeTypes,
       video: allowedVideoMimeTypes,
     },
+    maxUpload,
   } = useConfig();
 
   const allowedMimeTypes = useMemo(
@@ -85,6 +93,37 @@ function MediaPane(props) {
     })
   );
 
+  const isValidFile = (file) => {
+    let isValid = true;
+
+    if (!allowedMimeTypes.includes(file.type)) {
+      setErrorMessages([
+        ...errorMessages,
+        __('Invalid file type', 'web-stories'),
+      ]);
+      isValid = false;
+    }
+
+    if (file.size > maxUpload) {
+      setErrorMessages([
+        ...errorMessages,
+        sprintf(
+          /* translators: first %s is the file name, second %s is the file size in MB and second %s is the upload file limit in MB */
+          __(
+            '%1$s is %2$sMB and the upload limit is %3$sMB. Please resize and try again!',
+            'web-stories'
+          ),
+          file.name,
+          bytesToMB(file.size),
+          bytesToMB(maxUpload)
+        ),
+      ]);
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
   const handleFileInput = async (event) => {
     if (!event.target.files.length) {
       return;
@@ -96,7 +135,7 @@ function MediaPane(props) {
 
     await Promise.all(
       [...files].map(async (file) => {
-        if (allowedMimeTypes.includes(file.type)) {
+        if (isValidFile(file)) {
           const mediaData = await getResourceFromLocalFile(file);
           mediaData.local = false; // this disables the UploadingIndicator
           mediaItems.push(mediaData);
@@ -105,6 +144,7 @@ function MediaPane(props) {
     );
 
     setLocalStoryAdMedia(mediaItems);
+    fileInputRef.current.value = '';
   };
 
   const { insertElement } = useLibrary((state) => ({
@@ -127,6 +167,10 @@ function MediaPane(props) {
     },
     [insertElement]
   );
+
+  const closeDialog = () => {
+    setErrorMessages([]);
+  };
 
   return (
     <StyledPane id={paneId} {...props}>
@@ -171,6 +215,22 @@ function MediaPane(props) {
           />
         )}
       </PaneInner>
+      <Dialog
+        open={errorMessages.length > 0}
+        onClose={closeDialog}
+        title={__('Error uploading file', 'web-stories')}
+        primaryText={__('Close', 'web-stories')}
+        onPrimary={closeDialog}
+      >
+        {errorMessages.map((message, index) => (
+          <Text
+            key={index}
+            size={THEME_CONSTANTS.TYPOGRAPHY.PRESET_SIZES.SMALL}
+          >
+            {message}
+          </Text>
+        ))}
+      </Dialog>
     </StyledPane>
   );
 }
