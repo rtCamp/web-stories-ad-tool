@@ -26,6 +26,7 @@ export const LOCAL_STORAGE_PREFIX = {
   VIDEO_OPTIMIZATION_DIALOG_DISMISSED:
     'web_stories_video_optimization_dialog_dismissed',
   HELP_CENTER: 'web_stories_help_center',
+  PREVIEW_MARKUP: 'preview_markup',
 };
 
 function getItemByKey(key) {

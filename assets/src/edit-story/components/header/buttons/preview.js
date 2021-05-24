@@ -35,9 +35,9 @@ import Tooltip from '../../tooltip';
 import getStoryPropsToSave from '../../../app/story/utils/getStoryPropsToSave';
 import useAdStory from '../../../app/storyAd/useAdStory';
 import getCurrentUrl from '../../../utils/getCurrentUrl';
+import { LOCAL_STORAGE_PREFIX } from '../../../utils/localStore';
 
 const PREVIEW_TARGET = 'story-preview';
-const STORAGE_NAME = 'previewMarkup';
 
 function Preview() {
   const {
@@ -50,7 +50,7 @@ function Preview() {
   const { pages, story } = reducerState;
 
   const onUnload = () => {
-    localStorage.removeItem(STORAGE_NAME);
+    localStorage.removeItem(LOCAL_STORAGE_PREFIX.PREVIEW_MARKUP);
   };
 
   useEffect(() => {
@@ -74,7 +74,7 @@ function Preview() {
    * Open a preview of the story.
    */
   const openPreviewLink = useCallback(() => {
-    localStorage.setItem(STORAGE_NAME, markup);
+    localStorage.setItem(LOCAL_STORAGE_PREFIX.PREVIEW_MARKUP, markup);
 
     window.open(getCurrentUrl() + 'preview', PREVIEW_TARGET);
   }, [markup]);

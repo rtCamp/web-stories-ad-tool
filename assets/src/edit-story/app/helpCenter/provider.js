@@ -85,7 +85,9 @@ const deriveInitialState = composeEffects([
   deriveInitialUnreadTipsCount,
 ]);
 
-const persisted = localStore.getItemByKey(LOCAL_STORAGE_PREFIX.HELP_CENTER);
+// It was requested to show help center on each page load which is a little weird.
+// Keeping related code intact for now, in case we need to go back to previous state.
+const persisted = false;
 
 export const initialState = {
   isOpen: false,
