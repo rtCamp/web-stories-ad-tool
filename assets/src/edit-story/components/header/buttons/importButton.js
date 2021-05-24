@@ -84,19 +84,6 @@ function ImportButton() {
 
     const files = await JSZip.loadAsync(file).then((content) => content.files);
 
-    const fileNames = Object.keys(files);
-    const mediaFileNames = {
-      image: [],
-    };
-
-    fileNames.forEach((fileName) => {
-      Object.keys(mediaFileNames).forEach((fileType) => {
-        if (0 === fileName.indexOf(fileType + '-')) {
-          mediaFileNames[fileType].push(fileName);
-        }
-      });
-    });
-
     const mediaItems = [...localStoryAdMedia];
 
     const configData = await files['config.json'].async('text');
@@ -111,7 +98,7 @@ function ImportButton() {
     const { elements } = stateToRestore.pages[0] || {};
 
     await Promise.all(
-      Object.keys(files).map(async (fileName) => {
+      Object.keys(files).map(async (fileName, index) => {
         const currentFile = files[fileName];
 
         const elementIndex = elements.findIndex(
@@ -121,7 +108,7 @@ function ImportButton() {
         const { resource } = elementIndex >= 0 ? elements[elementIndex] : {};
 
         if (['image', 'video'].includes(resource?.type)) {
-          const { alt, mimeType, title, width, height } = resource;
+          const { mimeType } = resource;
           const blob = await currentFile?.async('blob');
           const mediaFile = new File([blob], currentFile.name, {
             type: mimeType,
@@ -131,27 +118,14 @@ function ImportButton() {
             return;
           }
 
-          const mediaItem = await getResourceFromLocalFile(mediaFile);
+          const mediaResource = await getResourceFromLocalFile(mediaFile);
+          const mediaSrc = mediaResource.src;
 
-          if (mediaItem?.alt) {
-            mediaItem.alt = alt || '';
-          }
+          const mediaItem = { ...mediaResource, ...resource };
+          mediaItem.id = index + 1;
+          mediaItem.src = mediaSrc;
 
-          if (mediaItem?.title) {
-            mediaItem.title = title || '';
-          }
-
-          if (mediaItem?.height) {
-            mediaItem.height = height;
-          }
-
-          if (mediaItem?.width) {
-            mediaItem.width = width;
-          }
-
-          mediaItem.local = false;
-
-          elements[elementIndex].resource.src = mediaItem.src;
+          elements[elementIndex].resource.src = mediaSrc;
 
           mediaItems.push(mediaItem);
         }
