@@ -125,6 +125,26 @@ function ImportButton() {
           mediaItem.id = index + 1;
           mediaItem.src = mediaSrc;
 
+          if ('video' === resource.type) {
+            const videoFileName = fileName.split('.')[0];
+            const poster = `${videoFileName}-poster.jpeg`;
+
+            // Poster is not available in resource, so it will not be pushed to media.
+            if (files[poster]) {
+              const posterBlob = await files[poster]?.async('blob');
+              const posterMediaFile = new File([posterBlob], poster, {
+                type: 'image/jpeg',
+              });
+
+              if (posterMediaFile) {
+                const posterResource = await getResourceFromLocalFile(
+                  posterMediaFile
+                );
+                mediaItem.poster = posterResource.src;
+              }
+            }
+          }
+
           elements[elementIndex].resource.src = mediaSrc;
 
           mediaItems.push(mediaItem);
