@@ -67,64 +67,72 @@ function DownloadZip() {
   const zipStoryAd = async (storyContent) => {
     let markup = `<!doctype html>${storyContent}`;
 
-    const elements = {
-      image: [],
-    };
-
-    currentPage.elements.forEach((element) => {
-      if (element?.type in elements) {
-        elements[element.type].push(element);
-      }
-    });
-
     const zip = new JSZip();
 
+    const mediaTypes = ['image', 'video'];
+    let mediaIndex = 1;
+
     await Promise.all(
-      Object.keys(elements).map(async (mediaType) => {
-        const mediaElements = elements[mediaType];
+      currentPage.elements.map(async (element) => {
+        const mediaType = element.type;
 
-        if (mediaElements.length) {
-          await Promise.all(
-            mediaElements.map(async (mediaElement, index) => {
-              const { src, mimeType, id } = mediaElement.resource;
-              const extension = COMMON_MIME_TYPE_MAPPING[mimeType];
+        if (!mediaTypes.includes(mediaType)) {
+          return;
+        }
 
-              if (!extension) {
-                return;
-              }
+        const { src, mimeType, poster } = element.resource;
+        const extension = COMMON_MIME_TYPE_MAPPING[mimeType];
 
-              let imageSrc = src;
+        if (!extension) {
+          return;
+        }
 
-              /**
-               * Download double size image of the page ratio as unsplash image size can be very
-               * large and we aren't using srcset to keep things simple for the user.
-               */
-              if (src.startsWith('https://images.unsplash.com')) {
-                imageSrc = addQueryArgs(src, {
-                  w: PAGE_WIDTH * 2,
-                  h: (PAGE_WIDTH * 2) / PAGE_RATIO,
-                });
-              }
+        let mediaSrc = src;
 
-              const resp = await fetch(imageSrc);
-              const respBlob = await resp.blob();
-              const fileName = `${mediaType}-${index + 1}.${extension}`;
-              const file = new File([respBlob], fileName);
+        /**
+         * Download double size image of the page ratio as unsplash image size can be very
+         * large and we aren't using srcset to keep things simple for the user.
+         */
+        if (src.startsWith('https://images.unsplash.com')) {
+          mediaSrc = addQueryArgs(src, {
+            w: PAGE_WIDTH * 2,
+            h: (PAGE_WIDTH * 2) / PAGE_RATIO,
+          });
+        }
 
-              const elementIndex = currentPage.elements.findIndex(
-                (element) => element?.resource?.id === id
-              );
+        const index = mediaIndex;
+        mediaIndex++;
 
-              if (elementIndex) {
-                currentPage.elements[elementIndex].resource.src = fileName;
-              }
+        const resp = await fetch(mediaSrc);
+        const respBlob = await resp.blob();
+        const fileName = `${mediaType}-${index}.${extension}`;
+        const file = new File([respBlob], fileName);
 
-              const encodedUrl = src.replaceAll('&', '&amp;'); // To match url in the rendered markup.
-              markup = markup.replace(encodedUrl, fileName);
+        let posterFileName;
+        let posterFile;
+        if (poster) {
+          const posterResp = await fetch(poster);
+          const posterRespBlob = await posterResp.blob();
+          posterFileName = `${mediaType}-${index}-poster.jpeg`;
+          posterFile = new File([posterRespBlob], posterFileName);
+        }
 
-              zip.file(fileName, file);
-            })
-          );
+        element.resource.src = fileName;
+
+        if (posterFileName) {
+          element.resource.poster = posterFileName;
+        }
+
+        const encodedUrl = src.replaceAll('&', '&amp;'); // To match url in the rendered markup.
+        markup = markup.replace(encodedUrl, fileName);
+
+        zip.file(fileName, file);
+
+        if (posterFileName && posterFile) {
+          const encodedPosterUrl = poster.replaceAll('&', '&amp;'); // To match url in the rendered markup.
+          markup = markup.replaceAll(encodedPosterUrl, posterFileName);
+
+          zip.file(posterFileName, posterFile);
         }
       })
     );

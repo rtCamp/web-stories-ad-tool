@@ -24,6 +24,7 @@ import getFirstFrameOfVideo from './getFirstFrameOfVideo';
 import createResource from './createResource';
 import getFileName from './getFileName';
 import getImageDimensions from './getImageDimensions';
+import getVideoDuration from './getVideoDuration';
 
 /**
  * Create a local resource object.
@@ -76,6 +77,12 @@ const getImageResource = async (file) => {
   });
 };
 
+function formatVideoLength(length) {
+  const minutes = Math.floor(length / 60);
+  const seconds = Math.floor(length % 60);
+  return minutes + ':' + seconds.toString().padStart(2, '0');
+}
+
 /**
  * Generates a video resource object from a local File object.
  *
@@ -94,6 +101,7 @@ const getVideoResource = async (file) => {
   const canPlayVideo = '' !== videoEl.canPlayType(mimeType);
 
   const frame = await getFirstFrameOfVideo(src);
+  const duration = await getVideoDuration(src);
 
   const poster = createBlob(frame);
   const { width, height } = await getImageDimensions(poster);
@@ -107,6 +115,7 @@ const getVideoResource = async (file) => {
     poster,
     alt: fileName,
     title: fileName,
+    lengthFormatted: formatVideoLength(duration),
   });
 };
 
