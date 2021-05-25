@@ -38,6 +38,19 @@ self.addEventListener('install', (event) => {
   );
 });
 
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keyList) => {
+      return Promise.all(
+        keyList.map((key) => {
+          return key !== cacheName ? caches.delete(key) : false;
+        })
+      );
+    })
+  );
+  return self.clients.claim();
+});
+
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches
