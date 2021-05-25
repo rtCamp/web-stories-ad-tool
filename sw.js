@@ -13,3 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const cacheName = 'CSv2';
+
+const cachedFiles = [
+  '/',
+  '/assets/js/*',
+  '/assets/css/vendors-edit-story.css',
+  '/assets/css/vendors-edit-story-rtl.css',
+  '/assets/css/edit-story.css',
+  '/assets/css/edit-story-rtl.css',
+  '/manifest.json',
+  '/favicon.ico',
+  'https://fonts.googleapis.com/css?family=Google+Sans%7CGoogle+Sans%3Ab%7CGoogle+Sans%3A500&display=swap&ver=1.7.0-alpha.0',
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches
+      .open(cacheName)
+      .then((cache) => {
+        return cache.addAll(cachedFiles);
+      })
+      .then(() => self.skipWaiting())
+  );
+});
