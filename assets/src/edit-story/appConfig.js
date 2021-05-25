@@ -86,7 +86,7 @@ export default {
     dashboardLink: '',
     assetsURL: `${url}assets/`,
     cdnURL: 'https://wp.stories.google/static/main/',
-    maxUpload: 536870912,
+    maxUpload: 31457280,
     isDemo: false,
     capabilities: {
       hasPublishAction: true,
@@ -122,7 +122,7 @@ export default {
       side: [],
     },
     ffmpegCoreUrl:
-      'https://wp.stories.google/static/main/js/@ffmpeg/core@0.8.5/dist/ffmpeg-core.js',
+      'https://wp.stories.google/static/main/js/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js',
   },
   flags: {
     enableSVG: false,
