@@ -17,9 +17,10 @@
 /**
  * External dependencies
  */
-import { createRef, useCallback, useMemo } from 'react';
+import { useRef, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { __ } from '@web-stories-wp/i18n';
+import { __, sprintf } from '@web-stories-wp/i18n';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Internal dependencies
@@ -29,6 +30,9 @@ import {
   BUTTON_SIZES,
   BUTTON_TYPES,
   BUTTON_VARIANTS,
+  THEME_CONSTANTS,
+  Text,
+  useSnackbar,
 } from '../../../../../../design-system';
 import {
   MediaGalleryMessage,
@@ -41,7 +45,9 @@ import PaginatedMediaGallery from '../common/paginatedMediaGallery';
 import resourceList from '../../../../../utils/resourceList';
 import useLibrary from '../../../useLibrary';
 import getResourceFromLocalFile from '../../../../../app/media/utils/getResourceFromLocalFile';
-import { useConfig, useMedia } from '../../../../../app';
+import { useConfig, useMedia, useStory } from '../../../../../app';
+import Dialog from '../../../../dialog';
+import useFFmpeg from '../../../../../app/media/utils/useFFmpeg';
 import paneId from './paneId';
 
 export const ROOT_MARGIN = 300;
@@ -57,15 +63,26 @@ const PaneHeader = styled(DefaultPaneHeader)`
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 `;
 
+const bytesToMB = (bytes) => Math.round(bytes / Math.pow(1024, 2));
+
+const VIDEO_MAX_FILESIZE = 1048576; // 1 MiB
+
 function MediaPane(props) {
-  const fileInputRef = createRef();
+  const fileInputRef = useRef();
   const setNextPage = () => {};
+
+  const [errorMessages, setErrorMessages] = useState([]);
+  const [optimizationMessage, setOptimizationMessage] = useState('');
+  const [mediaElementToBeOptimized, setMediaElementToBeOptimized] = useState(
+    {}
+  );
 
   const {
     allowedMimeTypes: {
       image: allowedImageMimeTypes,
       video: allowedVideoMimeTypes,
     },
+    maxUpload,
   } = useConfig();
 
   const allowedMimeTypes = useMemo(
@@ -85,6 +102,44 @@ function MediaPane(props) {
     })
   );
 
+  const { transcodeVideo } = useFFmpeg();
+  const { showSnackbar } = useSnackbar();
+
+  const { updateElementsByResourceId } = useStory((state) => ({
+    updateElementsByResourceId: state.actions.updateElementsByResourceId,
+  }));
+
+  const isValidFile = (file) => {
+    let isValid = true;
+
+    if (!allowedMimeTypes.includes(file.type)) {
+      setErrorMessages([
+        ...errorMessages,
+        __('Invalid file type', 'web-stories'),
+      ]);
+      isValid = false;
+    }
+
+    if (file.size > maxUpload) {
+      setErrorMessages([
+        ...errorMessages,
+        sprintf(
+          /* translators: first %s is the file name, second %s is the file size in MB and second %s is the upload file limit in MB */
+          __(
+            '%1$s is %2$sMB and the upload limit is %3$sMB. Please resize and try again!',
+            'web-stories'
+          ),
+          file.name,
+          bytesToMB(file.size),
+          bytesToMB(maxUpload)
+        ),
+      ]);
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
   const handleFileInput = async (event) => {
     if (!event.target.files.length) {
       return;
@@ -96,15 +151,18 @@ function MediaPane(props) {
 
     await Promise.all(
       [...files].map(async (file) => {
-        if (allowedMimeTypes.includes(file.type)) {
+        if (isValidFile(file)) {
           const mediaData = await getResourceFromLocalFile(file);
           mediaData.local = false; // this disables the UploadingIndicator
+          mediaData.id = uuidv4();
+          mediaData.file = file;
           mediaItems.push(mediaData);
         }
       })
     );
 
     setLocalStoryAdMedia(mediaItems);
+    fileInputRef.current.value = '';
   };
 
   const { insertElement } = useLibrary((state) => ({
@@ -123,10 +181,86 @@ function MediaPane(props) {
         url: thumbnailURL,
         type: 'cached',
       });
-      insertElement(resource.type, { resource });
+      return insertElement(resource.type, { resource });
     },
     [insertElement]
   );
+
+  const onInsertHandler = (resource, thumbnailURL) => {
+    if (resource.type === 'video' && resource.file.size > VIDEO_MAX_FILESIZE) {
+      setMediaElementToBeOptimized({ resource, thumbnailURL });
+      setOptimizationMessage(
+        sprintf(
+          /* translators: %s resource file name. */
+          __(
+            '"%s" is larger than 1MB. Do you want to optimize this video?',
+            'web-stories'
+          ),
+          resource.title
+        )
+      );
+
+      return;
+    }
+
+    insertMediaElement(resource, thumbnailURL);
+  };
+
+  const closeErrorDialog = () => {
+    setErrorMessages([]);
+  };
+
+  const closeOptimizationDialog = () => {
+    setMediaElementToBeOptimized({});
+    setOptimizationMessage('');
+  };
+
+  const setMediaElementAsLocal = (id) => {
+    const mediaElements = [...media];
+    const index = mediaElements.findIndex((mediaItem) => mediaItem.id === id);
+    mediaElements[index].local = true;
+    setLocalStoryAdMedia(mediaElements);
+  };
+
+  const setOptimizedVideoInGallery = async (id, optimizedFile) => {
+    const mediaElements = [...media];
+    const index = mediaElements.findIndex((mediaItem) => mediaItem.id === id);
+    const currentMediaData = { ...mediaElements[index] };
+
+    const mediaData = await getResourceFromLocalFile(optimizedFile);
+    mediaData.local = false;
+    mediaData.id = currentMediaData.id;
+    mediaData.file = optimizedFile;
+
+    mediaElements[index] = mediaData;
+    setLocalStoryAdMedia(mediaElements);
+
+    const updateResource = {
+      id: mediaData.id,
+      properties: ({ resource, ...rest }) => ({
+        ...rest,
+        resource: mediaData,
+      }),
+    };
+
+    updateElementsByResourceId(updateResource);
+  };
+
+  const startOptimization = async () => {
+    const { resource, thumbnailURL } = { ...mediaElementToBeOptimized };
+    insertMediaElement(resource, thumbnailURL);
+    closeOptimizationDialog();
+
+    showSnackbar({
+      message: __('Video optimization in progress.', 'web-stories'),
+      dismissable: true,
+    });
+
+    setMediaElementAsLocal(resource.id);
+
+    const optimizedFile = await transcodeVideo(resource.file);
+    setOptimizedVideoInGallery(resource.id, optimizedFile);
+  };
 
   return (
     <StyledPane id={paneId} {...props}>
@@ -165,12 +299,41 @@ function MediaPane(props) {
             isMediaLoading={false}
             isMediaLoaded
             hasMore={false}
-            onInsert={insertMediaElement}
+            onInsert={onInsertHandler}
             setNextPage={setNextPage}
             searchTerm={''}
           />
         )}
       </PaneInner>
+      <Dialog
+        open={errorMessages.length > 0}
+        onClose={closeErrorDialog}
+        title={__('Error uploading file', 'web-stories')}
+        primaryText={__('Close', 'web-stories')}
+        onPrimary={closeErrorDialog}
+      >
+        {errorMessages.map((message) => (
+          <Text
+            key={message}
+            size={THEME_CONSTANTS.TYPOGRAPHY.PRESET_SIZES.SMALL}
+          >
+            {message}
+          </Text>
+        ))}
+      </Dialog>
+      <Dialog
+        open={optimizationMessage}
+        onClose={closeOptimizationDialog}
+        title={__('Optimize video size', 'web-stories')}
+        secondaryText={__('No, skip it', 'web-stories')}
+        onSecondary={closeOptimizationDialog}
+        primaryText={__('Yes, Optimize it', 'web-stories')}
+        onPrimary={startOptimization}
+      >
+        <Text size={THEME_CONSTANTS.TYPOGRAPHY.PRESET_SIZES.SMALL}>
+          {optimizationMessage}
+        </Text>
+      </Dialog>
     </StyledPane>
   );
 }
