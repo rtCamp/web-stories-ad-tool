@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const cacheName = 'CSv2';
+const cacheName = 'CSv4';
 
 const cachedFiles = [
   '/',
-  '/assets/js/*',
+  '/preview/index.html',
+  '/preview/preview-frame.html',
+  '/assets/js/edit-story.js',
+  '/assets/js/vendors-edit-story-a5a1d5396ce5ef376537.js',
   '/assets/css/vendors-edit-story.css',
   '/assets/css/vendors-edit-story-rtl.css',
   '/assets/css/edit-story.css',
