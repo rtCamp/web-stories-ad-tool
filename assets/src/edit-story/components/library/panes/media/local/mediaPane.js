@@ -74,9 +74,7 @@ function MediaPane(props) {
 
   const [errorMessages, setErrorMessages] = useState([]);
   const [optimizationMessage, setOptimizationMessage] = useState('');
-  const [mediaElementToBeOptimized, setMediaElementToBeOptimized] = useState(
-    {}
-  );
+  const [resourceToBeOptimized, setResourceToBeOptimized] = useState({});
 
   const {
     allowedMimeTypes: {
@@ -189,7 +187,7 @@ function MediaPane(props) {
 
   const onInsertHandler = (resource, thumbnailURL) => {
     if (resource.type === 'video' && resource.file.size > VIDEO_MAX_FILESIZE) {
-      setMediaElementToBeOptimized({ resource, thumbnailURL });
+      setResourceToBeOptimized(resource);
       setOptimizationMessage(
         sprintf(
           /* translators: %s resource file name. */
@@ -200,8 +198,6 @@ function MediaPane(props) {
           resource.title
         )
       );
-
-      return;
     }
 
     insertMediaElement(resource, thumbnailURL);
@@ -212,7 +208,7 @@ function MediaPane(props) {
   };
 
   const closeOptimizationDialog = () => {
-    setMediaElementToBeOptimized({});
+    setResourceToBeOptimized({});
     setOptimizationMessage('');
   };
 
@@ -264,8 +260,7 @@ function MediaPane(props) {
   };
 
   const startOptimization = async () => {
-    const { resource, thumbnailURL } = { ...mediaElementToBeOptimized };
-    insertMediaElement(resource, thumbnailURL);
+    const resource = { ...resourceToBeOptimized };
     closeOptimizationDialog();
 
     showSnackbar({
