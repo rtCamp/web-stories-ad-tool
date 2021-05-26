@@ -49,7 +49,7 @@ const COMMON_MIME_TYPE_MAPPING = {
   'video/webm': 'webm',
 };
 
-function DownloadZip() {
+function Download() {
   const {
     internal: { reducerState },
   } = useStory();
@@ -194,4 +194,4 @@ function DownloadZip() {
   );
 }
 
-export default DownloadZip;
+export default Download;

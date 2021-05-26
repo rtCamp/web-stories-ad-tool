@@ -37,10 +37,11 @@ import { getResourceFromLocalFile } from '../../../app/media/utils';
 
 const ImportButtonContainer = styled.div``;
 
-function ImportButton() {
+function Import() {
   const {
     internal: { reducerState, restore },
   } = useStory();
+
   const {
     actions: {
       updateCTALink,
@@ -70,15 +71,14 @@ function ImportButton() {
   useEffect(() => () => clearTimeout(timeout), [timeout]);
 
   const handleFileInput = async () => {
-    if (!event.target.files.length) {
+    if (
+      !event.target.files.length ||
+      'application/zip' !== event.target.files[0]?.type
+    ) {
       return;
     }
 
     const file = event.target.files[0];
-
-    if ('application/zip' !== file.type) {
-      return;
-    }
 
     updateIsImportingStatus(true);
 
@@ -184,4 +184,4 @@ function ImportButton() {
   );
 }
 
-export default ImportButton;
+export default Import;

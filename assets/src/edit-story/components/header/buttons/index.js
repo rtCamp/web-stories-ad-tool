@@ -24,7 +24,7 @@ import styled from 'styled-components';
  */
 import CircularProgress from '../../circularProgress';
 import useAdStory from '../../../app/storyAd/useAdStory';
-import DownloadZip from './downloadZip';
+import Download from './download';
 import Preview from './preview';
 
 const LOADER_SIZE = 26;
@@ -61,7 +61,7 @@ function Buttons() {
         <Space />
         <Preview />
         <Space />
-        <DownloadZip />
+        <Download />
         <Space />
       </List>
     </ButtonList>

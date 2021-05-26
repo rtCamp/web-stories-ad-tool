@@ -27,7 +27,7 @@ import useAdStory from '../../app/storyAd/useAdStory';
 import CircularProgress from '../circularProgress';
 import Buttons from './buttons';
 import HeaderProvider from './provider';
-import ImportButton from './buttons/importButton';
+import { default as ImportButton } from './buttons/import';
 
 const Background = styled.header.attrs({
   role: 'group',
