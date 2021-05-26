@@ -83,7 +83,7 @@ function DownloadZip() {
         const { src, mimeType, poster } = element.resource;
         const extension = COMMON_MIME_TYPE_MAPPING[mimeType];
 
-        if (!extension) {
+        if (!extension || !src.match(/^blob/)) {
           return;
         }
 
