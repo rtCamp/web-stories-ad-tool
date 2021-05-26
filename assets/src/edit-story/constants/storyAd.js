@@ -109,7 +109,7 @@ const CTA_OPTIONS = [
   },
 ];
 
-const LANDING_PAGE_OPTION = [
+const LANDING_PAGE_OPTIONS = [
   {
     label: __('Sponsored Story', 'web-stories'),
     value: 'STORY',
@@ -124,4 +124,4 @@ const LANDING_PAGE_OPTION = [
   },
 ];
 
-export { CTA_OPTIONS, LANDING_PAGE_OPTION };
+export { CTA_OPTIONS, LANDING_PAGE_OPTIONS };

@@ -29,7 +29,7 @@ import { Row } from '../../../form';
 import useAdStory from '../../../../app/storyAd/useAdStory';
 import {
   CTA_OPTIONS,
-  LANDING_PAGE_OPTION,
+  LANDING_PAGE_OPTIONS,
 } from '../../../../constants/storyAd';
 
 const FieldRow = styled(Row)`
@@ -102,7 +102,7 @@ function StoryAdPanel() {
       <FieldRow>
         <DropDown
           emptyText={__('No options available', 'web-stories')}
-          options={LANDING_PAGE_OPTION}
+          options={LANDING_PAGE_OPTIONS}
           hasError={false}
           hint={''}
           placeholder={__('Select Landing Page Type', 'web-stories')}
