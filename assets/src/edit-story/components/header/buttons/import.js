@@ -30,6 +30,7 @@ import {
   BUTTON_SIZES,
   BUTTON_TYPES,
   BUTTON_VARIANTS,
+  useSnackbar,
 } from '../../../../design-system';
 import { useMedia, useStory } from '../../../app';
 import useAdStory from '../../../app/storyAd/useAdStory';
@@ -53,6 +54,8 @@ function Import() {
     state: { isImporting },
   } = useAdStory();
 
+  const { showSnackbar, clearSnackbar } = useSnackbar();
+
   const { localStoryAdMedia, setLocalStoryAdMedia } = useMedia(
     ({
       local: {
@@ -71,23 +74,42 @@ function Import() {
   useEffect(() => () => clearTimeout(timeout), [timeout]);
 
   const handleFileInput = async () => {
-    if (
-      !event.target.files.length ||
-      'application/zip' !== event.target.files[0]?.type
-    ) {
+    const inputFiles = event.target?.files;
+
+    if (!inputFiles.length || 'application/zip' !== inputFiles[0]?.type) {
+      showSnackbar({
+        message: __(
+          'Please upload the zip file previously downloaded from this tool',
+          'web-stories'
+        ),
+      });
       return;
     }
 
-    const file = event.target.files[0];
-
-    updateIsImportingStatus(true);
-
+    const [file] = inputFiles;
     const files = await JSZip.loadAsync(file).then((content) => content.files);
-
     const mediaItems = [...localStoryAdMedia];
 
+    if (!('config.json' in files)) {
+      showSnackbar({
+        message: __('Zip file is not compatible with this tool', 'web-stories'),
+      });
+      return;
+    }
+
     const configData = await files['config.json'].async('text');
-    const importedState = JSON.parse(configData);
+    let importedState = {};
+
+    try {
+      importedState = JSON.parse(configData);
+    } catch (e) {
+      showSnackbar({
+        message: __('Invalid configuration in the uploaded zip', 'web-stories'),
+      });
+    }
+
+    clearSnackbar();
+    updateIsImportingStatus(true);
 
     const stateToRestore = {
       ...importedState,
