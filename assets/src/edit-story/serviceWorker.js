@@ -20,6 +20,6 @@ export default function registerServiceWorker() {
      * Register Service Worker
      * 'sw.js' is our service worker file
      */
-    navigator.serviceWorker.register('/sw.js');
+    //navigator.serviceWorker.register('/sw.js');
   }
 }
