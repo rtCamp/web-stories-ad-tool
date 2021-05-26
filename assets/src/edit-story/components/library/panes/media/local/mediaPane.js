@@ -63,7 +63,8 @@ const PaneHeader = styled(DefaultPaneHeader)`
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 `;
 
-const bytesToMB = (bytes) => Math.round(bytes / Math.pow(1024, 2));
+const bytesToMB = (bytes) =>
+  (bytes / Math.pow(1024, 2)).toFixed(2).replace(/\.00$/, '');
 
 const VIDEO_MAX_FILESIZE = 1048576; // 1 MiB
 
@@ -73,9 +74,7 @@ function MediaPane(props) {
 
   const [errorMessages, setErrorMessages] = useState([]);
   const [optimizationMessage, setOptimizationMessage] = useState('');
-  const [mediaElementToBeOptimized, setMediaElementToBeOptimized] = useState(
-    {}
-  );
+  const [resourceToBeOptimized, setResourceToBeOptimized] = useState({});
 
   const {
     allowedMimeTypes: {
@@ -188,7 +187,7 @@ function MediaPane(props) {
 
   const onInsertHandler = (resource, thumbnailURL) => {
     if (resource.type === 'video' && resource.file.size > VIDEO_MAX_FILESIZE) {
-      setMediaElementToBeOptimized({ resource, thumbnailURL });
+      setResourceToBeOptimized(resource);
       setOptimizationMessage(
         sprintf(
           /* translators: %s resource file name. */
@@ -199,8 +198,6 @@ function MediaPane(props) {
           resource.title
         )
       );
-
-      return;
     }
 
     insertMediaElement(resource, thumbnailURL);
@@ -211,7 +208,7 @@ function MediaPane(props) {
   };
 
   const closeOptimizationDialog = () => {
-    setMediaElementToBeOptimized({});
+    setResourceToBeOptimized({});
     setOptimizationMessage('');
   };
 
@@ -244,11 +241,26 @@ function MediaPane(props) {
     };
 
     updateElementsByResourceId(updateResource);
+
+    if (mediaData.file.size > VIDEO_MAX_FILESIZE) {
+      const message = sprintf(
+        /* translators: %s resource file size. */
+        __(
+          'The size of the video after optimisation is %s which is still more than 1MB, you may want to use smaller video size.',
+          'web-stories'
+        ),
+        bytesToMB(mediaData.file.size)
+      );
+
+      showSnackbar({
+        message,
+        dismissable: true,
+      });
+    }
   };
 
   const startOptimization = async () => {
-    const { resource, thumbnailURL } = { ...mediaElementToBeOptimized };
-    insertMediaElement(resource, thumbnailURL);
+    const resource = { ...resourceToBeOptimized };
     closeOptimizationDialog();
 
     showSnackbar({
