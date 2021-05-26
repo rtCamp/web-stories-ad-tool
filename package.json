@@ -2,15 +2,14 @@
   "name": "web-stories-ad-creation-tool",
   "title": "Web Stories Ad Creation Tool",
   "private": true,
-  "description": "Visual storytelling for WordPress.",
+  "description": "Ad Creation Tool for Google Web Stories",
   "author": "Google",
   "license": "Apache-2.0",
   "type": "module",
   "keywords": [
     "amp",
     "stories",
-    "storytelling",
-    "wordpress"
+    "storytelling"
   ],
   "homepage": "https://rtCamp.github.io/google/web-stories-wp",
   "repository": {
@@ -210,7 +209,7 @@
     "build:js": "NODE_ENV=production webpack --config webpack.config.cjs",
     "postbuild:js": "rm -rf assets/js/web-stories-list-styles* assets/js/web-stories-theme-style*",
     "predev": "rm -rf assets/css/* assets/js/*",
-    "dev": "webpack serve --config webpack.config.cjs --progress",
+    "dev": "webpack serve --config webpack.config.cjs --progress --open",
     "postdev": "rm -rf assets/js/web-stories-list-styles* assets/js/web-stories-theme-style*",
     "env:start": "./bin/local-env/start.sh",
     "env:stop": "./bin/local-env/stop.sh",
