@@ -139,7 +139,6 @@ function APIProvider({ children }) {
       getStoryLockById: mockedFetch,
       setStoryLockById: mockedFetch,
       deleteStoryLockById: mockedFetch,
-      getMedia: mockedFetch,
       getLinkMetadata: mockedFetch,
       saveStoryById: mockedFetch,
       getAuthors: mockedFetch,
