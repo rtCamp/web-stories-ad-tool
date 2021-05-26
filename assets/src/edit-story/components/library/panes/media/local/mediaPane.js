@@ -334,7 +334,7 @@ function MediaPane(props) {
         ))}
       </Dialog>
       <Dialog
-        open={optimizationMessage}
+        open={optimizationMessage.length > 0}
         onClose={closeOptimizationDialog}
         title={__('Optimize video size', 'web-stories')}
         secondaryText={__('No, skip it', 'web-stories')}
