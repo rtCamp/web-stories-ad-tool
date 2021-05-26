@@ -44,8 +44,17 @@ export default function getStoryMarkup(
 ) {
   // Yes this should not be done, and yes it is not a good practice, but I will do it anyways
   // Because I am fed up of the error messages of LayoutEffect and there is no other solution.
-  const retval = console.error; // eslint-disable-line no-console
-  console.error = () => {}; // eslint-disable-line no-console
+  /* eslint-disable no-console */
+  const retval = console.error;
+  console.error = function (error, ...args) {
+    if (
+      error &&
+      !error.startsWith('Warning: useLayoutEffect does nothing on the server')
+    ) {
+      retval(error, ...args);
+    }
+  };
+  /* eslint-enable no-console */
 
   // Note that react-dom/server will warn about useLayoutEffect usage here.
   // Not because of any wrongdoing in our code, but mostly because
