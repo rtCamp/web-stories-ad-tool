@@ -42,11 +42,16 @@ export default function getStoryMarkup(
   featureFlags,
   storyAd = {}
 ) {
+  // Yes this should not be done, and yes it is not a good practice, but I will do it anyways
+  // Because I am fed up of the error messages of LayoutEffect and there is no other solution.
+  const retval = console.error; // eslint-disable-line no-console
+  console.error = () => {}; // eslint-disable-line no-console
+
   // Note that react-dom/server will warn about useLayoutEffect usage here.
   // Not because of any wrongdoing in our code, but mostly because
   // of its own profiler.
   // See https://github.com/facebook/react/issues/14927
-  return renderToStaticMarkup(
+  const markup = renderToStaticMarkup(
     <FlagsProvider features={featureFlags}>
       <OutputStory
         story={story}
@@ -56,4 +61,8 @@ export default function getStoryMarkup(
       />
     </FlagsProvider>
   );
+
+  console.error = retval; // eslint-disable-line no-console
+
+  return markup;
 }
