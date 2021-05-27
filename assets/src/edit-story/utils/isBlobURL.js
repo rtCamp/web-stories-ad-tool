@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 function isBlobURL(url) {
-  return Boolean(url.match(/^blob/));
+  return url.startsWith('blob');
 }
 
 export default isBlobURL;

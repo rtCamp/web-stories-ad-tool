@@ -39,6 +39,7 @@ import { useStory } from '../../../app';
 import useAdStory from '../../../app/storyAd/useAdStory';
 import getStoryPropsToSave from '../../../app/story/utils/getStoryPropsToSave';
 import { PAGE_RATIO, PAGE_WIDTH } from '../../../constants';
+import isBlobURL from '../../../utils/isBlobURL';
 import ButtonWithChecklistWarning from './buttonWithChecklistWarning';
 
 const COMMON_MIME_TYPE_MAPPING = {
@@ -83,27 +84,33 @@ function Download() {
         const { src, mimeType, poster } = element.resource;
         const extension = COMMON_MIME_TYPE_MAPPING[mimeType];
 
-        if (!extension || !src.match(/^blob/)) {
+        if (!extension) {
           return;
         }
 
-        let mediaSrc = src;
-
         /**
-         * Download double size image of the page ratio as unsplash image size can be very
+         * Use double size image of the page ratio as unsplash image size can be very
          * large and we aren't using srcset to keep things simple for the user.
          */
         if (src.startsWith('https://images.unsplash.com')) {
-          mediaSrc = addQueryArgs(src, {
+          const resizedSrc = addQueryArgs(src, {
             w: PAGE_WIDTH * 2,
             h: (PAGE_WIDTH * 2) / PAGE_RATIO,
           });
+
+          const markupSrc = src.replaceAll('&', '&amp;');
+          markup = markup.replace(markupSrc, resizedSrc);
+          return;
+        }
+
+        if (!isBlobURL(src)) {
+          return;
         }
 
         const index = mediaIndex;
         mediaIndex++;
 
-        const resp = await fetch(mediaSrc);
+        const resp = await fetch(src);
         const respBlob = await resp.blob();
         const fileName = `${mediaType}-${index}.${extension}`;
         const file = new File([respBlob], fileName);
