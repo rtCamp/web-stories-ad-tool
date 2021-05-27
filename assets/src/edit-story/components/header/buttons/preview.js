@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { __ } from '@web-stories-wp/i18n';
 
 /**
@@ -30,16 +30,21 @@ import {
   BUTTON_TYPES,
   BUTTON_VARIANTS,
   Icons,
+  THEME_CONSTANTS,
+  Text,
 } from '../../../../design-system';
 import Tooltip from '../../tooltip';
 import getStoryPropsToSave from '../../../app/story/utils/getStoryPropsToSave';
 import useAdStory from '../../../app/storyAd/useAdStory';
 import getCurrentUrl from '../../../utils/getCurrentUrl';
+import isBlobURL from '../../../utils/isBlobURL';
 import { LOCAL_STORAGE_PREFIX } from '../../../utils/localStore';
+import Dialog from '../../dialog';
 
 const PREVIEW_TARGET = 'story-preview';
 
 function Preview() {
+  const [showPreviewDialog, setShowPreviewDialog] = useState(false);
   const {
     internal: { reducerState },
   } = useStory();
@@ -79,21 +84,74 @@ function Preview() {
     window.open(getCurrentUrl() + 'preview', PREVIEW_TARGET);
   }, [markup]);
 
+  const handleOnPreviewClick = useCallback(() => {
+    const { elements } = pages[0];
+    let i = 0;
+    let shoudShowTheDialog = false;
+
+    for (i = 0; i < elements.length; i++) {
+      const element = elements[i];
+
+      // 1. Element is video and is set as background
+      // 2. Element has local video
+      if (
+        element.type === 'video' &&
+        (element.isBackground || isBlobURL(element?.resource?.src))
+      ) {
+        shoudShowTheDialog = true;
+        break;
+      }
+
+      // 3. Element is external Gif and set as background
+      if (element.type === 'gif' && element.isBackground) {
+        shoudShowTheDialog = true;
+        break;
+      }
+    }
+
+    if (shoudShowTheDialog) {
+      setShowPreviewDialog(true);
+    } else {
+      openPreviewLink();
+    }
+  }, [pages, openPreviewLink]);
+
+  const closePreviewDialog = () => {
+    setShowPreviewDialog(false);
+    openPreviewLink();
+  };
+
   const label = __('Preview', 'web-stories');
 
   return (
-    <Tooltip title={label} hasTail>
-      <Button
-        variant={BUTTON_VARIANTS.SQUARE}
-        type={BUTTON_TYPES.QUATERNARY}
-        size={BUTTON_SIZES.SMALL}
-        onClick={openPreviewLink}
-        disabled={false}
-        aria-label={label}
+    <>
+      <Tooltip title={label} hasTail>
+        <Button
+          variant={BUTTON_VARIANTS.SQUARE}
+          type={BUTTON_TYPES.QUATERNARY}
+          size={BUTTON_SIZES.SMALL}
+          onClick={handleOnPreviewClick}
+          disabled={false}
+          aria-label={label}
+        >
+          <Icons.Eye />
+        </Button>
+      </Tooltip>
+      <Dialog
+        open={showPreviewDialog}
+        onClose={closePreviewDialog}
+        title={__('Stories Preview', 'web-stories')}
+        primaryText={__('OK', 'web-stories')}
+        onPrimary={closePreviewDialog}
       >
-        <Icons.Eye />
-      </Button>
-    </Tooltip>
+        <Text size={THEME_CONSTANTS.TYPOGRAPHY.PRESET_SIZES.SMALL}>
+          {__(
+            'Some of the elements in your story may not autoplay on preview. They will autoplay when the ad is a part of an actual Web Story.',
+            'web-stories'
+          )}
+        </Text>
+      </Dialog>
+    </>
   );
 }
 
