@@ -21,6 +21,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { __ } from '@web-stories-wp/i18n';
 
 /**
+ * WordPress dependencies
+ */
+import { addQueryArgs } from '@wordpress/url';
+
+/**
  * Internal dependencies
  */
 import { useStory } from '../../../app';
@@ -39,6 +44,7 @@ import useAdStory from '../../../app/storyAd/useAdStory';
 import getCurrentUrl from '../../../utils/getCurrentUrl';
 import isBlobURL from '../../../utils/isBlobURL';
 import { LOCAL_STORAGE_PREFIX } from '../../../utils/localStore';
+import { PAGE_RATIO, PAGE_WIDTH } from '../../../constants';
 import Dialog from '../../dialog';
 
 const PREVIEW_TARGET = 'story-preview';
@@ -79,10 +85,27 @@ function Preview() {
    * Open a preview of the story.
    */
   const openPreviewLink = useCallback(() => {
-    localStorage.setItem(LOCAL_STORAGE_PREFIX.PREVIEW_MARKUP, markup);
+    let previewMarkup = markup;
+
+    pages.map((page) => {
+      page.elements.map((element) => {
+        if (element?.resource?.src.startsWith('https://images.unsplash.com')) {
+          const src = element.resource.src;
+          const resizedSrc = addQueryArgs(src, {
+            w: PAGE_WIDTH * 2,
+            h: (PAGE_WIDTH * 2) / PAGE_RATIO,
+          });
+
+          const markupSrc = src.replaceAll('&', '&amp;');
+          previewMarkup = previewMarkup.replace(markupSrc, resizedSrc);
+        }
+      });
+    });
+
+    localStorage.setItem(LOCAL_STORAGE_PREFIX.PREVIEW_MARKUP, previewMarkup);
 
     window.open(getCurrentUrl() + 'preview', PREVIEW_TARGET);
-  }, [markup]);
+  }, [markup, pages]);
 
   const handleOnPreviewClick = useCallback(() => {
     const { elements } = pages[0];
