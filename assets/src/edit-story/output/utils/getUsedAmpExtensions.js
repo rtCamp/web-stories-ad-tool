@@ -51,6 +51,7 @@ const getUsedAmpExtensions = (pages) => {
       switch (type) {
         // Todo: eventually check for amp-fit-text if ever added.
         case 'video':
+        case 'gif':
           extensions.push(ampVideo);
           break;
         default:
