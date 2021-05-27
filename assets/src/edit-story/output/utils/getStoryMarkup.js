@@ -42,8 +42,7 @@ export default function getStoryMarkup(
   featureFlags,
   storyAd = {}
 ) {
-  // Yes this should not be done, and yes it is not a good practice, but I will do it anyways
-  // Because I am fed up of the error messages of LayoutEffect and there is no other solution.
+  // Temporary hack to silence the useLayoutEffect errors, until we find a good solution.
   /* eslint-disable no-console */
   const retval = console.error;
   console.error = function (error, ...args) {
