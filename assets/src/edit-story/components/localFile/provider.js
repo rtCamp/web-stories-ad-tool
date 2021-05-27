@@ -84,7 +84,7 @@ function LocalFileProvider({ children }) {
       const resource = elements[newElementIndex].resource;
 
       if (
-        resource.type === 'video' &&
+        resource?.type === 'video' &&
         resource?.file?.size > maxVideoFileSize
       ) {
         setResourceToBeOptimized(resource);
