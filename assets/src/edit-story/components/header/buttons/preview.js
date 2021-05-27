@@ -140,13 +140,13 @@ function Preview() {
       <Dialog
         open={showPreviewDialog}
         onClose={closePreviewDialog}
-        title={__('Stories Preview', 'web-stories')}
+        title={null}
         primaryText={__('OK', 'web-stories')}
         onPrimary={closePreviewDialog}
       >
         <Text size={THEME_CONSTANTS.TYPOGRAPHY.PRESET_SIZES.SMALL}>
           {__(
-            'Some of the elements in your story may not autoplay on preview. They will autoplay when the ad is a part of an actual Web Story.',
+            'Video and gif elements may not autoplay in the preview however they should autoplay when the ad is part of an actual Web Story.',
             'web-stories'
           )}
         </Text>
