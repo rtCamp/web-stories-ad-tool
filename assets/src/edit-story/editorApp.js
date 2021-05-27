@@ -51,6 +51,7 @@ import { GlobalStyle as CalendarStyle } from './components/form/dateTime/calenda
 import KeyboardOnlyOutlines from './utils/keyboardOnlyOutline';
 import { MetaBoxesProvider } from './integrations/wordpress/metaBoxes';
 import { StoryAdProvider } from './app/storyAd';
+import { LocalFileProvider } from './components/localFile';
 
 function App({ config }) {
   const { storyId, isRTL } = config;
@@ -74,18 +75,20 @@ function App({ config }) {
                                 <MediaProvider>
                                   <AutoSaveHandler />
                                   <TransformProvider>
-                                    <DropTargetsProvider>
-                                      <HelpCenterProvider>
-                                        <GlobalStyle />
-                                        <DevTools />
-                                        <DefaultMoveableGlobalStyle />
-                                        <CropMoveableGlobalStyle />
-                                        <ModalGlobalStyle />
-                                        <CalendarStyle />
-                                        <KeyboardOnlyOutlines />
-                                        <Layout />
-                                      </HelpCenterProvider>
-                                    </DropTargetsProvider>
+                                    <LocalFileProvider>
+                                      <DropTargetsProvider>
+                                        <HelpCenterProvider>
+                                          <GlobalStyle />
+                                          <DevTools />
+                                          <DefaultMoveableGlobalStyle />
+                                          <CropMoveableGlobalStyle />
+                                          <ModalGlobalStyle />
+                                          <CalendarStyle />
+                                          <KeyboardOnlyOutlines />
+                                          <Layout />
+                                        </HelpCenterProvider>
+                                      </DropTargetsProvider>
+                                    </LocalFileProvider>
                                   </TransformProvider>
                                 </MediaProvider>
                               </FontProvider>
