@@ -32,7 +32,7 @@ function StoryAdProvider({ children }) {
   const [landingPageType, updateLandingPageType] = useState('AMP');
   const [isImporting, updateIsImportingStatus] = useState(false);
   const [isDownloading, updateIsDownloadingStatus] = useState(false);
-
+  const [showDownloadModal, updateShowDownloadModal] = useState(false);
   const value = {
     actions: {
       updateCTALink,
@@ -41,6 +41,7 @@ function StoryAdProvider({ children }) {
       updateLandingPageType,
       updateIsImportingStatus,
       updateIsDownloadingStatus,
+      updateShowDownloadModal,
     },
     state: {
       ctaLink,
@@ -49,6 +50,7 @@ function StoryAdProvider({ children }) {
       landingPageType,
       isImporting,
       isDownloading,
+      showDownloadModal,
     },
   };
 

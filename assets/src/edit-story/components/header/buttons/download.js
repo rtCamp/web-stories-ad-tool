@@ -39,6 +39,7 @@ import { useStory } from '../../../app';
 import useAdStory from '../../../app/storyAd/useAdStory';
 import getStoryPropsToSave from '../../../app/story/utils/getStoryPropsToSave';
 import { PAGE_RATIO, PAGE_WIDTH } from '../../../constants';
+import localStore from '../../../utils/localStore';
 import ButtonWithChecklistWarning from './buttonWithChecklistWarning';
 
 const COMMON_MIME_TYPE_MAPPING = {
@@ -58,7 +59,7 @@ function Download() {
 
   const {
     state: { ctaLink, ctaText, customCtaText, landingPageType, isDownloading },
-    actions: { updateIsDownloadingStatus },
+    actions: { updateIsDownloadingStatus, updateShowDownloadModal },
   } = useAdStory();
 
   // Deep clone page object.
@@ -66,7 +67,7 @@ function Download() {
 
   const zipStoryAd = async (storyContent) => {
     let markup = `<!doctype html>${storyContent}`;
-
+    const assets = [];
     const zip = new JSZip();
 
     const mediaTypes = ['image', 'video'];
@@ -108,6 +109,7 @@ function Download() {
         const fileName = `${mediaType}-${index}.${extension}`;
         const file = new File([respBlob], fileName);
 
+        assets.push({ src: resp.url, name: fileName });
         let posterFileName;
         let posterFile;
         if (poster) {
@@ -127,7 +129,6 @@ function Download() {
         markup = markup.replace(encodedUrl, fileName);
 
         zip.file(fileName, file);
-
         if (posterFileName && posterFile) {
           const encodedPosterUrl = poster.replaceAll('&', '&amp;'); // To match url in the rendered markup.
           markup = markup.replaceAll(encodedPosterUrl, posterFileName);
@@ -149,15 +150,25 @@ function Download() {
     zip.file('config.json', JSON.stringify(storyData));
 
     const readMeText = `
-    In order to view or test this ad as a standalone AMP page locally before uploading it to your platform, it needs to be run on any https-enabled server. For example, you may use the "Web Server for Chrome" chrome extension and view the ad by enabling its HTTPS option.
+    In order to view or test this ad as a standalone AMP page locally before uploading it
+    to your platform, it needs to be run on any https-enabled server. For example, you may
+    use the "Web Server for Chrome
+    chrome extension and view the ad by enabling its HTTPS option.
 
     Uploading the ad to google ad manager:
-    1. Choose "Code Type" as "AMP", copy the entire content of index.html without formatting and paste it inside the "AMP HTML" textbox.
-    2. All assets of the story ad have been downloaded as part of the zip and have a relative path in index.html, upload those assets and change its file path by inserting macros.
+    1. Choose "Code Type" as "AMP", copy the entire content of index.html
+    without formatting and paste it inside the "AMP HTML" textbox.
+    2. All assets of the story ad have been downloaded as part of the zip and
+    have a relative path in index.html,
+    upload those assets and change its file path by inserting macros.
     `;
 
     zip.file('index.html', markup);
     zip.file('README.txt', readMeText);
+
+    localStore.setItemByKey('readme', readMeText);
+    localStore.setItemByKey('markup', markup);
+    localStore.setItemByKey('assets', { assets: assets });
 
     zip.generateAsync({ type: 'blob' }).then((content) => {
       saveAs(content, 'story-ad.zip');
@@ -178,6 +189,7 @@ function Download() {
     });
     await zipStoryAd(storyProps.content);
 
+    updateShowDownloadModal(true);
     updateIsDownloadingStatus(false);
   };
 

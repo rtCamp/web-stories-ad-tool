@@ -20,6 +20,7 @@
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 import { __ } from '@web-stories-wp/i18n';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Internal dependencies
@@ -29,7 +30,7 @@ import {
   UploadDropTargetMessage,
   UploadDropTargetOverlay,
 } from '../uploadDropTarget';
-import { useMedia } from '../../app';
+import { useMedia, useStory } from '../../app';
 
 import { getResourceFromLocalFile } from '../../app/media/utils';
 import { Layer as CanvasLayer, PageArea } from './layout';
@@ -48,22 +49,55 @@ function CanvasUploadDropTarget({ children }) {
       setLocalStoryAdMedia,
     })
   );
+  const { addElements, currentPage } = useStory(
+    ({
+      state: { currentPage, selectedElementIds },
+      actions: { addElements },
+    }) => {
+      return {
+        currentPage,
+        selectedElementIds,
+        addElements,
+      };
+    }
+  );
+  const elements = currentPage?.elements;
 
   const onDropHandler = useCallback(
     async (files) => {
       const mediaItems = [...media];
-
+      const elementsArray = [...elements];
       await Promise.all(
         files.map(async (file) => {
           const mediaData = await getResourceFromLocalFile(file);
           mediaData.local = false; // this disables the UploadingIndicator
+
+          mediaData.id = uuidv4();
+          const element = {
+            focalX: 0,
+            focalY: 0,
+            opacity: 100,
+            id: mediaData.id,
+            resource: mediaData,
+            rotationAngle: 0,
+            scale: 50,
+            x: 0,
+            y: 0,
+            type: mediaData.type,
+            width: mediaData.width / 2,
+            height: mediaData.height / 2,
+          };
+
           mediaItems.push(mediaData);
+          elementsArray.push(element);
         })
       );
 
+      addElements({ elements: elementsArray });
+
       setLocalStoryAdMedia(mediaItems);
     },
-    [media, setLocalStoryAdMedia]
+    [media, setLocalStoryAdMedia, addElements, elements]
   );
   return (
     <UploadDropTarget onDrop={onDropHandler} labelledBy={MESSAGE_ID}>
