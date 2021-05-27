@@ -29,7 +29,6 @@ import { initializeTracking } from '@web-stories-wp/tracking';
  */
 import App from './editorApp';
 import appConfig from './appConfig';
-import registerServiceWorker from './serviceWorker';
 import './style.css'; // This way the general editor styles are loaded before all the component styles.
 
 __webpack_public_path__ = appConfig.publicPath;
@@ -68,7 +67,6 @@ const initializeWithConfig = () => {
 
 if ('loading' === document.readyState) {
   document.addEventListener('DOMContentLoaded', initializeWithConfig);
-  registerServiceWorker();
 } else {
   initializeWithConfig();
 }
