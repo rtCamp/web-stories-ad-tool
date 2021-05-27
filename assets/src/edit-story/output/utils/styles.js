@@ -85,6 +85,9 @@ function CustomStyles() {
       left: 0;
       top: 0;
     }
+    img.i-amphtml-fill-content {
+      object-fit: contain;
+    }
   `;
 
   return (
