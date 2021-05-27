@@ -87,6 +87,7 @@ export default {
     assetsURL: `${url}assets/`,
     cdnURL: 'https://wp.stories.google/static/main/',
     maxUpload: 31457280,
+    maxVideoFileSize: 1048576, // 1 MiB
     isDemo: false,
     capabilities: {
       hasPublishAction: true,

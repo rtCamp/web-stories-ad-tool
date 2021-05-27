@@ -55,6 +55,7 @@ function MediaGallery({ resources, onInsert, providerType }) {
         height={photo.height}
         onInsert={onInsert}
         providerType={providerType}
+        resourceModifiedAt={resources[index]?.modifiedAt}
       />
     ),
     [providerType, onInsert, resources]
