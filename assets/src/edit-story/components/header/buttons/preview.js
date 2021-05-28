@@ -107,37 +107,42 @@ function Preview() {
     window.open(getCurrentUrl() + 'preview', PREVIEW_TARGET);
   }, [markup, pages]);
 
-  const handleOnPreviewClick = useCallback(() => {
-    const { elements } = pages[0];
-    let i = 0;
-    let shoudShowTheDialog = false;
+  const handleOnPreviewClick = useCallback(
+    (event) => {
+      const { elements } = pages[0];
+      let i = 0;
+      let shoudShowTheDialog = false;
 
-    for (i = 0; i < elements.length; i++) {
-      const element = elements[i];
+      event.preventDefault();
 
-      // 1. Element is video and is set as background
-      // 2. Element has local video
-      if (
-        element.type === 'video' &&
-        (element.isBackground || isBlobURL(element?.resource?.src))
-      ) {
-        shoudShowTheDialog = true;
-        break;
+      for (i = 0; i < elements.length; i++) {
+        const element = elements[i];
+
+        // 1. Element is video and is set as background
+        // 2. Element has local video
+        if (
+          element.type === 'video' &&
+          (element.isBackground || isBlobURL(element?.resource?.src))
+        ) {
+          shoudShowTheDialog = true;
+          break;
+        }
+
+        // 3. Element is external Gif and set as background
+        if (element.type === 'gif' && element.isBackground) {
+          shoudShowTheDialog = true;
+          break;
+        }
       }
 
-      // 3. Element is external Gif and set as background
-      if (element.type === 'gif' && element.isBackground) {
-        shoudShowTheDialog = true;
-        break;
+      if (shoudShowTheDialog) {
+        setShowPreviewDialog(true);
+      } else {
+        openPreviewLink();
       }
-    }
-
-    if (shoudShowTheDialog) {
-      setShowPreviewDialog(true);
-    } else {
-      openPreviewLink();
-    }
-  }, [pages, openPreviewLink]);
+    },
+    [pages, openPreviewLink]
+  );
 
   const closePreviewDialog = () => {
     setShowPreviewDialog(false);
