@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { useRef, useCallback, useMemo } from 'react';
+import { useRef, useCallback, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { __ } from '@web-stories-wp/i18n';
 
@@ -40,8 +40,11 @@ import { PANE_PADDING } from '../../shared';
 import PaginatedMediaGallery from '../common/paginatedMediaGallery';
 import resourceList from '../../../../../utils/resourceList';
 import useLibrary from '../../../useLibrary';
-import { useConfig } from '../../../../../app';
+import { useConfig, useStory } from '../../../../../app';
 import { useLocalFile } from '../../../../localFile';
+import { initIndexDb } from '../../../../../app/story/utils/initIndexDb';
+import { getDataFromSessionStorage } from '../../../../../app/story/utils/sessionStore';
+import getResourceFromLocalFile from '../../../../../app/media/utils/getResourceFromLocalFile';
 import paneId from './paneId';
 
 export const ROOT_MARGIN = 300;
@@ -59,7 +62,12 @@ const PaneHeader = styled(DefaultPaneHeader)`
 
 function MediaPane(props) {
   const fileInputRef = useRef();
+  const isInitialMount = useRef(true);
   const setNextPage = () => {};
+
+  const { updateElementsByResourceId } = useStory((state) => ({
+    updateElementsByResourceId: state.actions.updateElementsByResourceId,
+  }));
 
   const { addLocalFiles, media } = useLocalFile((state) => ({
     addLocalFiles: state.actions.addLocalFiles,
@@ -108,6 +116,66 @@ function MediaPane(props) {
     },
     [insertElement]
   );
+
+  const updateResourcesFromStoredFiles = useCallback(
+    (files) => {
+      const sessionData = getDataFromSessionStorage();
+
+      const { elements } = sessionData?.pages?.[0] ?? [];
+
+      files.forEach((fileItem) => {
+        elements.forEach(async (element) => {
+          if (
+            ['image', 'video'].includes(element?.type) &&
+            element.resource.title === fileItem.title
+          ) {
+            const mediaData = await getResourceFromLocalFile(fileItem.file);
+            const resourceId = element.resource.id;
+            const updateResource = {
+              id: resourceId,
+              properties: ({ resource, ...rest }) => ({
+                ...rest,
+                resource: { ...mediaData, id: resourceId },
+              }),
+            };
+            updateElementsByResourceId(updateResource);
+          }
+        });
+      });
+    },
+    [updateElementsByResourceId]
+  );
+
+  /**
+   * Get saved media items and process on component mount.
+   */
+  useEffect(() => {
+    if (!isInitialMount.current) {
+      return;
+    }
+    initIndexDb(null, 'get', async (files) => {
+      const fileItems = files.map((item) => item.file);
+      await addLocalFiles(fileItems);
+
+      updateResourcesFromStoredFiles(files);
+    });
+    isInitialMount.current = false;
+  }, [addLocalFiles, updateResourcesFromStoredFiles]);
+
+  /**
+   * Watch media state and store media files to index db for persistance.
+   */
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      const mediaItemsToSave = media.map(({ file, title }) => ({
+        file,
+        title,
+      }));
+      initIndexDb(mediaItemsToSave, 'save');
+    }
+  }, [media]);
 
   return (
     <StyledPane id={paneId} {...props}>

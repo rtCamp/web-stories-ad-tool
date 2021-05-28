@@ -25,8 +25,10 @@ import { migrate } from '@web-stories-wp/migration';
  */
 import { useAPI } from '../../api';
 import { useHistory } from '../../history';
+import useAdStory from '../../storyAd/useAdStory';
 import { createPage } from '../../../elements';
 import getUniquePresets from '../../../utils/getUniquePresets';
+import { getDataFromSessionStorage } from '../utils/sessionStore';
 
 // When ID is set, load story from API.
 function useLoadStory({ storyId, shouldLoad, restore, isDemo }) {
@@ -36,6 +38,15 @@ function useLoadStory({ storyId, shouldLoad, restore, isDemo }) {
   const {
     actions: { clearHistory },
   } = useHistory();
+
+  const {
+    actions: {
+      updateCTALink,
+      updateCtaText,
+      updateCustomCtaText,
+      updateLandingPageType,
+    },
+  } = useAdStory();
 
   useEffect(() => {
     if (storyId && shouldLoad) {
@@ -162,12 +173,27 @@ function useLoadStory({ storyId, shouldLoad, restore, isDemo }) {
         };
 
         // TODO read current page and selection from deeplink?
-        restore({
+        let storyToRestore = {
           pages,
           story,
           selection: [],
           current: null, // will be set to first page by `restore`
-        });
+        };
+
+        const sessionData = getDataFromSessionStorage();
+
+        if (sessionData) {
+          storyToRestore = sessionData;
+        }
+
+        if (storyToRestore.storyAd) {
+          updateCTALink(storyToRestore.storyAd.ctaLink);
+          updateCtaText(storyToRestore.storyAd.ctaText);
+          updateCustomCtaText(storyToRestore.storyAd.customCtaText);
+          updateLandingPageType(storyToRestore.storyAd.landingPageType);
+        }
+
+        restore(storyToRestore);
       });
     }
   }, [
@@ -178,6 +204,10 @@ function useLoadStory({ storyId, shouldLoad, restore, isDemo }) {
     getStoryById,
     getDemoStoryById,
     clearHistory,
+    updateCTALink,
+    updateCtaText,
+    updateCustomCtaText,
+    updateLandingPageType,
   ]);
 }
 
