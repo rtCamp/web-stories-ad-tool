@@ -18,12 +18,13 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 
 /**
  * Internal dependencies
  */
 import useConfig from '../config/useConfig';
+import useAdStory from '../storyAd/useAdStory';
 import Context from './context';
 
 import useLoadStory from './effects/useLoadStory';
@@ -34,6 +35,7 @@ import useStoryReducer from './useStoryReducer';
 import useAutoSave from './actions/useAutoSave';
 import useSaveMetaBoxes from './effects/useSaveMetaBoxes';
 import { StoryTriggersProvider } from './storyTriggers';
+import { saveDataOnSessionStorage } from './utils/sessionStore';
 
 function StoryProvider({ storyId, children }) {
   const { isDemo } = useConfig();
@@ -44,6 +46,11 @@ function StoryProvider({ storyId, children }) {
   } = useStoryReducer({
     current: null,
   });
+
+  const {
+    state: { ctaLink, ctaText, customCtaText, landingPageType },
+  } = useAdStory();
+
   const {
     pages,
     current,
@@ -52,6 +59,29 @@ function StoryProvider({ storyId, children }) {
     animationState,
     capabilities,
   } = reducerState;
+
+  const activePage = pages.length ? pages[0] : {};
+
+  const storyDataForSession = {
+    current,
+    selection,
+    story: {
+      ...reducerState.story,
+      globalStoryStyles: story?.globalStoryStyles,
+    },
+    pages: [activePage],
+    storyAd: { ctaLink, ctaText, customCtaText, landingPageType },
+  };
+
+  const setSessionStorage = () => {
+    if (storyDataForSession.selection.length) {
+      saveDataOnSessionStorage(storyDataForSession);
+    }
+  };
+
+  useEffect(() => {
+    setSessionStorage();
+  }, [storyDataForSession]); // eslint-disable-line
 
   // Generate current page info.
   const {
