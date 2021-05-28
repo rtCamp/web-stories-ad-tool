@@ -27,11 +27,11 @@ export const saveDataOnSessionStorage = function (data) {
 /**
  * Get data from session storage.
  *
- * @return {Object} prased json object from session storage.
+ * @return {Object} parsed json object from session storage.
  */
 export const getDataFromSessionStorage = function () {
   const result = sessionStorage.getItem(SESSION_KEY);
-  return JSON.parse(result);
+  return result ? JSON.parse(result) : '';
 };
 
 /**

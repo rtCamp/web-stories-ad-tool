@@ -35,6 +35,10 @@ import {
 } from '../../../../design-system';
 import useAdStory from '../../../app/storyAd/useAdStory';
 
+const Space = styled.div`
+  width: 8px;
+`;
+
 function Reset() {
   const {
     internal: { restore },
@@ -51,10 +55,6 @@ function Reset() {
       setLocalStoryAdMedia,
     })
   );
-
-  const Space = styled.div`
-    width: 8px;
-  `;
 
   const {
     actions: {
