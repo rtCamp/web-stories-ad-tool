@@ -17,7 +17,6 @@
 /**
  * External dependencies
  */
-import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { __ } from '@web-stories-wp/i18n';
 
@@ -34,15 +33,8 @@ function LibraryUploadDropTarget({ children }) {
     addLocalFiles: state.actions.addLocalFiles,
   }));
 
-  const onDropHandler = useCallback(
-    async (files) => {
-      await addLocalFiles(files);
-    },
-    [addLocalFiles]
-  );
-
   return (
-    <UploadDropTarget onDrop={onDropHandler} labelledBy={MESSAGE_ID}>
+    <UploadDropTarget onDrop={addLocalFiles} labelledBy={MESSAGE_ID}>
       {children}
       <UploadDropTargetMessage
         id={MESSAGE_ID}
