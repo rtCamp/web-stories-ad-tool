@@ -23,20 +23,26 @@ import styled from 'styled-components';
 /**
  * Internal dependencies
  */
-import { useStory, useMedia } from '../../../app';
+import { useMedia, useStory } from '../../../app';
 import { removeSessionStorage } from '../../../app/story/utils/sessionStore';
 import { createPage } from '../../../elements';
+import Tooltip from '../../tooltip';
 
 import {
   Button,
   BUTTON_SIZES,
   BUTTON_TYPES,
   BUTTON_VARIANTS,
+  Icons,
 } from '../../../../design-system';
 import useAdStory from '../../../app/storyAd/useAdStory';
 
 const Space = styled.div`
   width: 8px;
+`;
+
+const ButtonContainer = styled.div`
+  transform: scale(0.9) translate(0px, -2px);
 `;
 
 function Reset() {
@@ -96,16 +102,20 @@ function Reset() {
   return (
     <>
       <Space />
-      <Button
-        variant={BUTTON_VARIANTS.RECTANGLE}
-        type={BUTTON_TYPES.SECONDARY}
-        size={BUTTON_SIZES.SMALL}
-        onClick={resetStory}
-        disabled={false}
-        aria-label={label}
-      >
-        {label}
-      </Button>
+      <Tooltip title={label} hasTail>
+        <ButtonContainer>
+          <Button
+            variant={BUTTON_VARIANTS.SQUARE}
+            type={BUTTON_TYPES.QUATERNARY}
+            size={BUTTON_SIZES.SMALL}
+            onClick={resetStory}
+            disabled={false}
+            aria-label={label}
+          >
+            <Icons.ArrowCircle />
+          </Button>
+        </ButtonContainer>
+      </Tooltip>
     </>
   );
 }
