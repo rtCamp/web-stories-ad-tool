@@ -67,6 +67,11 @@
 			line-height: 1.5;
 		}
 
+		.detect-notice {
+			color: white;
+			text-align: center;
+		}
+
 		@media screen and ( max-height: 549px ) {
 			.overlay {
 				display: flex;
@@ -83,14 +88,24 @@
 
 <script>
   (function( loc ) {
-	var container = document.getElementById( 'preview-container' ),
-		iframe = document.createElement( 'iframe' ),
-		url = loc.origin + loc.pathname,
-		slash = url.endsWith( '/' ) ? '' : '/';
+    var container = document.getElementById( 'preview-container' ),
+      iframe = document.createElement( 'iframe' ),
+      url = loc.origin + loc.pathname,
+      slash = url.endsWith( '/' ) ? '' : '/';
 
     iframe.src = url + slash + 'preview-frame.html';
     iframe.setAttribute( 'id', 'iframe' );
     container.appendChild( iframe );
+
+    var request = new Request( 'https://cdn.ampproject.org/amp4ads-v0.js', {
+      method: 'HEAD', // Do not request body.
+      mode: 'no-cors'
+    } );
+
+    fetch( request ).catch( () => {
+      container.innerHTML = '<h1 class="detect-notice">Looks like you have ad blocker enabled, please disable it and reload the page.</h1>';
+    } );
+
   })( window.location )
 </script>
 </body>
