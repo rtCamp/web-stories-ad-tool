@@ -28,6 +28,7 @@ import CircularProgress from '../circularProgress';
 import Buttons from './buttons';
 import HeaderProvider from './provider';
 import { default as ImportButton } from './buttons/import';
+import ResetButton from './buttons/resetButton';
 
 const Background = styled.header.attrs({
   role: 'group',
@@ -82,6 +83,7 @@ function HeaderLayout() {
       <Background>
         <LeftButtonCell>
           <ImportButton />
+          <ResetButton />
           <IconWithSpinner>
             <Loading />
           </IconWithSpinner>
