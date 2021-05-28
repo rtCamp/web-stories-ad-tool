@@ -18,7 +18,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useCallback } from 'react';
 
 /**
  * Internal dependencies
@@ -60,28 +60,36 @@ function StoryProvider({ storyId, children }) {
     capabilities,
   } = reducerState;
 
-  const activePage = pages.length ? pages[0] : {};
+  const setSessionStorage = useCallback(() => {
+    const activePage = pages.length ? pages[0] : {};
 
-  const storyDataForSession = {
-    current,
-    selection,
-    story: {
-      ...reducerState.story,
-      globalStoryStyles: story?.globalStoryStyles,
-    },
-    pages: [activePage],
-    storyAd: { ctaLink, ctaText, customCtaText, landingPageType },
-  };
-
-  const setSessionStorage = () => {
-    if (storyDataForSession.selection.length) {
+    const storyDataForSession = {
+      current,
+      selection,
+      story: {
+        ...story,
+        globalStoryStyles: story?.globalStoryStyles,
+      },
+      pages: [activePage],
+      storyAd: { ctaLink, ctaText, customCtaText, landingPageType },
+    };
+    if (selection.length) {
       saveDataOnSessionStorage(storyDataForSession);
     }
-  };
+  }, [
+    current,
+    selection,
+    story,
+    pages,
+    ctaLink,
+    ctaText,
+    customCtaText,
+    landingPageType,
+  ]);
 
   useEffect(() => {
     setSessionStorage();
-  }, [storyDataForSession]); // eslint-disable-line
+  }, [setSessionStorage]);
 
   // Generate current page info.
   const {

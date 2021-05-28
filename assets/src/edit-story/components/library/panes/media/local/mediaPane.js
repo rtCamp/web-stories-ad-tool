@@ -117,50 +117,50 @@ function MediaPane(props) {
     [insertElement]
   );
 
-  const updateResourcesFromStoredFiles = (files) => {
-    const sessionData = getDataFromSessionStorage();
+  const updateResourcesFromStoredFiles = useCallback(
+    (files) => {
+      const sessionData = getDataFromSessionStorage();
 
-    const { elements } = sessionData?.pages?.[0] ?? [];
+      const { elements } = sessionData?.pages?.[0] ?? [];
 
-    files.map((fileItem) => {
-      elements.map(async (element) => {
-        if (
-          ['image', 'video'].includes(element?.type) &&
-          element.resource.title === fileItem.title
-        ) {
-          const mediaData = await getResourceFromLocalFile(fileItem.file);
-          const resourceId = element.resource.id;
-          const updateResource = {
-            id: resourceId,
-            properties: ({ resource, ...rest }) => ({
-              ...rest,
-              resource: { ...mediaData, id: resourceId },
-            }),
-          };
-          updateElementsByResourceId(updateResource);
-        }
+      files.forEach((fileItem) => {
+        elements.forEach(async (element) => {
+          if (
+            ['image', 'video'].includes(element?.type) &&
+            element.resource.title === fileItem.title
+          ) {
+            const mediaData = await getResourceFromLocalFile(fileItem.file);
+            const resourceId = element.resource.id;
+            const updateResource = {
+              id: resourceId,
+              properties: ({ resource, ...rest }) => ({
+                ...rest,
+                resource: { ...mediaData, id: resourceId },
+              }),
+            };
+            updateElementsByResourceId(updateResource);
+          }
+        });
       });
-    });
-  };
-
-  /**
-   * Process stored files on indexDb.
-   *
-   * @param {Array} files file list to update element resource.
-   */
-  const processStoredFiles = async (files) => {
-    const fileItems = files.map((item) => item.file);
-    await addLocalFiles(fileItems);
-
-    updateResourcesFromStoredFiles(files);
-  };
+    },
+    [updateElementsByResourceId]
+  );
 
   /**
    * Get saved media items and process on component mount.
    */
   useEffect(() => {
-    initIndexDb(null, 'get', processStoredFiles);
-  }, []);
+    if (!isInitialMount.current) {
+      return;
+    }
+    initIndexDb(null, 'get', async (files) => {
+      const fileItems = files.map((item) => item.file);
+      await addLocalFiles(fileItems);
+
+      updateResourcesFromStoredFiles(files);
+    });
+    isInitialMount.current = false;
+  }, [addLocalFiles, updateResourcesFromStoredFiles]);
 
   /**
    * Watch media state and store media files to index db for persistance.
