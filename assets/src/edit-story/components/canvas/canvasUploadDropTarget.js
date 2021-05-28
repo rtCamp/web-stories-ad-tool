@@ -18,7 +18,6 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
 import { __ } from '@web-stories-wp/i18n';
 
 /**
@@ -29,44 +28,18 @@ import {
   UploadDropTargetMessage,
   UploadDropTargetOverlay,
 } from '../uploadDropTarget';
-import { useMedia } from '../../app';
-
-import { getResourceFromLocalFile } from '../../app/media/utils';
+import useLocalFile from '../localFile/useLocalFile';
 import { Layer as CanvasLayer, PageArea } from './layout';
 
 const MESSAGE_ID = 'edit-story-canvas-upload-message';
 
 function CanvasUploadDropTarget({ children }) {
-  const { localStoryAdMedia: media, setLocalStoryAdMedia } = useMedia(
-    ({
-      local: {
-        state: { localStoryAdMedia },
-        actions: { setLocalStoryAdMedia },
-      },
-    }) => ({
-      localStoryAdMedia,
-      setLocalStoryAdMedia,
-    })
-  );
+  const { addLocalFiles } = useLocalFile((state) => ({
+    addLocalFiles: state.actions.addLocalFiles,
+  }));
 
-  const onDropHandler = useCallback(
-    async (files) => {
-      const mediaItems = [...media];
-
-      await Promise.all(
-        files.map(async (file) => {
-          const mediaData = await getResourceFromLocalFile(file);
-          mediaData.local = false; // this disables the UploadingIndicator
-          mediaItems.push(mediaData);
-        })
-      );
-
-      setLocalStoryAdMedia(mediaItems);
-    },
-    [media, setLocalStoryAdMedia]
-  );
   return (
-    <UploadDropTarget onDrop={onDropHandler} labelledBy={MESSAGE_ID}>
+    <UploadDropTarget onDrop={addLocalFiles} labelledBy={MESSAGE_ID}>
       {children}
       <UploadDropTargetOverlay>
         <CanvasLayer>
