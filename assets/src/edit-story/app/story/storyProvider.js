@@ -73,7 +73,7 @@ function StoryProvider({ storyId, children }) {
       pages: [activePage],
       storyAd: { ctaLink, ctaText, customCtaText, landingPageType },
     };
-    if (selection.length) {
+    if (current) {
       saveDataOnSessionStorage(storyDataForSession);
     }
   }, [
