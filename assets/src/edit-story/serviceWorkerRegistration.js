@@ -13,13 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies
+ */
+import { Workbox } from 'workbox-window';
+
 export default function registerServiceWorker() {
+  // Short-circuit if not production.
+  if ('production' !== process.env.NODE_ENV) {
+    return;
+  }
+
   // Check if the serviceWorker Object exists in the navigator object ( means if browser supports SW )
   if ('serviceWorker' in navigator) {
-    /**
-     * Register Service Worker
-     * 'sw.js' is our service worker file
-     */
-    //navigator.serviceWorker.register('/sw.js');
+    const wb = new Workbox('sw.js');
+
+    wb.addEventListener('installed', (event) => {
+      /**
+       * We have the condition — event.isUpdate because we don’t want to show
+       * this message on the very first service worker installation,
+       * only on the updated
+       */
+      if (event.isUpdate) {
+        if (confirm(`New app update is available!. Click OK to refresh`)) {
+          window.location.reload();
+        }
+      }
+    });
+    wb.register();
   }
 }
