@@ -199,8 +199,8 @@ const editorAndDashboard = {
         { from: "preview", to: "preview" },
         { from: "favicon.ico", to: "" },
         { from: "manifest.json", to: "" },
-        { from: "logo192.png", to: "" },
-        { from: "logo512.png", to: "" },
+        { from: "assets/images/editor/logo192.png", to: "assets/images/" },
+        { from: "assets/images/editor/logo512.png", to: "assets/images/" },
       ],
     }),
     // @see https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest
