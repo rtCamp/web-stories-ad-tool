@@ -75,6 +75,10 @@ function Reset() {
    * Reset story handler.
    */
   const resetStory = () => {
+    if (!window.confirm(__('Are you sure you want to reset all changes?', 'web-stories'))) {
+      return;
+    }
+
     const stateToReset = {
       current: null,
       pages: [createPage()],
