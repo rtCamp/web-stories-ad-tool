@@ -27,6 +27,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const CopyPlugin = require("copy-webpack-plugin");
+const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const isProduction = process.env.NODE_ENV === 'production';
@@ -192,6 +193,20 @@ const editorAndDashboard = {
         { from: "preview", to: "preview" },
         { from: "favicon.ico", to: "" }
       ],
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: "preview", to: "preview" },
+        { from: "favicon.ico", to: "" },
+        { from: "manifest.json", to: "" },
+        { from: "assets/images/editor/logo192.png", to: "assets/images/" },
+        { from: "assets/images/editor/logo512.png", to: "assets/images/" },
+      ],
+    }),
+    // @see https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest
+    new WorkboxWebpackPlugin.InjectManifest({
+      swSrc: "./assets/src/edit-story/src-sw.js",
+      swDest: "sw.js",
     }),
   ],
   optimization: {
