@@ -26,9 +26,9 @@ import PropTypes from 'prop-types';
 import Context from './context';
 
 function StoryAdProvider({ children }) {
-  const [ctaLink, updateCTALink] = useState('');
-  const [ctaText, updateCtaText] = useState('BOOK_NOW');
-  const [customCtaText, updateCustomCtaText] = useState('');
+  const [ctaLink, updateCTALink] = useState('https://placeholder');
+  const [ctaText, updateCtaText] = useState('CUSTOM_TEXT');
+  const [customCtaText, updateCustomCtaText] = useState('placeholder');
   const [landingPageType, updateLandingPageType] = useState('NONAMP');
   const [isImporting, updateIsImportingStatus] = useState(false);
   const [isDownloading, updateIsDownloadingStatus] = useState(false);
