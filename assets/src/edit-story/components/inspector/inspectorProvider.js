@@ -34,7 +34,7 @@ import DesignInspector from './design';
 import DocumentInspector from './document';
 
 function InspectorProvider({ children }) {
-  const { selectedElementIds, currentPage } = useStory(({ state }) => ({
+  const { selectedElementIds } = useStory(({ state }) => ({
     selectedElementIds: state.selectedElementIds,
     currentPage: state.currentPage,
   }));
@@ -49,7 +49,7 @@ function InspectorProvider({ children }) {
 
   const inspectorRef = useRef(null);
 
-  const initialTab = DESIGN;
+  const initialTab = DOCUMENT;
   const [tab, setTab] = useState(initialTab);
   const [inspectorContentHeight, setInspectorContentHeight] = useState(null);
   const inspectorContentRef = useRef();
@@ -70,12 +70,6 @@ function InspectorProvider({ children }) {
       setTab(DESIGN);
     }
   }, [selectedElementIds]);
-
-  useEffect(() => {
-    if (tabRef.current === DOCUMENT) {
-      setTab(DESIGN);
-    }
-  }, [currentPage]);
 
   // @todo To be removed.
   const loadUsers = useCallback(() => {}, []);

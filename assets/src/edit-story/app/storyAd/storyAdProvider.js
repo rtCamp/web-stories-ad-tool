@@ -29,7 +29,7 @@ function StoryAdProvider({ children }) {
   const [ctaLink, updateCTALink] = useState('');
   const [ctaText, updateCtaText] = useState('BOOK_NOW');
   const [customCtaText, updateCustomCtaText] = useState('');
-  const [landingPageType, updateLandingPageType] = useState('AMP');
+  const [landingPageType, updateLandingPageType] = useState('NONAMP');
   const [isImporting, updateIsImportingStatus] = useState(false);
   const [isDownloading, updateIsDownloadingStatus] = useState(false);
 
