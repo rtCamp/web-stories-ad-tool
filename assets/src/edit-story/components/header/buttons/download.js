@@ -40,6 +40,7 @@ import useAdStory from '../../../app/storyAd/useAdStory';
 import getStoryPropsToSave from '../../../app/story/utils/getStoryPropsToSave';
 import { PAGE_RATIO, PAGE_WIDTH } from '../../../constants';
 import isBlobURL from '../../../utils/isBlobURL';
+import { DEFAULT_CTA_LINK } from '../../../constants/storyAd';
 import ButtonWithChecklistWarning from './buttonWithChecklistWarning';
 
 const COMMON_MIME_TYPE_MAPPING = {
@@ -186,6 +187,8 @@ Uploading ad to google ad manager:
     updateIsDownloadingStatus(false);
   };
 
+  const hasErrors = !isURL(ctaLink) || DEFAULT_CTA_LINK === ctaLink;
+
   return (
     <ButtonWithChecklistWarning
       variant={BUTTON_VARIANTS.RECTANGLE}
@@ -194,7 +197,7 @@ Uploading ad to google ad manager:
       onClick={download}
       disabled={isDownloading}
       text={__('Download Zip', 'web-stories')}
-      hasErrors={!isURL(ctaLink)}
+      hasErrors={hasErrors}
     />
   );
 }

@@ -70,10 +70,7 @@ function ButtonWithChecklistWarning({ text, hasErrors, ...buttonProps }) {
   );
 
   return hasErrors ? (
-    <Tooltip
-      title={__('CTA link is empty or invalid under meta tab', 'web-stories')}
-      hasTail
-    >
+    <Tooltip title={__('Invalid CTA Link', 'web-stories')} hasTail>
       {button}
     </Tooltip>
   ) : (

@@ -36,6 +36,12 @@ import {
   Icons,
 } from '../../../../design-system';
 import useAdStory from '../../../app/storyAd/useAdStory';
+import {
+  DEFAULT_CTA_CUSTOM_TEXT,
+  DEFAULT_CTA_LINK,
+  DEFAULT_CTA_TEXT_OPTION,
+  DEFAULT_LANDING_PAGE_TYPE,
+} from '../../../constants/storyAd';
 
 const Space = styled.div`
   width: 8px;
@@ -75,7 +81,11 @@ function Reset() {
    * Reset story handler.
    */
   const resetStory = () => {
-    if (!window.confirm(__('Are you sure you want to reset all changes?', 'web-stories'))) {
+    if (
+      !window.confirm(
+        __('Are you sure you want to reset all changes?', 'web-stories')
+      )
+    ) {
       return;
     }
 
@@ -93,10 +103,10 @@ function Reset() {
     removeSessionStorage();
 
     // Update states
-    updateCTALink('');
-    updateCtaText('BOOK_NOW');
-    updateCustomCtaText('');
-    updateLandingPageType('AMP');
+    updateCTALink(DEFAULT_CTA_LINK);
+    updateCtaText(DEFAULT_CTA_TEXT_OPTION);
+    updateCustomCtaText(DEFAULT_CTA_CUSTOM_TEXT);
+    updateLandingPageType(DEFAULT_LANDING_PAGE_TYPE);
 
     restore(stateToReset);
   };
