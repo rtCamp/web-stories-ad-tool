@@ -15,6 +15,7 @@
  */
 
 export { ReactComponent as ArrowDown } from './arrow_down.svg';
+export { ReactComponent as AdBadge } from './ad_badge.svg';
 export { ReactComponent as Close } from './close.svg';
 export { ReactComponent as Dropdown } from './dropdown.svg';
 export { ReactComponent as KeyArrowUp } from './key_arrow_up.svg';

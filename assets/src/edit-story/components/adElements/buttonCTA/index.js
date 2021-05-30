@@ -26,8 +26,8 @@ import { isURL } from '@wordpress/url';
 /**
  * Internal dependencies
  */
-import useAdStory from '../../app/storyAd/useAdStory';
-import { CTA_OPTIONS } from '../../constants/storyAd';
+import useAdStory from '../../../app/storyAd/useAdStory';
+import { CTA_OPTIONS } from '../../../constants/storyAd';
 
 // Copied style from the original cta button.
 const Link = styled.a`
