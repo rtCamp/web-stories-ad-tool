@@ -16,14 +16,15 @@
 /**
  * Internal dependencies
  */
-import * as beautyStickers from './beauty';
-import * as cookingStickers from './cooking';
-import * as diyStickers from './diy';
-import * as entertainmentStickers from './entertainment';
-import * as fashionStickers from './fashion';
-import * as fitnessStickers from './fitness';
-import * as travelStickers from './travel';
-import * as wellbeingStickers from './wellbeing';
+import * as beautyStickers from './fresh-and-bright';
+import * as cookingStickers from './food-and-stuff';
+import * as doersGetMoreDoneStickers from './doers-get-more-done';
+import * as weeklyEntertainmentStickers from './weekly-entertainment';
+import * as fashionOnTheGoStickers from './fashion-on-the-go';
+import * as noDaysOffStickers from './no-days-off';
+import * as experienceThailandStickers from './experience-thailand';
+import * as wellbeingSleepStickers from './sleep';
+import * as crownSeasonsRecappedStickers from './crown-seasons-recapped';
 import * as guideTobakingBreadStrickers from './beginers-guide-to-baking-bread';
 import * as sangriaArtichokeStickers from './sangria-artichoke';
 import * as crispyChickenThighStickers from './crispy-chicken-thigh';
@@ -35,7 +36,6 @@ import * as streetStyleOnTheGoStickers from './street-style-on-the-go';
 import * as plantBasedDyesStickers from './plant-based-dyes';
 import * as indoorGardenOasisStickers from './indoor-garden-oasis';
 import * as killBellyFatStickers from './kill-belly-fat';
-import * as crownSeasonsRecappedStickers from './crown-seasons-recapped';
 import * as honeymooningInItalyStickers from './honeymooning-in-italy';
 import * as stayAtAceHotelKyotoStickers from './stay-at-ace-hotel-kyoto';
 import * as videoCallsSavedTheDayStickers from './how-video-calls-saved-the-day';
@@ -46,12 +46,12 @@ import * as atHomeOfficeStickers from './diy-budget-friendly-home-office';
 export default {
   ...beautyStickers,
   ...cookingStickers,
-  ...diyStickers,
-  ...entertainmentStickers,
-  ...fashionStickers,
-  ...fitnessStickers,
-  ...travelStickers,
-  ...wellbeingStickers,
+  ...doersGetMoreDoneStickers,
+  ...weeklyEntertainmentStickers,
+  ...fashionOnTheGoStickers,
+  ...noDaysOffStickers,
+  ...experienceThailandStickers,
+  ...wellbeingSleepStickers,
   ...guideTobakingBreadStrickers,
   ...sangriaArtichokeStickers,
   ...crispyChickenThighStickers,
