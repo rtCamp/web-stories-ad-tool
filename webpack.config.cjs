@@ -203,11 +203,6 @@ const editorAndDashboard = {
         { from: "assets/images/editor/logo512.png", to: "assets/images/" },
       ],
     }),
-    // @see https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest
-    new WorkboxWebpackPlugin.InjectManifest({
-      swSrc: "./assets/src/edit-story/src-sw.js",
-      swDest: "sw.js",
-    }),
   ],
   optimization: {
     ...sharedConfig.optimization,
@@ -217,6 +212,16 @@ const editorAndDashboard = {
     },
   },
 };
+
+if ( 'production' === process.env.NODE_ENV ) {
+  // @see https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest
+  editorAndDashboard.plugins.push(
+    new WorkboxWebpackPlugin.InjectManifest( {
+      swSrc: './assets/src/edit-story/src-sw.js',
+      swDest: 'sw.js',
+    } ),
+  );
+}
 
 module.exports = [
   editorAndDashboard,
