@@ -87,13 +87,13 @@ function useLoadStory({ storyId, shouldLoad, restore, isDemo }) {
 
       if (sessionData) {
         storyToRestore = sessionData;
-      }
 
-      if (storyToRestore.storyAd) {
-        updateCTALink(storyToRestore.storyAd.ctaLink);
-        updateCtaText(storyToRestore.storyAd.ctaText);
-        updateCustomCtaText(storyToRestore.storyAd.customCtaText);
-        updateLandingPageType(storyToRestore.storyAd.landingPageType);
+        if (storyToRestore.storyAd) {
+          updateCTALink(storyToRestore.storyAd.ctaLink);
+          updateCtaText(storyToRestore.storyAd.ctaText);
+          updateCustomCtaText(storyToRestore.storyAd.customCtaText);
+          updateLandingPageType(storyToRestore.storyAd.landingPageType);
+        }
       }
 
       restore(storyToRestore);
