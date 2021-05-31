@@ -36,12 +36,9 @@ import { StoryProvider } from './app/story';
 import { FontProvider } from './app/font';
 import { MediaProvider } from './app/media';
 import { CurrentUserProvider } from './app/currentUser';
-import AutoSaveHandler from './components/autoSaveHandler';
 import { TransformProvider } from './components/transform';
 import { DropTargetsProvider } from './components/dropTargets';
 import { HelpCenterProvider } from './app/helpCenter';
-import StatusCheck from './components/statusCheck';
-import PostLock from './components/postLock';
 import Layout from './components/layout';
 import DevTools from './components/devTools';
 import { GlobalStyle as DefaultMoveableGlobalStyle } from './components/moveable/moveStyle';
@@ -61,7 +58,6 @@ function App({ config }) {
         <ErrorBoundary>
           <ConfigProvider config={config}>
             <APIProvider>
-              <StatusCheck />
               <FileProvider>
                 <Media3pApiProvider>
                   <HistoryProvider size={50}>
@@ -70,10 +66,8 @@ function App({ config }) {
                         <StoryAdProvider>
                           <StoryProvider storyId={storyId}>
                             <CurrentUserProvider>
-                              <PostLock />
                               <FontProvider>
                                 <MediaProvider>
-                                  <AutoSaveHandler />
                                   <TransformProvider>
                                     <LocalFileProvider>
                                       <DropTargetsProvider>

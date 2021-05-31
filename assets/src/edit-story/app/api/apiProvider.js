@@ -39,53 +39,6 @@ function APIProvider({ children }) {
     withoutImages: [],
   });
 
-  const getCurrentUser = useCallback(() => {
-    return Promise.resolve({
-      id: 1,
-      name: 'dev',
-      url: '',
-      description: '',
-      link: '',
-      slug: 'dev',
-      avatar_urls: {
-        24: '',
-      },
-      meta: {
-        web_stories_tracking_optin: false,
-        web_stories_media_optimization: true,
-        web_stories_onboarding: {
-          safeZone: true,
-        },
-      },
-      amp_dev_tools_enabled: true,
-      _links: {
-        self: [
-          {
-            href: '',
-          },
-        ],
-        collection: [
-          {
-            href: '',
-          },
-        ],
-      },
-    });
-  }, []);
-
-  /**
-   * Status check, submit html string.
-   *
-   * @todo To be removed.
-   *
-   * @param {string} HTML string.
-   * @return {Promise} Result promise
-   */
-  const getStatusCheck = useCallback(
-    () => Promise.resolve({ success: true }),
-    []
-  );
-
   const getPageTemplates = useCallback(
     async ({ showImages = false } = {}) => {
       // check if pageTemplates have been loaded yet
@@ -118,11 +71,11 @@ function APIProvider({ children }) {
       updateMedia: dummyFetch,
       deleteMedia: dummyFetch,
       saveMetaBoxes: dummyFetch,
-      getStatusCheck,
+      getStatusCheck: dummyFetch,
       addPageTemplate: dummyFetch,
       getCustomPageTemplates: dummyFetch,
       getPageTemplates,
-      getCurrentUser,
+      getCurrentUser: dummyFetch,
       updateCurrentUser: dummyFetch,
     },
   };
