@@ -32,35 +32,7 @@ function APIProvider({ children }) {
   const { cdnURL, assetsURL } = useConfig();
 
   // @todo All mocked fetch references need to be removed.
-  const mockedFetch = useCallback(() => Promise.resolve({}), []);
-
-  const getStoryById = useCallback(() => {
-    // @todo Remove items not required for story ad.
-    return Promise.resolve({
-      date: '',
-      modified: '',
-      password: '',
-      slug: '',
-      status: 'auto-draft',
-      link: '',
-      title: {
-        raw: '',
-      },
-      excerpt: {
-        raw: '',
-      },
-      permalink_template: '',
-      story_data: [],
-      publisher_logo_url: null,
-      style_presets: {
-        colors: [],
-        textStyles: [],
-      },
-      featured_media_url: '',
-      preview_link: '',
-      _embedded: {},
-    });
-  }, []);
+  const dummyFetch = useCallback(() => Promise.resolve({}), []);
 
   const pageTemplates = useRef({
     base: [],
@@ -133,25 +105,25 @@ function APIProvider({ children }) {
 
   const state = {
     actions: {
-      autoSaveById: mockedFetch,
-      getStoryById,
-      getDemoStoryById: mockedFetch,
-      getStoryLockById: mockedFetch,
-      setStoryLockById: mockedFetch,
-      deleteStoryLockById: mockedFetch,
-      getLinkMetadata: mockedFetch,
-      saveStoryById: mockedFetch,
-      getAuthors: mockedFetch,
-      uploadMedia: mockedFetch,
-      updateMedia: mockedFetch,
-      deleteMedia: mockedFetch,
-      saveMetaBoxes: mockedFetch,
+      autoSaveById: dummyFetch,
+      getStoryById: dummyFetch,
+      getDemoStoryById: dummyFetch,
+      getStoryLockById: dummyFetch,
+      setStoryLockById: dummyFetch,
+      deleteStoryLockById: dummyFetch,
+      getLinkMetadata: dummyFetch,
+      saveStoryById: dummyFetch,
+      getAuthors: dummyFetch,
+      uploadMedia: dummyFetch,
+      updateMedia: dummyFetch,
+      deleteMedia: dummyFetch,
+      saveMetaBoxes: dummyFetch,
       getStatusCheck,
-      addPageTemplate: mockedFetch,
-      getCustomPageTemplates: mockedFetch,
+      addPageTemplate: dummyFetch,
+      getCustomPageTemplates: dummyFetch,
       getPageTemplates,
       getCurrentUser,
-      updateCurrentUser: mockedFetch,
+      updateCurrentUser: dummyFetch,
     },
   };
 
