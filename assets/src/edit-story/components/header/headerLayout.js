@@ -28,7 +28,7 @@ import CircularProgress from '../circularProgress';
 import Buttons from './buttons';
 import HeaderProvider from './provider';
 import { default as ImportButton } from './buttons/import';
-import ResetButton from './buttons/resetButton';
+import ResetButton from './buttons/reset';
 
 const Background = styled.header.attrs({
   role: 'group',

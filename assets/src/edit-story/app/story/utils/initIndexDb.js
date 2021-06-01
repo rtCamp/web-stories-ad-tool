@@ -13,24 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+const DB_NAME = 'google_ad_creation_tool';
+const DB_VERSION = 1;
+const ASSET_OBJECT_STORE = 'assets';
+const FILES_STORAGE_KEY = 'files';
+
 export const initIndexDb = (
   files = [],
   action = 'get',
   callback = () => null
 ) => {
-  const DB_NAME = 'google_ad_creation_tool';
-  const DB_VERSION = 1;
-  const ASSET_OBJECT_STORE = 'assets';
-
-  const filesStorageKey = 'files';
-
   const request = window.indexedDB.open(DB_NAME, DB_VERSION);
-
-  request.onerror = function () {
-    throw new Error(
-      'Could not open Indexed DB due to error: ' + this.errorCode
-    );
-  };
 
   request.onupgradeneeded = function () {
     // Here we create a new object store called data, and give it an auto-generated key path
@@ -38,26 +32,25 @@ export const initIndexDb = (
       autoIncrement: true,
     });
 
-    // add an object to the "data" objectStore with the key.
-    storage.add([], filesStorageKey);
+    // Add an object to the "data" objectStore with the key.
+    storage.add([], FILES_STORAGE_KEY);
   };
 
   request.onsuccess = function (event) {
-    const database = event.target.result; // store the database for later use
+    const database = event.target.result;
 
-    // now we are going to use some data from our database
     const storage = database
       .transaction(ASSET_OBJECT_STORE, 'readwrite')
       .objectStore(ASSET_OBJECT_STORE);
 
-    const getRequest = storage.get(filesStorageKey);
+    const getRequest = storage.get(FILES_STORAGE_KEY);
 
     getRequest.onsuccess = function () {
       let tempAssets = this.result;
 
       if ('save' === action) {
         tempAssets = files;
-        storage.put(tempAssets, filesStorageKey);
+        storage.put(tempAssets, FILES_STORAGE_KEY);
       }
 
       if ('get' === action) {

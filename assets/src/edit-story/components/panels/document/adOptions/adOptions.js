@@ -36,7 +36,7 @@ const FieldRow = styled(Row)`
   margin-bottom: 12px;
 `;
 
-function StoryAdPanel() {
+function AdOptionsPanel() {
   const { adOptions, updateAdOptions } = useStory(
     ({
       state: {
@@ -125,4 +125,4 @@ function StoryAdPanel() {
   );
 }
 
-export default StoryAdPanel;
+export default AdOptionsPanel;

@@ -17,10 +17,10 @@
 /**
  * Internal dependencies
  */
-import { StoryAdPanel } from '../../panels/document';
+import { AdOptionsPanel } from '../../panels/document';
 
 function DocumentInspector() {
-  return <StoryAdPanel />;
+  return <AdOptionsPanel />;
 }
 
 export default DocumentInspector;
