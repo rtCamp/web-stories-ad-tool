@@ -134,7 +134,8 @@
 
 <script>
   ( function( loc ) {
-    var container = document.getElementById( 'frame-container' ),
+    var previewContainer = document.getElementById( 'preview-container' ),
+      container = document.getElementById( 'frame-container' ),
       adBadge = document.getElementById( 'ad-badge' ),
       iframe = document.createElement( 'iframe' ),
       url = loc.origin + loc.pathname,
@@ -152,10 +153,10 @@
     } );
 
     fetch( request ).catch( () => {
-      container.innerHTML = `
+      previewContainer.innerHTML = `
 			<div class="detect-notice-container">
 				<svg class="report-icon" xmlns="http://www.w3.org/2000/svg" height="100px" viewBox="0 0 24 24" width="100px" fill="#FF0000"><path d="M0 0h24v24H0z" fill="none"/><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-				<h1 class="detect-notice">Looks like you have ad blocker enabled, please disable it and reload the page.</h1>
+				<h1 class="detect-notice">Please disable ad blocker and refresh the page to view the ad.</h1>
 			</div>
 		`;
     } );
