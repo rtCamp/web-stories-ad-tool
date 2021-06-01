@@ -25,7 +25,6 @@ import styled from 'styled-components';
  */
 import { useMedia, useStory } from '../../../app';
 import { removeSessionStorage } from '../../../app/story/utils/sessionStore';
-import { createPage } from '../../../elements';
 import Tooltip from '../../tooltip';
 
 import {
@@ -35,13 +34,7 @@ import {
   BUTTON_VARIANTS,
   Icons,
 } from '../../../../design-system';
-import useAdStory from '../../../app/storyAd/useAdStory';
-import {
-  DEFAULT_CTA_CUSTOM_TEXT,
-  DEFAULT_CTA_LINK,
-  DEFAULT_CTA_TEXT_OPTION,
-  DEFAULT_LANDING_PAGE_TYPE,
-} from '../../../constants/storyAd';
+import getInitialStoryState from '../../../app/story/utils/getInitialStoryState';
 
 const Space = styled.div`
   width: 8px;
@@ -68,15 +61,6 @@ function Reset() {
     })
   );
 
-  const {
-    actions: {
-      updateCTALink,
-      updateCtaText,
-      updateCustomCtaText,
-      updateLandingPageType,
-    },
-  } = useAdStory();
-
   /**
    * Reset story handler.
    */
@@ -89,24 +73,13 @@ function Reset() {
       return;
     }
 
-    const stateToReset = {
-      current: null,
-      pages: [createPage()],
-      selection: [],
-      story: {},
-    };
+    const stateToReset = getInitialStoryState();
 
     // Remove local media items.
     setLocalStoryAdMedia([]);
 
     // Remove session storage dara.
     removeSessionStorage();
-
-    // Update states
-    updateCTALink(DEFAULT_CTA_LINK);
-    updateCtaText(DEFAULT_CTA_TEXT_OPTION);
-    updateCustomCtaText(DEFAULT_CTA_CUSTOM_TEXT);
-    updateLandingPageType(DEFAULT_LANDING_PAGE_TYPE);
 
     restore(stateToReset);
   };

@@ -18,17 +18,14 @@
  * External dependencies
  */
 import { useEffect } from 'react';
-import { migrate } from '@web-stories-wp/migration';
 
 /**
  * Internal dependencies
  */
 import { useAPI } from '../../api';
 import { useHistory } from '../../history';
-import useAdStory from '../../storyAd/useAdStory';
-import { createPage } from '../../../elements';
-import getUniquePresets from '../../../utils/getUniquePresets';
 import { getDataFromSessionStorage } from '../utils/sessionStore';
+import getInitialStoryState from '../utils/getInitialStoryState';
 
 // When ID is set, load story from API.
 function useLoadStory({ storyId, shouldLoad, restore, isDemo }) {
@@ -39,61 +36,16 @@ function useLoadStory({ storyId, shouldLoad, restore, isDemo }) {
     actions: { clearHistory },
   } = useHistory();
 
-  const {
-    actions: {
-      updateCTALink,
-      updateCtaText,
-      updateCustomCtaText,
-      updateLandingPageType,
-    },
-  } = useAdStory();
-
   useEffect(() => {
     if (storyId && shouldLoad) {
-      const globalStoryStyles = {
-        colors: [],
-        textStyles: [],
-      };
-
       // First clear history completely.
       clearHistory();
 
-      // If there are no pages, create empty page.
-      const storyData = migrate([], 0);
-      const pages =
-        storyData?.pages?.length > 0 ? storyData.pages : [createPage()];
-
-      // Set story-global variables.
-      const story = {
-        storyId,
-        currentStoryStyles: {
-          colors: storyData?.currentStoryStyles?.colors
-            ? getUniquePresets(storyData.currentStoryStyles.colors)
-            : [],
-        },
-        globalStoryStyles,
-        autoAdvance: storyData?.autoAdvance,
-        defaultPageDuration: storyData?.defaultPageDuration,
-      };
-
-      let storyToRestore = {
-        pages,
-        story,
-        selection: [],
-        current: null, // will be set to first page by `restore`
-      };
-
+      let storyToRestore = getInitialStoryState();
       const sessionData = getDataFromSessionStorage();
 
       if (sessionData) {
         storyToRestore = sessionData;
-
-        if (storyToRestore.storyAd) {
-          updateCTALink(storyToRestore.storyAd.ctaLink);
-          updateCtaText(storyToRestore.storyAd.ctaText);
-          updateCustomCtaText(storyToRestore.storyAd.customCtaText);
-          updateLandingPageType(storyToRestore.storyAd.landingPageType);
-        }
       }
 
       restore(storyToRestore);
@@ -106,10 +58,6 @@ function useLoadStory({ storyId, shouldLoad, restore, isDemo }) {
     getStoryById,
     getDemoStoryById,
     clearHistory,
-    updateCTALink,
-    updateCtaText,
-    updateCustomCtaText,
-    updateLandingPageType,
   ]);
 }
 

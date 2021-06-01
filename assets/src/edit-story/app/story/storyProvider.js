@@ -18,13 +18,12 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useMemo, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 /**
  * Internal dependencies
  */
 import useConfig from '../config/useConfig';
-import useAdStory from '../storyAd/useAdStory';
 import Context from './context';
 
 import useLoadStory from './effects/useLoadStory';
@@ -48,10 +47,6 @@ function StoryProvider({ storyId, children }) {
   });
 
   const {
-    state: { ctaLink, ctaText, customCtaText, landingPageType },
-  } = useAdStory();
-
-  const {
     pages,
     current,
     selection,
@@ -63,7 +58,7 @@ function StoryProvider({ storyId, children }) {
   const setSessionStorage = useCallback(() => {
     const activePage = pages.length ? pages[0] : {};
 
-    if ( ! story.globalStoryStyles ) {
+    if (!story.globalStoryStyles) {
       return;
     }
 
@@ -72,22 +67,12 @@ function StoryProvider({ storyId, children }) {
       selection,
       story: { ...story },
       pages: [activePage],
-      storyAd: { ctaLink, ctaText, customCtaText, landingPageType },
     };
 
     if (current) {
       saveDataOnSessionStorage(storyDataForSession);
     }
-  }, [
-    current,
-    selection,
-    story,
-    pages,
-    ctaLink,
-    ctaText,
-    customCtaText,
-    landingPageType,
-  ]);
+  }, [current, selection, story, pages]);
 
   // Generate current page info.
   const {

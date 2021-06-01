@@ -35,12 +35,11 @@ import {
   BUTTON_TYPES,
   BUTTON_VARIANTS,
   Icons,
-  THEME_CONSTANTS,
   Text,
+  THEME_CONSTANTS,
 } from '../../../../design-system';
 import Tooltip from '../../tooltip';
 import getStoryPropsToSave from '../../../app/story/utils/getStoryPropsToSave';
-import useAdStory from '../../../app/storyAd/useAdStory';
 import getCurrentUrl from '../../../utils/getCurrentUrl';
 import isBlobURL from '../../../utils/isBlobURL';
 import { LOCAL_STORAGE_PREFIX } from '../../../utils/localStore';
@@ -54,9 +53,6 @@ function Preview() {
   const {
     internal: { reducerState },
   } = useStory();
-  const {
-    state: { ctaLink, ctaText, customCtaText, landingPageType },
-  } = useAdStory();
 
   const { pages, story } = reducerState;
 
@@ -76,7 +72,6 @@ function Preview() {
     pages,
     metadata: {},
     flags: {},
-    storyAd: { ctaLink, ctaText, customCtaText, landingPageType },
   });
 
   const markup = `<!doctype html>${content}`;

@@ -18,15 +18,15 @@
  * External dependencies
  */
 import styled from 'styled-components';
+import { __ } from '@web-stories-wp/i18n';
 
 /**
  * Internal dependencies
  */
-import { __ } from '@web-stories-wp/i18n';
 import { SimplePanel } from '../../panel';
 import { DropDown, Input, PLACEMENT } from '../../../../../design-system';
 import { Row } from '../../../form';
-import useAdStory from '../../../../app/storyAd/useAdStory';
+import { useStory } from '../../../../app';
 import {
   CTA_OPTIONS,
   LANDING_PAGE_OPTIONS,
@@ -37,22 +37,27 @@ const FieldRow = styled(Row)`
 `;
 
 function StoryAdPanel() {
-  const {
-    actions: {
-      updateCTALink,
-      updateCtaText,
-      updateCustomCtaText,
-      updateLandingPageType,
-    },
-    state: { ctaLink, ctaText, customCtaText, landingPageType },
-  } = useAdStory();
+  const { adOptions, updateAdOptions } = useStory(
+    ({
+      state: {
+        story: { adOptions },
+      },
+      actions: { updateAdOptions },
+    }) => ({ adOptions, updateAdOptions })
+  );
+
+  if (!adOptions) {
+    return null;
+  }
 
   const handleCTALinkChange = (event) => {
-    updateCTALink(event.currentTarget.value);
+    updateAdOptions({ properties: { ctaLink: event.currentTarget.value } });
   };
 
   const handleCustomCTAChange = (event) => {
-    updateCustomCtaText(event.currentTarget.value);
+    updateAdOptions({
+      properties: { customCtaText: event.currentTarget.value },
+    });
   };
 
   return (
@@ -63,7 +68,7 @@ function StoryAdPanel() {
     >
       <FieldRow>
         <Input
-          value={ctaLink}
+          value={adOptions.ctaLink}
           onChange={handleCTALinkChange}
           placeholder={__('Enter CTA Link', 'web-stories')}
           aria-label={__('CTA Link', 'web-stories')}
@@ -80,18 +85,18 @@ function StoryAdPanel() {
           dropDownLabel={__('CTA Text', 'web-stories')}
           isKeepMenuOpenOnSelection={false}
           isRTL={false}
-          selectedValue={ctaText}
+          selectedValue={adOptions.ctaText}
           onMenuItemClick={(event, newValue) => {
-            updateCtaText(newValue);
+            updateAdOptions({ properties: { ctaText: newValue } });
           }}
           placement={PLACEMENT.BOTTOM}
         />
       </FieldRow>
 
-      {'CUSTOM_TEXT' === ctaText && (
+      {'CUSTOM_TEXT' === adOptions.ctaText && (
         <FieldRow>
           <Input
-            value={customCtaText}
+            value={adOptions.customCtaText}
             onChange={handleCustomCTAChange}
             placeholder={__('Enter Custom CTA Text', 'web-stories')}
             aria-label={__('Custom CTA Text', 'web-stories')}
@@ -109,9 +114,9 @@ function StoryAdPanel() {
           dropDownLabel={__('Landing Page Type', 'web-stories')}
           isKeepMenuOpenOnSelection={false}
           isRTL={false}
-          selectedValue={landingPageType}
+          selectedValue={adOptions.landingPageType}
           onMenuItemClick={(event, newValue) => {
-            updateLandingPageType(newValue);
+            updateAdOptions({ properties: { landingPageType: newValue } });
           }}
           placement={PLACEMENT.BOTTOM}
         />

@@ -52,14 +52,19 @@ const COMMON_MIME_TYPE_MAPPING = {
 };
 
 function Download() {
-  const {
-    internal: { reducerState },
-  } = useStory();
+  const { adOptions, reducerState } = useStory(
+    ({
+      state: {
+        story: { adOptions },
+      },
+      internal: { reducerState },
+    }) => ({ adOptions, reducerState })
+  );
 
   const { pages, current, selection, story } = reducerState;
 
   const {
-    state: { ctaLink, ctaText, customCtaText, landingPageType, isDownloading },
+    state: { isDownloading },
     actions: { updateIsDownloadingStatus },
   } = useAdStory();
 
@@ -148,10 +153,12 @@ function Download() {
     const storyData = {
       current,
       selection,
-      story: { globalStoryStyles: story?.globalStoryStyles },
+      story: {
+        globalStoryStyles: story?.globalStoryStyles,
+        adOptions: story?.adOptions,
+      },
       version: DATA_VERSION,
       pages: [currentPage],
-      storyAd: { ctaLink, ctaText, customCtaText, landingPageType },
     };
 
     zip.file('config.json', JSON.stringify(storyData));
@@ -171,8 +178,6 @@ Uploading ad to google ad manager:
   };
 
   const download = async () => {
-    const storyAd = { ctaLink, ctaText, customCtaText, landingPageType };
-
     updateIsDownloadingStatus(true);
 
     const storyProps = getStoryPropsToSave({
@@ -180,14 +185,15 @@ Uploading ad to google ad manager:
       pages,
       metadata: {},
       flags: {},
-      storyAd,
     });
+
     await zipStoryAd(storyProps.content);
 
     updateIsDownloadingStatus(false);
   };
 
-  const hasErrors = !isURL(ctaLink) || DEFAULT_CTA_LINK === ctaLink;
+  const hasErrors =
+    !isURL(adOptions?.ctaLink) || DEFAULT_CTA_LINK === adOptions?.ctaLink;
 
   return (
     <ButtonWithChecklistWarning

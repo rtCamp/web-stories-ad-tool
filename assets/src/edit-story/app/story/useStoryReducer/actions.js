@@ -141,6 +141,9 @@ const toggleElementInSelection = (dispatch) => ({ elementId }) =>
 const updateStory = (dispatch) => ({ properties }) =>
   dispatch({ type: types.UPDATE_STORY, payload: { properties } });
 
+const updateAdOptions = (dispatch) => ({ properties }) =>
+  dispatch({ type: types.UPDATE_AD_OPTIONS, payload: { properties } });
+
 const updateAnimationState = (dispatch) => ({ animationState }) =>
   dispatch({ type: types.UPDATE_ANIMATION_STATE, payload: { animationState } });
 
@@ -180,6 +183,7 @@ export const exposedActions = {
   updateAnimationState,
   addAnimations,
   updateStory,
+  updateAdOptions,
 };
 
 // Internal actions

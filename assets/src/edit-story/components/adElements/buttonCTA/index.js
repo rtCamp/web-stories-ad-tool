@@ -26,8 +26,8 @@ import { isURL } from '@wordpress/url';
 /**
  * Internal dependencies
  */
-import useAdStory from '../../../app/storyAd/useAdStory';
 import { CTA_OPTIONS } from '../../../constants/storyAd';
+import { useStory } from '../../../app';
 
 // Copied style from the original cta button.
 const Link = styled.a`
@@ -54,9 +54,15 @@ const Link = styled.a`
 `;
 
 function ButtonCTA() {
-  const {
-    state: { ctaLink, ctaText, customCtaText },
-  } = useAdStory();
+  const { adOptions } = useStory(({ state: { story: { adOptions } } }) => ({
+    adOptions,
+  }));
+
+  if (!adOptions) {
+    return null;
+  }
+
+  const { ctaLink, ctaText, customCtaText } = adOptions;
 
   const selectedOption = CTA_OPTIONS.find((option) => option.value === ctaText);
   const buttonText = selectedOption?.label;
