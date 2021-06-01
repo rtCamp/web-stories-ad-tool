@@ -25,12 +25,12 @@ import { v4 as uuidv4 } from 'uuid';
 /**
  * Internal dependencies
  */
-import Dialog from '../dialog';
+import Dialog from '../../components/dialog';
 import { THEME_CONSTANTS, Text, useSnackbar } from '../../../design-system';
-import { useConfig, useStory } from '../../app';
-import { useMedia } from '../../app/media';
-import { getResourceFromLocalFile } from '../../app/media/utils';
-import useFFmpeg from '../../app/media/utils/useFFmpeg';
+import { useConfig, useStory } from '..';
+import { useMedia } from '../media';
+import { getResourceFromLocalFile } from '../media/utils';
+import useFFmpeg from '../media/utils/useFFmpeg';
 import Context from './context';
 
 const bytesToMB = (bytes) =>

@@ -79,24 +79,7 @@ const StoryPropTypes = {};
 
 StoryPropTypes.story = PropTypes.shape({
   storyId: PropTypes.number,
-  title: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
-  author: PropTypes.shape({
-    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    name: PropTypes.string.isRequired,
-  }),
-  slug: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  modified: PropTypes.string.isRequired,
-  excerpt: PropTypes.string.isRequired,
-  featuredMedia: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    url: PropTypes.string.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-  }),
-  password: PropTypes.string.isRequired,
-  currentStoryStyles: PropTypes.array,
+  currentStoryStyles: PropTypes.object,
   autoAdvance: PropTypes.bool,
   defaultPageDuration: PropTypes.number,
 });
