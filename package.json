@@ -11,13 +11,13 @@
     "stories",
     "storytelling"
   ],
-  "homepage": "https://rtCamp.github.io/google/web-stories-wp",
+  "homepage": "https://github.com/rtCamp/web-stories-ad-tool",
   "repository": {
     "type": "git",
-    "url": "https://github.com/google/web-stories-wp.git"
+    "url": "https://github.com/google/web-stories-ad-tool.git"
   },
   "bugs": {
-    "url": "https://github.com/google/web-stories-wp/issues"
+    "url": "https://github.com/rtCamp/web-stories-ad-tool/issues"
   },
   "engines": {
     "node": ">= 15",
