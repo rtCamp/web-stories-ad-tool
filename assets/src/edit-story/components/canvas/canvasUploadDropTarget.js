@@ -28,7 +28,7 @@ import {
   UploadDropTargetMessage,
   UploadDropTargetOverlay,
 } from '../uploadDropTarget';
-import useLocalFile from '../localFile/useLocalFile';
+import useLocalFile from '../../app/localFile/useLocalFile';
 import { Layer as CanvasLayer, PageArea } from './layout';
 
 const MESSAGE_ID = 'edit-story-canvas-upload-message';

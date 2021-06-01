@@ -23,40 +23,18 @@ import PropTypes from 'prop-types';
 /**
  * Internal dependencies
  */
-import {
-  DEFAULT_CTA_LINK,
-  DEFAULT_CTA_CUSTOM_TEXT,
-  DEFAULT_CTA_TEXT_OPTION,
-  DEFAULT_LANDING_PAGE_TYPE,
-} from '../../constants/storyAd';
 import Context from './context';
 
 function StoryAdProvider({ children }) {
-  const [ctaLink, updateCTALink] = useState(DEFAULT_CTA_LINK);
-  const [ctaText, updateCtaText] = useState(DEFAULT_CTA_TEXT_OPTION);
-  const [customCtaText, updateCustomCtaText] = useState(
-    DEFAULT_CTA_CUSTOM_TEXT
-  );
-  const [landingPageType, updateLandingPageType] = useState(
-    DEFAULT_LANDING_PAGE_TYPE
-  );
   const [isImporting, updateIsImportingStatus] = useState(false);
   const [isDownloading, updateIsDownloadingStatus] = useState(false);
 
   const value = {
     actions: {
-      updateCTALink,
-      updateCtaText,
-      updateCustomCtaText,
-      updateLandingPageType,
       updateIsImportingStatus,
       updateIsDownloadingStatus,
     },
     state: {
-      ctaLink,
-      ctaText,
-      customCtaText,
-      landingPageType,
       isImporting,
       isDownloading,
     },

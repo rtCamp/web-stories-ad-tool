@@ -18,13 +18,12 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useMemo, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 /**
  * Internal dependencies
  */
 import useConfig from '../config/useConfig';
-import useAdStory from '../storyAd/useAdStory';
 import Context from './context';
 
 import useLoadStory from './effects/useLoadStory';
@@ -48,10 +47,6 @@ function StoryProvider({ storyId, children }) {
   });
 
   const {
-    state: { ctaLink, ctaText, customCtaText, landingPageType },
-  } = useAdStory();
-
-  const {
     pages,
     current,
     selection,
@@ -63,33 +58,21 @@ function StoryProvider({ storyId, children }) {
   const setSessionStorage = useCallback(() => {
     const activePage = pages.length ? pages[0] : {};
 
+    if (!story.globalStoryStyles) {
+      return;
+    }
+
     const storyDataForSession = {
       current,
       selection,
-      story: {
-        ...story,
-        globalStoryStyles: story?.globalStoryStyles,
-      },
+      story: { ...story },
       pages: [activePage],
-      storyAd: { ctaLink, ctaText, customCtaText, landingPageType },
     };
+
     if (current) {
       saveDataOnSessionStorage(storyDataForSession);
     }
-  }, [
-    current,
-    selection,
-    story,
-    pages,
-    ctaLink,
-    ctaText,
-    customCtaText,
-    landingPageType,
-  ]);
-
-  useEffect(() => {
-    setSessionStorage();
-  }, [setSessionStorage]);
+  }, [current, selection, story, pages]);
 
   // Generate current page info.
   const {
@@ -159,6 +142,10 @@ function StoryProvider({ storyId, children }) {
   // These effects send updates to and restores state from history.
   useHistoryEntry({ pages, current, selection, story, capabilities });
   useHistoryReplay({ restore });
+
+  useEffect(() => {
+    setSessionStorage();
+  }, [setSessionStorage]);
 
   // This action allows the user to save the story
   // (and it will have side-effects because saving can update url and status,

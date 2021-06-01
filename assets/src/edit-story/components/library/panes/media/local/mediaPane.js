@@ -41,7 +41,7 @@ import PaginatedMediaGallery from '../common/paginatedMediaGallery';
 import resourceList from '../../../../../utils/resourceList';
 import useLibrary from '../../../useLibrary';
 import { useConfig, useStory } from '../../../../../app';
-import { useLocalFile } from '../../../../localFile';
+import { useLocalFile } from '../../../../../app/localFile';
 import { initIndexDb } from '../../../../../app/story/utils/initIndexDb';
 import { getDataFromSessionStorage } from '../../../../../app/story/utils/sessionStore';
 import getResourceFromLocalFile from '../../../../../app/media/utils/getResourceFromLocalFile';

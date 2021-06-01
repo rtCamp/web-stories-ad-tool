@@ -99,6 +99,10 @@ function reducer(state, { type, payload }) {
       return reducers.updateStory(state, payload);
     }
 
+    case types.UPDATE_AD_OPTIONS: {
+      return reducers.updateAdOptions(state, payload);
+    }
+
     case types.UPDATE_ANIMATION_STATE: {
       return reducers.updateAnimationState(state, payload);
     }

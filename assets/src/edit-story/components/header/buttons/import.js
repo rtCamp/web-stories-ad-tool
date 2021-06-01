@@ -44,13 +44,7 @@ function Import() {
   } = useStory();
 
   const {
-    actions: {
-      updateCTALink,
-      updateCtaText,
-      updateCustomCtaText,
-      updateLandingPageType,
-      updateIsImportingStatus,
-    },
+    actions: { updateIsImportingStatus },
     state: { isImporting },
   } = useAdStory();
 
@@ -176,13 +170,6 @@ function Import() {
     );
 
     setLocalStoryAdMedia(mediaItems);
-
-    if (stateToRestore.storyAd) {
-      updateCTALink(stateToRestore.storyAd.ctaLink);
-      updateCtaText(stateToRestore.storyAd.ctaText);
-      updateCustomCtaText(stateToRestore.storyAd.customCtaText);
-      updateLandingPageType(stateToRestore.storyAd.landingPageType);
-    }
 
     restore(stateToRestore);
 

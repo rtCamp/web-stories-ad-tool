@@ -24,7 +24,7 @@ import { __ } from '@web-stories-wp/i18n';
  * Internal dependencies
  */
 import { UploadDropTarget, UploadDropTargetMessage } from '../uploadDropTarget';
-import { useLocalFile } from '../localFile';
+import { useLocalFile } from '../../app/localFile';
 
 const MESSAGE_ID = 'edit-story-library-upload-message';
 

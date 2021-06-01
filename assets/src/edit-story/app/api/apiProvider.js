@@ -32,87 +32,12 @@ function APIProvider({ children }) {
   const { cdnURL, assetsURL } = useConfig();
 
   // @todo All mocked fetch references need to be removed.
-  const mockedFetch = useCallback(() => Promise.resolve({}), []);
-
-  const getStoryById = useCallback(() => {
-    // @todo Remove items not required for story ad.
-    return Promise.resolve({
-      date: '',
-      modified: '',
-      password: '',
-      slug: '',
-      status: 'auto-draft',
-      link: '',
-      title: {
-        raw: '',
-      },
-      excerpt: {
-        raw: '',
-      },
-      permalink_template: '',
-      story_data: [],
-      publisher_logo_url: null,
-      style_presets: {
-        colors: [],
-        textStyles: [],
-      },
-      featured_media_url: '',
-      preview_link: '',
-      _embedded: {},
-    });
-  }, []);
+  const dummyFetch = useCallback(() => Promise.resolve({}), []);
 
   const pageTemplates = useRef({
     base: [],
     withoutImages: [],
   });
-
-  const getCurrentUser = useCallback(() => {
-    return Promise.resolve({
-      id: 1,
-      name: 'dev',
-      url: '',
-      description: '',
-      link: '',
-      slug: 'dev',
-      avatar_urls: {
-        24: '',
-      },
-      meta: {
-        web_stories_tracking_optin: false,
-        web_stories_media_optimization: true,
-        web_stories_onboarding: {
-          safeZone: true,
-        },
-      },
-      amp_dev_tools_enabled: true,
-      _links: {
-        self: [
-          {
-            href: '',
-          },
-        ],
-        collection: [
-          {
-            href: '',
-          },
-        ],
-      },
-    });
-  }, []);
-
-  /**
-   * Status check, submit html string.
-   *
-   * @todo To be removed.
-   *
-   * @param {string} HTML string.
-   * @return {Promise} Result promise
-   */
-  const getStatusCheck = useCallback(
-    () => Promise.resolve({ success: true }),
-    []
-  );
 
   const getPageTemplates = useCallback(
     async ({ showImages = false } = {}) => {
@@ -133,25 +58,25 @@ function APIProvider({ children }) {
 
   const state = {
     actions: {
-      autoSaveById: mockedFetch,
-      getStoryById,
-      getDemoStoryById: mockedFetch,
-      getStoryLockById: mockedFetch,
-      setStoryLockById: mockedFetch,
-      deleteStoryLockById: mockedFetch,
-      getLinkMetadata: mockedFetch,
-      saveStoryById: mockedFetch,
-      getAuthors: mockedFetch,
-      uploadMedia: mockedFetch,
-      updateMedia: mockedFetch,
-      deleteMedia: mockedFetch,
-      saveMetaBoxes: mockedFetch,
-      getStatusCheck,
-      addPageTemplate: mockedFetch,
-      getCustomPageTemplates: mockedFetch,
+      autoSaveById: dummyFetch,
+      getStoryById: dummyFetch,
+      getDemoStoryById: dummyFetch,
+      getStoryLockById: dummyFetch,
+      setStoryLockById: dummyFetch,
+      deleteStoryLockById: dummyFetch,
+      getLinkMetadata: dummyFetch,
+      saveStoryById: dummyFetch,
+      getAuthors: dummyFetch,
+      uploadMedia: dummyFetch,
+      updateMedia: dummyFetch,
+      deleteMedia: dummyFetch,
+      saveMetaBoxes: dummyFetch,
+      getStatusCheck: dummyFetch,
+      addPageTemplate: dummyFetch,
+      getCustomPageTemplates: dummyFetch,
       getPageTemplates,
-      getCurrentUser,
-      updateCurrentUser: mockedFetch,
+      getCurrentUser: dummyFetch,
+      updateCurrentUser: dummyFetch,
     },
   };
 

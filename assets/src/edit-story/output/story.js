@@ -28,10 +28,10 @@ import CustomCSS from './utils/styles';
 import getFontDeclarations from './utils/getFontDeclarations';
 import OutputPage from './page';
 
-function OutputStory({ pages, storyAd }) {
+function OutputStory({ story: { adOptions }, pages }) {
   const fontDeclarations = getFontDeclarations(pages);
 
-  const { ctaLink, ctaText, customCtaText, landingPageType } = storyAd || {};
+  const { ctaLink, ctaText, customCtaText, landingPageType } = adOptions || {};
   const ampExtensions = getUsedAmpExtensions(pages);
   const ctaType = 'CUSTOM_TEXT' === ctaText ? customCtaText : ctaText;
 
@@ -71,6 +71,7 @@ function OutputStory({ pages, storyAd }) {
 }
 
 OutputStory.propTypes = {
+  story: StoryPropTypes.story.isRequired,
   pages: PropTypes.arrayOf(StoryPropTypes.page).isRequired,
   metadata: PropTypes.shape({
     publisher: PropTypes.shape({
@@ -78,7 +79,6 @@ OutputStory.propTypes = {
       logo: PropTypes.string,
     }),
   }).isRequired,
-  storyAd: PropTypes.object.isRequired,
 };
 
 export default OutputStory;

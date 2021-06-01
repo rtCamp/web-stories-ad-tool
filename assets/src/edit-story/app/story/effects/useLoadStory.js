@@ -18,17 +18,14 @@
  * External dependencies
  */
 import { useEffect } from 'react';
-import { migrate } from '@web-stories-wp/migration';
 
 /**
  * Internal dependencies
  */
 import { useAPI } from '../../api';
 import { useHistory } from '../../history';
-import useAdStory from '../../storyAd/useAdStory';
-import { createPage } from '../../../elements';
-import getUniquePresets from '../../../utils/getUniquePresets';
 import { getDataFromSessionStorage } from '../utils/sessionStore';
+import getInitialStoryState from '../utils/getInitialStoryState';
 
 // When ID is set, load story from API.
 function useLoadStory({ storyId, shouldLoad, restore, isDemo }) {
@@ -39,162 +36,19 @@ function useLoadStory({ storyId, shouldLoad, restore, isDemo }) {
     actions: { clearHistory },
   } = useHistory();
 
-  const {
-    actions: {
-      updateCTALink,
-      updateCtaText,
-      updateCustomCtaText,
-      updateLandingPageType,
-    },
-  } = useAdStory();
-
   useEffect(() => {
     if (storyId && shouldLoad) {
-      const callback = isDemo ? getDemoStoryById : getStoryById;
-      callback(storyId).then((post) => {
-        const {
-          title: { raw: title },
-          status,
-          slug,
-          date,
-          modified,
-          excerpt: { raw: excerpt },
-          link,
-          story_data: storyDataRaw,
-          // todo: get publisher_logo_url image dimensions for prepublish checklist
-          publisher_logo_url: publisherLogoUrl,
-          permalink_template: permalinkTemplate,
-          style_presets: globalStoryStyles,
-          password,
-          preview_link: previewLink,
-          _embedded: embedded = {},
-        } = post;
+      // First clear history completely.
+      clearHistory();
 
-        let author = {
-          id: 0,
-          name: '',
-        };
+      let storyToRestore = getInitialStoryState();
+      const sessionData = getDataFromSessionStorage();
 
-        if ('author' in embedded) {
-          author = {
-            id: embedded.author[0].id,
-            name: embedded.author[0].name,
-          };
-        }
+      if (sessionData) {
+        storyToRestore = sessionData;
+      }
 
-        let featuredMedia = {
-          id: 0,
-          height: 0,
-          width: 0,
-          url: '',
-        };
-
-        let lockUser = null;
-
-        if ('wp:lockuser' in embedded) {
-          lockUser = {
-            id: embedded['wp:lockuser'][0].id,
-            name: embedded['wp:lockuser'][0].name,
-            avatar: embedded['wp:lockuser'][0].avatar_urls?.['48'],
-          };
-        }
-
-        if ('wp:featuredmedia' in embedded) {
-          featuredMedia = {
-            id: embedded['wp:featuredmedia'][0].id,
-            height: embedded['wp:featuredmedia'][0].media_details?.height,
-            width: embedded['wp:featuredmedia'][0].media_details?.width,
-            url: embedded['wp:featuredmedia'][0].source_url,
-          };
-        }
-
-        const [prefix, suffix] = permalinkTemplate.split(
-          /%(?:postname|pagename)%/
-        );
-        // If either of these is undefined, the placeholder was not found in settings.
-        const foundSettings = prefix !== undefined && suffix !== undefined;
-        const permalinkConfig = foundSettings
-          ? {
-              prefix,
-              suffix,
-            }
-          : null;
-        const statusFormat = status === 'auto-draft' ? 'draft' : status;
-
-        // First clear history completely.
-        clearHistory();
-
-        // If there are no pages, create empty page.
-        const storyData =
-          storyDataRaw && migrate(storyDataRaw, storyDataRaw.version || 0);
-        const pages =
-          storyData?.pages?.length > 0 ? storyData.pages : [createPage()];
-
-        // Initialize color/style presets, if missing.
-        // Otherwise ensure the saved presets are unique.
-        if (!globalStoryStyles.colors) {
-          globalStoryStyles.colors = [];
-        } else {
-          globalStoryStyles.colors = getUniquePresets(globalStoryStyles.colors);
-        }
-        if (!globalStoryStyles.textStyles) {
-          globalStoryStyles.textStyles = [];
-        } else {
-          globalStoryStyles.textStyles = getUniquePresets(
-            globalStoryStyles.textStyles
-          );
-        }
-
-        // Set story-global variables.
-        const story = {
-          storyId,
-          title,
-          status: statusFormat,
-          author,
-          date,
-          modified,
-          excerpt,
-          slug,
-          link,
-          lockUser,
-          featuredMedia,
-          permalinkConfig,
-          publisherLogoUrl,
-          password,
-          previewLink,
-          currentStoryStyles: {
-            colors: storyData?.currentStoryStyles?.colors
-              ? getUniquePresets(storyData.currentStoryStyles.colors)
-              : [],
-          },
-          globalStoryStyles,
-          autoAdvance: storyData?.autoAdvance,
-          defaultPageDuration: storyData?.defaultPageDuration,
-        };
-
-        // TODO read current page and selection from deeplink?
-        let storyToRestore = {
-          pages,
-          story,
-          selection: [],
-          current: null, // will be set to first page by `restore`
-        };
-
-        const sessionData = getDataFromSessionStorage();
-
-        if (sessionData) {
-          storyToRestore = sessionData;
-        }
-
-        if (storyToRestore.storyAd) {
-          updateCTALink(storyToRestore.storyAd.ctaLink);
-          updateCtaText(storyToRestore.storyAd.ctaText);
-          updateCustomCtaText(storyToRestore.storyAd.customCtaText);
-          updateLandingPageType(storyToRestore.storyAd.landingPageType);
-        }
-
-        restore(storyToRestore);
-      });
+      restore(storyToRestore);
     }
   }, [
     storyId,
@@ -204,10 +58,6 @@ function useLoadStory({ storyId, shouldLoad, restore, isDemo }) {
     getStoryById,
     getDemoStoryById,
     clearHistory,
-    updateCTALink,
-    updateCtaText,
-    updateCustomCtaText,
-    updateLandingPageType,
   ]);
 }
 
