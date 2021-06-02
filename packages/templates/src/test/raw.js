@@ -18,7 +18,7 @@
  * External dependencies
  */
 import { readdirSync, readFileSync } from 'fs';
-import { resolve, basename } from 'path';
+import { resolve } from 'path';
 
 describe('raw template files', () => {
   const templates = readdirSync(
@@ -30,7 +30,10 @@ describe('raw template files', () => {
     '%s template should not contain invisible characters',
     (template) => {
       const templateContent = readFileSync(
-        resolve(process.cwd(), `packages/templates/src/raw/${template}`),
+        resolve(
+          process.cwd(),
+          `packages/templates/src/raw/${template}/template.json`
+        ),
         'utf8'
       );
 
@@ -42,21 +45,20 @@ describe('raw template files', () => {
   // @see https://github.com/google/web-stories-wp/pull/6159
   it.each(templates)(
     '%s template should contain replaceable URLs',
-    (template) => {
-      const templateName = basename(template, '.json');
-      const templateContent = readFileSync(
-        resolve(process.cwd(), `packages/templates/src/raw/${template}`),
-        'utf8'
+    async (template) => {
+      const { default: templateData } = await import(
+        /* webpackChunkName: "chunk-web-stories-template-[index]" */ `../raw/${template}`
       );
-      const templateData = JSON.parse(templateContent);
 
       for (const { elements } of templateData.pages) {
         for (const element of elements) {
-          if (element?.resource?.src) {
-            expect(element?.resource?.src).toStartWith(
-              `__WEB_STORIES_TEMPLATE_BASE_URL__/images/templates/${templateName}`
-            );
+          if (!element?.resource?.src) {
+            continue;
           }
+
+          expect(element?.resource?.src).toStartWith(
+            `__WEB_STORIES_TEMPLATE_BASE_URL__/images/templates/${template}`
+          );
         }
       }
     }
@@ -65,12 +67,10 @@ describe('raw template files', () => {
   // @see https://github.com/google/web-stories-wp/pull/5889
   it.each(templates)(
     '%s template should contain pageTemplateType',
-    (template) => {
-      const templateContent = readFileSync(
-        resolve(process.cwd(), `packages/templates/src/raw/${template}`),
-        'utf8'
+    async (template) => {
+      const { default: templateData } = await import(
+        /* webpackChunkName: "chunk-web-stories-template-[index]" */ `../raw/${template}`
       );
-      const templateData = JSON.parse(templateContent);
 
       for (const page of templateData.pages) {
         expect(page).toStrictEqual(
@@ -79,6 +79,20 @@ describe('raw template files', () => {
           })
         );
       }
+    }
+  );
+
+  // @see https://github.com/google/web-stories-wp/issues/7227
+  it.each(templates)(
+    '%s template should not contain extraneaous properties',
+    async (template) => {
+      const { default: templateData } = await import(
+        /* webpackChunkName: "chunk-web-stories-template-[index]" */ `../raw/${template}`
+      );
+
+      expect(templateData.current).toBeNull();
+      expect(templateData.selection).toStrictEqual([]);
+      expect(templateData.story.globalStoryStyles).toBeUndefined();
     }
   );
 });
