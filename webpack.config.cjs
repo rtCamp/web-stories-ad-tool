@@ -199,7 +199,7 @@ const editorAndDashboard = {
         { from: "preview", to: "preview" },
         { from: "favicon.ico", to: "" },
         { from: "manifest.json", to: "" },
-        { from: "assets/images/editor", to: "assets/images/" },
+        { from: "assets/images/editor", to: "assets/images/editor" },
       ],
     }),
   ],
