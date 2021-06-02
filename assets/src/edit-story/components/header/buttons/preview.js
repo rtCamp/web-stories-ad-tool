@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { __ } from '@web-stories-wp/i18n';
 
 /**
@@ -48,6 +48,7 @@ const PREVIEW_TARGET = 'story-preview';
 
 function Preview() {
   const [showPreviewDialog, setShowPreviewDialog] = useState(false);
+  const previewDialogShown = useRef(false);
   const {
     internal: { reducerState },
   } = useStory();
@@ -85,33 +86,33 @@ function Preview() {
   const handleOnPreviewClick = useCallback(
     (event) => {
       const { elements } = pages[0];
-      let i = 0;
-      let shoudShowTheDialog = false;
+      let caShowTheDialog = false;
 
       event.preventDefault();
 
-      for (i = 0; i < elements.length; i++) {
+      for (let i = 0; i < elements.length; i++) {
         const element = elements[i];
 
         // 1. Element is video and is set as background
         // 2. Element has local video
         if (
-          element.type === 'video' &&
+          'video' === element.type &&
           (element.isBackground || isBlobURL(element?.resource?.src))
         ) {
-          shoudShowTheDialog = true;
+          caShowTheDialog = true;
           break;
         }
 
         // 3. Element is external Gif and set as background
         if (element.type === 'gif' && element.isBackground) {
-          shoudShowTheDialog = true;
+          caShowTheDialog = true;
           break;
         }
       }
 
-      if (shoudShowTheDialog) {
+      if (caShowTheDialog && false === previewDialogShown.current) {
         setShowPreviewDialog(true);
+        previewDialogShown.current = true;
       } else {
         openPreviewLink();
       }
