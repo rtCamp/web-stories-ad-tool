@@ -23,7 +23,8 @@ import styled from 'styled-components';
 /**
  * Internal dependencies
  */
-import { useMedia, useStory } from '../../../app';
+import { useCallback } from 'react';
+import { useHistory, useMedia, useStory } from '../../../app';
 import { removeSessionStorage } from '../../../app/story/utils/sessionStore';
 import Tooltip from '../../tooltip';
 
@@ -48,6 +49,9 @@ function Reset() {
   const {
     internal: { restore },
   } = useStory();
+  const {
+    actions: { clearHistory },
+  } = useHistory();
 
   const { setLocalStoryAdMedia } = useMedia(
     ({
@@ -64,7 +68,7 @@ function Reset() {
   /**
    * Reset story handler.
    */
-  const resetStory = () => {
+  const resetStory = useCallback(() => {
     if (
       !window.confirm(
         __('Are you sure you want to reset all changes?', 'web-stories')
@@ -75,14 +79,12 @@ function Reset() {
 
     const stateToReset = getInitialStoryState();
 
-    // Remove local media items.
+    clearHistory();
     setLocalStoryAdMedia([]);
-
-    // Remove session storage dara.
     removeSessionStorage();
 
     restore(stateToReset);
-  };
+  }, [clearHistory, restore, setLocalStoryAdMedia]);
 
   const label = __('Reset', 'web-stories');
 
