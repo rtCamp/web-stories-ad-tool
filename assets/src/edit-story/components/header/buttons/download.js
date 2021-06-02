@@ -40,7 +40,7 @@ import useAdStory from '../../../app/storyAd/useAdStory';
 import getStoryPropsToSave from '../../../app/story/utils/getStoryPropsToSave';
 import { PAGE_RATIO, PAGE_WIDTH } from '../../../constants';
 import isBlobURL from '../../../utils/isBlobURL';
-import { DEFAULT_CTA_LINK } from '../../../constants/storyAd';
+import { DEFAULT_CTA_LINK } from '../../../constants/adOptions';
 import ButtonWithChecklistWarning from './buttonWithChecklistWarning';
 
 const COMMON_MIME_TYPE_MAPPING = {

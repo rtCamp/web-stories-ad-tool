@@ -127,7 +127,7 @@ const LANDING_PAGE_OPTIONS = [
 const DEFAULT_LANDING_PAGE_TYPE = 'NONAMP';
 const DEFAULT_CTA_TEXT_OPTION = 'CUSTOM_TEXT';
 const DEFAULT_CTA_LINK = 'https://placeholder';
-const DEFAULT_CTA_CUSTOM_TEXT = 'placeholder';
+const DEFAULT_CTA_CUSTOM_TEXT = 'CTA';
 
 export {
   CTA_OPTIONS,

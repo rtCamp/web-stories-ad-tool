@@ -26,7 +26,7 @@ import { isURL } from '@wordpress/url';
 /**
  * Internal dependencies
  */
-import { CTA_OPTIONS } from '../../../constants/storyAd';
+import { CTA_OPTIONS } from '../../../constants/adOptions';
 import { useStory } from '../../../app';
 
 // Copied style from the original cta button.

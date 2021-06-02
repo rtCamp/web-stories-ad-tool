@@ -30,7 +30,7 @@ import { useStory } from '../../../../app';
 import {
   CTA_OPTIONS,
   LANDING_PAGE_OPTIONS,
-} from '../../../../constants/storyAd';
+} from '../../../../constants/adOptions';
 
 const FieldRow = styled(Row)`
   margin-bottom: 12px;

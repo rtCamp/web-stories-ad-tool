@@ -27,7 +27,7 @@ import {
   DEFAULT_CTA_LINK,
   DEFAULT_CTA_TEXT_OPTION,
   DEFAULT_LANDING_PAGE_TYPE,
-} from '../../../constants/storyAd';
+} from '../../../constants/adOptions';
 
 function getInitialStoryState() {
   const globalStoryStyles = {
