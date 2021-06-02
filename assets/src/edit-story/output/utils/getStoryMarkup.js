@@ -32,12 +32,24 @@ import renderToString from '../../utils/renderToString';
  * @param {Array<Object>} pages List of pages.
  * @param {Object} metadata Metadata.
  * @param {Object} featureFlags Boolean flags to enable/disable features
+ * @param {boolean} isPreview Is Preview.
  * @return {string} Story markup.
  */
-export default function getStoryMarkup(story, pages, metadata, featureFlags) {
+export default function getStoryMarkup(
+  story,
+  pages,
+  metadata,
+  featureFlags,
+  isPreview = false
+) {
   return renderToString(
     <FlagsProvider features={featureFlags}>
-      <OutputStory story={story} pages={pages} metadata={metadata} />
+      <OutputStory
+        story={story}
+        pages={pages}
+        metadata={metadata}
+        isPreview={isPreview}
+      />
     </FlagsProvider>
   );
 }

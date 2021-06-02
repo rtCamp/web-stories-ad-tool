@@ -23,17 +23,26 @@ import PropTypes from 'prop-types';
  * Internal dependencies
  */
 import StoryPropTypes from '../types';
+import { CTA_OPTIONS } from '../constants/adOptions';
 import getUsedAmpExtensions from './utils/getUsedAmpExtensions';
 import CustomCSS from './utils/styles';
 import getFontDeclarations from './utils/getFontDeclarations';
 import OutputPage from './page';
 
-function OutputStory({ story: { adOptions }, pages }) {
+function OutputStory({ story: { adOptions }, pages, isPreview }) {
   const fontDeclarations = getFontDeclarations(pages);
 
   const { ctaLink, ctaText, customCtaText, landingPageType } = adOptions || {};
   const ampExtensions = getUsedAmpExtensions(pages);
-  const ctaType = 'CUSTOM_TEXT' === ctaText ? customCtaText : ctaText;
+  let ctaType = 'CUSTOM_TEXT' === ctaText ? customCtaText : ctaText;
+
+  // Do not show text enum in preview.
+  if (isPreview && 'CUSTOM_TEXT' !== ctaText) {
+    const selectedOption = CTA_OPTIONS.find(
+      (option) => option.value === ctaText
+    );
+    ctaType = selectedOption?.label;
+  }
 
   return (
     <html amp4ads="" lang="en">
@@ -73,12 +82,7 @@ function OutputStory({ story: { adOptions }, pages }) {
 OutputStory.propTypes = {
   story: StoryPropTypes.story.isRequired,
   pages: PropTypes.arrayOf(StoryPropTypes.page).isRequired,
-  metadata: PropTypes.shape({
-    publisher: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      logo: PropTypes.string,
-    }),
-  }).isRequired,
+  isPreview: PropTypes.bool,
 };
 
 export default OutputStory;

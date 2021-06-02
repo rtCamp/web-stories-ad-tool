@@ -23,7 +23,6 @@ import { __ } from '@web-stories-wp/i18n';
 /**
  * WordPress dependencies
  */
-
 /**
  * Internal dependencies
  */
@@ -66,22 +65,23 @@ function Preview() {
     };
   }, []);
 
-  const { content } = getStoryPropsToSave({
-    story,
-    pages,
-    metadata: {},
-    flags: {},
-  });
-
-  const markup = `<!doctype html>${content}`;
-
   /**
    * Open a preview of the story.
    */
   const openPreviewLink = useCallback(() => {
+    const { content } = getStoryPropsToSave({
+      story,
+      pages,
+      metadata: {},
+      flags: {},
+      isPreview: true,
+    });
+
+    const markup = `<!doctype html>${content}`;
+
     localStorage.setItem(LOCAL_STORAGE_PREFIX.PREVIEW_MARKUP, markup);
     window.open(getCurrentUrl() + 'preview', PREVIEW_TARGET);
-  }, [markup]);
+  }, [story, pages]);
 
   const handleOnPreviewClick = useCallback(
     (event) => {
