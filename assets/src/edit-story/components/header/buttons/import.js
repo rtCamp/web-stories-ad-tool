@@ -157,6 +157,7 @@ function Import() {
                   posterMediaFile
                 );
                 mediaItem.poster = posterResource.src;
+                mediaItem.local = false;
                 elements[elementIndex].resource.poster = posterResource.src;
               }
             }
