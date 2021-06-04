@@ -25,9 +25,9 @@ import { saveDataOnSessionStorage } from '../utils/sessionStore';
 
 function useSessionStorage({ current, selection, story, pages }) {
   useEffect(() => {
-    const activePage = pages.length ? pages[0] : {};
+    const [activePage] = pages;
 
-    if (!story.globalStoryStyles) {
+    if (!activePage || !story.globalStoryStyles) {
       return;
     }
 
