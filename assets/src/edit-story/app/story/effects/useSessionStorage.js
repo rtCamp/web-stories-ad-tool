@@ -16,14 +16,15 @@
 /**
  * External dependencies
  */
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
+
 /**
  * Internal dependencies
  */
 import { saveDataOnSessionStorage } from '../utils/sessionStore';
 
 function useSessionStorage({ current, selection, story, pages }) {
-  const setSessionStorage = useCallback(() => {
+  useEffect(() => {
     const activePage = pages.length ? pages[0] : {};
 
     if (!story.globalStoryStyles) {
@@ -41,10 +42,6 @@ function useSessionStorage({ current, selection, story, pages }) {
       saveDataOnSessionStorage(storyDataForSession);
     }
   }, [current, selection, story, pages]);
-
-  useEffect(() => {
-    setSessionStorage();
-  }, [setSessionStorage]);
 }
 
 export default useSessionStorage;
