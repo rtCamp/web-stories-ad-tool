@@ -35,6 +35,7 @@ import {
 import { useMedia, useStory } from '../../../app';
 import useAdStory from '../../../app/storyAd/useAdStory';
 import { getResourceFromLocalFile } from '../../../app/media/utils';
+import { initIndexDb } from '../../../app/story/utils/initIndexDb';
 
 const ImportButtonContainer = styled.div``;
 
@@ -112,6 +113,7 @@ function Import() {
     };
 
     const { elements } = stateToRestore.pages[0] || {};
+    const filesToStore = [];
 
     await Promise.all(
       Object.keys(files).map(async (fileName, index) => {
@@ -137,6 +139,11 @@ function Import() {
           const mediaResource = await getResourceFromLocalFile(mediaFile);
           const mediaSrc = mediaResource.src;
 
+          filesToStore.push({
+            file: mediaFile,
+            title: mediaResource.title,
+          });
+
           const mediaItem = { ...mediaResource, ...resource };
           mediaItem.id = index + 1;
           mediaItem.src = mediaSrc;
@@ -156,6 +163,7 @@ function Import() {
                 const posterResource = await getResourceFromLocalFile(
                   posterMediaFile
                 );
+
                 mediaItem.poster = posterResource.src;
                 mediaItem.local = false;
                 elements[elementIndex].resource.poster = posterResource.src;
@@ -169,6 +177,8 @@ function Import() {
         }
       })
     );
+
+    initIndexDb(filesToStore, 'save');
 
     setLocalStoryAdMedia(mediaItems);
 

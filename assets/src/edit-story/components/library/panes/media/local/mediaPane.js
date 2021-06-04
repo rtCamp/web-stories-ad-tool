@@ -169,11 +169,21 @@ function MediaPane(props) {
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
-      const mediaItemsToSave = media.map(({ file, title }) => ({
-        file,
-        title,
-      }));
-      initIndexDb(mediaItemsToSave, 'save');
+      let shouldSaveToIndexDb = true;
+      const mediaItemsToSave = media.map(({ file, title }) => {
+        if (!file) {
+          shouldSaveToIndexDb = false;
+        }
+
+        return {
+          file,
+          title,
+        };
+      });
+
+      if (shouldSaveToIndexDb) {
+        initIndexDb(mediaItemsToSave, 'save');
+      }
     }
   }, [media]);
 
