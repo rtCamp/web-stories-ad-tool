@@ -212,7 +212,6 @@ function LocalMediaFileProvider({ children }) {
 
       showSnackbar({
         message,
-        dismissable: true,
       });
     }
   };
@@ -223,13 +222,12 @@ function LocalMediaFileProvider({ children }) {
 
     showSnackbar({
       message: __('Video optimization in progress.', 'web-stories'),
-      dismissable: true,
     });
 
     setMediaElementAsLocal(resource.id);
 
     const optimizedFile = await transcodeVideo(resource.file);
-    setOptimizedVideoInGallery(resource.id, optimizedFile);
+    await setOptimizedVideoInGallery(resource.id, optimizedFile);
   };
 
   const state = {
