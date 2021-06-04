@@ -48,6 +48,7 @@ const PREVIEW_TARGET = 'story-preview';
 function Preview() {
   const [showPreviewDialog, setShowPreviewDialog] = useState(false);
   const previewDialogShown = useRef(false);
+  const previewTimeout = useRef(null);
   const {
     internal: { reducerState },
   } = useStory();
@@ -65,6 +66,8 @@ function Preview() {
     };
   }, []);
 
+  useEffect(() => () => clearTimeout(previewTimeout.current), []);
+
   /**
    * Open a preview of the story.
    */
@@ -80,7 +83,13 @@ function Preview() {
     const markup = `<!doctype html>${content}`;
 
     localStorage.setItem(LOCAL_STORAGE_PREFIX.PREVIEW_MARKUP, markup);
-    window.open(getCurrentUrl() + 'preview', PREVIEW_TARGET);
+
+    // When the user clicks on preview button too quickly, the preview is not able to show the correct layout.
+    // A little delay to ensure all states are updated and markup is stored in localstorage.
+    previewTimeout.current = setTimeout(
+      () => window.open(getCurrentUrl() + 'preview', PREVIEW_TARGET),
+      100
+    );
   }, [story, pages]);
 
   const handleOnPreviewClick = useCallback(
