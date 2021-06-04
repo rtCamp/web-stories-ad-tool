@@ -18,7 +18,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
 /**
  * Internal dependencies
@@ -30,11 +30,11 @@ import useLoadStory from './effects/useLoadStory';
 import useSaveStory from './actions/useSaveStory';
 import useHistoryEntry from './effects/useHistoryEntry';
 import useHistoryReplay from './effects/useHistoryReplay';
+import useSessionStorage from './effects/useSessionStorage';
 import useStoryReducer from './useStoryReducer';
 import useAutoSave from './actions/useAutoSave';
 import useSaveMetaBoxes from './effects/useSaveMetaBoxes';
 import { StoryTriggersProvider } from './storyTriggers';
-import { saveDataOnSessionStorage } from './utils/sessionStore';
 
 function StoryProvider({ storyId, children }) {
   const { isDemo } = useConfig();
@@ -54,25 +54,6 @@ function StoryProvider({ storyId, children }) {
     animationState,
     capabilities,
   } = reducerState;
-
-  const setSessionStorage = useCallback(() => {
-    const activePage = pages.length ? pages[0] : {};
-
-    if (!story.globalStoryStyles) {
-      return;
-    }
-
-    const storyDataForSession = {
-      current,
-      selection,
-      story: { ...story },
-      pages: [activePage],
-    };
-
-    if (current) {
-      saveDataOnSessionStorage(storyDataForSession);
-    }
-  }, [current, selection, story, pages]);
 
   // Generate current page info.
   const {
@@ -142,10 +123,7 @@ function StoryProvider({ storyId, children }) {
   // These effects send updates to and restores state from history.
   useHistoryEntry({ pages, current, selection, story, capabilities });
   useHistoryReplay({ restore });
-
-  useEffect(() => {
-    setSessionStorage();
-  }, [setSessionStorage]);
+  useSessionStorage({ current, selection, story, pages });
 
   // This action allows the user to save the story
   // (and it will have side-effects because saving can update url and status,
