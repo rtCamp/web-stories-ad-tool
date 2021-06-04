@@ -19,6 +19,10 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { __ } from '@web-stories-wp/i18n';
+/**
+ * WordPress dependencies
+ */
+import { addQueryArgs } from '@wordpress/url';
 
 /**
  * WordPress dependencies
@@ -36,6 +40,7 @@ import {
   Text,
   THEME_CONSTANTS,
 } from '../../../../design-system';
+import { PAGE_RATIO, PAGE_WIDTH } from '../../../constants';
 import Tooltip from '../../tooltip';
 import getStoryPropsToSave from '../../../app/story/utils/getStoryPropsToSave';
 import getCurrentUrl from '../../../utils/getCurrentUrl';
@@ -80,7 +85,22 @@ function Preview() {
       isPreview: true,
     });
 
-    const markup = `<!doctype html>${content}`;
+    let markup = `<!doctype html>${content}`;
+
+    pages.map((page) => {
+      page.elements.map((element) => {
+        if (element?.resource?.src.startsWith('https://images.unsplash.com')) {
+          const src = element.resource.src;
+          const resizedSrc = addQueryArgs(src, {
+            w: PAGE_WIDTH * 2,
+            h: (PAGE_WIDTH * 2) / PAGE_RATIO,
+          });
+
+          const markupSrc = src.replaceAll('&', '&amp;');
+          markup = markup.replace(markupSrc, resizedSrc);
+        }
+      });
+    });
 
     localStorage.setItem(LOCAL_STORAGE_PREFIX.PREVIEW_MARKUP, markup);
 
