@@ -28,13 +28,13 @@ import {
   UploadDropTargetMessage,
   UploadDropTargetOverlay,
 } from '../uploadDropTarget';
-import useLocalFile from '../../app/localFile/useLocalFile';
+import useLocalMediaFile from '../../app/localMediaFile/useLocalMediaFile';
 import { Layer as CanvasLayer, PageArea } from './layout';
 
 const MESSAGE_ID = 'edit-story-canvas-upload-message';
 
 function CanvasUploadDropTarget({ children }) {
-  const { addLocalFiles } = useLocalFile((state) => ({
+  const { addLocalFiles } = useLocalMediaFile((state) => ({
     addLocalFiles: state.actions.addLocalFiles,
   }));
 

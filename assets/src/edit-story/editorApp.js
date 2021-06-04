@@ -48,7 +48,7 @@ import { GlobalStyle as CalendarStyle } from './components/form/dateTime/calenda
 import KeyboardOnlyOutlines from './utils/keyboardOnlyOutline';
 import { MetaBoxesProvider } from './integrations/wordpress/metaBoxes';
 import { StoryAdProvider } from './app/storyAd';
-import { LocalFileProvider } from './app/localFile';
+import { LocalMediaFileProvider } from './app/localMediaFile';
 
 function App({ config }) {
   const { storyId, isRTL } = config;
@@ -69,7 +69,7 @@ function App({ config }) {
                               <FontProvider>
                                 <MediaProvider>
                                   <TransformProvider>
-                                    <LocalFileProvider>
+                                    <LocalMediaFileProvider>
                                       <DropTargetsProvider>
                                         <HelpCenterProvider>
                                           <GlobalStyle />
@@ -82,7 +82,7 @@ function App({ config }) {
                                           <Layout />
                                         </HelpCenterProvider>
                                       </DropTargetsProvider>
-                                    </LocalFileProvider>
+                                    </LocalMediaFileProvider>
                                   </TransformProvider>
                                 </MediaProvider>
                               </FontProvider>

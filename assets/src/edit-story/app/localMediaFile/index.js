@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export { default as LocalFileProvider } from './provider';
-export { default as useLocalFile } from './useLocalFile';
+export { default as LocalMediaFileProvider } from './localMediaFileProvider';
+export { default as useLocalMediaFile } from './useLocalMediaFile';

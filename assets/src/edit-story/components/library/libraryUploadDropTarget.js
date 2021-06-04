@@ -24,12 +24,12 @@ import { __ } from '@web-stories-wp/i18n';
  * Internal dependencies
  */
 import { UploadDropTarget, UploadDropTargetMessage } from '../uploadDropTarget';
-import { useLocalFile } from '../../app/localFile';
+import { useLocalMediaFile } from '../../app/localMediaFile';
 
 const MESSAGE_ID = 'edit-story-library-upload-message';
 
 function LibraryUploadDropTarget({ children }) {
-  const { addLocalFiles } = useLocalFile((state) => ({
+  const { addLocalFiles } = useLocalMediaFile((state) => ({
     addLocalFiles: state.actions.addLocalFiles,
   }));
 

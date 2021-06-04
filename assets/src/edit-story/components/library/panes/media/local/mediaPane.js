@@ -41,7 +41,7 @@ import PaginatedMediaGallery from '../common/paginatedMediaGallery';
 import resourceList from '../../../../../utils/resourceList';
 import useLibrary from '../../../useLibrary';
 import { useConfig, useStory } from '../../../../../app';
-import { useLocalFile } from '../../../../../app/localFile';
+import { useLocalMediaFile } from '../../../../../app/localMediaFile';
 import { initIndexDb } from '../../../../../app/story/utils/initIndexDb';
 import { getDataFromSessionStorage } from '../../../../../app/story/utils/sessionStore';
 import getResourceFromLocalFile from '../../../../../app/media/utils/getResourceFromLocalFile';
@@ -69,7 +69,7 @@ function MediaPane(props) {
     updateElementsByResourceId: state.actions.updateElementsByResourceId,
   }));
 
-  const { addLocalFiles, media } = useLocalFile((state) => ({
+  const { addLocalFiles, media } = useLocalMediaFile((state) => ({
     addLocalFiles: state.actions.addLocalFiles,
     media: state.state.media,
   }));

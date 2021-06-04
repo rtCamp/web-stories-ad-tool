@@ -36,7 +36,7 @@ import Context from './context';
 const bytesToMB = (bytes) =>
   (bytes / Math.pow(1024, 2)).toFixed(2).replace(/\.00$/, '');
 
-function LocalFileProvider({ children }) {
+function LocalMediaFileProvider({ children }) {
   const { transcodeVideo } = useFFmpeg();
   const { showSnackbar } = useSnackbar();
   const [errorMessages, setErrorMessages] = useState([]);
@@ -277,8 +277,8 @@ function LocalFileProvider({ children }) {
   );
 }
 
-LocalFileProvider.propTypes = {
+LocalMediaFileProvider.propTypes = {
   children: PropTypes.node,
 };
 
-export default LocalFileProvider;
+export default LocalMediaFileProvider;
