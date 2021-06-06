@@ -13,7 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const url = window.webStoriesAdConfig.url;
+/**
+ * Internal dependencies
+ */
+import getCurrentUrl from './utils/getCurrentUrl';
+
+const url = getCurrentUrl();
 
 // @todo Remove items not required for story ad.
 export default {
@@ -68,7 +73,7 @@ export default {
       weekdaysInitials: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
       weekStartsOn: 1,
     },
-    allowedFileTypes: ['jpe', 'jpeg', 'jpg', 'png'],
+    allowedFileTypes: ['gif', 'jpe', 'jpeg', 'jpg', 'png', 'mp4v', 'mp4'],
     allowedImageFileTypes: ['jpe', 'jpeg', 'jpg', 'png'],
     allowedImageMimeTypes: ['image/png', 'image/jpeg'],
     allowedMimeTypes: {
@@ -81,7 +86,8 @@ export default {
     dashboardLink: '',
     assetsURL: `${url}assets/`,
     cdnURL: 'https://wp.stories.google/static/main/',
-    maxUpload: 536870912,
+    maxUpload: 31457280,
+    maxVideoFileSize: 1048576, // 1 MiB
     isDemo: false,
     capabilities: {
       hasPublishAction: true,
@@ -117,7 +123,7 @@ export default {
       side: [],
     },
     ffmpegCoreUrl:
-      'https://wp.stories.google/static/main/js/@ffmpeg/core@0.8.5/dist/ffmpeg-core.js',
+      'https://wp.stories.google/static/main/js/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js',
   },
   flags: {
     enableSVG: false,
@@ -132,5 +138,5 @@ export default {
     customMetaBoxes: true,
     customPageTemplates: false,
   },
-  publicPath: `${url}assets/js/`,
+  publicPath: `${url}`,
 };

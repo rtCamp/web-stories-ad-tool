@@ -49,3 +49,6 @@ export { default as restore } from './restore';
 
 // Manipulate story-global properties.
 export { default as updateStory } from './updateStory';
+
+// Manipulate story ad properties.
+export { default as updateAdOptions } from './updateAdOptions';

@@ -18,7 +18,6 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
 import { __ } from '@web-stories-wp/i18n';
 
 /**
@@ -29,24 +28,18 @@ import {
   UploadDropTargetMessage,
   UploadDropTargetOverlay,
 } from '../uploadDropTarget';
-
+import { useMedia } from '../../app';
 import { Layer as CanvasLayer, PageArea } from './layout';
-import useUploadWithPreview from './useUploadWithPreview';
 
 const MESSAGE_ID = 'edit-story-canvas-upload-message';
 
 function CanvasUploadDropTarget({ children }) {
-  const uploadWithPreview = useUploadWithPreview();
-  const onDropHandler = useCallback(
-    (files) => {
-      if (files && files.length > 0) {
-        uploadWithPreview(files);
-      }
-    },
-    [uploadWithPreview]
-  );
+  const { addLocalFiles } = useMedia((state) => ({
+    addLocalFiles: state.local.actions.addLocalFiles,
+  }));
+
   return (
-    <UploadDropTarget onDrop={onDropHandler} labelledBy={MESSAGE_ID}>
+    <UploadDropTarget onDrop={addLocalFiles} labelledBy={MESSAGE_ID}>
       {children}
       <UploadDropTargetOverlay>
         <CanvasLayer>

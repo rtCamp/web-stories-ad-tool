@@ -43,6 +43,9 @@ export const TOGGLE_ELEMENT_IN_SELECTION = 'TOGGLE_ELEMENT_IN_SELECTION';
 // Manipulate story-global state.
 export const UPDATE_STORY = 'UPDATE_STORY';
 
+// Manipulate ad options.
+export const UPDATE_AD_OPTIONS = 'UPDATE_AD_OPTIONS';
+
 // Manipulate animation state.
 export const UPDATE_ANIMATION_STATE = 'UPDATE_ANIMATION_STATE';
 export const ADD_ANIMATIONS = 'ADD_ANIMATIONS';

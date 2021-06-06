@@ -34,6 +34,8 @@ import { FULLBLEED_RATIO, HEADER_HEIGHT } from '../../constants';
 import pointerEventsCss from '../../utils/pointerEventsCss';
 import generatePatternStyles from '../../utils/generatePatternStyles';
 import { useLayout } from '../../app';
+import ButtonCTA from '../adElements/buttonCTA';
+import AdLabelOverlay from '../adElements/adLabelOverlay';
 
 /**
  * @file See https://user-images.githubusercontent.com/726049/72654503-bfffe780-3944-11ea-912c-fc54d68b6100.png
@@ -394,9 +396,11 @@ const PageArea = forwardRef(function PageArea(
             isBackgroundSelected={isBackgroundSelected}
           >
             <PageAreaWithoutOverflow showOverflow={showOverflow}>
+              <AdLabelOverlay />
               <PageAreaSafeZone ref={ref} data-testid="safezone">
                 {children}
               </PageAreaSafeZone>
+              <ButtonCTA />
             </PageAreaWithoutOverflow>
           </FullbleedContainer>
         </PaddedPage>

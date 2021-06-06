@@ -22,8 +22,12 @@ import styled from 'styled-components';
 /**
  * Internal dependencies
  */
-import { useStory } from '../../../app';
 import CircularProgress from '../../circularProgress';
+import useAdStory from '../../../app/storyAd/useAdStory';
+import Download from './download';
+import Preview from './preview';
+
+const LOADER_SIZE = 26;
 
 const ButtonList = styled.nav`
   display: flex;
@@ -41,38 +45,27 @@ const Space = styled.div`
   width: 8px;
 `;
 
-const Spinner = styled.div`
-  position: absolute;
-  top: 0;
-`;
-
-const IconWithSpinner = styled.div`
-  position: relative;
-`;
-
 function Loading() {
-  const { isSaving } = useStory((state) => ({
-    isSaving: state.state.meta.isSaving,
-  }));
-  return (
-    isSaving && (
-      <Spinner>
-        <CircularProgress size={32} />
-      </Spinner>
-    )
-  );
+  const {
+    state: { isDownloading },
+  } = useAdStory();
+
+  return isDownloading && <CircularProgress size={LOADER_SIZE} />;
 }
 
 function Buttons() {
   return (
     <ButtonList>
       <List>
-        <IconWithSpinner>
-          <Loading />
-        </IconWithSpinner>
+        <Loading />
+        <Space />
+        <Preview />
+        <Space />
+        <Download />
         <Space />
       </List>
     </ButtonList>
   );
 }
+
 export default Buttons;

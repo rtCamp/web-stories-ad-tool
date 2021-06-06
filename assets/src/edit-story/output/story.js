@@ -23,28 +23,29 @@ import PropTypes from 'prop-types';
  * Internal dependencies
  */
 import StoryPropTypes from '../types';
+import { CTA_OPTIONS } from '../constants/adOptions';
 import getUsedAmpExtensions from './utils/getUsedAmpExtensions';
-import Boilerplate from './utils/ampBoilerplate';
 import CustomCSS from './utils/styles';
 import getFontDeclarations from './utils/getFontDeclarations';
 import OutputPage from './page';
 
-function OutputStory({
-  story: {
-    featuredMedia: { url: featuredMediaUrl },
-    link,
-    title,
-    autoAdvance,
-    defaultPageDuration,
-  },
-  pages,
-  metadata: { publisher },
-}) {
-  const ampExtensions = getUsedAmpExtensions(pages);
+function OutputStory({ story: { adOptions }, pages, isPreview }) {
   const fontDeclarations = getFontDeclarations(pages);
 
+  const { ctaLink, ctaText, customCtaText, landingPageType } = adOptions || {};
+  const ampExtensions = getUsedAmpExtensions(pages);
+  let ctaType = 'CUSTOM_TEXT' === ctaText ? customCtaText : ctaText;
+
+  // Do not show text enum in preview.
+  if (isPreview && 'CUSTOM_TEXT' !== ctaText) {
+    const selectedOption = CTA_OPTIONS.find(
+      (option) => option.value === ctaText
+    );
+    ctaType = selectedOption?.label;
+  }
+
   return (
-    <html amp="" lang="en">
+    <html amp4ads="" lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta
@@ -57,31 +58,22 @@ function OutputStory({
         {fontDeclarations.map((url) => (
           <link key={url} href={url} rel="stylesheet" />
         ))}
-        <Boilerplate />
+        <style
+          amp4ads-boilerplate=""
+          dangerouslySetInnerHTML={{
+            __html: 'body{visibility:hidden}',
+          }}
+        />
         <CustomCSS />
-        {/* Everything between these markers can be replaced server-side. */}
-        <meta name="web-stories-replace-head-start" />
-        <title>{title}</title>
-        <link rel="canonical" href={link} />
-        <meta name="web-stories-replace-head-end" />
+
+        <meta name="amp-cta-url" content={ctaLink} />
+        <meta name="amp-cta-type" content={ctaType} />
+        <meta name="amp-cta-landing-page-type" content={landingPageType} />
       </head>
       <body>
-        <amp-story
-          standalone=""
-          publisher={publisher.name}
-          publisher-logo-src={publisher.logo}
-          title={title}
-          poster-portrait-src={featuredMediaUrl}
-        >
-          {pages.map((page) => (
-            <OutputPage
-              key={page.id}
-              page={page}
-              autoAdvance={autoAdvance}
-              defaultPageDuration={defaultPageDuration}
-            />
-          ))}
-        </amp-story>
+        {pages.map((page) => (
+          <OutputPage key={page.id} page={page} />
+        ))}
       </body>
     </html>
   );
@@ -90,12 +82,7 @@ function OutputStory({
 OutputStory.propTypes = {
   story: StoryPropTypes.story.isRequired,
   pages: PropTypes.arrayOf(StoryPropTypes.page).isRequired,
-  metadata: PropTypes.shape({
-    publisher: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      logo: PropTypes.string,
-    }),
-  }).isRequired,
+  isPreview: PropTypes.bool,
 };
 
 export default OutputStory;

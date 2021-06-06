@@ -108,12 +108,12 @@ function DevTools() {
     pages,
     current,
     selection,
-    story: { globalStoryStyles },
+    story: { globalStoryStyles, adOptions },
   } = reducerState;
   const reducerStateSlice = {
     current,
     selection,
-    story: { globalStoryStyles },
+    story: { globalStoryStyles, adOptions },
     version: DATA_VERSION,
     pages,
   };

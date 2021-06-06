@@ -17,7 +17,6 @@
 /**
  * External dependencies
  */
-import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { __ } from '@web-stories-wp/i18n';
 
@@ -25,22 +24,17 @@ import { __ } from '@web-stories-wp/i18n';
  * Internal dependencies
  */
 import { UploadDropTarget, UploadDropTargetMessage } from '../uploadDropTarget';
-import { useLocalMedia } from '../../app/media';
+import { useMedia } from '../../app';
 
 const MESSAGE_ID = 'edit-story-library-upload-message';
 
 function LibraryUploadDropTarget({ children }) {
-  const { uploadMedia } = useLocalMedia((state) => ({
-    uploadMedia: state.actions.uploadMedia,
+  const { addLocalFiles } = useMedia((state) => ({
+    addLocalFiles: state.local.actions.addLocalFiles,
   }));
-  const onDropHandler = useCallback(
-    (files) => {
-      uploadMedia(files);
-    },
-    [uploadMedia]
-  );
+
   return (
-    <UploadDropTarget onDrop={onDropHandler} labelledBy={MESSAGE_ID}>
+    <UploadDropTarget onDrop={addLocalFiles} labelledBy={MESSAGE_ID}>
       {children}
       <UploadDropTargetMessage
         id={MESSAGE_ID}

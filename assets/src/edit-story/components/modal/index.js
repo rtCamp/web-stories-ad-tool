@@ -24,22 +24,16 @@ import { createGlobalStyle } from 'styled-components';
 /**
  * Internal dependencies
  */
-import { ADMIN_TOOLBAR_HEIGHT } from '../../constants';
 import theme from '../../theme';
-
-const ADMIN_MENU_WIDTH = 160;
-const ADMIN_MENU_FOLDED_WIDTH = 36;
 
 export const GlobalStyle = createGlobalStyle`
   body.edit-story .WebStories_ReactModal__Overlay {
     opacity: 0;
     transition: opacity 0.1s ease-out;
-    top: ${ADMIN_TOOLBAR_HEIGHT}px !important;
-    left: ${ADMIN_MENU_WIDTH}px !important;
   }
 
   body.edit-story.folded .WebStories_ReactModal__Overlay {
-    left: ${ADMIN_MENU_FOLDED_WIDTH}px !important;
+    left: 0;
   }
 
   body.edit-story .WebStories_ReactModal__Overlay.ReactModal__Overlay--after-open {

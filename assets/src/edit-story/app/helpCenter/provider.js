@@ -85,7 +85,11 @@ const deriveInitialState = composeEffects([
   deriveInitialUnreadTipsCount,
 ]);
 
-const persisted = localStore.getItemByKey(LOCAL_STORAGE_PREFIX.HELP_CENTER);
+// It was requested to show help center on each page load however we do not want that during development.
+const isDev = 'development' === process.env.NODE_ENV;
+const persisted = isDev
+  ? localStore.getItemByKey(LOCAL_STORAGE_PREFIX.HELP_CENTER)
+  : null;
 
 export const initialState = {
   isOpen: false,

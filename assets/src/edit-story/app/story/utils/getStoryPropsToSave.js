@@ -19,7 +19,13 @@
 import objectPick from '../../../utils/objectPick';
 import getStoryMarkup from '../../../output/utils/getStoryMarkup';
 
-function getStoryPropsToSave({ story, pages, metadata, flags }) {
+function getStoryPropsToSave({
+  story,
+  pages,
+  metadata,
+  flags,
+  isPreview = false,
+}) {
   const propsFromStory = objectPick(story, [
     'title',
     'status',
@@ -33,11 +39,12 @@ function getStoryPropsToSave({ story, pages, metadata, flags }) {
     'publisherLogo',
     'currentStoryStyles',
     'globalStoryStyles',
+    'adOptions',
     'autoAdvance',
     'defaultPageDuration',
   ]);
 
-  const content = getStoryMarkup(story, pages, metadata, flags);
+  const content = getStoryMarkup(story, pages, metadata, flags, isPreview);
   return {
     content,
     pages,

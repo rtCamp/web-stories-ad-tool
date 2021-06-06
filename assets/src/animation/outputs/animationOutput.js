@@ -28,7 +28,7 @@ function AnimationOutput({ config }) {
   const configs = Array.isArray(config) ? config : [config];
 
   return (
-    <amp-story-animation layout="nodisplay" trigger="visibility">
+    <amp-animation layout="nodisplay" trigger="visibility">
       <script
         type="application/json"
         dangerouslySetInnerHTML={{
@@ -66,7 +66,7 @@ function AnimationOutput({ config }) {
           ),
         }}
       />
-    </amp-story-animation>
+    </amp-animation>
   );
 }
 

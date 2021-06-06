@@ -17,12 +17,20 @@
 /**
  * Internal dependencies
  */
-import { FULLBLEED_RATIO, PAGE_RATIO } from '../../constants';
+import {
+  FULLBLEED_RATIO,
+  PAGE_RATIO,
+  PAGE_HEIGHT,
+  PAGE_WIDTH,
+} from '../../constants';
 import theme from '../../theme';
 
 function isHexColorString(s) {
   return /^#(?:[a-f0-9]{3}){1,2}$/i.test(s);
 }
+
+const ASPECT_RATIO = PAGE_HEIGHT / PAGE_WIDTH;
+const MAX_PAGE_WIDTH = 630;
 
 function CustomStyles() {
   const safeToFullRatio = PAGE_RATIO / FULLBLEED_RATIO;
@@ -45,6 +53,42 @@ function CustomStyles() {
   const pageBackgroundColor = isHexColorString(workspaceColor)
     ? workspaceColor
     : '#1B1D1C';
+
+  const storyAdStyle = `
+   .grid-layer-main {
+      margin: auto;
+      width: 100vw;
+      height: calc( 100vw * ${ASPECT_RATIO} );
+      max-width: ${MAX_PAGE_WIDTH}px;
+      max-height: 100vh;
+      font-size: calc( 100vw * ${ASPECT_RATIO}/10);
+      pointer-events: none;
+      position: relative;
+    }
+    @media ( min-width: ${MAX_PAGE_WIDTH}px ) {
+      .grid-layer-main {
+        font-size: calc( ${MAX_PAGE_WIDTH * ASPECT_RATIO}px/10);
+      }
+    }
+    body,html {
+      overflow: hidden ;
+      font-size: calc(var(--story-page-vh, 8px)*2.5);
+      height: 100%;
+      margin: 0;
+    }
+    .page-wrapper {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    img.i-amphtml-fill-content {
+      object-fit: contain;
+    }
+  `;
 
   return (
     <style
@@ -102,6 +146,7 @@ function CustomStyles() {
                 bottom: 0;
                 margin: 0;
               }
+              ${storyAdStyle}
               `,
       }}
     />

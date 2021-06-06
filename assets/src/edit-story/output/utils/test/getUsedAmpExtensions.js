@@ -20,43 +20,32 @@
 import getUsedAmpExtensions from '../getUsedAmpExtensions';
 
 describe('getUsedAmpExtensions', () => {
-  it('should always include the AMP runtime script', () => {
+  it('should always include the AMP4Ads runtime script', () => {
     const actual = getUsedAmpExtensions([]);
 
-    expect(actual).toHaveLength(2);
-    expect(actual).toStrictEqual(
-      expect.arrayContaining([{ src: 'https://cdn.ampproject.org/v0.js' }])
-    );
-  });
-
-  it('should always include the AMP Stories script', () => {
-    const actual = getUsedAmpExtensions([]);
-
+    expect(actual).toHaveLength(1);
     expect(actual).toStrictEqual(
       expect.arrayContaining([
-        {
-          name: 'amp-story',
-          src: 'https://cdn.ampproject.org/v0/amp-story-1.0.js',
-        },
+        { src: 'https://cdn.ampproject.org/amp4ads-v0.js' },
       ])
     );
   });
 
-  it('should include the amp-video script if there is a video', () => {
+  it('should include the amp-animation script if there is an animation', () => {
     const pages = [
       {
-        elements: [{ type: 'video' }],
+        elements: [{ type: 'animations' }],
       },
     ];
 
     const actual = getUsedAmpExtensions(pages);
 
-    expect(actual).toHaveLength(3);
+    expect(actual).toHaveLength(2);
     expect(actual).toStrictEqual(
       expect.arrayContaining([
         {
-          name: 'amp-video',
-          src: 'https://cdn.ampproject.org/v0/amp-video-0.1.js',
+          name: 'amp-animation',
+          src: 'https://cdn.ampproject.org/v0/amp-animation-0.1.js',
         },
       ])
     );
@@ -65,27 +54,27 @@ describe('getUsedAmpExtensions', () => {
   it('should include the amp-video script only once if there are multiple videos', () => {
     const pages = [
       {
-        elements: [{ type: 'video' }],
+        elements: [{ type: 'animations' }],
       },
       {
         elements: [{ type: 'text' }],
       },
       {
-        elements: [{ type: 'video' }],
+        elements: [{ type: 'animations' }],
       },
       {
-        elements: [{ type: 'video' }],
+        elements: [{ type: 'animations' }],
       },
     ];
 
     const actual = getUsedAmpExtensions(pages);
 
-    expect(actual).toHaveLength(3);
+    expect(actual).toHaveLength(2);
     expect(actual).toStrictEqual(
       expect.arrayContaining([
         {
-          name: 'amp-video',
-          src: 'https://cdn.ampproject.org/v0/amp-video-0.1.js',
+          name: 'amp-animation',
+          src: 'https://cdn.ampproject.org/v0/amp-animation-0.1.js',
         },
       ])
     );

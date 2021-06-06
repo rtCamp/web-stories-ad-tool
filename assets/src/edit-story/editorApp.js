@@ -36,12 +36,9 @@ import { StoryProvider } from './app/story';
 import { FontProvider } from './app/font';
 import { MediaProvider } from './app/media';
 import { CurrentUserProvider } from './app/currentUser';
-import AutoSaveHandler from './components/autoSaveHandler';
 import { TransformProvider } from './components/transform';
 import { DropTargetsProvider } from './components/dropTargets';
 import { HelpCenterProvider } from './app/helpCenter';
-import StatusCheck from './components/statusCheck';
-import PostLock from './components/postLock';
 import Layout from './components/layout';
 import DevTools from './components/devTools';
 import { GlobalStyle as DefaultMoveableGlobalStyle } from './components/moveable/moveStyle';
@@ -50,6 +47,8 @@ import { GlobalStyle as ModalGlobalStyle } from './components/modal';
 import { GlobalStyle as CalendarStyle } from './components/form/dateTime/calendarStyle';
 import KeyboardOnlyOutlines from './utils/keyboardOnlyOutline';
 import { MetaBoxesProvider } from './integrations/wordpress/metaBoxes';
+import { StoryAdProvider } from './app/storyAd';
+import StoryDialogs from './components/storyDialogs';
 
 function App({ config }) {
   const { storyId, isRTL } = config;
@@ -59,36 +58,36 @@ function App({ config }) {
         <ErrorBoundary>
           <ConfigProvider config={config}>
             <APIProvider>
-              <StatusCheck />
               <FileProvider>
                 <Media3pApiProvider>
                   <HistoryProvider size={50}>
                     <SnackbarProvider>
                       <MetaBoxesProvider>
-                        <StoryProvider storyId={storyId}>
-                          <CurrentUserProvider>
-                            <PostLock />
-                            <FontProvider>
-                              <MediaProvider>
-                                <AutoSaveHandler />
-                                <TransformProvider>
-                                  <DropTargetsProvider>
-                                    <HelpCenterProvider>
-                                      <GlobalStyle />
-                                      <DevTools />
-                                      <DefaultMoveableGlobalStyle />
-                                      <CropMoveableGlobalStyle />
-                                      <ModalGlobalStyle />
-                                      <CalendarStyle />
-                                      <KeyboardOnlyOutlines />
-                                      <Layout />
-                                    </HelpCenterProvider>
-                                  </DropTargetsProvider>
-                                </TransformProvider>
-                              </MediaProvider>
-                            </FontProvider>
-                          </CurrentUserProvider>
-                        </StoryProvider>
+                        <StoryAdProvider>
+                          <StoryProvider storyId={storyId}>
+                            <CurrentUserProvider>
+                              <FontProvider>
+                                <MediaProvider>
+                                  <TransformProvider>
+                                    <DropTargetsProvider>
+                                      <HelpCenterProvider>
+                                        <GlobalStyle />
+                                        <DevTools />
+                                        <DefaultMoveableGlobalStyle />
+                                        <CropMoveableGlobalStyle />
+                                        <ModalGlobalStyle />
+                                        <CalendarStyle />
+                                        <KeyboardOnlyOutlines />
+                                        <Layout />
+                                        <StoryDialogs />
+                                      </HelpCenterProvider>
+                                    </DropTargetsProvider>
+                                  </TransformProvider>
+                                </MediaProvider>
+                              </FontProvider>
+                            </CurrentUserProvider>
+                          </StoryProvider>
+                        </StoryAdProvider>
                       </MetaBoxesProvider>
                     </SnackbarProvider>
                   </HistoryProvider>

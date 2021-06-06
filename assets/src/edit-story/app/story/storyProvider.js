@@ -23,20 +23,19 @@ import { useMemo } from 'react';
 /**
  * Internal dependencies
  */
-import useConfig from '../config/useConfig';
 import Context from './context';
 
 import useLoadStory from './effects/useLoadStory';
 import useSaveStory from './actions/useSaveStory';
 import useHistoryEntry from './effects/useHistoryEntry';
 import useHistoryReplay from './effects/useHistoryReplay';
+import useSessionStorage from './effects/useSessionStorage';
 import useStoryReducer from './useStoryReducer';
 import useAutoSave from './actions/useAutoSave';
 import useSaveMetaBoxes from './effects/useSaveMetaBoxes';
 import { StoryTriggersProvider } from './storyTriggers';
 
 function StoryProvider({ storyId, children }) {
-  const { isDemo } = useConfig();
   const {
     state: reducerState,
     api,
@@ -44,6 +43,7 @@ function StoryProvider({ storyId, children }) {
   } = useStoryReducer({
     current: null,
   });
+
   const {
     pages,
     current,
@@ -116,11 +116,12 @@ function StoryProvider({ storyId, children }) {
 
   // This effect loads and initialises the story on first load (when there's no pages).
   const shouldLoad = pages.length === 0;
-  useLoadStory({ restore, shouldLoad, storyId, isDemo });
+  useLoadStory({ restore, shouldLoad, storyId });
 
   // These effects send updates to and restores state from history.
   useHistoryEntry({ pages, current, selection, story, capabilities });
   useHistoryReplay({ restore });
+  useSessionStorage({ current, selection, story, pages });
 
   // This action allows the user to save the story
   // (and it will have side-effects because saving can update url and status,

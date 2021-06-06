@@ -24,7 +24,6 @@ import { __ } from '@web-stories-wp/i18n';
  */
 import { noop } from '../../../utils/noop';
 import { GUTTER_WIDTH, ReadTipsType } from '../constants';
-import { Footer } from './footer';
 import { Header } from './header';
 import { Tips } from './tips';
 import { Transitioner } from './transitioner';
@@ -45,7 +44,6 @@ export function Menu({ onTipSelect = noop, readTips, ...transitionProps }) {
       <Container aria-label={__('Help Center Main Menu', 'web-stories')}>
         <Header />
         <Tips readTips={readTips} onTipSelect={onTipSelect} />
-        <Footer />
       </Container>
     </Transitioner>
   );

@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { useCallback } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 import { __ } from '@web-stories-wp/i18n';
 
@@ -30,17 +30,17 @@ import {
   BUTTON_TYPES,
   BUTTON_VARIANTS,
 } from '../../../../../../design-system';
-import { useLocalMedia } from '../../../../../app/media';
-import useLibrary from '../../../useLibrary';
 import {
   MediaGalleryMessage,
   PaneHeader as DefaultPaneHeader,
   PaneInner,
   StyledPane,
 } from '../common/styles';
+import { PANE_PADDING } from '../../shared';
 import PaginatedMediaGallery from '../common/paginatedMediaGallery';
 import resourceList from '../../../../../utils/resourceList';
-import { PANE_PADDING } from '../../shared';
+import useLibrary from '../../../useLibrary';
+import { useConfig, useMedia } from '../../../../../app';
 import paneId from './paneId';
 
 export const ROOT_MARGIN = 300;
@@ -57,32 +57,40 @@ const PaneHeader = styled(DefaultPaneHeader)`
 `;
 
 function MediaPane(props) {
+  const fileInputRef = useRef();
+  const setNextPage = () => {};
+
+  const { addLocalFiles, media } = useMedia((state) => ({
+    addLocalFiles: state.local.actions.addLocalFiles,
+    media: state.local.state.media,
+  }));
+
   const {
-    hasMore,
-    media,
-    isMediaLoading,
-    isMediaLoaded,
-    setNextPage,
-  } = useLocalMedia(
-    ({
-      state: { hasMore, media, isMediaLoading, isMediaLoaded, totalItems },
-      actions: { setNextPage, setSearchTerm },
-    }) => {
-      return {
-        hasMore,
-        media,
-        isMediaLoading,
-        isMediaLoaded,
-        totalItems,
-        setNextPage,
-        setSearchTerm,
-      };
-    }
+    allowedMimeTypes: {
+      image: allowedImageMimeTypes,
+      video: allowedVideoMimeTypes,
+    },
+  } = useConfig();
+
+  const allowedMimeTypes = useMemo(
+    () => [...allowedImageMimeTypes, ...allowedVideoMimeTypes],
+    [allowedImageMimeTypes, allowedVideoMimeTypes]
   );
+
+  const handleFileInput = async (event) => {
+    if (!event.target.files.length) {
+      return;
+    }
+
+    const { files } = event.target;
+    await addLocalFiles([...files]);
+    fileInputRef.current.value = '';
+  };
 
   const { insertElement } = useLibrary((state) => ({
     insertElement: state.actions.insertElement,
   }));
+
   /**
    * Insert element such image, video and audio into the editor.
    *
@@ -95,7 +103,7 @@ function MediaPane(props) {
         url: thumbnailURL,
         type: 'cached',
       });
-      insertElement(resource.type, { resource });
+      return insertElement(resource.type, { resource });
     },
     [insertElement]
   );
@@ -105,11 +113,21 @@ function MediaPane(props) {
       <PaneInner>
         <PaneHeader>
           <FilterArea>
+            <input
+              type="file"
+              accept={allowedMimeTypes}
+              ref={fileInputRef}
+              onChange={handleFileInput}
+              hidden
+              multiple
+            />
             <Button
               variant={BUTTON_VARIANTS.RECTANGLE}
               type={BUTTON_TYPES.SECONDARY}
               size={BUTTON_SIZES.SMALL}
-              onClick={() => {}}
+              onClick={() =>
+                fileInputRef.current && fileInputRef.current.click()
+              }
             >
               {__('Upload', 'web-stories')}
             </Button>
@@ -124,11 +142,12 @@ function MediaPane(props) {
           <PaginatedMediaGallery
             providerType="local"
             resources={media}
-            isMediaLoading={isMediaLoading}
-            isMediaLoaded={isMediaLoaded}
-            hasMore={hasMore}
+            isMediaLoading={false}
+            isMediaLoaded
+            hasMore={false}
             onInsert={insertMediaElement}
             setNextPage={setNextPage}
+            searchTerm={''}
           />
         )}
       </PaneInner>
