@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -58,14 +58,13 @@ export default function useContextValueProvider(reducerState) {
 
   const [media, updateMedia] = useState([]);
 
-  const allowedMimeTypes = useMemo(
-    () => [...allowedImageMimeTypes, ...allowedVideoMimeTypes],
-    [allowedImageMimeTypes, allowedVideoMimeTypes]
-  );
-
   const addLocalFiles = useCallback(
     async (files) => {
       const mediaItems = [...media];
+      const allowedMimeTypes = [
+        ...allowedImageMimeTypes,
+        ...allowedVideoMimeTypes,
+      ];
 
       const isValidFile = (file) => {
         let isValid = true;
@@ -114,7 +113,8 @@ export default function useContextValueProvider(reducerState) {
       updateMedia(mediaItems);
     },
     [
-      allowedMimeTypes,
+      allowedImageMimeTypes,
+      allowedVideoMimeTypes,
       uploadErrorMessages,
       maxUpload,
       media,
