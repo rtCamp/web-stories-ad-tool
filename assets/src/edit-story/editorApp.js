@@ -48,7 +48,7 @@ import { GlobalStyle as CalendarStyle } from './components/form/dateTime/calenda
 import KeyboardOnlyOutlines from './utils/keyboardOnlyOutline';
 import { MetaBoxesProvider } from './integrations/wordpress/metaBoxes';
 import { StoryAdProvider } from './app/storyAd';
-import { LocalMediaFileProvider } from './app/localMediaFile';
+import StoryDialogs from './components/storyDialogs';
 
 function App({ config }) {
   const { storyId, isRTL } = config;
@@ -69,20 +69,19 @@ function App({ config }) {
                               <FontProvider>
                                 <MediaProvider>
                                   <TransformProvider>
-                                    <LocalMediaFileProvider>
-                                      <DropTargetsProvider>
-                                        <HelpCenterProvider>
-                                          <GlobalStyle />
-                                          <DevTools />
-                                          <DefaultMoveableGlobalStyle />
-                                          <CropMoveableGlobalStyle />
-                                          <ModalGlobalStyle />
-                                          <CalendarStyle />
-                                          <KeyboardOnlyOutlines />
-                                          <Layout />
-                                        </HelpCenterProvider>
-                                      </DropTargetsProvider>
-                                    </LocalMediaFileProvider>
+                                    <DropTargetsProvider>
+                                      <HelpCenterProvider>
+                                        <GlobalStyle />
+                                        <DevTools />
+                                        <DefaultMoveableGlobalStyle />
+                                        <CropMoveableGlobalStyle />
+                                        <ModalGlobalStyle />
+                                        <CalendarStyle />
+                                        <KeyboardOnlyOutlines />
+                                        <Layout />
+                                        <StoryDialogs />
+                                      </HelpCenterProvider>
+                                    </DropTargetsProvider>
                                   </TransformProvider>
                                 </MediaProvider>
                               </FontProvider>

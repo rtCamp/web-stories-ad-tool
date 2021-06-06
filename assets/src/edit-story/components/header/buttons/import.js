@@ -35,7 +35,7 @@ import {
 import { useMedia, useStory } from '../../../app';
 import useAdStory from '../../../app/storyAd/useAdStory';
 import { getResourceFromLocalFile } from '../../../app/media/utils';
-import { initIndexDb } from '../../../app/story/utils/initIndexDb';
+import { initIndexDb } from '../../../app/media/local/initIndexDb';
 
 const ImportButtonContainer = styled.div``;
 
@@ -51,15 +51,15 @@ function Import() {
 
   const { showSnackbar, clearSnackbar } = useSnackbar();
 
-  const { localStoryAdMedia, setLocalStoryAdMedia } = useMedia(
+  const { media, updateMedia } = useMedia(
     ({
       local: {
-        state: { localStoryAdMedia },
-        actions: { setLocalStoryAdMedia },
+        state: { media },
+        actions: { updateMedia },
       },
     }) => ({
-      localStoryAdMedia,
-      setLocalStoryAdMedia,
+      media,
+      updateMedia,
     })
   );
 
@@ -83,7 +83,7 @@ function Import() {
 
     const [file] = inputFiles;
     const files = await JSZip.loadAsync(file).then((content) => content.files);
-    const mediaItems = [...localStoryAdMedia];
+    const mediaItems = [...media];
 
     if (!('config.json' in files)) {
       showSnackbar({
@@ -141,12 +141,13 @@ function Import() {
 
           filesToStore.push({
             file: mediaFile,
-            title: mediaResource.title,
+            title: resource.title, // Title will be used to match the stored asset and config resource.
           });
 
           const mediaItem = { ...mediaResource, ...resource };
           mediaItem.id = index + 1;
           mediaItem.src = mediaSrc;
+          mediaItem.local = false;
 
           if ('video' === resource.type) {
             const videoFileName = fileName.split('.')[0];
@@ -180,7 +181,7 @@ function Import() {
 
     initIndexDb(filesToStore, 'save');
 
-    setLocalStoryAdMedia(mediaItems);
+    updateMedia(mediaItems);
 
     restore(stateToRestore);
 

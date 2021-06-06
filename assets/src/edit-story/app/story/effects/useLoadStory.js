@@ -17,48 +17,55 @@
 /**
  * External dependencies
  */
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 /**
  * Internal dependencies
  */
-import { useAPI } from '../../api';
 import { useHistory } from '../../history';
 import { getDataFromSessionStorage } from '../utils/sessionStore';
 import getInitialStoryState from '../utils/getInitialStoryState';
 
 // When ID is set, load story from API.
-function useLoadStory({ storyId, shouldLoad, restore, isDemo }) {
-  const {
-    actions: { getStoryById, getDemoStoryById },
-  } = useAPI();
+function useLoadStory({ storyId, shouldLoad, restore }) {
   const {
     actions: { clearHistory },
   } = useHistory();
 
+  const storedStory = useCallback(() => {
+    const sessionData = getDataFromSessionStorage();
+
+    if (!sessionData?.pages || !sessionData?.pages[0]) {
+      return null;
+    }
+
+    const { elements } = sessionData.pages[0];
+
+    sessionData.pages[0].elements = elements.map((element) => {
+      const { resource } = element;
+
+      ['src', 'poster'].forEach((key) => {
+        if (resource && key in resource && resource[key].startsWith('blob:')) {
+          element.resource[key] = '';
+        }
+      });
+
+      return element;
+    });
+
+    return sessionData;
+  }, []);
+
   useEffect(() => {
     if (storyId && shouldLoad) {
-      // First clear history completely.
       clearHistory();
 
-      let storyToRestore = getInitialStoryState();
-      const sessionData = getDataFromSessionStorage();
-
-      if (sessionData) {
-        storyToRestore = sessionData;
-      }
+      const sessionData = storedStory();
+      const storyToRestore = sessionData ? sessionData : getInitialStoryState();
 
       restore(storyToRestore);
     }
-  }, [
-    storyId,
-    shouldLoad,
-    restore,
-    isDemo,
-    getStoryById,
-    getDemoStoryById,
-    clearHistory,
-  ]);
+  }, [storyId, shouldLoad, restore, clearHistory, storedStory]);
 }
 
 export default useLoadStory;

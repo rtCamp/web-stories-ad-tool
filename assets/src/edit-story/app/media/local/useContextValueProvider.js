@@ -22,7 +22,12 @@ import { useCallback, useState } from 'react';
 /**
  * Internal dependencies
  */
-import useUploadMedia from '../useUploadMedia';
+import { __, sprintf } from '@web-stories-wp/i18n';
+import { v4 as uuidv4 } from 'uuid';
+import { useConfig } from '../../config';
+import { getResourceFromLocalFile } from '../utils';
+import bytesToMB from '../utils/bytesToMB';
+import usePersistentAssets from './usePersistentAssets';
 
 /**
  * @typedef {import('./typedefs').LocalMediaContext} LocalMediaContext
@@ -34,50 +39,113 @@ import useUploadMedia from '../useUploadMedia';
  * Context fragment provider for local media.
  * This is called from {@link MediaProvider} to provide the media global state.
  *
- * @param {LocalMediaReducerState} reducerState The 'local' fragment of the
- * state returned from `useMediaReducer`
- * @param {LocalMediaReducerActions} reducerActions The 'local' fragment of the
- * actions returned from `useMediaReducer`
  * @return {LocalMediaContext} Context.
  */
-export default function useContextValueProvider(reducerState, reducerActions) {
-  const { media } = reducerState;
+export default function useContextValueProvider() {
   const {
-    prependMedia,
-    updateMediaElement,
-    deleteMediaElement,
-  } = reducerActions;
+    allowedMimeTypes: {
+      image: allowedImageMimeTypes,
+      video: allowedVideoMimeTypes,
+    },
+    maxUpload,
+  } = useConfig();
 
-  const [localStoryAdMedia, setLocalStoryAdMedia] = useState([]);
+  const [media, updateMedia] = useState([]);
+  const [uploadErrorMessages, updateUploadErrorMessages] = useState([]);
 
-  const { uploadMedia, isUploading, isTranscoding } = useUploadMedia({
+  const addLocalFiles = useCallback(
+    async (files) => {
+      const mediaItems = [...media];
+      const allowedMimeTypes = [
+        ...allowedImageMimeTypes,
+        ...allowedVideoMimeTypes,
+      ];
+
+      const isValidFile = (file) => {
+        let isValid = true;
+
+        if (!allowedMimeTypes.includes(file.type)) {
+          updateUploadErrorMessages([
+            ...uploadErrorMessages,
+            __('Invalid file type', 'web-stories'),
+          ]);
+          isValid = false;
+        }
+
+        if (file.size > maxUpload) {
+          updateUploadErrorMessages([
+            ...uploadErrorMessages,
+            sprintf(
+              /* translators: first %s is the file name, second %s is the file size in MB and second %s is the upload file limit in MB */
+              __(
+                '%1$s is %2$sMB and the upload limit is %3$sMB. Please resize and try again!',
+                'web-stories'
+              ),
+              file.name,
+              bytesToMB(file.size),
+              bytesToMB(maxUpload)
+            ),
+          ]);
+          isValid = false;
+        }
+
+        return isValid;
+      };
+
+      await Promise.all(
+        [...files].map(async (file) => {
+          if (isValidFile(file)) {
+            const mediaData = await getResourceFromLocalFile(file);
+            mediaData.local = false; // this disables the UploadingIndicator
+            mediaData.id = uuidv4();
+            mediaData.file = file;
+            mediaData.modifiedAt = new Date().getTime();
+            mediaItems.push(mediaData);
+          }
+        })
+      );
+
+      updateMedia(mediaItems);
+    },
+    [
+      allowedImageMimeTypes,
+      allowedVideoMimeTypes,
+      uploadErrorMessages,
+      maxUpload,
+      media,
+      updateMedia,
+      updateUploadErrorMessages,
+    ]
+  );
+
+  usePersistentAssets({
+    addLocalFiles,
     media,
-    prependMedia,
-    updateMediaElement,
-    deleteMediaElement,
   });
 
   const noop = useCallback(() => {}, []);
 
   return {
     state: {
-      ...reducerState,
-      isUploading,
-      isTranscoding,
-      localStoryAdMedia,
+      isUploading: false,
+      isTranscoding: false,
+      uploadErrorMessages,
+      media,
     },
     actions: {
       setNextPage: noop,
       setMediaType: noop,
       setSearchTerm: noop,
       resetFilters: noop,
-      uploadMedia,
+      uploadMedia: noop,
       resetWithFetch: noop,
       uploadVideoPoster: noop,
       deleteMediaElement: noop,
       updateMediaElement: noop,
       optimizeVideo: noop,
-      setLocalStoryAdMedia,
+      updateMedia,
+      addLocalFiles,
+      updateUploadErrorMessages,
     },
   };
 }

@@ -30,7 +30,7 @@ import Context from './context';
 function MediaProvider({ children }) {
   const { state, actions } = useMediaReducer();
 
-  const local = useLocalContextValueProvider(state.local, actions.local);
+  const local = useLocalContextValueProvider();
   const media3p = useMedia3pContextValueProvider(
     state.media3p,
     actions.media3p

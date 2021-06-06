@@ -79,7 +79,7 @@ const wrapWithDispatch = (actionFnOrActionObject, dispatch) => {
  * purposes
  * @return {MediaReducer} Media reducer object.
  */
-function useMediaReducer(reducer = rootReducer, actionsToWrap) {
+function useMediaReducer(reducer = rootReducer, actionsToWrap = null) {
   const defaultActionsToWrap = useMemo(
     () => ({ local: localActionsToWrap, media3p: media3pActionsToWrap }),
     []
