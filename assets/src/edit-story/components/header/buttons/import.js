@@ -35,7 +35,7 @@ import {
 import { useMedia, useStory } from '../../../app';
 import useAdStory from '../../../app/storyAd/useAdStory';
 import { getResourceFromLocalFile } from '../../../app/media/utils';
-import { initIndexDb } from '../../../app/story/utils/initIndexDb';
+import { initIndexDb } from '../../../app/media/local/initIndexDb';
 
 const ImportButtonContainer = styled.div``;
 

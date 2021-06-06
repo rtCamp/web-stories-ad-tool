@@ -27,6 +27,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useConfig } from '../../config';
 import { getResourceFromLocalFile } from '../utils';
 import bytesToMB from '../utils/bytesToMB';
+import usePersistentAssets from './usePersistentAssets';
 
 /**
  * @typedef {import('./typedefs').LocalMediaContext} LocalMediaContext
@@ -116,6 +117,11 @@ export default function useContextValueProvider() {
       updateUploadErrorMessages,
     ]
   );
+
+  usePersistentAssets({
+    addLocalFiles,
+    media,
+  });
 
   const noop = useCallback(() => {}, []);
 
