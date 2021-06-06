@@ -40,15 +40,15 @@ function OptimisationMessage() {
 
   const { maxVideoFileSize } = useConfig();
 
-  const { localStoryAdMedia: media, setLocalStoryAdMedia } = useMedia(
+  const { media, updateMedia } = useMedia(
     ({
       local: {
-        state: { localStoryAdMedia },
-        actions: { setLocalStoryAdMedia },
+        state: { media },
+        actions: { updateMedia },
       },
     }) => ({
-      localStoryAdMedia,
-      setLocalStoryAdMedia,
+      media,
+      updateMedia,
     })
   );
 
@@ -97,7 +97,7 @@ function OptimisationMessage() {
     mediaElements[index].local = true;
     mediaElements[index].isTranscoding = true;
     mediaElements[index].modifiedAt = new Date().getTime();
-    setLocalStoryAdMedia(mediaElements);
+    updateMedia(mediaElements);
   };
 
   const setOptimizedVideoInGallery = async (id, optimizedFile) => {
@@ -113,7 +113,7 @@ function OptimisationMessage() {
     mediaData.modifiedAt = new Date().getTime();
 
     mediaElements[index] = mediaData;
-    setLocalStoryAdMedia(mediaElements);
+    updateMedia(mediaElements);
 
     const updateResource = {
       id: mediaData.id,

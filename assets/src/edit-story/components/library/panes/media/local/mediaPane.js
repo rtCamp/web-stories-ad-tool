@@ -68,9 +68,9 @@ function MediaPane(props) {
     updateElementsByResourceId: state.actions.updateElementsByResourceId,
   }));
 
-  const { addLocalFiles, localStoryAdMedia: media } = useMedia((state) => ({
+  const { addLocalFiles, media } = useMedia((state) => ({
     addLocalFiles: state.local.actions.addLocalFiles,
-    localStoryAdMedia: state.local.state.localStoryAdMedia,
+    media: state.local.state.media,
   }));
 
   const {

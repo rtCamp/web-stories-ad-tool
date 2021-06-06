@@ -43,15 +43,15 @@ import Dialog from '../../../../dialog';
  * @return {null|*} The dialog element.
  */
 function DeleteDialog({ mediaId, type, onClose }) {
-  const { localStoryAdMedia: media, setLocalStoryAdMedia } = useMedia(
+  const { media, updateMedia } = useMedia(
     ({
       local: {
-        state: { localStoryAdMedia },
-        actions: { setLocalStoryAdMedia },
+        state: { media },
+        actions: { updateMedia },
       },
     }) => ({
-      localStoryAdMedia,
-      setLocalStoryAdMedia,
+      media,
+      updateMedia,
     })
   );
 
@@ -64,10 +64,10 @@ function DeleteDialog({ mediaId, type, onClose }) {
 
       if (currentMediaIndex > -1) {
         newMedia.splice(currentMediaIndex, 1);
-        setLocalStoryAdMedia(newMedia);
+        updateMedia(newMedia);
       }
     },
-    [media, setLocalStoryAdMedia]
+    [media, updateMedia]
   );
 
   const { showSnackbar } = useSnackbar();

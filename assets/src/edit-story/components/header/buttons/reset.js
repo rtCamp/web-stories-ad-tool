@@ -53,15 +53,13 @@ function Reset() {
     actions: { clearHistory },
   } = useHistory();
 
-  const { setLocalStoryAdMedia } = useMedia(
+  const { updateMedia } = useMedia(
     ({
       local: {
-        state: { localStoryAdMedia },
-        actions: { setLocalStoryAdMedia },
+        actions: { updateMedia },
       },
     }) => ({
-      localStoryAdMedia,
-      setLocalStoryAdMedia,
+      updateMedia,
     })
   );
 
@@ -80,11 +78,11 @@ function Reset() {
     const stateToReset = getInitialStoryState();
 
     clearHistory();
-    setLocalStoryAdMedia([]);
+    updateMedia([]);
     removeSessionStorage();
 
     restore(stateToReset);
-  }, [clearHistory, restore, setLocalStoryAdMedia]);
+  }, [clearHistory, restore, updateMedia]);
 
   const label = __('Reset', 'web-stories');
 

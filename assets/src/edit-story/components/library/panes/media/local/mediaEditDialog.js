@@ -107,15 +107,15 @@ function MediaEditDialog({ resource, onClose }) {
     mimeType,
   } = resource;
 
-  const { localStoryAdMedia: media, setLocalStoryAdMedia } = useMedia(
+  const { media, updateMedia: updateLocalMedia } = useMedia(
     ({
       local: {
-        state: { localStoryAdMedia },
-        actions: { setLocalStoryAdMedia },
+        state: { media },
+        actions: { updateMedia },
       },
     }) => ({
-      localStoryAdMedia,
-      setLocalStoryAdMedia,
+      media,
+      updateMedia,
     })
   );
 
@@ -128,10 +128,10 @@ function MediaEditDialog({ resource, onClose }) {
       if (currentIndex > -1) {
         const newMedia = [...media];
         newMedia[currentIndex] = { ...newMedia[currentIndex], ...data };
-        setLocalStoryAdMedia(newMedia);
+        updateLocalMedia(newMedia);
       }
     },
-    [media, setLocalStoryAdMedia]
+    [media, updateLocalMedia]
   );
 
   const { updateMediaElement } = useLocalMedia((state) => ({

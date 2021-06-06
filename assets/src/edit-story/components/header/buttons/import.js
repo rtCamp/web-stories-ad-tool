@@ -51,15 +51,15 @@ function Import() {
 
   const { showSnackbar, clearSnackbar } = useSnackbar();
 
-  const { localStoryAdMedia, setLocalStoryAdMedia } = useMedia(
+  const { media, updateMedia } = useMedia(
     ({
       local: {
-        state: { localStoryAdMedia },
-        actions: { setLocalStoryAdMedia },
+        state: { media },
+        actions: { updateMedia },
       },
     }) => ({
-      localStoryAdMedia,
-      setLocalStoryAdMedia,
+      media,
+      updateMedia,
     })
   );
 
@@ -83,7 +83,7 @@ function Import() {
 
     const [file] = inputFiles;
     const files = await JSZip.loadAsync(file).then((content) => content.files);
-    const mediaItems = [...localStoryAdMedia];
+    const mediaItems = [...media];
 
     if (!('config.json' in files)) {
       showSnackbar({
@@ -180,7 +180,7 @@ function Import() {
 
     initIndexDb(filesToStore, 'save');
 
-    setLocalStoryAdMedia(mediaItems);
+    updateMedia(mediaItems);
 
     restore(stateToRestore);
 

@@ -56,7 +56,7 @@ export default function useContextValueProvider(reducerState) {
     actions: { updateUploadErrorMessages },
   } = useAdStory();
 
-  const [localStoryAdMedia, setLocalStoryAdMedia] = useState([]);
+  const [media, updateMedia] = useState([]);
 
   const allowedMimeTypes = useMemo(
     () => [...allowedImageMimeTypes, ...allowedVideoMimeTypes],
@@ -65,7 +65,7 @@ export default function useContextValueProvider(reducerState) {
 
   const addLocalFiles = useCallback(
     async (files) => {
-      const mediaItems = [...localStoryAdMedia];
+      const mediaItems = [...media];
 
       const isValidFile = (file) => {
         let isValid = true;
@@ -111,14 +111,14 @@ export default function useContextValueProvider(reducerState) {
         })
       );
 
-      setLocalStoryAdMedia(mediaItems);
+      updateMedia(mediaItems);
     },
     [
       allowedMimeTypes,
       uploadErrorMessages,
       maxUpload,
-      localStoryAdMedia,
-      setLocalStoryAdMedia,
+      media,
+      updateMedia,
       updateUploadErrorMessages,
     ]
   );
@@ -130,7 +130,7 @@ export default function useContextValueProvider(reducerState) {
       ...reducerState, // @todo To be removed.
       isUploading: false,
       isTranscoding: false,
-      localStoryAdMedia,
+      media,
     },
     actions: {
       setNextPage: noop,
@@ -143,7 +143,7 @@ export default function useContextValueProvider(reducerState) {
       deleteMediaElement: noop,
       updateMediaElement: noop,
       optimizeVideo: noop,
-      setLocalStoryAdMedia, // @todo To be removed.
+      updateMedia, // @todo To be removed.
       addLocalFiles,
     },
   };
