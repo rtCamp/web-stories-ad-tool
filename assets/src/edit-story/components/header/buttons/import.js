@@ -141,12 +141,13 @@ function Import() {
 
           filesToStore.push({
             file: mediaFile,
-            title: mediaResource.title,
+            title: resource.title, // Title will be used to match the stored asset and config resource.
           });
 
           const mediaItem = { ...mediaResource, ...resource };
           mediaItem.id = index + 1;
           mediaItem.src = mediaSrc;
+          mediaItem.local = false;
 
           if ('video' === resource.type) {
             const videoFileName = fileName.split('.')[0];
