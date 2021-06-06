@@ -23,7 +23,6 @@ import { useMemo } from 'react';
 /**
  * Internal dependencies
  */
-import useConfig from '../config/useConfig';
 import Context from './context';
 
 import useLoadStory from './effects/useLoadStory';
@@ -37,7 +36,6 @@ import useSaveMetaBoxes from './effects/useSaveMetaBoxes';
 import { StoryTriggersProvider } from './storyTriggers';
 
 function StoryProvider({ storyId, children }) {
-  const { isDemo } = useConfig();
   const {
     state: reducerState,
     api,
@@ -118,7 +116,7 @@ function StoryProvider({ storyId, children }) {
 
   // This effect loads and initialises the story on first load (when there's no pages).
   const shouldLoad = pages.length === 0;
-  useLoadStory({ restore, shouldLoad, storyId, isDemo });
+  useLoadStory({ restore, shouldLoad, storyId });
 
   // These effects send updates to and restores state from history.
   useHistoryEntry({ pages, current, selection, story, capabilities });
