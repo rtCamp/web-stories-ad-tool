@@ -39,11 +39,9 @@ import bytesToMB from '../utils/bytesToMB';
  * Context fragment provider for local media.
  * This is called from {@link MediaProvider} to provide the media global state.
  *
- * @param {LocalMediaReducerState} reducerState The 'local' fragment of the
- * state returned from `useMediaReducer`
  * @return {LocalMediaContext} Context.
  */
-export default function useContextValueProvider(reducerState) {
+export default function useContextValueProvider() {
   const {
     allowedMimeTypes: {
       image: allowedImageMimeTypes,
@@ -56,6 +54,7 @@ export default function useContextValueProvider(reducerState) {
     actions: { updateUploadErrorMessages },
   } = useAdStory();
 
+  // @todo use useReducer.
   const [media, updateMedia] = useState([]);
 
   const addLocalFiles = useCallback(
@@ -127,7 +126,6 @@ export default function useContextValueProvider(reducerState) {
 
   return {
     state: {
-      ...reducerState, // @todo To be removed.
       isUploading: false,
       isTranscoding: false,
       media,
@@ -143,7 +141,7 @@ export default function useContextValueProvider(reducerState) {
       deleteMediaElement: noop,
       updateMediaElement: noop,
       optimizeVideo: noop,
-      updateMedia, // @todo To be removed.
+      updateMedia,
       addLocalFiles,
     },
   };
