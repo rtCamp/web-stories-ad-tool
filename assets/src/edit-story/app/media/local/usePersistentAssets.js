@@ -66,10 +66,10 @@ function usePersistentAssets({ addLocalFiles, media }) {
    */
   useEffect(() => {
     if (isInitialMount.current) {
-      isInitialMount.current = false;
       return;
     }
 
+    // This is to avoid storing it twice during import.
     const shouldSaveToIndexDb = media.every(({ file }) => Boolean(file));
     const mediaItemsToSave = media.map(({ file, title }) => ({
       file,
@@ -79,6 +79,8 @@ function usePersistentAssets({ addLocalFiles, media }) {
     if (shouldSaveToIndexDb) {
       initIndexDb(mediaItemsToSave, 'save');
     }
+
+    isInitialMount.current = false;
   }, [media]);
 
   /**
