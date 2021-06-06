@@ -28,18 +28,15 @@ import Context from './context';
 function StoryAdProvider({ children }) {
   const [isImporting, updateIsImportingStatus] = useState(false);
   const [isDownloading, updateIsDownloadingStatus] = useState(false);
-  const [uploadErrorMessages, updateUploadErrorMessages] = useState([]);
 
   const value = {
     actions: {
       updateIsImportingStatus,
       updateIsDownloadingStatus,
-      updateUploadErrorMessages,
     },
     state: {
       isImporting,
       isDownloading,
-      uploadErrorMessages,
     },
   };
 

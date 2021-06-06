@@ -25,13 +25,15 @@ import Dialog from '../../dialog';
  * External dependencies
  */
 import { Text, THEME_CONSTANTS } from '../../../../design-system';
-import useAdStory from '../../../app/storyAd/useAdStory';
+import { useMedia } from '../../../app';
 
 function UploadError() {
-  const {
-    state: { uploadErrorMessages },
-    actions: { updateUploadErrorMessages },
-  } = useAdStory();
+  const { uploadErrorMessages, updateUploadErrorMessages } = useMedia(
+    (state) => ({
+      uploadErrorMessages: state.local.state.uploadErrorMessages,
+      updateUploadErrorMessages: state.local.actions.updateUploadErrorMessages,
+    })
+  );
 
   const closeErrorDialog = () => {
     updateUploadErrorMessages([]);

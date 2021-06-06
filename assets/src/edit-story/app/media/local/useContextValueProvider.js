@@ -25,7 +25,6 @@ import { useCallback, useState } from 'react';
 import { __, sprintf } from '@web-stories-wp/i18n';
 import { v4 as uuidv4 } from 'uuid';
 import { useConfig } from '../../config';
-import useAdStory from '../../storyAd/useAdStory';
 import { getResourceFromLocalFile } from '../utils';
 import bytesToMB from '../utils/bytesToMB';
 
@@ -49,13 +48,9 @@ export default function useContextValueProvider() {
     },
     maxUpload,
   } = useConfig();
-  const {
-    state: { uploadErrorMessages },
-    actions: { updateUploadErrorMessages },
-  } = useAdStory();
 
-  // @todo use useReducer.
   const [media, updateMedia] = useState([]);
+  const [uploadErrorMessages, updateUploadErrorMessages] = useState([]);
 
   const addLocalFiles = useCallback(
     async (files) => {
@@ -128,6 +123,7 @@ export default function useContextValueProvider() {
     state: {
       isUploading: false,
       isTranscoding: false,
+      uploadErrorMessages,
       media,
     },
     actions: {
@@ -143,6 +139,7 @@ export default function useContextValueProvider() {
       optimizeVideo: noop,
       updateMedia,
       addLocalFiles,
+      updateUploadErrorMessages,
     },
   };
 }
