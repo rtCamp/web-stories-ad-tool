@@ -42,9 +42,14 @@ function useLoadStory({ storyId, shouldLoad, restore }) {
     const { elements } = sessionData.pages[0];
 
     sessionData.pages[0].elements = elements.map((element) => {
-      if (element?.resource && element.resource?.src.startsWith('blob:')) {
-        element.resource.src = '';
-      }
+      const { resource } = element;
+
+      ['src', 'poster'].forEach((key) => {
+        if (resource && key in resource && resource[key].startsWith('blob:')) {
+          element.resource[key] = '';
+        }
+      });
+
       return element;
     });
 

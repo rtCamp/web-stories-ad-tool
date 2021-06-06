@@ -46,14 +46,14 @@ function usePersistentAssets({ addLocalFiles, media }) {
           ) {
             const mediaData = await getResourceFromLocalFile(fileItem.file);
             const resourceId = element.resource.id;
-            const updateResource = {
+            const mediaResource = {
               id: resourceId,
               properties: ({ resource, ...rest }) => ({
                 ...rest,
                 resource: { ...mediaData, id: resourceId },
               }),
             };
-            updateElementsByResourceId(updateResource);
+            updateElementsByResourceId(mediaResource);
           }
         });
       });
