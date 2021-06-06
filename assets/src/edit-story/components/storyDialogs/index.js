@@ -17,14 +17,12 @@
  * Internal dependencies
  */
 import OptimisationMessage from './optimizationMessage';
-import PreviewError from './previewError';
 import UploadError from './uploadError';
 
 function StoryDialogs() {
   return (
     <>
       <OptimisationMessage />
-      <PreviewError />
       <UploadError />
     </>
   );
