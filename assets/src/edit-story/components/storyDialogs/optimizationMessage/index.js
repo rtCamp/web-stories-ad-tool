@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,50 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies
- */
-import { useState, useMemo, useCallback, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { __, sprintf } from '@web-stories-wp/i18n';
-import { v4 as uuidv4 } from 'uuid';
-
 /**
  * Internal dependencies
  */
-import Dialog from '../../components/dialog';
-import { THEME_CONSTANTS, Text, useSnackbar } from '../../../design-system';
-import { useConfig, useStory } from '..';
-import { useMedia } from '../media';
-import { getResourceFromLocalFile } from '../media/utils';
-import useFFmpeg from '../media/utils/useFFmpeg';
-import Context from './context';
+/**
+ * External dependencies
+ */
+import { __, sprintf } from '@web-stories-wp/i18n';
+import { useEffect, useState } from 'react';
+import Dialog from '../../dialog';
+/**
+ * External dependencies
+ */
+import { Text, THEME_CONSTANTS, useSnackbar } from '../../../../design-system';
+import useFFmpeg from '../../../app/media/utils/useFFmpeg';
+import { useConfig, useMedia, useStory } from '../../../app';
+import { getResourceFromLocalFile } from '../../../app/media/utils';
+import bytesToMB from '../../../app/media/utils/bytesToMB';
 
-const bytesToMB = (bytes) =>
-  (bytes / Math.pow(1024, 2)).toFixed(2).replace(/\.00$/, '');
-
-function LocalMediaFileProvider({ children }) {
+function OptimisationMessage() {
   const { transcodeVideo } = useFFmpeg();
   const { showSnackbar } = useSnackbar();
-  const [errorMessages, setErrorMessages] = useState([]);
   const [currentElementCount, setCurrentElementCount] = useState(0);
   const [optimizationMessage, setOptimizationMessage] = useState('');
   const [resourceToBeOptimized, setResourceToBeOptimized] = useState({});
 
-  const {
-    allowedMimeTypes: {
-      image: allowedImageMimeTypes,
-      video: allowedVideoMimeTypes,
-    },
-    maxUpload,
-    maxVideoFileSize,
-  } = useConfig();
-
-  const allowedMimeTypes = useMemo(
-    () => [...allowedImageMimeTypes, ...allowedVideoMimeTypes],
-    [allowedImageMimeTypes, allowedVideoMimeTypes]
-  );
+  const { maxVideoFileSize } = useConfig();
 
   const { localStoryAdMedia: media, setLocalStoryAdMedia } = useMedia(
     ({
@@ -103,63 +85,6 @@ function LocalMediaFileProvider({ children }) {
 
     setCurrentElementCount(elementCount);
   }, [elements, elementCount, currentElementCount, maxVideoFileSize]);
-
-  const addLocalFiles = useCallback(
-    async (files) => {
-      const mediaItems = [...media];
-
-      const isValidFile = (file) => {
-        let isValid = true;
-
-        if (!allowedMimeTypes.includes(file.type)) {
-          setErrorMessages([
-            ...errorMessages,
-            __('Invalid file type', 'web-stories'),
-          ]);
-          isValid = false;
-        }
-
-        if (file.size > maxUpload) {
-          setErrorMessages([
-            ...errorMessages,
-            sprintf(
-              /* translators: first %s is the file name, second %s is the file size in MB and second %s is the upload file limit in MB */
-              __(
-                '%1$s is %2$sMB and the upload limit is %3$sMB. Please resize and try again!',
-                'web-stories'
-              ),
-              file.name,
-              bytesToMB(file.size),
-              bytesToMB(maxUpload)
-            ),
-          ]);
-          isValid = false;
-        }
-
-        return isValid;
-      };
-
-      await Promise.all(
-        [...files].map(async (file) => {
-          if (isValidFile(file)) {
-            const mediaData = await getResourceFromLocalFile(file);
-            mediaData.local = false; // this disables the UploadingIndicator
-            mediaData.id = uuidv4();
-            mediaData.file = file;
-            mediaData.modifiedAt = new Date().getTime();
-            mediaItems.push(mediaData);
-          }
-        })
-      );
-
-      setLocalStoryAdMedia(mediaItems);
-    },
-    [allowedMimeTypes, errorMessages, maxUpload, media, setLocalStoryAdMedia]
-  );
-
-  const closeErrorDialog = () => {
-    setErrorMessages([]);
-  };
 
   const closeOptimizationDialog = () => {
     setResourceToBeOptimized({});
@@ -230,53 +155,21 @@ function LocalMediaFileProvider({ children }) {
     await setOptimizedVideoInGallery(resource.id, optimizedFile);
   };
 
-  const state = {
-    state: {
-      media,
-    },
-    actions: {
-      addLocalFiles,
-    },
-  };
-
   return (
-    <Context.Provider value={state}>
-      {children}
-      <Dialog
-        open={errorMessages.length > 0}
-        onClose={closeErrorDialog}
-        title={__('Error uploading file', 'web-stories')}
-        primaryText={__('Close', 'web-stories')}
-        onPrimary={closeErrorDialog}
-      >
-        {errorMessages.map((message) => (
-          <Text
-            key={message}
-            size={THEME_CONSTANTS.TYPOGRAPHY.PRESET_SIZES.SMALL}
-          >
-            {message}
-          </Text>
-        ))}
-      </Dialog>
-      <Dialog
-        open={optimizationMessage.length > 0}
-        onClose={closeOptimizationDialog}
-        title={__('Optimize video size', 'web-stories')}
-        secondaryText={__('No, skip it', 'web-stories')}
-        onSecondary={closeOptimizationDialog}
-        primaryText={__('Yes, Optimize it', 'web-stories')}
-        onPrimary={startOptimization}
-      >
-        <Text size={THEME_CONSTANTS.TYPOGRAPHY.PRESET_SIZES.SMALL}>
-          {optimizationMessage}
-        </Text>
-      </Dialog>
-    </Context.Provider>
+    <Dialog
+      open={optimizationMessage.length > 0}
+      onClose={closeOptimizationDialog}
+      title={__('Optimize video size', 'web-stories')}
+      secondaryText={__('No, skip it', 'web-stories')}
+      onSecondary={closeOptimizationDialog}
+      primaryText={__('Yes, Optimize it', 'web-stories')}
+      onPrimary={startOptimization}
+    >
+      <Text size={THEME_CONSTANTS.TYPOGRAPHY.PRESET_SIZES.SMALL}>
+        {optimizationMessage}
+      </Text>
+    </Dialog>
   );
 }
 
-LocalMediaFileProvider.propTypes = {
-  children: PropTypes.node,
-};
-
-export default LocalMediaFileProvider;
+export default OptimisationMessage;

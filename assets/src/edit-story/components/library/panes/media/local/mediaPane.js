@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { useRef, useCallback, useMemo, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 import { __ } from '@web-stories-wp/i18n';
 
@@ -40,8 +40,7 @@ import { PANE_PADDING } from '../../shared';
 import PaginatedMediaGallery from '../common/paginatedMediaGallery';
 import resourceList from '../../../../../utils/resourceList';
 import useLibrary from '../../../useLibrary';
-import { useConfig, useStory } from '../../../../../app';
-import { useLocalMediaFile } from '../../../../../app/localMediaFile';
+import { useConfig, useMedia, useStory } from '../../../../../app';
 import { initIndexDb } from '../../../../../app/story/utils/initIndexDb';
 import { getDataFromSessionStorage } from '../../../../../app/story/utils/sessionStore';
 import getResourceFromLocalFile from '../../../../../app/media/utils/getResourceFromLocalFile';
@@ -69,9 +68,9 @@ function MediaPane(props) {
     updateElementsByResourceId: state.actions.updateElementsByResourceId,
   }));
 
-  const { addLocalFiles, media } = useLocalMediaFile((state) => ({
-    addLocalFiles: state.actions.addLocalFiles,
-    media: state.state.media,
+  const { addLocalFiles, localStoryAdMedia: media } = useMedia((state) => ({
+    addLocalFiles: state.local.actions.addLocalFiles,
+    localStoryAdMedia: state.local.state.localStoryAdMedia,
   }));
 
   const {

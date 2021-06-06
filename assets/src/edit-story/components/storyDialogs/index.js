@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Internal dependencies
  */
-import { identity, useContextSelector } from '../../../design-system';
-import Context from './context';
+import OptimisationMessage from './optimizationMessage';
+import PreviewError from './previewError';
+import UploadError from './uploadError';
 
-function useLocalMediaFile(selector) {
-  return useContextSelector(Context, selector ?? identity);
+function StoryDialogs() {
+  return (
+    <>
+      <OptimisationMessage />
+      <PreviewError />
+      <UploadError />
+    </>
+  );
 }
 
-export default useLocalMediaFile;
+export default StoryDialogs;
