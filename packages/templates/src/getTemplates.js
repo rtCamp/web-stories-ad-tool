@@ -53,18 +53,7 @@ async function loadTemplate(title, imageBaseUrl) {
 }
 
 async function getTemplates(imageBaseUrl) {
-  const templateNames = [
-    'fresh-and-bright',
-    'food-and-stuff',
-    'doers-get-more-done',
-    'weekly-entertainment',
-    'fashion-on-the-go',
-    'no-days-off',
-    'experience-thailand',
-    'sleep',
-    'ad-template-one',
-    'ad-template-two',
-  ];
+  const templateNames = ['ad-template-one', 'ad-template-two'];
 
   const trackTiming = getTimeTracker('load_templates');
 
