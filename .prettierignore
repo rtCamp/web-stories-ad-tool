@@ -9,6 +9,7 @@ packages/fonts/src/fonts.json
 /assets/css
 /assets/js
 /assets/images
+/dist
 /karma/karma-puppeteer-client/client.js
 .browserslistrc
 .distignore
