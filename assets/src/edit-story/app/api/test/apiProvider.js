@@ -62,31 +62,6 @@ describe('APIProvider', () => {
     );
   });
 
-  it('getMedia with cacheBust:true should call api with &cache_bust=true', () => {
-    const { result } = renderApiProvider({
-      configValue: {
-        api: {
-          media: 'mediaPath',
-        },
-        postLock: { api: '' },
-      },
-    });
-
-    act(() => {
-      result.current.actions.getMedia({
-        mediaType: '',
-        searchTerm: '',
-        pagingNum: 1,
-        cacheBust: true,
-      });
-    });
-
-    expect(apiFetch).toHaveBeenCalledWith({
-      path:
-        '/mediaPath?context=edit&per_page=100&page=1&_web_stories_envelope=true&cache_bust=true',
-    });
-  });
-
   it('getPageTemplates gets pageTemplates w/ cdnURL', async () => {
     const pageTemplates = [{ id: 'templateid' }];
     getAllTemplatesMock.mockReturnValue(pageTemplates);
