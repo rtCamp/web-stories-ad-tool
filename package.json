@@ -323,7 +323,7 @@
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "<rootDir>/assets/src/edit-story/output/test"
+      "<rootDir>/assets/src/edit-story/output/test/"
     ]
   }
 }
