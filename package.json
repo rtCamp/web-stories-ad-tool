@@ -317,5 +317,10 @@
       "github-actions",
       "imgbot"
     ]
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+       "<rootDir>/assets/src/edit-story/output/test"
+    ]
   }
 }
