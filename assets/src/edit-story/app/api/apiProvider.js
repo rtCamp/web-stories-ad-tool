@@ -32,7 +32,7 @@ function APIProvider({ children }) {
   const { cdnURL, assetsURL } = useConfig();
 
   // @todo All mocked fetch references need to be removed.
-  const dummyFetch = useCallback(() => Promise.resolve({}), []);
+  const mockFetch = useCallback(() => Promise.resolve({}), []);
 
   const pageTemplates = useRef({
     base: [],
@@ -58,25 +58,25 @@ function APIProvider({ children }) {
 
   const state = {
     actions: {
-      autoSaveById: dummyFetch,
-      getStoryById: dummyFetch,
-      getDemoStoryById: dummyFetch,
-      getStoryLockById: dummyFetch,
-      setStoryLockById: dummyFetch,
-      deleteStoryLockById: dummyFetch,
-      getLinkMetadata: dummyFetch,
-      saveStoryById: dummyFetch,
-      getAuthors: dummyFetch,
-      uploadMedia: dummyFetch,
-      updateMedia: dummyFetch,
-      deleteMedia: dummyFetch,
-      saveMetaBoxes: dummyFetch,
-      getStatusCheck: dummyFetch,
-      addPageTemplate: dummyFetch,
-      getCustomPageTemplates: dummyFetch,
+      autoSaveById: mockFetch,
+      getStoryById: mockFetch,
+      getDemoStoryById: mockFetch,
+      getStoryLockById: mockFetch,
+      setStoryLockById: mockFetch,
+      deleteStoryLockById: mockFetch,
+      getLinkMetadata: mockFetch,
+      saveStoryById: mockFetch,
+      getAuthors: mockFetch,
+      uploadMedia: mockFetch,
+      updateMedia: mockFetch,
+      deleteMedia: mockFetch,
+      saveMetaBoxes: mockFetch,
+      getStatusCheck: mockFetch,
+      addPageTemplate: mockFetch,
+      getCustomPageTemplates: mockFetch,
       getPageTemplates,
-      getCurrentUser: dummyFetch,
-      updateCurrentUser: dummyFetch,
+      getCurrentUser: mockFetch,
+      updateCurrentUser: mockFetch,
     },
   };
 
