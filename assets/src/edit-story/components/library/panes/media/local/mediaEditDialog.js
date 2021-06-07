@@ -107,17 +107,10 @@ function MediaEditDialog({ resource, onClose }) {
     mimeType,
   } = resource;
 
-  const { media, updateMedia: updateLocalMedia } = useMedia(
-    ({
-      local: {
-        state: { media },
-        actions: { updateMedia },
-      },
-    }) => ({
-      media,
-      updateMedia,
-    })
-  );
+  const { media, updateMedia: updateLocalMedia } = useMedia((state) => ({
+    media: state.local?.state?.media,
+    updateMedia: state.local?.actions?.media,
+  }));
 
   const updateMedia = useCallback(
     (mediaId, data) => {

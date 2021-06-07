@@ -43,17 +43,10 @@ import Dialog from '../../../../dialog';
  * @return {null|*} The dialog element.
  */
 function DeleteDialog({ mediaId, type, onClose }) {
-  const { media, updateMedia } = useMedia(
-    ({
-      local: {
-        state: { media },
-        actions: { updateMedia },
-      },
-    }) => ({
-      media,
-      updateMedia,
-    })
-  );
+  const { media, updateMedia } = useMedia((state) => ({
+    media: state.local?.state?.media,
+    updateMedia: state.local?.actions?.media,
+  }));
 
   const deleteMedia = useCallback(
     (id) => {
