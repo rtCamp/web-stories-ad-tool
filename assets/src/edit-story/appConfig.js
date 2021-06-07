@@ -20,7 +20,7 @@ import getCurrentUrl from './utils/getCurrentUrl';
 
 const url = getCurrentUrl();
 
-// @todo Remove items not required for story ad.
+// @todo Remove items not required for ad creation tool.
 export default {
   id: 'web-stories-editor',
   config: {
