@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies
- */
+
 /**
  * External dependencies
  */
 import { __, sprintf } from '@web-stories-wp/i18n';
 import { useCallback, useEffect, useState } from 'react';
-import Dialog from '../../dialog';
+
 /**
- * External dependencies
+ * Internal dependencies
  */
 import { Text, THEME_CONSTANTS, useSnackbar } from '../../../../design-system';
 import useFFmpeg from '../../../app/media/utils/useFFmpeg';
 import { useConfig, useMedia, useStory } from '../../../app';
 import { getResourceFromLocalFile } from '../../../app/media/utils';
 import bytesToMB from '../../../app/media/utils/bytesToMB';
+import Dialog from '../../dialog';
 
 function OptimisationMessage() {
   const { transcodeVideo } = useFFmpeg();

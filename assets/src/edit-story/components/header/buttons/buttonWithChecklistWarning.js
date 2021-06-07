@@ -18,13 +18,6 @@
  * External dependencies
  */
 import { __ } from '@web-stories-wp/i18n';
-
-/**
- * Internal dependencies
- */
-/**
- * External dependencies
- */
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 

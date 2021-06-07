@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies
- */
+
 /**
  * External dependencies
  */
 import { __ } from '@web-stories-wp/i18n';
-import Dialog from '../../dialog';
+
 /**
- * External dependencies
+ * Internal dependencies
  */
 import { Text, THEME_CONSTANTS } from '../../../../design-system';
 import { useMedia } from '../../../app';
+import Dialog from '../../dialog';
 
 function UploadError() {
   const { uploadErrorMessages, updateUploadErrorMessages } = useMedia(
