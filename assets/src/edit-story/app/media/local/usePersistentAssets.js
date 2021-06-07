@@ -17,6 +17,7 @@
  * External dependencies
  */
 import { useCallback, useEffect, useRef } from 'react';
+
 /**
  * Internal dependencies
  */

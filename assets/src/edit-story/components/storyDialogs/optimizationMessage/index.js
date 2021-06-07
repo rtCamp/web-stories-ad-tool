@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies
- */
+
 /**
  * External dependencies
  */
 import { __, sprintf } from '@web-stories-wp/i18n';
-import { useEffect, useState } from 'react';
-import Dialog from '../../dialog';
+import { useCallback, useEffect, useState } from 'react';
+
 /**
- * External dependencies
+ * Internal dependencies
  */
 import { Text, THEME_CONSTANTS, useSnackbar } from '../../../../design-system';
 import useFFmpeg from '../../../app/media/utils/useFFmpeg';
 import { useConfig, useMedia, useStory } from '../../../app';
 import { getResourceFromLocalFile } from '../../../app/media/utils';
 import bytesToMB from '../../../app/media/utils/bytesToMB';
+import Dialog from '../../dialog';
 
 function OptimisationMessage() {
   const { transcodeVideo } = useFFmpeg();
@@ -91,57 +90,69 @@ function OptimisationMessage() {
     setOptimizationMessage('');
   };
 
-  const setMediaElementAsLocal = (id) => {
-    const mediaElements = [...media];
-    const index = mediaElements.findIndex((mediaItem) => mediaItem.id === id);
-    mediaElements[index].local = true;
-    mediaElements[index].isTranscoding = true;
-    mediaElements[index].modifiedAt = new Date().getTime();
-    updateMedia(mediaElements);
-  };
+  const setMediaElementAsLocal = useCallback(
+    (id) => {
+      const mediaElements = [...media];
+      const index = mediaElements.findIndex((mediaItem) => mediaItem.id === id);
+      mediaElements[index].local = true;
+      mediaElements[index].isTranscoding = true;
+      mediaElements[index].modifiedAt = new Date().getTime();
+      updateMedia(mediaElements);
+    },
+    [media, updateMedia]
+  );
 
-  const setOptimizedVideoInGallery = async (id, optimizedFile) => {
-    const mediaElements = [...media];
-    const index = mediaElements.findIndex((mediaItem) => mediaItem.id === id);
-    const currentMediaData = { ...mediaElements[index] };
+  const setOptimizedVideoInGallery = useCallback(
+    async (id, optimizedFile) => {
+      const mediaElements = [...media];
+      const index = mediaElements.findIndex((mediaItem) => mediaItem.id === id);
+      const currentMediaData = { ...mediaElements[index] };
 
-    const mediaData = await getResourceFromLocalFile(optimizedFile);
-    mediaData.local = false;
-    mediaData.id = currentMediaData.id;
-    mediaData.file = optimizedFile;
-    mediaData.isTranscoding = false;
-    mediaData.modifiedAt = new Date().getTime();
+      const mediaData = await getResourceFromLocalFile(optimizedFile);
+      mediaData.local = false;
+      mediaData.id = currentMediaData.id;
+      mediaData.file = optimizedFile;
+      mediaData.isTranscoding = false;
+      mediaData.modifiedAt = new Date().getTime();
 
-    mediaElements[index] = mediaData;
-    updateMedia(mediaElements);
+      mediaElements[index] = mediaData;
+      updateMedia(mediaElements);
 
-    const updateResource = {
-      id: mediaData.id,
-      properties: ({ resource, ...rest }) => ({
-        ...rest,
-        resource: mediaData,
-      }),
-    };
+      const updateResource = {
+        id: mediaData.id,
+        properties: ({ resource, ...rest }) => ({
+          ...rest,
+          resource: mediaData,
+        }),
+      };
 
-    updateElementsByResourceId(updateResource);
+      updateElementsByResourceId(updateResource);
 
-    if (mediaData.file.size > maxVideoFileSize) {
-      const message = sprintf(
-        /* translators: %s resource file size. */
-        __(
-          'The size of the video after optimisation is %s which is still more than 1MB, you may want to use smaller video size.',
-          'web-stories'
-        ),
-        bytesToMB(mediaData.file.size)
-      );
+      if (mediaData.file.size > maxVideoFileSize) {
+        const message = sprintf(
+          /* translators: %s resource file size. */
+          __(
+            'The size of the video after optimisation is %s which is still more than 1MB, you may want to use smaller video size.',
+            'web-stories'
+          ),
+          bytesToMB(mediaData.file.size)
+        );
 
-      showSnackbar({
-        message,
-      });
-    }
-  };
+        showSnackbar({
+          message,
+        });
+      }
+    },
+    [
+      maxVideoFileSize,
+      media,
+      showSnackbar,
+      updateElementsByResourceId,
+      updateMedia,
+    ]
+  );
 
-  const startOptimization = async () => {
+  const startOptimization = useCallback(async () => {
     const resource = { ...resourceToBeOptimized };
     closeOptimizationDialog();
 
@@ -153,7 +164,13 @@ function OptimisationMessage() {
 
     const optimizedFile = await transcodeVideo(resource.file);
     await setOptimizedVideoInGallery(resource.id, optimizedFile);
-  };
+  }, [
+    resourceToBeOptimized,
+    setMediaElementAsLocal,
+    setOptimizedVideoInGallery,
+    showSnackbar,
+    transcodeVideo,
+  ]);
 
   return (
     <Dialog

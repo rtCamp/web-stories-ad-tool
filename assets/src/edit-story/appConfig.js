@@ -20,7 +20,7 @@ import getCurrentUrl from './utils/getCurrentUrl';
 
 const url = getCurrentUrl();
 
-// @todo Remove items not required for story ad.
+// @todo Remove items not required for ad creation tool.
 export default {
   id: 'web-stories-editor',
   config: {
@@ -86,8 +86,8 @@ export default {
     dashboardLink: '',
     assetsURL: `${url}assets/`,
     cdnURL: 'https://wp.stories.google/static/main/',
-    maxUpload: 31457280,
-    maxVideoFileSize: 1048576, // 1 MiB
+    maxUpload: 31457280, // 30 MB
+    maxVideoFileSize: 1048576, // 1 MB
     isDemo: false,
     capabilities: {
       hasPublishAction: true,

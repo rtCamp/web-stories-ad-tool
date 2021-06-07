@@ -26,8 +26,8 @@ const RtlCssPlugin = require('rtlcss-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const CopyPlugin = require("copy-webpack-plugin");
-const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const isProduction = process.env.NODE_ENV === 'production';
@@ -39,7 +39,7 @@ const sharedConfig = {
   mode,
   devtool: !isProduction ? 'source-map' : undefined,
   output: {
-    path: path.resolve(process.cwd(), appFolder ),
+    path: path.resolve(process.cwd(), appFolder),
     filename: 'assets/js/[name].js',
     chunkFilename: 'assets/js/[name]-[chunkhash].js',
     publicPath: '',
@@ -185,21 +185,25 @@ const editorAndDashboard = {
     new HtmlWebpackPlugin({
       inject: true, // Don't inject default <script> tags, etc.
       minify: false,
-      template: path.resolve(process.cwd(), 'assets', 'src/edit-story/index.html'),
+      template: path.resolve(
+        process.cwd(),
+        'assets',
+        'src/edit-story/index.html'
+      ),
       chunks: ['edit-story'],
     }),
     new CopyPlugin({
       patterns: [
-        { from: "preview", to: "preview" },
-        { from: "favicon.ico", to: "" }
+        { from: 'preview', to: 'preview' },
+        { from: 'favicon.ico', to: '' },
       ],
     }),
     new CopyPlugin({
       patterns: [
-        { from: "preview", to: "preview" },
-        { from: "favicon.ico", to: "" },
-        { from: "manifest.json", to: "" },
-        { from: "assets/images/editor", to: "assets/images/editor" },
+        { from: 'preview', to: 'preview' },
+        { from: 'favicon.ico', to: '' },
+        { from: 'manifest.json', to: '' },
+        { from: 'assets/images/editor', to: 'assets/images/editor' },
       ],
     }),
   ],
@@ -212,16 +216,14 @@ const editorAndDashboard = {
   },
 };
 
-if ( 'production' === process.env.NODE_ENV ) {
+if ('production' === process.env.NODE_ENV) {
   // @see https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest
   editorAndDashboard.plugins.push(
-    new WorkboxWebpackPlugin.InjectManifest( {
+    new WorkboxWebpackPlugin.InjectManifest({
       swSrc: './assets/src/edit-story/src-sw.js',
       swDest: 'sw.js',
-    } ),
+    })
   );
 }
 
-module.exports = [
-  editorAndDashboard,
-];
+module.exports = [editorAndDashboard];
