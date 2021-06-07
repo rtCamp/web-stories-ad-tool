@@ -27,7 +27,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
  *
  * @param {Object} element React element.
  *
- * @return {string}
+ * @return {string} Markup.
  */
 function renderToString(element) {
   /* eslint-disable no-console */
