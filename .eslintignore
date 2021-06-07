@@ -6,3 +6,4 @@ bin/build/*
 build/*
 !.storybook
 dist/
+test_/
