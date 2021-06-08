@@ -125,14 +125,14 @@ body.edit-story .web-stories-wp {
   position: relative;
 }
 
-body.js.edit-story #web-stories-editor {
+body.js.edit-story #web-stories-ad-creation-tool {
   background-color: #131516; /* theme.colors.bg.primary */
   position: relative;
   height: 100vh;
   overflow: hidden;
 }
 
-body.js.edit-story #web-stories-editor .loading-message {
+body.js.edit-story #web-stories-ad-creation-tool .loading-message {
   color: #fff;
   text-align: center;
   margin: 0;

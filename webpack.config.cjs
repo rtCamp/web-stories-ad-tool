@@ -183,7 +183,7 @@ const editorAndDashboard = {
       name: 'Editor',
     }),
     new HtmlWebpackPlugin({
-      inject: true, // Don't inject default <script> tags, etc.
+      inject: true, // Inject default <script> tags, etc.
       minify: false,
       template: path.resolve(
         process.cwd(),
@@ -196,10 +196,6 @@ const editorAndDashboard = {
       patterns: [
         { from: 'preview', to: 'preview' },
         { from: 'favicon.ico', to: '' },
-      ],
-    }),
-    new CopyPlugin({
-      patterns: [
         { from: 'preview', to: 'preview' },
         { from: 'favicon.ico', to: '' },
         { from: 'manifest.json', to: '' },

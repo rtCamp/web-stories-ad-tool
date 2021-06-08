@@ -52,7 +52,7 @@ describe('Custom Meta Boxes', () => {
       await page.type('input[placeholder="Add title"]', 'Meta Box Test');
 
       await expect(page).not.toMatchElement(
-        '#web-stories-editor #web_stories_test_meta_box_field',
+        '#web-stories-ad-creation-tool #web_stories_test_meta_box_field',
         {
           visible: false,
         }
@@ -61,7 +61,7 @@ describe('Custom Meta Boxes', () => {
       await expect(page).toClick('[aria-label="Third-Party Meta Boxes"]');
 
       await expect(page).toMatchElement(
-        '#web-stories-editor #web_stories_test_meta_box_field',
+        '#web-stories-ad-creation-tool #web_stories_test_meta_box_field',
         {
           visible: false,
         }
@@ -95,7 +95,7 @@ describe('Custom Meta Boxes', () => {
       await expect(page).toMatchElement('input[placeholder="Add title"]');
 
       await expect(page).not.toMatchElement(
-        '#web-stories-editor #web_stories_test_meta_box_field',
+        '#web-stories-ad-creation-tool #web_stories_test_meta_box_field',
         {
           visible: false,
         }
@@ -104,7 +104,7 @@ describe('Custom Meta Boxes', () => {
       await expect(page).toClick('[aria-label="Third-Party Meta Boxes"]');
 
       await expect(page).toMatchElement(
-        '#web-stories-editor #web_stories_test_meta_box_field',
+        '#web-stories-ad-creation-tool #web_stories_test_meta_box_field',
         {
           visible: false,
         }

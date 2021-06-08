@@ -22,7 +22,7 @@ const url = getCurrentUrl();
 
 // @todo Remove items not required for ad creation tool.
 export default {
-  id: 'web-stories-editor',
+  id: 'web-stories-ad-creation-tool',
   config: {
     autoSaveInterval: 60,
     isRTL: false,
