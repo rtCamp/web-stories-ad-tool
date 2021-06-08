@@ -31,7 +31,7 @@ async function loadTemplate(title, imageBaseUrl) {
       ...page,
       elements: page.elements?.map((elem) => {
         if (elem?.resource?.sizes) {
-          elem.resource.sizes = [];
+          elem.resource.sizes = {};
         }
         ['src', 'poster'].forEach((key) => {
           if (elem?.resource && elem?.resource[key]) {

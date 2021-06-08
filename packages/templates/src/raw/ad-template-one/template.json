@@ -116,7 +116,7 @@
             "id": 5126,
             "title": "adtemplate_texttemplate_bg",
             "alt": "adtemplate_texttemplate_bg",
-            "sizes": [],
+            "sizes": {},
             "local": false,
             "isOptimized": false
           },
@@ -333,7 +333,7 @@
             "id": 5125,
             "title": "adtemplate_texttemplate_logo",
             "alt": "adtemplate_texttemplate_logo",
-            "sizes": [],
+            "sizes": {},
             "local": false,
             "isOptimized": false
           },

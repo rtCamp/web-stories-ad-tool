@@ -120,7 +120,7 @@
             "lengthFormatted": "0:10",
             "title": "adtemplate_singlevideotemplate_bg",
             "alt": "adtemplate_singlevideotemplate_bg",
-            "sizes": [],
+            "sizes": {},
             "local": false,
             "isOptimized": true
           },
@@ -360,7 +360,7 @@
             "id": 5123,
             "title": "adtemplate_singlevideotemplate_logo",
             "alt": "adtemplate_singlevideotemplate_logo",
-            "sizes": [],
+            "sizes": {},
             "local": false,
             "isOptimized": false,
             "baseColor": [255, 255, 255]
