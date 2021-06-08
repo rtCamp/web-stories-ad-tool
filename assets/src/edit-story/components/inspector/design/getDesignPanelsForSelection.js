@@ -23,6 +23,7 @@ import {
   BorderRadiusPanel,
   BorderStylePanel,
   CaptionsPanel,
+  ColorPresetPanel,
   ElementAlignmentPanel,
   FilterPanel,
   ImageAccessibilityPanel,
@@ -31,12 +32,11 @@ import {
   PageBackgroundPanel,
   ShapeStylePanel,
   SizePositionPanel,
+  StylePresetPanel,
   TextBoxPanel,
   TextStylePanel,
   VideoAccessibilityPanel,
   VideoOptionsPanel,
-  StylePresetPanel,
-  ColorPresetPanel,
 } from '../../panels/design';
 import PanelTypes from '../../panels/design/types';
 
@@ -121,6 +121,8 @@ function getDesignPanelsForSelection(elements) {
           return { type, Panel: StylePresetPanel };
         case PanelTypes.LAYER_STYLE:
           return { type, Panel: LayerStylePanel };
+        case PanelTypes.FILTER:
+          return { type, Panel: FilterPanel };
         case PanelTypes.SIZE_POSITION:
           return { type, Panel: SizePositionPanel };
         case PanelTypes.LINK:

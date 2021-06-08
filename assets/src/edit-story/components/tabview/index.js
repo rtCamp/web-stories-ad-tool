@@ -187,7 +187,7 @@ function TabView({
 
   const tabChanged = useCallback(
     (id) => {
-      if (tabRefs[id]?.current) {
+      if (tabRefs && tabRefs[id]?.current) {
         tabRefs[id].current?.focus();
       } else if (internalTabRefs?.current[id]) {
         internalTabRefs.current[id]?.focus();
