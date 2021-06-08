@@ -1,5 +1,5 @@
 {
-  "current": "a3ec90d5-10cb-4ce4-8189-b31dd223faff",
+  "current": null,
   "selection": [],
   "story": {
     "globalStoryStyles": {
@@ -110,7 +110,7 @@
             "type": "image",
             "mimeType": "image/jpeg",
             "creationDate": "2021-06-04T12:18:46",
-            "src": "__WEB_STORIES_TEMPLATE_BASE_URL__/images/templates/ad-template-one/page01_bg.jpg",
+            "src": "__WEB_STORIES_TEMPLATE_BASE_URL__/images/templates/ad-template-one/page01_bg.jpeg",
             "width": 1242,
             "height": 2208,
             "id": 5126,
