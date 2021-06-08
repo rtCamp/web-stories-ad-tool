@@ -26,9 +26,11 @@ import { trackEvent } from '@web-stories-wp/tracking';
  * Internal dependencies
  */
 import TabView from '../tabview';
+import { states, useFocusHighlight } from '../../app/highlights';
 import LibraryPanes from './libraryPanes';
 import useLibrary from './useLibrary';
 import { getTabId, getPaneId } from './panes/shared';
+import { MEDIA, MEDIA3P, TEXT } from './constants';
 
 const Layout = styled.section.attrs({
   'aria-label': __('Library', 'web-stories'),
@@ -55,11 +57,16 @@ const LibraryPaneContainer = styled.div`
 `;
 
 function LibraryLayout() {
-  const { initialTab, setTab, tabs } = useLibrary((state) => ({
-    initialTab: state.state.initialTab,
+  const { setTab, tab, tabRefs, tabs } = useLibrary((state) => ({
+    tab: state.state.tab,
+    tabRefs: state.state.tabRefs,
     setTab: state.actions.setTab,
     tabs: state.data.tabs,
   }));
+
+  useFocusHighlight(states.MEDIA, tabRefs[MEDIA.id]);
+  useFocusHighlight(states.MEDIA3P, tabRefs[MEDIA3P.id]);
+  useFocusHighlight(states.TEXT_SET, tabRefs[TEXT.id]);
 
   const onTabChange = useCallback(
     (id) => {
@@ -77,7 +84,8 @@ function LibraryLayout() {
         <TabView
           label={__('Element Library Selection', 'web-stories')}
           tabs={tabs}
-          initialTab={initialTab}
+          tabRefs={tabRefs}
+          tab={tab}
           onTabChange={onTabChange}
           getTabId={getTabId}
           getAriaControlsId={getPaneId}

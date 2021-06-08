@@ -23,8 +23,10 @@ import { render, act } from '@testing-library/react';
  * Internal dependencies
  */
 import { TestDisplayElement } from '../../../components/canvas/test/_utils';
-import { OverlayType } from '../../../utils/backgroundOverlay';
+import { OverlayType } from '../../../utils/overlay';
 import resourceList from '../../../utils/resourceList';
+
+/* eslint-disable testing-library/no-node-access, testing-library/no-container */
 
 describe('MediaDisplay', () => {
   let imageElement;
@@ -185,7 +187,7 @@ describe('MediaDisplay', () => {
       },
     ];
 
-    overlayCases.forEach((backgroundOverlay) => {
+    overlayCases.forEach((overlay) => {
       flipCases.forEach(({ flip, transform }) => {
         const flippedBackgroundVideo = {
           ...videoElement,
@@ -197,15 +199,16 @@ describe('MediaDisplay', () => {
             storyContext={{
               ...storyContext,
               page: {
-                backgroundOverlay,
+                overlay,
               },
             }}
             element={flippedBackgroundVideo}
           />
         );
 
-        const element = container.querySelector('[data-element-id="baz"]')
-          .firstChild;
+        const element = container.querySelector(
+          '[data-element-id="baz"]'
+        ).firstChild;
         expect(window.getComputedStyle(element)).toMatchObject({
           transform,
         });
@@ -213,3 +216,5 @@ describe('MediaDisplay', () => {
     });
   });
 });
+
+/* eslint-enable testing-library/no-node-access, testing-library/no-container */

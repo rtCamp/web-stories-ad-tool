@@ -79,11 +79,13 @@ function StoriesView({
     // then we use storiesById to find the proper index of the interacted with item and use that to decide where to move focus
     if (focusedStory.id && !returnStoryFocusId) {
       const storyArrayIndex = storiesById.indexOf(focusedStory.id);
-      const adjustedIndex = focusedStory.isDeleted ? -1 : 0;
+      const isDeletedAdjustmentDirection = storyArrayIndex > 0 ? -1 : +1;
+      const adjustedIndex = focusedStory.isDeleted
+        ? isDeletedAdjustmentDirection
+        : 0;
       const focusIndex = storyArrayIndex + adjustedIndex;
       const storyIdToFocus = storiesById[focusIndex];
-
-      setReturnStoryFocusId(storyIdToFocus);
+      storyIdToFocus && setReturnStoryFocusId(storyIdToFocus);
     }
   }, [focusedStory, returnStoryFocusId, storiesById]);
 
@@ -133,6 +135,7 @@ function StoriesView({
       setContextMenuId(-1);
       trackEvent('duplicate_story');
       storyActions.duplicateStory(story);
+      setFocusedStory({ id: story.id });
     },
     [storyActions]
   );
@@ -170,6 +173,7 @@ function StoriesView({
               ),
         dismissable: true,
       });
+      setFocusedStory({ id: story.id });
     },
     [showSnackbar]
   );
@@ -188,7 +192,8 @@ function StoriesView({
       menuItemActions: {
         default: () => setContextMenuId(-1),
         [STORY_CONTEXT_MENU_ACTIONS.COPY_STORY_LINK]: handleCopyStoryLink,
-        [STORY_CONTEXT_MENU_ACTIONS.CREATE_TEMPLATE]: handleCreateTemplateFromStory,
+        [STORY_CONTEXT_MENU_ACTIONS.CREATE_TEMPLATE]:
+          handleCreateTemplateFromStory,
         [STORY_CONTEXT_MENU_ACTIONS.DELETE]: handleDeleteStory,
         [STORY_CONTEXT_MENU_ACTIONS.DUPLICATE]: handleDuplicateStory,
         [STORY_CONTEXT_MENU_ACTIONS.OPEN_STORY_LINK]: handleOpenStoryInEditor,
@@ -252,7 +257,10 @@ function StoriesView({
           renameStory={renameStory}
           storyMenu={storyMenu}
           stories={stories}
-          returnStoryFocusId={returnStoryFocusId}
+          returnStoryFocusId={{
+            value: returnStoryFocusId,
+            set: setReturnStoryFocusId,
+          }}
         />
       );
     }
@@ -290,7 +298,7 @@ function StoriesView({
           secondaryText={__('Cancel', 'web-stories')}
           secondaryRest={{
             ['aria-label']: sprintf(
-              /* translators: %s: story title */
+              /* translators: %s: story title. */
               __('Cancel deleting story "%s"', 'web-stories'),
               titleFormatted(activeStory.title)
             ),
@@ -299,7 +307,7 @@ function StoriesView({
           onPrimary={handleOnDeleteStory}
           primaryRest={{
             ['aria-label']: sprintf(
-              /* translators: %s: story title */
+              /* translators: %s: story title. */
               __('Confirm deleting story "%s"', 'web-stories'),
               titleFormatted(activeStory.title)
             ),

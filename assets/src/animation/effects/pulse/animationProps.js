@@ -40,17 +40,17 @@ export default {
     label: __('Scale', 'web-stories'),
     tooltip: 'Valid values are greater than or equal to 0',
     type: FIELD_TYPES.FLOAT,
-    defaultValue: 0.05,
+    defaultValue: 0.5,
   },
   iterations: {
-    label: __('Pulses', 'web-stories'),
+    label: _x('Pulses', 'number of pulses', 'web-stories'),
     type: FIELD_TYPES.NUMBER,
     defaultValue: 1,
   },
   duration: {
     label: __('Duration', 'web-stories'),
     type: FIELD_TYPES.NUMBER,
-    unit: _x('ms', 'Time in milliseconds ', 'web-stories'),
-    defaultValue: 600,
+    unit: _x('ms', 'Time in milliseconds', 'web-stories'),
+    defaultValue: 1450,
   },
 };

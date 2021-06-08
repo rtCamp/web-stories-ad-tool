@@ -30,6 +30,7 @@ import {
   BUTTON_TYPES,
   BUTTON_SIZES,
   ThemeGlobals,
+  useFocusOut,
 } from '../../../design-system';
 import {
   PreviewErrorBoundary,
@@ -39,7 +40,6 @@ import { clamp, STORY_ANIMATION_STATE } from '../../../animation';
 import { resolveRoute } from '../../app/router';
 import { DEFAULT_STORY_PAGE_ADVANCE_DURATION } from '../../constants';
 import { PageSizePropType, StoryPropType } from '../../types';
-import { useFocusOut } from '../../utils';
 import { ActionLabel } from './types';
 
 const PreviewPane = styled.div`
@@ -178,6 +178,13 @@ const CardPreviewContainer = ({
         </PreviewErrorBoundary>
         {children}
       </PreviewPane>
+      {/*
+        Disable Reason: As the UI stands for the dashboard grid item view we have nested functionality 
+        that is embedded in the grid and requires the user hover or focus a card in order to see options 
+        since keyboard users can't hover we have to also harness focus and active to get consistent behavior
+        the click events on this div show or hide options for each grid item.
+        */}
+      {/* eslint-disable-next-line styled-components-a11y/click-events-have-key-events, styled-components-a11y/no-static-element-interactions */}
       <EditControls
         aria-label={ariaLabel}
         data-testid="card-action-container"

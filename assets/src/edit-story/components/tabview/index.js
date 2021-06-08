@@ -18,7 +18,7 @@
  * External dependencies
  */
 import styled, { css } from 'styled-components';
-import { useRef, useState, useCallback, useEffect } from 'react';
+import { useRef, useCallback, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -33,6 +33,7 @@ import {
   ThemeGlobals,
 } from '../../../design-system';
 import { useConfig } from '../../app';
+import Tooltip from '../tooltip';
 
 const ALERT_ICON_SIZE = 28;
 
@@ -52,7 +53,7 @@ const Tabs = styled.ul.attrs({
   border-bottom: 1px solid ${({ theme }) => theme.colors.divider.secondary};
 `;
 
-const Tab = styled.li.attrs(({ isActive }) => ({
+const TabElement = styled.li.attrs(({ isActive }) => ({
   tabIndex: isActive ? 0 : -1,
   role: 'tab',
   'aria-selected': isActive,
@@ -144,6 +145,30 @@ const TabText = styled(Headline).attrs({
 
 const noop = () => {};
 
+function UnreffedTab({ children, tooltip = null, placement, ...rest }, ref) {
+  const tab = (
+    <TabElement ref={ref} {...rest}>
+      {children}
+    </TabElement>
+  );
+  if (tooltip !== null) {
+    return (
+      <Tooltip title={tooltip} placement={placement} isDelayed>
+        {tab}
+      </Tooltip>
+    );
+  }
+  return tab;
+}
+
+const Tab = forwardRef(UnreffedTab);
+
+UnreffedTab.propTypes = {
+  children: PropTypes.node,
+  tooltip: PropTypes.string,
+  placement: PropTypes.string,
+};
+
 function TabView({
   getTabId = (id) => id,
   getAriaControlsId,
@@ -151,31 +176,26 @@ function TabView({
   tabs = [],
   label = '',
   shortcut = '',
-  initialTab,
+  tab,
+  tabRefs,
   ...rest
 }) {
-  const [tab, setTab] = useState(initialTab || tabs[0]?.id);
   const { isRTL } = useConfig();
 
   const ref = useRef();
-  const tabRefs = useRef({});
+  const internalTabRefs = useRef({}); // fallback if tabRefs aren't passed in
 
   const tabChanged = useCallback(
     (id) => {
-      setTab(id);
-      if (tabRefs.current[id]) {
-        tabRefs.current[id].focus();
+      if (tabRefs[id]?.current) {
+        tabRefs[id].current?.focus();
+      } else if (internalTabRefs?.current[id]) {
+        internalTabRefs.current[id]?.focus();
       }
       onTabChange(id);
     },
-    [setTab, onTabChange]
+    [tabRefs, onTabChange]
   );
-
-  useEffect(() => {
-    if (initialTab) {
-      setTab(initialTab);
-    }
-  }, [initialTab]);
 
   useGlobalKeyDownEffect(
     { key: shortcut, editable: true },
@@ -214,15 +234,22 @@ function TabView({
 
   return (
     <Tabs aria-label={label} ref={ref} {...rest}>
-      {tabs.map(({ id, title, icon: Icon }) => (
+      {tabs.map(({ id, title, icon: Icon, ...tabRest }) => (
         <Tab
           key={id}
-          ref={(tabRef) => (tabRefs.current[id] = tabRef)}
+          ref={(tabRef) => {
+            if (tabRefs) {
+              tabRefs[id].current = tabRef;
+            } else {
+              internalTabRefs.current[id] = tabRef;
+            }
+          }}
           id={getTabId(id)}
           isActive={tab === id}
           aria-controls={getAriaControlsId ? getAriaControlsId(id) : null}
           aria-selected={tab === id}
           onClick={() => tabChanged(id)}
+          {...tabRest}
         >
           {Boolean(title) && <TabText>{title}</TabText>}
           {Boolean(Icon) && <Icon isActive={id === tab} />}
@@ -237,7 +264,10 @@ TabView.propTypes = {
   getAriaControlsId: PropTypes.func,
   onTabChange: PropTypes.func,
   tabs: PropTypes.array.isRequired,
-  initialTab: PropTypes.any,
+  tab: PropTypes.string.isRequired,
+  tabRefs: PropTypes.objectOf(
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+  ),
   label: PropTypes.string,
   shortcut: PropTypes.string,
 };

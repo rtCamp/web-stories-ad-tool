@@ -36,7 +36,10 @@ import { SizePosition } from './sizePosition';
 import { TextStyle } from './textStyle';
 import { TextStylePreset } from './textStylePreset';
 import { VideoPoster } from './videoPoster';
+import { Captions } from './captions';
 import { TextBox } from './textBox';
+import { ShapeStyle } from './shapeStyle';
+import { LayerStyle } from './layerStyle';
 /**
  * The editor's canvas. Includes: display, frames, editor layers, carousel,
  * navigation buttons, page menu.
@@ -92,7 +95,7 @@ export class DesignPanel extends Container {
 
   get textStylePreset() {
     return this._get(
-      this.getByRole('region', { name: /Saved styles/ }),
+      this.getByRole('region', { name: /Saved Styles/i }),
       'textStylePreset',
       TextStylePreset
     );
@@ -100,7 +103,7 @@ export class DesignPanel extends Container {
 
   get colorPreset() {
     return this._get(
-      this.getByRole('region', { name: /Saved colors/ }),
+      this.getByRole('region', { name: /Saved Colors/i }),
       'colorPreset',
       ColorPreset
     );
@@ -108,7 +111,7 @@ export class DesignPanel extends Container {
 
   get borderRadius() {
     return this._get(
-      this.getByRole('region', { name: /Corner radius/ }),
+      this.getByRole('region', { name: /Corner Radius/i }),
       'borderRadius',
       BorderRadius
     );
@@ -120,18 +123,24 @@ export class DesignPanel extends Container {
   }
 
   get layerStyle() {
-    // @todo: implement
-    return null;
+    return this._get(
+      this.getByRole('region', { name: /Layer/i }),
+      'layerStyle',
+      LayerStyle
+    );
   }
 
   get shapeStyle() {
-    // @todo: implement
-    return null;
+    return this._get(
+      this.getByRole('region', { name: /Style/i }),
+      'shapeStyle',
+      ShapeStyle
+    );
   }
 
   get sizePosition() {
     return this._get(
-      this.getByRole('region', { name: /Size & position/i }),
+      this.getByRole('region', { name: /Size & Position/i }),
       'sizePosition',
       SizePosition
     );
@@ -148,6 +157,14 @@ export class DesignPanel extends Container {
   get videoOptions() {
     // @todo: implement
     return null;
+  }
+
+  get captions() {
+    return this._get(
+      this.getByRole('region', { name: /Caption and Subtitles/i }),
+      'captions',
+      Captions
+    );
   }
 
   get animation() {

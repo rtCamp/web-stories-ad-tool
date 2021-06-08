@@ -18,7 +18,6 @@
  * External dependencies
  */
 import { v4 as uuidv4 } from 'uuid';
-import { useFeature } from 'flagged';
 
 /**
  * Internal dependencies
@@ -26,11 +25,13 @@ import { useFeature } from 'flagged';
 import { getTimeTracker, trackError } from '@web-stories-wp/tracking';
 import { useConfig } from '../../config';
 import { useCurrentUser } from '../../currentUser';
-import {
-  MEDIA_TRANSCODING_MAX_FILE_SIZE,
-  MEDIA_TRANSCODING_SUPPORTED_INPUT_TYPES,
-} from '../../../constants';
+import { MEDIA_TRANSCODING_MAX_FILE_SIZE } from '../../../constants';
 import getFileName from './getFileName';
+
+export const VIDEO_SIZE_THRESHOLD = {
+  HEIGHT: 720,
+  WIDTH: 1280,
+};
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -38,7 +39,6 @@ const isDevelopment = process.env.NODE_ENV === 'development';
  * Checks whether the file size is too large for transcoding.
  *
  * @see https://github.com/ffmpegwasm/ffmpeg.wasm/tree/9b56b7f05b552c404aa0f62f46bed2592d9daf06#what-is-the-maximum-size-of-input-file
- *
  * @param {File} file File object.
  * @param {number} file.size File size.
  * @return {boolean} Whether the file is too  large.
@@ -49,7 +49,6 @@ const isFileTooLarge = ({ size }) => size >= MEDIA_TRANSCODING_MAX_FILE_SIZE;
  * Custom hook to interact with FFmpeg.
  *
  * @see https://ffmpeg.org/ffmpeg.html
- *
  * @return {{
  * isFeatureEnabled: boolean,
  * isFileTooLarge: (file: File) => boolean,
@@ -60,20 +59,18 @@ const isFileTooLarge = ({ size }) => size >= MEDIA_TRANSCODING_MAX_FILE_SIZE;
  * }} Functions and vars related to FFmpeg usage.
  */
 function useFFmpeg() {
-  const { ffmpegCoreUrl } = useConfig();
+  const { ffmpegCoreUrl, allowedTranscodableMimeTypes } = useConfig();
   const {
     state: { currentUser },
   } = useCurrentUser();
 
-  const isFeatureSupported = Boolean(window?.crossOriginIsolated);
   /**
    * Whether the video optimization feature is enabled.
    *
    *
    * @type {boolean} Whether the feature flag is enabled.
    */
-  const isFeatureEnabled =
-    useFeature('videoOptimization') && isFeatureSupported;
+  const isFeatureEnabled = Boolean(window?.crossOriginIsolated);
 
   async function getFFmpegInstance(file) {
     const { createFFmpeg, fetchFile } = await import(
@@ -120,11 +117,11 @@ function useFFmpeg() {
         // Stop writing to the stream after 1 frame.
         '-frames:v',
         '1',
-        // Resize videos if larger than 1080x1920, preserving aspect ratio.
+        // Scale down to 720p as recommended by Storytime.
         // See https://trac.ffmpeg.org/wiki/Scaling
         // Adds 1px pad to width/height if they're not divisible by 2, which FFmpeg will complain about.
         '-vf',
-        "scale='min(1080,iw)':'min(1920,ih)':'force_original_aspect_ratio=decrease',pad='width=ceil(iw/2)*2:height=ceil(ih/2)*2'",
+        `scale='min(${VIDEO_SIZE_THRESHOLD.HEIGHT},iw)':'min(${VIDEO_SIZE_THRESHOLD.WIDTH},ih)':'force_original_aspect_ratio=decrease',pad='width=ceil(iw/2)*2:height=ceil(ih/2)*2'`,
         // Simpler color profile
         '-pix_fmt',
         'yuv420p',
@@ -174,11 +171,15 @@ function useFFmpeg() {
         // Use H.264 video codec.
         '-vcodec',
         'libx264',
-        // Resize videos if larger than 1080x1920, preserving aspect ratio.
+        // Scale down to 720p as recommended by Storytime.
         // See https://trac.ffmpeg.org/wiki/Scaling
         // Adds 1px pad to width/height if they're not divisible by 2, which FFmpeg will complain about.
         '-vf',
-        "scale='min(1080,iw)':'min(1920,ih)':'force_original_aspect_ratio=decrease',pad='width=ceil(iw/2)*2:height=ceil(ih/2)*2'",
+        `scale='min(${VIDEO_SIZE_THRESHOLD.HEIGHT},iw)':'min(${VIDEO_SIZE_THRESHOLD.WIDTH},ih)':'force_original_aspect_ratio=decrease',pad='width=ceil(iw/2)*2:height=ceil(ih/2)*2'`,
+        // Reduce to 24fps as recommended by Storytime.
+        // See https://trac.ffmpeg.org/wiki/ChangingFrameRate
+        '-r',
+        '24',
         // move some information to the beginning of your file.
         '-movflags',
         '+faststart',
@@ -215,7 +216,7 @@ function useFFmpeg() {
    * @return {boolean} Whether transcoding is likely possible.
    */
   const canTranscodeFile = (file) =>
-    MEDIA_TRANSCODING_SUPPORTED_INPUT_TYPES.includes(file.type);
+    allowedTranscodableMimeTypes.includes(file.type);
 
   /**
    * Whether user opted in to video optimization.

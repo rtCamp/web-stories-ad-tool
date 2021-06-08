@@ -18,6 +18,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
+import { forwardRef } from 'react';
 import { __ } from '@web-stories-wp/i18n';
 
 /**
@@ -25,6 +26,7 @@ import { __ } from '@web-stories-wp/i18n';
  */
 import { isValidUrl, withProtocol } from '../../utils/url';
 import { Input } from '../../../design-system';
+import { inputContainerStyleOverride } from '../panels/shared';
 import Row from './row';
 
 const MIN_MAX = {
@@ -34,21 +36,17 @@ const MIN_MAX = {
   },
 };
 
-function LinkInput({
-  onChange,
-  onBlur,
-  onFocus,
-  value = '',
-  hint,
-  hasError,
-  ...rest
-}) {
+const LinkInput = forwardRef(function LinkInput(
+  { onChange, onBlur, onFocus, value = '', hint, hasError, ...rest },
+  ref
+) {
   const trimmedValue = (value || '').trim();
   const isValid = isValidUrl(withProtocol(trimmedValue));
   const isNotValid = trimmedValue.length > 0 && !isValid;
   return (
     <Row>
       <Input
+        ref={ref}
         placeholder={__('Web address', 'web-stories')}
         onChange={(evt) => onChange(evt.target.value)}
         onBlur={() => {
@@ -68,11 +66,12 @@ function LinkInput({
         maxLength={MIN_MAX.URL.MAX}
         hasError={isNotValid || hasError}
         hint={isNotValid ? __('Invalid web address.', 'web-stories') : hint}
+        containerStyleOverride={inputContainerStyleOverride}
         {...rest}
       />
     </Row>
   );
-}
+});
 
 LinkInput.propTypes = {
   value: PropTypes.string,

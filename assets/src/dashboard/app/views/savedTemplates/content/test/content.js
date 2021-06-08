@@ -15,6 +15,11 @@
  */
 
 /**
+ * External dependencies
+ */
+import { screen } from '@testing-library/react';
+
+/**
  * Internal dependencies
  */
 import { renderWithProviders } from '../../../../../testUtils';
@@ -28,8 +33,11 @@ jest.mock(
   '../../../../../../edit-story/components/previewPage/previewPage.js',
   () => () => null
 );
-jest.mock('../../../../../app/font/fontProvider.js', () => ({ children }) =>
-  children
+jest.mock(
+  '../../../../../app/font/fontProvider.js',
+  () =>
+    ({ children }) =>
+      children
 );
 
 describe('Saved Templates <Content />', function () {
@@ -38,7 +46,7 @@ describe('Saved Templates <Content />', function () {
   });
 
   it('should render the content grid with the correct saved template count.', function () {
-    const { getAllByTestId } = renderWithProviders(
+    renderWithProviders(
       <SnackbarProvider>
         <LayoutProvider>
           <Content
@@ -62,13 +70,13 @@ describe('Saved Templates <Content />', function () {
       { features: { enableInProgressStoryActions: false } }
     );
 
-    expect(getAllByTestId(/^story-grid-item/)).toHaveLength(
+    expect(screen.getAllByTestId(/^story-grid-item/)).toHaveLength(
       formattedTemplatesArray.length
     );
   });
 
   it('should show "Bookmark a story or template to get started!" if no saved templates are present.', function () {
-    const { getByText } = renderWithProviders(
+    renderWithProviders(
       <SnackbarProvider>
         <LayoutProvider>
           <Content
@@ -93,12 +101,12 @@ describe('Saved Templates <Content />', function () {
     );
 
     expect(
-      getByText('Bookmark a story or template to get started!')
+      screen.getByText('Bookmark a story or template to get started!')
     ).toBeInTheDocument();
   });
 
   it('should show "Sorry, we couldn\'t find any results matching "scooby dooby doo" if no saved templates are found for a search query are present.', function () {
-    const { getByText } = renderWithProviders(
+    renderWithProviders(
       <SnackbarProvider>
         <LayoutProvider>
           <Content
@@ -123,7 +131,7 @@ describe('Saved Templates <Content />', function () {
     );
 
     expect(
-      getByText(
+      screen.getByText(
         'Sorry, we couldn\'t find any results matching "scooby dooby doo"'
       )
     ).toBeInTheDocument();

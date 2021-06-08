@@ -15,16 +15,6 @@
  */
 
 /**
- * WordPress dependencies
- */
-import {
-  activatePlugin,
-  deactivatePlugin,
-  createNewPost,
-  setPostContent,
-} from '@wordpress/e2e-test-utils';
-
-/**
  * External dependencies
  */
 import {
@@ -32,6 +22,9 @@ import {
   publishPost,
   withDisabledToolbarOnFrontend,
   insertBlock,
+  withPlugin,
+  createNewPost,
+  setPostContent,
 } from '@web-stories-wp/e2e-test-utils';
 
 /**
@@ -68,8 +61,7 @@ describe('Web Stories Block', () => {
       if (request.url().includes('web-stories/v1/embed')) {
         request.respond({
           status: 200,
-          body:
-            '{"title":"Stories in AMP - Hello World","poster":"https:\\/\\/amp.dev\\/static\\/samples\\/img\\/story_dog2_portrait.jpg"}',
+          body: '{"title":"Stories in AMP - Hello World","poster":"https:\\/\\/amp.dev\\/static\\/samples\\/img\\/story_dog2_portrait.jpg"}',
         });
         return;
       }
@@ -110,13 +102,13 @@ describe('Web Stories Block', () => {
     await expect(page).toMatchElement('amp-story-player');
     await expect(page).toMatch('Embed Settings');
   });
-
-  describe('AMP validation', () => {
+  // Disable for https://github.com/google/web-stories-wp/issues/6237
+  // eslint-disable-next-line jest/no-disabled-tests
+  describe.skip('AMP validation', () => {
     withDisabledToolbarOnFrontend();
+    withPlugin('amp');
 
     it('should produce valid AMP when using the AMP plugin', async () => {
-      await activatePlugin('amp');
-
       await createNewPost({
         showWelcomeGuide: false,
       });
@@ -132,14 +124,14 @@ describe('Web Stories Block', () => {
         ? `${postPermalink}&amp`
         : `${postPermalink}?amp`;
 
-      await Promise.all([
-        page.goto(ampPostPermaLink),
-        page.waitForNavigation(),
-      ]);
+      await page.goto(ampPostPermaLink, {
+        waitUntil: 'networkidle0',
+      });
+
+      await page.waitForSelector('amp-story-player');
+      await expect(page).toMatchElement('amp-story-player');
 
       await expect(page).toBeValidAMP();
-
-      await deactivatePlugin('amp');
     });
   });
 });

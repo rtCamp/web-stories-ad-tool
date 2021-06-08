@@ -34,6 +34,8 @@ const REGISTER_USAGE_URL =
   Paths.REGISTER_USAGE +
   '?payload=02647749feef0d5536c92df1d9cfa38e';
 
+/* eslint-disable testing-library/no-node-access */
+
 describe('useMedia3pApi', () => {
   apiFetcherMock.listMedia.mockImplementation(() =>
     Promise.resolve({
@@ -48,43 +50,37 @@ describe('useMedia3pApi', () => {
           registerUsageUrl: REGISTER_USAGE_URL,
           imageUrls: [
             {
-              url:
-                'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=340&h=227&fit=max',
+              url: 'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=340&h=227&fit=max',
               mimeType: 'image/jpeg',
               width: 340,
               height: 227,
             },
             {
-              url:
-                'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=1060&h=707&fit=max',
+              url: 'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=1060&h=707&fit=max',
               mimeType: 'image/jpeg',
               width: 1060,
               height: 707,
             },
             {
-              url:
-                'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=2121&h=1414&fit=max',
+              url: 'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=2121&h=1414&fit=max',
               mimeType: 'image/jpeg',
               width: 2121,
               height: 1414,
             },
             {
-              url:
-                'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=3182&h=2121&fit=max',
+              url: 'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=3182&h=2121&fit=max',
               mimeType: 'image/jpeg',
               width: 3182,
               height: 2121,
             },
             {
-              url:
-                'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=4243&h=2829&fit=max',
+              url: 'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=4243&h=2829&fit=max',
               mimeType: 'image/jpeg',
               width: 4243,
               height: 2829,
             },
             {
-              url:
-                'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=5304&h=3536&fit=max',
+              url: 'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=5304&h=3536&fit=max',
               mimeType: 'image/jpeg',
               width: 5304,
               height: 3536,
@@ -136,7 +132,7 @@ describe('useMedia3pApi', () => {
     expect(listMediaResult).toStrictEqual({
       media: [
         {
-          alt: null,
+          alt: 'media/unsplash:1234',
           attribution: {
             author: {
               displayName: 'Maria',
@@ -206,8 +202,7 @@ describe('useMedia3pApi', () => {
               height: 3536,
             },
           },
-          src:
-            'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=5304&h=3536&fit=max',
+          src: 'https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzE5M30&fm=jpg&w=5304&h=3536&fit=max',
           title: 'A cat',
           type: 'image',
           width: 5304,
@@ -363,3 +358,5 @@ describe('useMedia3pApi', () => {
     }).not.toThrow();
   });
 });
+
+/* eslint-enable testing-library/no-node-access */

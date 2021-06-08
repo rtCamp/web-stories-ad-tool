@@ -19,7 +19,7 @@
  */
 import styled from 'styled-components';
 import { memo, useCallback, useEffect, useMemo } from 'react';
-import { __ } from '@web-stories-wp/i18n';
+import { _x } from '@web-stories-wp/i18n';
 
 /**
  * Internal dependencies
@@ -114,11 +114,8 @@ function DisplayLayer() {
       updateAnimationState: actions.updateAnimationState,
     };
   });
-  const {
-    editingElement,
-    setPageContainer,
-    setFullbleedContainer,
-  } = useCanvas(
+
+  const { editingElement, setPageContainer, setFullbleedContainer } = useCanvas(
     ({
       state: { editingElement },
       actions: { setPageContainer, setFullbleedContainer },
@@ -132,9 +129,10 @@ function DisplayLayer() {
     updateAnimationState({ animationState: STORY_ANIMATION_STATE.RESET });
   }, [updateAnimationState]);
 
-  const animatedElements = useMemo(() => selectedElements.map((el) => el.id), [
-    selectedElements,
-  ]);
+  const animatedElements = useMemo(
+    () => selectedElements.map((el) => el.id),
+    [selectedElements]
+  );
 
   return (
     <StoryAnimation.Provider
@@ -150,7 +148,7 @@ function DisplayLayer() {
       <Layer
         data-testid="DisplayLayer"
         pointerEvents="none"
-        aria-label={__('Display layer', 'web-stories')}
+        aria-label={_x('Display layer', 'compound noun', 'web-stories')}
       >
         <DisplayPageArea
           ref={setPageContainer}

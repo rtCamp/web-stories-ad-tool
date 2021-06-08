@@ -33,7 +33,7 @@ import {
   elementWithTextParagraphStyle,
 } from '../shared';
 import StoryPropTypes from '../../types';
-import isMouseUpAClick from '../../utils/isMouseUpAClick';
+import areEventsDragging from '../../utils/areEventsDragging';
 import { generateParagraphTextStyle } from './util';
 
 const Element = styled.p`
@@ -109,11 +109,16 @@ function TextFrame({ element, element: { id, content, ...rest }, wrapperRef }) {
 
     const handleMouseUp = (evt) => {
       if (
-        !isMouseUpAClick(evt, {
-          timeStamp: clickTime,
-          ...clickCoordinates,
-        })
+        !clickCoordinates ||
+        areEventsDragging(
+          {
+            timeStamp: clickTime,
+            ...clickCoordinates,
+          },
+          evt
+        )
       ) {
+        // Abort early as this is part of a user dragging
         return;
       }
 
@@ -138,10 +143,13 @@ function TextFrame({ element, element: { id, content, ...rest }, wrapperRef }) {
     };
   }, [id, wrapperRef, isElementOnlySelection, setEditingElementWithState]);
 
+  // data-fix-caret is for allowing caretRangeFromPoint to work in Safari.
+  // See https://github.com/google/web-stories-wp/issues/7745.
   return (
     <Element
       ref={elementRef}
       data-testid="textFrame"
+      data-fix-caret
       className="syncMargin"
       dangerouslySetInnerHTML={{ __html: content }}
       element={element}

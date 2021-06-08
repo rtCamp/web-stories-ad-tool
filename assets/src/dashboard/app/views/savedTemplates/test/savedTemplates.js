@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 /**
  * Internal dependencies
@@ -36,8 +36,11 @@ jest.mock(
   '../../../../../edit-story/components/previewPage/previewPage.js',
   () => () => null
 );
-jest.mock('../../../../app/font/fontProvider.js', () => ({ children }) =>
-  children
+jest.mock(
+  '../../../../app/font/fontProvider.js',
+  () =>
+    ({ children }) =>
+      children
 );
 
 describe('<SavedTemplates />', function () {
@@ -47,7 +50,7 @@ describe('<SavedTemplates />', function () {
 
   it('should call the set sort function when a new sort is selected', async function () {
     const setSortFn = jest.fn();
-    const { getByLabelText, getByText } = renderWithProviders(
+    renderWithProviders(
       <LayoutProvider>
         <SavedTemplatesHeader
           filter={{ value: SAVED_TEMPLATES_STATUSES.ALL }}
@@ -62,8 +65,8 @@ describe('<SavedTemplates />', function () {
       </LayoutProvider>,
       { features: { enableInProgressStoryActions: false } }
     );
-    fireEvent.click(getByLabelText('Choose sort option for display'));
-    fireEvent.click(getByText('Date created'));
+    fireEvent.click(screen.getByLabelText('Choose sort option for display'));
+    fireEvent.click(screen.getByText('Date Created'));
 
     await waitFor(() => {
       expect(setSortFn).toHaveBeenCalledWith('date');
@@ -71,7 +74,7 @@ describe('<SavedTemplates />', function () {
   });
 
   it('should render the content grid with the correct saved template count.', function () {
-    const { getAllByText } = renderWithProviders(
+    renderWithProviders(
       <LayoutProvider>
         <SavedTemplatesContent
           templates={formattedTemplatesArray}
@@ -87,7 +90,7 @@ describe('<SavedTemplates />', function () {
       { features: { enableInProgressStoryActions: false } }
     );
 
-    expect(getAllByText('See details')).toHaveLength(
+    expect(screen.getAllByText('See details')).toHaveLength(
       formattedTemplatesArray.length
     );
   });

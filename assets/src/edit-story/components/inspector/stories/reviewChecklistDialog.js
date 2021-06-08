@@ -22,7 +22,7 @@ import { useCallback, useState } from 'react';
 /**
  * Internal dependencies
  */
-import ReviewChecklistDialog from '../prepublish/reviewChecklistDialog';
+import { ReviewChecklistDialog } from '../prepublish';
 import { Button, BUTTON_TYPES } from '../../../../design-system';
 
 export default {
@@ -43,7 +43,7 @@ export const _default = () => {
         {'Open Dialog'}
       </Button>
       <ReviewChecklistDialog
-        open={isOpen}
+        isOpen={isOpen}
         onClose={() => {
           toggleDialog();
           action('close dialog triggered')();

@@ -25,8 +25,7 @@ import { v4 as uuidv4 } from 'uuid';
 /**
  * Internal dependencies
  */
-import { BEZIER } from '../../../animation/constants';
-import { themeHelpers } from '../../theme';
+import { themeHelpers, BEZIER } from '../../theme';
 
 export const LOADING_MESSAGE = __('Loading', 'web-stories');
 
@@ -93,9 +92,10 @@ export function LoadingSpinner({
   numCircles = 11,
   ...props
 }) {
-  const ids = useMemo(() => new Array(numCircles).fill(1).map(() => uuidv4()), [
-    numCircles,
-  ]);
+  const ids = useMemo(
+    () => new Array(numCircles).fill(1).map(() => uuidv4()),
+    [numCircles]
+  );
 
   return (
     <Container animationSize={animationSize} {...props}>

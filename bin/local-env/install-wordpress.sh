@@ -19,14 +19,25 @@ dc up -d >/dev/null 2>&1
 # Get the host port for the WordPress container.
 HOST_PORT=$(dc port $CONTAINER 80 | awk -F : '{printf $2}')
 
-# Wait until the Docker containers are running and the WordPress site is
-# responding to requests.
+# Wait until the WordPress site is responding to requests.
 echo -en $(status_message "Attempting to connect to WordPress...")
 until $(curl -L http://localhost:$HOST_PORT -so - 2>&1 | grep -q "WordPress"); do
 	echo -n '.'
 	sleep 5
 done
 echo ''
+
+# Wait until the database container is ready.
+echo -en $(status_message "Waiting for database connection...")
+until $(container bash -c "echo -n > /dev/tcp/mysql/3306" >/dev/null 2>&1); do
+    echo -n '.'
+    sleep 5
+done
+echo ''
+
+# Create the database if it doesn't exist.
+echo -e $(status_message "Creating the database (if it does not exist)...")
+mysql -e 'CREATE DATABASE IF NOT EXISTS wordpress;'
 
 # If this is the test site, we reset the database so no posts/comments/etc.
 # dirty up the tests.
@@ -53,25 +64,27 @@ fi
 
 # Create additional users.
 echo -e $(status_message "Creating additional users...")
-if [ ! "$(wp user get editor --field=login)" ]; then
-	wp user create editor editor@example.com --role=editor --user_pass=password --quiet
+
+if [[ $(wp user get editor --field=login 2>&1) != "editor" ]]; then
+	wp user create editor editor@example.com --role=editor --user_pass=password
 	echo -e $(status_message "Editor created! Username: editor Password: password")
 else
  echo -e $(status_message "Editor already exists, skipping...")
 fi
-if [ ! "$(wp user get author --field=login)" ]; then
+
+if [[ $(wp user get author --field=login 2>&1) != "author" ]]; then
 	wp user create author author@example.com --role=author --user_pass=password --quiet
 	echo -e $(status_message "Author created! Username: author Password: password")
 else
  echo -e $(status_message "Author already exists, skipping...")
 fi
-if [ ! "$(wp user get contributor --field=login)" ]; then
+if [[ $(wp user get contributor --field=login 2>&1) != "contributor" ]]; then
 	wp user create contributor contributor@example.com --role=contributor --user_pass=password --quiet
 	echo -e $(status_message "Contributor created! Username: contributor Password: password")
 else
  echo -e $(status_message "Contributor already exists, skipping...")
 fi
-if [ ! "$(wp user get subscriber --field=login)" ]; then
+if [[ $(wp user get subscriber --field=login 2>&1) != "subscriber" ]]; then
 	wp user create subscriber subscriber@example.com --role=subscriber --user_pass=password --quiet
 	echo -e $(status_message "Subscriber created! Username: subscriber Password: password")
 else
@@ -139,36 +152,37 @@ wp rewrite structure '%postname%' --hard --quiet
 echo -e $(status_message "Configuring site constants...")
 WP_DEBUG_CURRENT=$(wp config get --type=constant --format=json WP_DEBUG | tr -d '\r')
 
-if [ "$WP_DEBUG" != $WP_DEBUG_CURRENT ]; then
-	wp config set WP_DEBUG $WP_DEBUG --raw --type=constant --quiet
+if [[ "$WP_DEBUG" != $WP_DEBUG_CURRENT ]]; then
+	wp config set WP_DEBUG $WP_DEBUG --raw --type=constant --quiet --anchor="That's all, stop editing"
 	WP_DEBUG_RESULT=$(wp config get --type=constant --format=json WP_DEBUG | tr -d '\r')
 	echo -e $(status_message "WP_DEBUG: $WP_DEBUG_RESULT...")
 fi
 
 SCRIPT_DEBUG_CURRENT=$(wp config get --type=constant --format=json SCRIPT_DEBUG | tr -d '\r')
-if [ "$SCRIPT_DEBUG" != $SCRIPT_DEBUG_CURRENT ]; then
-	wp config set SCRIPT_DEBUG $SCRIPT_DEBUG --raw --type=constant --quiet
+if [[ "$SCRIPT_DEBUG" != $SCRIPT_DEBUG_CURRENT ]]; then
+	wp config set SCRIPT_DEBUG $SCRIPT_DEBUG --raw --type=constant --quiet --anchor="That's all, stop editing"
 	SCRIPT_DEBUG_RESULT=$(wp config get --type=constant --format=json SCRIPT_DEBUG | tr -d '\r')
 	echo -e $(status_message "SCRIPT_DEBUG: $SCRIPT_DEBUG_RESULT...")
 fi
 
 WEBSTORIES_DEV_MODE_CURRENT=!$WEBSTORIES_DEV_MODE;
-if [ "$(wp config has --type=constant WEBSTORIES_DEV_MODE)" ]; then
+if [[ "$(wp config has --type=constant WEBSTORIES_DEV_MODE)" ]]; then
   WEBSTORIES_DEV_MODE_CURRENT=$(wp config get --type=constant --format=json WEBSTORIES_DEV_MODE | tr -d '\r')
 fi
 
-if [ "$WEBSTORIES_DEV_MODE" != $WEBSTORIES_DEV_MODE_CURRENT ]; then
-  wp config set WEBSTORIES_DEV_MODE $WEBSTORIES_DEV_MODE --raw --type=constant --quiet
+if [[ "$WEBSTORIES_DEV_MODE" != $WEBSTORIES_DEV_MODE_CURRENT ]]; then
+  wp config set WEBSTORIES_DEV_MODE $WEBSTORIES_DEV_MODE --raw --type=constant --quiet --anchor="That's all, stop editing"
   WEBSTORIES_DEV_MODE_RESULT=$(wp config get --type=constant --format=json WEBSTORIES_DEV_MODE | tr -d '\r')
   echo -e $(status_message "WEBSTORIES_DEV_MODE: $WEBSTORIES_DEV_MODE_RESULT...")
 fi
 
 MEDIA_TRASH_CURRENT=!MEDIA_TRASH;
-if [ "$(wp config has --type=constant MEDIA_TRASH)" ]; then
+if [[ "$(wp config has --type=constant MEDIA_TRASH)" ]]; then
   $MEDIA_TRASH_CURRENT=$(wp config get --type=constant --format=json MEDIA_TRASH | tr -d '\r')
 fi
-if [ "$MEDIA_TRASH" != $MEDIA_TRASH_CURRENT ]; then
-  wp config set MEDIA_TRASH $MEDIA_TRASH --raw --type=constant --quiet
+
+if [[ "$MEDIA_TRASH" != $MEDIA_TRASH_CURRENT ]]; then
+  wp config set MEDIA_TRASH $MEDIA_TRASH --raw --type=constant --quiet --anchor="That's all, stop editing"
   MEDIA_TRASH_RESULT=$(wp config get --type=constant --format=json MEDIA_TRASH | tr -d '\r')
   echo -e $(status_message "MEDIA_TRASH: $MEDIA_TRASH_RESULT...")
 fi
@@ -191,3 +205,7 @@ wp media import /var/www/html/wp-content/e2e-assets/example-3.png --quiet
 wp option patch insert web_stories_experiments enableSVG 1
 wp media import /var/www/html/wp-content/e2e-assets/video-play.svg
 wp option patch insert web_stories_experiments enableSVG 0
+
+wp user list --format=yaml
+wp post list --post_type=attachment --format=yaml
+wp plugin list --format=yaml

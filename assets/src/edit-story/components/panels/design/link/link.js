@@ -17,11 +17,11 @@
 /**
  * External dependencies
  */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useDebouncedCallback } from 'use-debounce';
-import { __, sprintf } from '@web-stories-wp/i18n';
+import { __, sprintf, translateToExclusiveList } from '@web-stories-wp/i18n';
 
 /**
  * Internal dependencies
@@ -39,8 +39,12 @@ import { MULTIPLE_DISPLAY_VALUE, MULTIPLE_VALUE } from '../../../../constants';
 import { Media, Row, LinkInput } from '../../../form';
 import { createLink } from '../../../elementLink';
 import { SimplePanel } from '../../panel';
-import { useCommonObjectValue } from '../../shared';
+import {
+  inputContainerStyleOverride,
+  useCommonObjectValue,
+} from '../../shared';
 import { MEDIA_VARIANTS } from '../../../../../design-system/components/mediaInput/constants';
+import { states, styles, useFocusHighlight } from '../../../../app/highlights';
 
 const IconInfo = styled.div`
   display: flex;
@@ -64,19 +68,19 @@ const Error = styled.span`
 `;
 
 function LinkPanel({ selectedElements, pushUpdateForObject }) {
-  const {
-    clearEditing,
-    setDisplayLinkGuidelines,
-    displayLinkGuidelines,
-  } = useCanvas((state) => ({
-    clearEditing: state.actions.clearEditing,
-    setDisplayLinkGuidelines: state.actions.setDisplayLinkGuidelines,
-    displayLinkGuidelines: state.state.displayLinkGuidelines,
-  }));
+  const { clearEditing, setDisplayLinkGuidelines, displayLinkGuidelines } =
+    useCanvas((state) => ({
+      clearEditing: state.actions.clearEditing,
+      setDisplayLinkGuidelines: state.actions.setDisplayLinkGuidelines,
+      displayLinkGuidelines: state.state.displayLinkGuidelines,
+    }));
 
   const { currentPage } = useStory((state) => ({
     currentPage: state.state.currentPage,
   }));
+
+  const linkRef = useRef(null);
+  const highlight = useFocusHighlight(states.LINK, linkRef);
 
   const { getElementsInAttachmentArea } = useElementsWithLinks();
   const hasElementsInAttachmentArea =
@@ -103,12 +107,12 @@ function LinkPanel({ selectedElements, pushUpdateForObject }) {
     ({ url, title, icon }) =>
       pushUpdateForObject(
         'link',
-        (prev) =>
+        () =>
           url
             ? {
                 url,
-                desc: title ? title : prev.desc,
-                icon: icon ? toAbsoluteUrl(url, icon) : prev.icon,
+                desc: title ? title : '',
+                icon: icon ? toAbsoluteUrl(url, icon) : '',
               }
             : null,
         defaultLink,
@@ -174,14 +178,20 @@ function LinkPanel({ selectedElements, pushUpdateForObject }) {
   );
 
   const iconErrorMessage = useMemo(() => {
-    return sprintf(
-      /* translators: %s: list of allowed file types. */
-      __('Please choose only %s as an icon.', 'web-stories'),
-      allowedImageFileTypes.join(
-        /* translators: delimiter used in a list */
-        __(', ', 'web-stories')
-      )
+    let message = __(
+      'No image file types are currently supported.',
+      'web-stories'
     );
+
+    if (allowedImageFileTypes.length) {
+      message = sprintf(
+        /* translators: %s: list of allowed file types. */
+        __('Please choose only %s as an icon.', 'web-stories'),
+        translateToExclusiveList(allowedImageFileTypes)
+      );
+    }
+
+    return message;
   }, [allowedImageFileTypes]);
 
   const hasLinkSet = Boolean(link.url?.length);
@@ -207,8 +217,14 @@ function LinkPanel({ selectedElements, pushUpdateForObject }) {
   const isMultipleUrl = MULTIPLE_VALUE === link.url;
   const isMultipleDesc = MULTIPLE_VALUE === link.desc;
   return (
-    <SimplePanel name="link" title={__('Link', 'web-stories')}>
+    <SimplePanel
+      name="link"
+      title={__('Link', 'web-stories')}
+      css={highlight?.showEffect && styles.FLASH}
+      isPersistable={!highlight}
+    >
       <LinkInput
+        ref={linkRef}
         onChange={(value) =>
           !displayLinkGuidelines &&
           handleChange({ url: value }, !value /* submit */)
@@ -256,6 +272,8 @@ function LinkPanel({ selectedElements, pushUpdateForObject }) {
               value={link.desc || ''}
               aria-label={__('Link description', 'web-stories')}
               isIndeterminate={isMultipleDesc}
+              disabled={fetchingMetadata}
+              containerStyleOverride={inputContainerStyleOverride}
             />
           </Row>
           <Row spaceBetween={false}>
@@ -268,6 +286,7 @@ function LinkPanel({ selectedElements, pushUpdateForObject }) {
               buttonInsertText={__('Select as link icon', 'web-stories')}
               type={allowedImageMimeTypes}
               isLoading={fetchingMetadata}
+              disabled={fetchingMetadata}
               variant={MEDIA_VARIANTS.CIRCLE}
               menuOptions={link.icon ? ['edit', 'remove'] : []}
             />

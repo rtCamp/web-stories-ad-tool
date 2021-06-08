@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import { useRef, useEffect, useCallback } from 'react';
 import { rgba } from 'polished';
 import styled from 'styled-components';
+import { __ } from '@web-stories-wp/i18n';
 
 /**
  * Internal dependencies
@@ -59,7 +60,7 @@ MessageContainer.propTypes = {
 
 const Message = styled(Text)`
   color: ${({ theme }) => theme.colors.inverted.fg.primary};
-  max-width: 206px;
+  max-width: 430px;
   padding-right: ${({ hasAction }) => (hasAction ? '52px' : '0px')};
 `;
 
@@ -75,6 +76,7 @@ const ActionButton = styled(Button)`
   height: 2em;
   padding: 0;
   color: ${({ theme }) => theme.colors.inverted.fg.linkNormal};
+  font-weight: ${({ theme }) => theme.typography.weight.bold};
 
   ${({ theme }) =>
     focusableOutlineCSS(
@@ -106,6 +108,7 @@ const CloseButton = styled(Button)`
 `;
 
 const SnackbarMessage = ({
+  'aria-label': ariaLabel,
   actionLabel,
   onAction = noop,
   onDismiss = noop,
@@ -156,6 +159,7 @@ const SnackbarMessage = ({
       {...props}
     >
       <Message
+        aria-label={ariaLabel}
         size={THEME_CONSTANTS.TYPOGRAPHY.PRESET_SIZES.SMALL}
         hasAction={hasAction}
       >
@@ -167,7 +171,10 @@ const SnackbarMessage = ({
             <ActionButton onClick={handleAction}>{actionLabel}</ActionButton>
           )}
           {showCloseButton && (
-            <CloseButton onClick={onDismiss}>
+            <CloseButton
+              onClick={onDismiss}
+              aria-label={__('Close', 'web-stories')}
+            >
               <Cross aria-hidden />
             </CloseButton>
           )}

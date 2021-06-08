@@ -157,7 +157,7 @@ function MediaEditDialog({ resource, onClose }) {
 
   return (
     <Dialog
-      open
+      isOpen
       onClose={onClose}
       title={isImage ? imageDialogTitle : videoDialogTitle}
       secondaryText={__('Cancel', 'web-stories')}
@@ -177,7 +177,7 @@ function MediaEditDialog({ resource, onClose }) {
             key={src}
             crossOrigin="anonymous"
             poster={poster}
-            preload="none"
+            preload="metadata"
             muted
           >
             <source src={src} type={mimeType} />

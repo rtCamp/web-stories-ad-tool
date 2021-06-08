@@ -22,8 +22,9 @@ import styled, { css } from 'styled-components';
 /**
  * Internal dependencies
  */
-import { BEZIER } from '../../../animation/constants';
+import { BEZIER } from '../../theme/constants';
 import { CORNER_DIRECTIONS, DIRECTIONS } from '../../utils/directions';
+import Mask from './mask';
 import Menu, { MenuPropTypes } from './menu';
 import { Popover, Shadow } from './styled';
 
@@ -34,7 +35,8 @@ const PERCENTAGE_OFFSET = {
   [DIRECTIONS.LEFT]: -50,
 };
 
-const transition = `transform 0.175s ${BEZIER.default}`;
+const animationTimeSeconds = 0.175;
+const transition = `transform ${animationTimeSeconds}s ${BEZIER.default}`;
 const initialScale = 0.5;
 const fullSize = css`
   top: 0;
@@ -48,7 +50,8 @@ const MenuWrapper = styled.div`
 `;
 
 const MenuRevealer = styled.div`
-  overflow: hidden;
+  overflow: ${({ animationFinished }) =>
+    animationFinished ? 'normal' : 'hidden'};
   border-radius: ${({ theme }) => theme.borders.radius.small};
   ${fullSize}
 `;
@@ -204,6 +207,7 @@ ButtonInner.propTypes = {
 function AnimationContainer({ children, isOpen, ...props }) {
   const [align, setAlign] = useState(null);
   const [isReady, setIsReady] = useState(false);
+  const [animationFinished, setAnimationFinished] = useState(true);
   const menuPositionRef = useRef(null);
   const menuTogglePositionRef = useRef(null);
 
@@ -216,8 +220,10 @@ function AnimationContainer({ children, isOpen, ...props }) {
       return;
     }
 
-    const toggleBoundingBox = menuTogglePositionRef.current.getBoundingClientRect();
-    const menuWrapperBoundingBox = menuPositionRef.current.getBoundingClientRect();
+    const toggleBoundingBox =
+      menuTogglePositionRef.current.getBoundingClientRect();
+    const menuWrapperBoundingBox =
+      menuPositionRef.current.getBoundingClientRect();
 
     const menuLeft =
       toggleBoundingBox.left +
@@ -236,6 +242,21 @@ function AnimationContainer({ children, isOpen, ...props }) {
         : DIRECTIONS.BOTTOM;
 
     setAlign(CORNER_DIRECTIONS[`${alignVertical}_${alignHorizontal}`]);
+  }, [isOpen]);
+
+  useEffect(() => {
+    // some styles depend on the animation being finished. Set a timeout to set this variable
+    // once the animation has finished.
+    let timeoutId;
+    if (isOpen) {
+      setAnimationFinished(false);
+      timeoutId = setTimeout(
+        () => setAnimationFinished(true),
+        animationTimeSeconds * 1000
+      );
+    }
+
+    return () => clearTimeout(timeoutId);
   }, [isOpen]);
 
   /**
@@ -258,7 +279,7 @@ function AnimationContainer({ children, isOpen, ...props }) {
       {...props}
     >
       <MenuWrapper>
-        <MenuRevealer>
+        <MenuRevealer animationFinished={isOpen && animationFinished}>
           <MenuCounterRevealer ref={menuPositionRef}>
             {children}
           </MenuCounterRevealer>
@@ -273,13 +294,17 @@ AnimationContainer.propTypes = {
   children: PropTypes.node,
 };
 
-const AnimatedContextMenu = ({ isOpen, items, ...props }) => (
-  <AnimationContainer isOpen={isOpen}>
-    <Menu items={items} isOpen={isOpen} {...props} />
-  </AnimationContainer>
+const AnimatedContextMenu = ({ isAlwaysVisible, items, ...props }) => (
+  <>
+    {!isAlwaysVisible && props.isOpen && <Mask onDismiss={props.onDismiss} />}
+    <AnimationContainer isOpen={isAlwaysVisible || props.isOpen}>
+      <Menu aria-expanded={props.isOpen} items={items} {...props} />
+    </AnimationContainer>
+  </>
 );
 AnimatedContextMenu.propTypes = {
   ...MenuPropTypes,
+  isAlwaysVisible: PropTypes.bool,
   isOpen: PropTypes.bool,
 };
 

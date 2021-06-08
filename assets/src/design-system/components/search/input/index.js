@@ -44,20 +44,21 @@ const SearchInput = (
     inputValue,
     isOpen,
     listId,
+    className = '',
     ...rest
   },
   ref
 ) => {
   // Avoid conditional rendering in this input because rerendering will remove the focus styling
 
-  const activeInput = useMemo(() => inputValue.length > 0 && isOpen, [
-    isOpen,
-    inputValue,
-  ]);
-  const alignInputCenter = useMemo(() => inputValue.length === 0 && !isOpen, [
-    isOpen,
-    inputValue,
-  ]);
+  const activeInput = useMemo(
+    () => inputValue.length > 0 && isOpen,
+    [isOpen, inputValue]
+  );
+  const alignInputCenter = useMemo(
+    () => inputValue.length === 0 && !isOpen,
+    [isOpen, inputValue]
+  );
 
   const onClearButtonKeyDown = useCallback(
     ({ key }) => {
@@ -69,7 +70,7 @@ const SearchInput = (
   );
 
   return (
-    <InputContainer>
+    <InputContainer className={className}>
       <Input
         aria-disabled={disabled}
         autocomplete="off"
@@ -127,4 +128,5 @@ SearchInput.propTypes = {
   handleTabClear: PropTypes.func.isRequired,
   inputValue: PropTypes.string,
   isOpen: PropTypes.bool,
+  className: PropTypes.string,
 };

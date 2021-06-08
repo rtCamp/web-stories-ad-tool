@@ -13,16 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External dependencies
+ */
+import { screen } from '@testing-library/react';
+
 /**
  * Internal dependencies
  */
 import { noop } from '../../../../../design-system';
 import { renderWithProviders } from '../../../../../design-system/testUtils/renderWithProviders';
+import { ConfigProvider } from '../../../../app/config';
 import { PRE_PUBLISH_MESSAGE_TYPES } from '../../../../app/prepublish';
-import ChecklistTab from '../checklistTab';
+import ChecklistTab from '../components/checklistTab';
+import { TEXT } from '../constants';
+import { PPC_CHECKPOINT_STATE } from '../prepublishCheckpointState';
 
 jest.mock('flagged', () => ({
   useFeature: () => true,
+  useFeatures: () => ({
+    enablePrePublishVideoOptimization: true,
+  }),
 }));
 
 const GUIDANCE_ERROR = {
@@ -34,32 +46,76 @@ const GUIDANCE_ERROR = {
   help: 'Test help',
 };
 
-describe('<ChecklistTab />', () => {
-  it("should render a toggle if the user's web_stories_media_optimization setting is initially false", () => {
-    const { getByRole } = renderWithProviders(
+const renderChecklistTab = ({
+  areVideosAutoOptimized = false,
+  hasUploadMediaAction = true,
+  currentCheckpoint = PPC_CHECKPOINT_STATE.ONLY_RECOMMENDED,
+  isChecklistEmpty,
+}) => {
+  return renderWithProviders(
+    <ConfigProvider
+      config={{
+        isRTL: false,
+        capabilities: { hasUploadMediaAction },
+      }}
+    >
       <ChecklistTab
-        areVideosAutoOptimized={false}
+        areVideosAutoOptimized={areVideosAutoOptimized}
         checklist={[GUIDANCE_ERROR]}
+        currentCheckpoint={currentCheckpoint}
+        isChecklistEmpty={isChecklistEmpty}
         onAutoVideoOptimizationClick={noop}
       />
-    );
+    </ConfigProvider>
+  );
+};
+describe('<ChecklistTab />', () => {
+  it("should render a toggle if the user's web_stories_media_optimization setting is initially false", () => {
+    renderChecklistTab({ areVideosAutoOptimized: false });
 
-    const toggle = getByRole('checkbox', { hidden: true });
+    const toggle = screen.getByRole('checkbox', { hidden: true });
 
     expect(toggle).toBeInTheDocument();
   });
 
   it("should not render toggle if the user's web_stories_media_optimization setting is initially true", () => {
-    const { queryByRole } = renderWithProviders(
-      <ChecklistTab
-        areVideosAutoOptimized
-        checklist={[GUIDANCE_ERROR]}
-        onAutoVideoOptimizationClick={noop}
-      />
-    );
+    renderChecklistTab({
+      areVideosAutoOptimized: true,
+    });
 
-    const toggle = queryByRole('checkbox', { hidden: true });
+    const toggle = screen.queryByRole('checkbox', { hidden: true });
 
     expect(toggle).not.toBeInTheDocument();
+  });
+
+  it("should not render toggle if the user doesn't have proper permissions", () => {
+    renderChecklistTab({
+      areVideosAutoOptimized: true,
+    });
+
+    const toggle = screen.queryByRole('checkbox', { hidden: true });
+
+    expect(toggle).not.toBeInTheDocument();
+  });
+
+  it(`should display starting empty message when checkpoint is "${PPC_CHECKPOINT_STATE.UNAVAILABLE}"`, () => {
+    renderChecklistTab({
+      currentCheckpoint: PPC_CHECKPOINT_STATE.UNAVAILABLE,
+    });
+
+    const message = screen.getByText(TEXT.UNAVAILABLE_BODY);
+
+    expect(message).toBeInTheDocument();
+  });
+
+  it(`should display message about empty checklist when checkpoint is "${PPC_CHECKPOINT_STATE.NO_ISSUES}"`, () => {
+    renderChecklistTab({
+      currentCheckpoint: PPC_CHECKPOINT_STATE.NO_ISSUES,
+      isChecklistEmpty: true,
+    });
+
+    const message = screen.getByText(TEXT.EMPTY_BODY);
+
+    expect(message).toBeInTheDocument();
   });
 });

@@ -47,9 +47,13 @@ function EditElement({ element }) {
   }));
 
   const [editWrapper, setEditWrapper] = useState(null);
+  // Needed for elements that can scale in edit mode.
+  const [localProperties, setLocalProperties] = useState(null);
 
   const { Edit, hasEditModeMoveable } = getDefinitionForType(type);
-  const box = getBox(element);
+  const box = getBox(
+    localProperties ? { ...element, ...localProperties } : element
+  );
 
   const moveable = useRef(null);
 
@@ -62,6 +66,11 @@ function EditElement({ element }) {
 
   return (
     <>
+      {/*
+        TODO: Investigate
+        See https://github.com/google/web-stories-wp/issues/6671
+        */}
+      {/* eslint-disable-next-line styled-components-a11y/no-static-element-interactions */}
       <Wrapper
         aria-labelledby={`layer-${id}`}
         {...box}
@@ -69,10 +78,13 @@ function EditElement({ element }) {
         ref={setEditWrapper}
       >
         <Edit
-          element={element}
+          element={
+            localProperties ? { ...element, ...localProperties } : element
+          }
           box={box}
           editWrapper={hasEditModeMoveable && editWrapper}
           onResize={onResize}
+          setLocalProperties={setLocalProperties}
         />
       </Wrapper>
       {hasEditModeMoveable && editWrapper && (
