@@ -136,7 +136,9 @@ function Import() {
             return;
           }
 
-          const mediaResource = await getResourceFromLocalFile(mediaFile);
+          const { resource: mediaResource } = await getResourceFromLocalFile(
+            mediaFile
+          );
           const mediaSrc = mediaResource.src;
 
           filesToStore.push({
@@ -161,9 +163,8 @@ function Import() {
               });
 
               if (posterMediaFile) {
-                const posterResource = await getResourceFromLocalFile(
-                  posterMediaFile
-                );
+                const { resource: posterResource } =
+                  await getResourceFromLocalFile(posterMediaFile);
 
                 mediaItem.poster = posterResource.src;
                 mediaItem.local = false;
