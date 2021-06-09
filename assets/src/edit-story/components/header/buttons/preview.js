@@ -172,7 +172,7 @@ function Preview() {
         </Button>
       </Tooltip>
       <Dialog
-        open={showPreviewDialog}
+        isOpen={showPreviewDialog}
         onClose={closePreviewDialog}
         title={null}
         primaryText={__('OK', 'web-stories')}

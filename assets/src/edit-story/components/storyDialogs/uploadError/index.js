@@ -40,7 +40,7 @@ function UploadError() {
 
   return (
     <Dialog
-      open={uploadErrorMessages.length > 0}
+      isOpen={uploadErrorMessages.length > 0}
       onClose={closeErrorDialog}
       title={__('Error uploading file', 'web-stories')}
       primaryText={__('Close', 'web-stories')}
