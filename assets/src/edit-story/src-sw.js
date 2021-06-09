@@ -69,26 +69,6 @@ registerRoute(
 );
 
 /**
- * Image Templates.
- *
- * Caches at: runtime
- */
-registerRoute(
-  ({ url }) =>
-    url.origin === 'https://wp.stories.google' &&
-    url.pathname.startsWith('/static/main/images/templates'),
-  new StaleWhileRevalidate({
-    cacheName: 'image-templates',
-    plugins: [
-      new CacheableResponsePlugin({
-        statuses: [0, 200],
-      }),
-      new ExpirationPlugin({ maxEntries: 15 }), // Will cache maximum five images ( 15 image requests )
-    ],
-  })
-);
-
-/**
  * We use CacheFirst for images because, images are not going to change very often,
  * so it does not make sense to revalidate images on every request.
  *
