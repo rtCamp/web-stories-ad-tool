@@ -23,11 +23,9 @@ import { useEffect } from 'react';
  */
 import { saveDataOnSessionStorage } from '../utils/sessionStore';
 
-function useSessionStorage({ current, selection, story, pages }) {
+function useSessionStorage({ current, currentPage, selection, story }) {
   useEffect(() => {
-    const [activePage] = pages;
-
-    if (!activePage || !story.globalStoryStyles) {
+    if (!currentPage || !story.globalStoryStyles) {
       return;
     }
 
@@ -35,13 +33,13 @@ function useSessionStorage({ current, selection, story, pages }) {
       current,
       selection,
       story: { ...story },
-      pages: [activePage],
+      pages: [currentPage],
     };
 
     if (current) {
       saveDataOnSessionStorage(storyDataForSession);
     }
-  }, [current, selection, story, pages]);
+  }, [current, currentPage, selection, story]);
 }
 
 export default useSessionStorage;

@@ -110,7 +110,7 @@ function StoryProvider({ storyId, children }) {
   // These effects send updates to and restores state from history.
   useHistoryEntry({ pages, current, selection, story, capabilities });
   useHistoryReplay({ restore });
-  useSessionStorage({ current, selection, story, pages });
+  useSessionStorage({ current, currentPage, selection, story });
 
   // This action allows the user to save the story
   // (and it will have side-effects because saving can update url and status,
