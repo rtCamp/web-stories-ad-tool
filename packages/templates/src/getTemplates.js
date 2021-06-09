@@ -56,7 +56,12 @@ async function loadTemplate(title, imageBaseUrl) {
 }
 
 async function getTemplates(imageBaseUrl) {
-  const templateNames = ['ad-template-one', 'ad-template-two'];
+  const templateNames = [
+    'ad-template-one',
+    'ad-template-two',
+    'annual-clothing-sale',
+    'app-install-ad',
+  ];
 
   const trackTiming = getTimeTracker('load_templates');
 

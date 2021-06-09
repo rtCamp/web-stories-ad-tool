@@ -1,0 +1,491 @@
+{
+  "current": null,
+  "selection": [],
+  "story": {
+    "globalStoryStyles": {
+      "textStyles": [
+        {
+          "backgroundColor": {
+            "color": {
+              "r": 196,
+              "g": 196,
+              "b": 196
+            }
+          },
+          "backgroundTextMode": "NONE",
+          "font": {
+            "family": "Roboto",
+            "weights": [100, 300, 400, 500, 700, 900],
+            "styles": ["italic", "regular"],
+            "variants": [
+              [0, 100],
+              [0, 300],
+              [0, 400],
+              [0, 500],
+              [0, 700],
+              [0, 900],
+              [1, 100],
+              [1, 300],
+              [1, 400],
+              [1, 500],
+              [1, 700],
+              [1, 900]
+            ],
+            "fallbacks": ["Helvetica Neue", "Helvetica", "sans-serif"],
+            "service": "fonts.google.com",
+            "metrics": {
+              "upm": 2048,
+              "asc": 1900,
+              "des": -500,
+              "tAsc": 1536,
+              "tDes": -512,
+              "tLGap": 102,
+              "wAsc": 1946,
+              "wDes": 512,
+              "xH": 1082,
+              "capH": 1456,
+              "yMin": -555,
+              "yMax": 2163,
+              "hAsc": 1900,
+              "hDes": -500,
+              "lGap": 0
+            }
+          },
+          "fontSize": 36,
+          "lineHeight": 1.19,
+          "padding": {
+            "locked": true,
+            "hasHiddenPadding": false
+          },
+          "textAlign": "initial",
+          "color": {
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            }
+          },
+          "fontWeight": 700,
+          "isItalic": false,
+          "isUnderline": false,
+          "letterSpacing": 0
+        },
+        {
+          "backgroundColor": {
+            "color": {
+              "r": 196,
+              "g": 196,
+              "b": 196
+            }
+          },
+          "backgroundTextMode": "NONE",
+          "font": {
+            "family": "Libre Baskerville",
+            "service": "fonts.google.com",
+            "fallbacks": ["serif"],
+            "weights": [400, 700],
+            "styles": ["regular", "italic"],
+            "variants": [
+              [0, 400],
+              [0, 700],
+              [1, 400]
+            ],
+            "metrics": {
+              "upm": 1000,
+              "asc": 970,
+              "des": -270,
+              "tAsc": 970,
+              "tDes": -270,
+              "tLGap": 0,
+              "wAsc": 970,
+              "wDes": 270,
+              "xH": 530,
+              "capH": 770,
+              "yMin": -260,
+              "yMax": 970,
+              "hAsc": 970,
+              "hDes": -270,
+              "lGap": 0
+            }
+          },
+          "fontSize": 14,
+          "lineHeight": 1.5,
+          "padding": {
+            "vertical": 0,
+            "horizontal": 0,
+            "locked": true
+          },
+          "textAlign": "left",
+          "color": {
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            }
+          },
+          "fontWeight": 700,
+          "isItalic": false,
+          "isUnderline": false,
+          "letterSpacing": 25
+        },
+        {
+          "backgroundColor": {
+            "color": {
+              "r": 196,
+              "g": 196,
+              "b": 196
+            }
+          },
+          "backgroundTextMode": "NONE",
+          "font": {
+            "family": "Fjalla One",
+            "service": "fonts.google.com",
+            "fallbacks": ["sans-serif"],
+            "weights": [400],
+            "styles": ["regular"],
+            "variants": [[0, 400]],
+            "metrics": {
+              "upm": 2048,
+              "asc": 2066,
+              "des": -508,
+              "tAsc": 1810,
+              "tDes": -458,
+              "tLGap": 0,
+              "wAsc": 2066,
+              "wDes": 508,
+              "xH": 1377,
+              "capH": 1708,
+              "yMin": -458,
+              "yMax": 2066,
+              "hAsc": 2066,
+              "hDes": -508,
+              "lGap": 0
+            }
+          },
+          "fontSize": 42,
+          "lineHeight": 1,
+          "padding": {
+            "vertical": 0,
+            "horizontal": 0,
+            "locked": true
+          },
+          "textAlign": "left",
+          "color": {
+            "color": {
+              "r": 0,
+              "g": 47,
+              "b": 167
+            }
+          },
+          "fontWeight": 400,
+          "isItalic": false,
+          "isUnderline": false,
+          "letterSpacing": 0
+        },
+        {
+          "backgroundColor": {
+            "color": {
+              "r": 196,
+              "g": 196,
+              "b": 196
+            }
+          },
+          "backgroundTextMode": "NONE",
+          "font": {
+            "family": "Libre Baskerville",
+            "service": "fonts.google.com",
+            "fallbacks": ["serif"],
+            "weights": [400, 700],
+            "styles": ["regular", "italic"],
+            "variants": [
+              [0, 400],
+              [0, 700],
+              [1, 400]
+            ],
+            "metrics": {
+              "upm": 1000,
+              "asc": 970,
+              "des": -270,
+              "tAsc": 970,
+              "tDes": -270,
+              "tLGap": 0,
+              "wAsc": 970,
+              "wDes": 270,
+              "xH": 530,
+              "capH": 770,
+              "yMin": -260,
+              "yMax": 970,
+              "hAsc": 970,
+              "hDes": -270,
+              "lGap": 0
+            }
+          },
+          "fontSize": 16,
+          "lineHeight": 1.5,
+          "padding": {
+            "vertical": 0,
+            "horizontal": 0,
+            "locked": true
+          },
+          "textAlign": "left",
+          "color": {
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            }
+          },
+          "fontWeight": null,
+          "isItalic": false,
+          "isUnderline": false,
+          "letterSpacing": 0
+        }
+      ],
+      "colors": []
+    }
+  },
+  "version": 28,
+  "pages": [
+    {
+      "elements": [
+        {
+          "opacity": 100,
+          "flip": {
+            "vertical": false,
+            "horizontal": false
+          },
+          "rotationAngle": 0,
+          "lockAspectRatio": true,
+          "backgroundColor": {
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          "x": 1,
+          "y": 1,
+          "width": 1,
+          "height": 1,
+          "mask": {
+            "type": "rectangle"
+          },
+          "isBackground": true,
+          "isDefaultBackground": true,
+          "type": "shape",
+          "id": "377228bf-3012-4615-adb2-234b08bb7e72"
+        },
+        {
+          "opacity": 100,
+          "flip": {
+            "vertical": false,
+            "horizontal": false
+          },
+          "rotationAngle": 0,
+          "lockAspectRatio": true,
+          "backgroundColor": {
+            "color": {
+              "r": 196,
+              "g": 196,
+              "b": 196
+            }
+          },
+          "type": "image",
+          "resource": {
+            "type": "image",
+            "mimeType": "image/jpeg",
+            "creationDate": "2021-06-08T11:11:08",
+            "src": "__WEB_STORIES_TEMPLATE_BASE_URL__/images/templates/app-install-ad/page1_logo.jpg",
+            "width": 216,
+            "height": 216,
+            "id": 5207,
+            "title": "adtemplate_appinstalltemplate_logo",
+            "alt": "adtemplate_appinstalltemplate_logo",
+            "sizes": [],
+            "local": false,
+            "isOptimized": false,
+            "baseColor": [4, 4, 4]
+          },
+          "x": 168.5,
+          "y": 2,
+          "width": 73,
+          "height": 73,
+          "scale": 100,
+          "focalX": 50,
+          "focalY": 50,
+          "mask": {
+            "type": "rectangle"
+          },
+          "id": "0f28cdf2-bbbd-4fec-89b1-f3661055e885",
+          "borderRadius": {
+            "topLeft": 11,
+            "topRight": 11,
+            "bottomRight": 11,
+            "bottomLeft": 11,
+            "locked": true
+          }
+        },
+        {
+          "opacity": 100,
+          "flip": {
+            "vertical": false,
+            "horizontal": false
+          },
+          "rotationAngle": 0,
+          "lockAspectRatio": true,
+          "scale": 100,
+          "focalX": 50,
+          "focalY": 50,
+          "resource": {
+            "type": "image",
+            "mimeType": "image/jpeg",
+            "creationDate": "2021-06-08T11:07:19",
+            "src": "__WEB_STORIES_TEMPLATE_BASE_URL__/images/templates/app-install-ad/page1_image1.jpg",
+            "width": 828,
+            "height": 1472,
+            "id": 5206,
+            "title": "adtemplate_appinstalltemplate_image",
+            "alt": "adtemplate_appinstalltemplate_image",
+            "sizes": [],
+            "local": false,
+            "isOptimized": false
+          },
+          "type": "image",
+          "x": 72,
+          "y": 200,
+          "width": 268,
+          "height": 476,
+          "mask": {
+            "type": "rectangle",
+            "showInLibrary": true,
+            "name": "Rectangle",
+            "path": "M 0,0 1,0 1,1 0,1 0,0 Z",
+            "ratio": 1,
+            "supportsBorder": true
+          },
+          "id": "89612a1a-4e4d-488e-8f86-b805f9d961b9",
+          "borderRadius": {
+            "topLeft": 29,
+            "topRight": 29,
+            "bottomRight": 0,
+            "bottomLeft": 0,
+            "locked": false
+          },
+          "border": {
+            "left": 15,
+            "right": 15,
+            "top": 15,
+            "bottom": 15,
+            "lockedWidth": true,
+            "color": {
+              "color": {
+                "r": 255,
+                "g": 255,
+                "b": 255
+              }
+            }
+          }
+        },
+        {
+          "opacity": 100,
+          "flip": {
+            "vertical": false,
+            "horizontal": false
+          },
+          "rotationAngle": 0,
+          "lockAspectRatio": true,
+          "backgroundTextMode": "NONE",
+          "font": {
+            "family": "Poppins",
+            "service": "fonts.google.com",
+            "fallbacks": ["sans-serif"],
+            "weights": [100, 200, 300, 400, 500, 600, 700, 800, 900],
+            "styles": ["italic", "regular"],
+            "variants": [
+              [0, 100],
+              [0, 200],
+              [0, 300],
+              [0, 400],
+              [0, 500],
+              [0, 600],
+              [0, 700],
+              [0, 800],
+              [0, 900],
+              [1, 100],
+              [1, 200],
+              [1, 300],
+              [1, 400],
+              [1, 500],
+              [1, 600],
+              [1, 700],
+              [1, 800],
+              [1, 900]
+            ],
+            "metrics": {
+              "upm": 1000,
+              "asc": 1050,
+              "des": -350,
+              "tAsc": 1050,
+              "tDes": -350,
+              "tLGap": 100,
+              "wAsc": 1135,
+              "wDes": 627,
+              "xH": 548,
+              "capH": 698,
+              "yMin": -572,
+              "yMax": 1065,
+              "hAsc": 1050,
+              "hDes": -350,
+              "lGap": 100
+            }
+          },
+          "fontSize": 24,
+          "backgroundColor": {
+            "color": {
+              "r": 196,
+              "g": 196,
+              "b": 196
+            }
+          },
+          "lineHeight": 1.33,
+          "textAlign": "center",
+          "padding": {
+            "vertical": 0,
+            "horizontal": 0,
+            "locked": true
+          },
+          "type": "text",
+          "content": "<span style=\"font-weight: 600\">Start your journey in&nbsp;</span>\n<span style=\"font-weight: 600\">the&nbsp;fantasy wonderland.</span>",
+          "fontWeight": 400,
+          "borderRadius": {
+            "locked": true,
+            "topLeft": 2,
+            "topRight": 2,
+            "bottomRight": 2,
+            "bottomLeft": 2
+          },
+          "x": 40,
+          "y": 97,
+          "width": 330,
+          "height": 66,
+          "scale": 100,
+          "focalX": 50,
+          "focalY": 50,
+          "id": "1a96e85e-2312-4db7-9831-e6df94efbde8",
+          "marginOffset": 10.5
+        }
+      ],
+      "backgroundColor": {
+        "color": {
+          "r": 253,
+          "g": 198,
+          "b": 41
+        }
+      },
+      "type": "page",
+      "id": "690abba3-14b3-4a3d-a281-5966c8a76941",
+      "animations": [],
+      "pageTemplateType": "cover"
+    }
+  ]
+}
