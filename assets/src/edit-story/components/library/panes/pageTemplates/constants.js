@@ -20,11 +20,7 @@
 import { __ } from '@web-stories-wp/i18n';
 
 export const PAGE_TEMPLATE_TYPES = {
-  cover: { name: __('Cover', 'web-stories') },
-  section: { name: __('Section', 'web-stories') },
-  quote: { name: __('Quote', 'web-stories') },
-  editorial: { name: __('Editorial', 'web-stories') },
-  list: { name: __('List', 'web-stories') },
-  table: { name: __('Table', 'web-stories') },
-  steps: { name: __('Steps', 'web-stories') },
+  app: { name: __('App', 'web-stories') },
+  sale: { name: __('Sale', 'web-stories') },
+  videoAd: { name: __('Video Ad', 'web-stories') },
 };
