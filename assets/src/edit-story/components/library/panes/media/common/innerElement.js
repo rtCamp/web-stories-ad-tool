@@ -217,7 +217,7 @@ function InnerElement({
     cloneProps.src = posterSrc;
   }
   if (!media) {
-    // throw new Error('Invalid media element type.');
+    throw new Error('Invalid media element type.');
   }
 
   const dragHandler = (event) => {
