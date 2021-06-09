@@ -112,6 +112,7 @@ function Import() {
       capabilities: reducerState.capabilities,
     };
 
+    // pages[0] because only single page (currentPage) was stored during download.
     const { elements } = stateToRestore.pages[0] || {};
     const filesToStore = [];
 

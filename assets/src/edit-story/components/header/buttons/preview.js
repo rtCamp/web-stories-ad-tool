@@ -54,11 +54,14 @@ function Preview() {
   const [showPreviewDialog, setShowPreviewDialog] = useState(false);
   const previewDialogShown = useRef(false);
   const previewTimeout = useRef(null);
-  const {
-    internal: { reducerState },
-  } = useStory();
+  const { reducerState, currentPage } = useStory(
+    ({ state: { currentPage }, internal: { reducerState } }) => ({
+      reducerState,
+      currentPage,
+    })
+  );
 
-  const { pages, story } = reducerState;
+  const { story } = reducerState;
 
   const onUnload = () => {
     localStorage.removeItem(LOCAL_STORAGE_PREFIX.PREVIEW_MARKUP);
@@ -79,7 +82,7 @@ function Preview() {
   const openPreviewLink = useCallback(() => {
     const { content } = getStoryPropsToSave({
       story,
-      pages,
+      pages: [currentPage],
       metadata: {},
       flags: {},
       isPreview: true,
@@ -87,19 +90,17 @@ function Preview() {
 
     let markup = `<!doctype html>${content}`;
 
-    pages.map((page) => {
-      page.elements.map((element) => {
-        if (element?.resource?.src.startsWith('https://images.unsplash.com')) {
-          const src = element.resource.src;
-          const resizedSrc = addQueryArgs(src, {
-            w: PAGE_WIDTH * 2,
-            h: (PAGE_WIDTH * 2) / PAGE_RATIO,
-          });
+    currentPage.elements.map((element) => {
+      if (element?.resource?.src.startsWith('https://images.unsplash.com')) {
+        const src = element.resource.src;
+        const resizedSrc = addQueryArgs(src, {
+          w: PAGE_WIDTH * 2,
+          h: (PAGE_WIDTH * 2) / PAGE_RATIO,
+        });
 
-          const markupSrc = src.replaceAll('&', '&amp;');
-          markup = markup.replace(markupSrc, resizedSrc);
-        }
-      });
+        const markupSrc = src.replaceAll('&', '&amp;');
+        markup = markup.replace(markupSrc, resizedSrc);
+      }
     });
 
     localStorage.setItem(LOCAL_STORAGE_PREFIX.PREVIEW_MARKUP, markup);
@@ -110,11 +111,11 @@ function Preview() {
       () => window.open(getCurrentUrl() + 'preview', PREVIEW_TARGET),
       100
     );
-  }, [story, pages]);
+  }, [story, currentPage]);
 
   const handleOnPreviewClick = useCallback(
     (event) => {
-      const { elements } = pages[0];
+      const { elements } = currentPage;
       let caShowTheDialog = false;
 
       event.preventDefault();
@@ -146,7 +147,7 @@ function Preview() {
         openPreviewLink();
       }
     },
-    [pages, openPreviewLink]
+    [currentPage, openPreviewLink]
   );
 
   const closePreviewDialog = () => {

@@ -52,13 +52,18 @@ const COMMON_MIME_TYPE_MAPPING = {
 };
 
 function Download() {
-  const { adOptions, reducerState } = useStory(
+  const {
+    adOptions,
+    reducerState,
+    currentPage: page,
+  } = useStory(
     ({
       state: {
         story: { adOptions },
+        currentPage,
       },
       internal: { reducerState },
-    }) => ({ adOptions, reducerState })
+    }) => ({ adOptions, reducerState, currentPage })
   );
 
   const { pages, current, selection, story } = reducerState;
@@ -69,7 +74,7 @@ function Download() {
   } = useAdStory();
 
   // Deep clone page object.
-  const currentPage = pages[0] ? JSON.parse(JSON.stringify(pages[0])) : {};
+  const currentPage = page ? JSON.parse(JSON.stringify(page)) : {};
 
   const zipStoryAd = async (storyContent) => {
     let markup = `<!doctype html>${storyContent}`;

@@ -35,6 +35,7 @@ function useLoadStory({ storyId, shouldLoad, restore }) {
   const storedStory = useCallback(() => {
     const sessionData = getDataFromSessionStorage();
 
+    // pages[0] because only one page was stored in session stored.
     if (!sessionData?.pages || !sessionData?.pages[0]) {
       return null;
     }
