@@ -239,9 +239,8 @@ describe('Settings View', () => {
     const LogoToMakeDefault = within(publisherLogosContainer).queryAllByRole(
       'listitem'
     )[1];
-    const confirmCurrentlyNotDefault = within(LogoToMakeDefault).queryAllByText(
-      /^Default/
-    );
+    const confirmCurrentlyNotDefault =
+      within(LogoToMakeDefault).queryAllByText(/^Default/);
     expect(confirmCurrentlyNotDefault.length).toBe(0);
 
     const ContextMenuButton = within(publisherLogosContainer).getByTestId(
@@ -256,9 +255,8 @@ describe('Settings View', () => {
     );
     expect(ContextMenu).toBeDefined();
 
-    const UpdateDefaultLogoButton = within(ContextMenu).getByText(
-      /^Set as Default$/
-    );
+    const UpdateDefaultLogoButton =
+      within(ContextMenu).getByText(/^Set as Default$/);
 
     expect(UpdateDefaultLogoButton).toBeTruthy();
 
@@ -271,9 +269,8 @@ describe('Settings View', () => {
     const FormerDefaultLogo = within(newPublisherLogosContainer).queryAllByRole(
       'listitem'
     )[0];
-    const confirmNotDefault = within(FormerDefaultLogo).queryAllByText(
-      /^Default/
-    );
+    const confirmNotDefault =
+      within(FormerDefaultLogo).queryAllByText(/^Default/);
     expect(confirmNotDefault.length).toBe(0);
 
     const NewLogoToMakeDefault = within(
@@ -351,9 +348,6 @@ describe('Settings View', () => {
 
     await fixture.events.keyboard.press('Enter');
 
-    // Tab into second menu
-    await fixture.events.keyboard.press('Tab');
-
     // we want to select the second list item
     await fixture.events.keyboard.press('ArrowDown');
 
@@ -376,9 +370,8 @@ describe('Settings View', () => {
   it('should update the default logo on click', async () => {
     const settingsView = await fixture.screen.getByTestId('editor-settings');
 
-    const PublisherLogos = within(settingsView).queryAllByTestId(
-      /^publisher-logo-\d+$/
-    );
+    const PublisherLogos =
+      within(settingsView).queryAllByTestId(/^publisher-logo-\d+$/);
     expect(PublisherLogos).toBeTruthy();
 
     // Check that the first publisher logo is set to the default
@@ -399,9 +392,8 @@ describe('Settings View', () => {
     );
     expect(ContextMenu).toBeDefined();
 
-    const UpdateDefaultLogoButton = within(ContextMenu).getByText(
-      'Set as Default'
-    );
+    const UpdateDefaultLogoButton =
+      within(ContextMenu).getByText('Set as Default');
     expect(UpdateDefaultLogoButton).toBeTruthy();
 
     await fixture.events.click(UpdateDefaultLogoButton);
@@ -422,9 +414,8 @@ describe('Settings View', () => {
       'publisher-logos-container'
     );
 
-    const PublisherLogos = within(settingsView).queryAllByTestId(
-      /^publisher-logo-\d+$/
-    );
+    const PublisherLogos =
+      within(settingsView).queryAllByTestId(/^publisher-logo-\d+$/);
     expect(PublisherLogos).toBeTruthy();
 
     // Check that the first publisher logo is set to the default
@@ -450,8 +441,6 @@ describe('Settings View', () => {
     await fixture.events.keyboard.press('tab');
     // activate menu
     await fixture.events.keyboard.press('Enter');
-    //tab into menu
-    await fixture.events.keyboard.press('tab');
 
     // we want to select the first list item
     await fixture.events.keyboard.press('Enter');

@@ -43,6 +43,7 @@ import StoryPropTypes, { AnimationPropType } from '../../../../types';
 import { Row } from '../../../form';
 import { SimplePanel } from '../../panel';
 import { Text, THEME_CONSTANTS } from '../../../../../design-system';
+import { states, styles, useFocusHighlight } from '../../../../app/highlights';
 import EffectPanel, { getEffectName, getEffectDirection } from './effectPanel';
 import { EffectChooserDropdown } from './effectChooserDropdown';
 
@@ -78,6 +79,8 @@ function AnimationPanel({
   updateAnimationState,
 }) {
   const playUpdatedAnimation = useRef(false);
+  const dropdownRef = useRef(null);
+  const highlight = useFocusHighlight(states.ANIMATION, dropdownRef);
 
   const isBackground =
     selectedElements.length === 1 && selectedElements[0].isBackground;
@@ -180,7 +183,9 @@ function AnimationPanel({
   // for an animation type input
   const disabledTypeOptionsMap = useMemo(() => {
     if (selectedElements[0]?.isBackground) {
-      const hasOffset = hasOffsets({ element: selectedElements[0] });
+      const hasOffset =
+        ['media', 'image', 'video', 'gif'].includes(selectedElements[0].type) &&
+        hasOffsets({ element: selectedElements[0] });
       const normalizedScale = progress(selectedElements[0]?.scale || 0, [
         BG_MIN_SCALE,
         BG_MAX_SCALE,
@@ -231,16 +236,23 @@ function AnimationPanel({
       </Row>
     </SimplePanel>
   ) : (
-    <SimplePanel name="animation" title={__('Animation', 'web-stories')}>
+    <SimplePanel
+      name="animation"
+      title={__('Animation', 'web-stories')}
+      css={highlight?.showEffect && styles.FLASH}
+      isPersistable={!highlight}
+    >
       <GroupWrapper hasAnimation={selectedEffectTitle}>
         <StyledRow>
           <EffectChooserDropdown
+            ref={dropdownRef}
             onAnimationSelected={handleAddOrUpdateElementEffect}
             onNoEffectSelected={handleRemoveEffect}
             isBackgroundEffects={isBackground}
             disabledTypeOptionsMap={disabledTypeOptionsMap}
             direction={getEffectDirection(updatedAnimations[0])}
             selectedEffectType={updatedAnimations[0]?.type}
+            selectButtonStylesOverride={highlight?.focus && styles.OUTLINE}
           />
         </StyledRow>
         {updatedAnimations[0] && (

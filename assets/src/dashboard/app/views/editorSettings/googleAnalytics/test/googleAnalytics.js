@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { fireEvent } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 
 /**
  * Internal dependencies
@@ -27,7 +27,7 @@ import GoogleAnalyticsSettings, { TEXT } from '..';
 describe('Editor Settings: Google Analytics <GoogleAnalytics />', function () {
   let googleAnalyticsId;
   let mockUpdate;
-  const defaultsiteKitStatus = {
+  const defaultSiteKitStatus = {
     installed: false,
     analyticsActive: false,
     active: false,
@@ -44,80 +44,80 @@ describe('Editor Settings: Google Analytics <GoogleAnalytics />', function () {
     googleAnalyticsId = '';
   });
 
-  it('should render google analytics input and helper text by default', function () {
-    const { getByRole, getByText } = renderWithProviders(
+  it('should render Google Analytics input and helper text by default', function () {
+    renderWithProviders(
       <GoogleAnalyticsSettings
         googleAnalyticsId={googleAnalyticsId}
         handleUpdate={mockUpdate}
-        siteKitStatus={{ ...defaultsiteKitStatus }}
+        siteKitStatus={defaultSiteKitStatus}
       />
     );
 
-    const input = getByRole('textbox');
+    const input = screen.getByRole('textbox');
     expect(input).toBeInTheDocument();
     expect(input).toBeEnabled();
 
-    const sectionHeader = getByText(TEXT.SECTION_HEADING);
+    const sectionHeader = screen.getByText(TEXT.SECTION_HEADING);
     expect(sectionHeader).toBeInTheDocument();
   });
 
-  it('should render a visually hidden label for google analytics input', function () {
-    const { getByLabelText } = renderWithProviders(
+  it('should render a visually hidden label for Google Analytics input', function () {
+    renderWithProviders(
       <GoogleAnalyticsSettings
         googleAnalyticsId={googleAnalyticsId}
         handleUpdate={mockUpdate}
-        siteKitStatus={{ ...defaultsiteKitStatus }}
+        siteKitStatus={defaultSiteKitStatus}
       />
     );
 
-    const label = getByLabelText(TEXT.ARIA_LABEL);
+    const label = screen.getByLabelText(TEXT.ARIA_LABEL);
     expect(label).toBeInTheDocument();
   });
 
-  it('should not allow the input to be active when analytics module is active', function () {
-    const { getByRole } = renderWithProviders(
+  it('should not display any input field when analytics module is active', function () {
+    renderWithProviders(
       <GoogleAnalyticsSettings
         googleAnalyticsId={googleAnalyticsId}
         handleUpdate={mockUpdate}
         siteKitStatus={{
-          ...defaultsiteKitStatus,
+          ...defaultSiteKitStatus,
           active: true,
           analyticsActive: true,
         }}
       />
     );
 
-    const input = getByRole('textbox');
-    expect(input).toBeDisabled();
+    const input = screen.queryByRole('textbox');
+    expect(input).not.toBeInTheDocument();
   });
 
-  it('should allow the input to be active when site kit is installed but analytics module is not active', function () {
-    const { getByRole } = renderWithProviders(
+  it('should allow the input to be active when Site Kit is installed but analytics module is not active', function () {
+    renderWithProviders(
       <GoogleAnalyticsSettings
         googleAnalyticsId={googleAnalyticsId}
         handleUpdate={mockUpdate}
         siteKitStatus={{
-          ...defaultsiteKitStatus,
+          ...defaultSiteKitStatus,
           active: false,
           installed: true,
         }}
       />
     );
 
-    const input = getByRole('textbox');
+    const input = screen.getByRole('textbox');
     expect(input).toBeEnabled();
   });
 
   it('should call mockUpdate when enter is keyed on input', function () {
-    const { getByRole, rerender } = renderWithProviders(
+    const { rerender } = renderWithProviders(
       <GoogleAnalyticsSettings
         googleAnalyticsId={googleAnalyticsId}
         handleUpdate={mockUpdate}
-        siteKitStatus={{ ...defaultsiteKitStatus }}
+        siteKitStatus={defaultSiteKitStatus}
       />
     );
 
-    const input = getByRole('textbox');
+    const input = screen.getByRole('textbox');
 
     fireEvent.change(input, { target: { value: 'UA-098754-33' } });
     fireEvent.keyDown(input, { key: 'Enter', keyCode: 13 });
@@ -127,7 +127,7 @@ describe('Editor Settings: Google Analytics <GoogleAnalytics />', function () {
       <GoogleAnalyticsSettings
         googleAnalyticsId={googleAnalyticsId}
         handleUpdate={mockUpdate}
-        siteKitStatus={{ ...defaultsiteKitStatus }}
+        siteKitStatus={defaultSiteKitStatus}
       />
     );
 
@@ -141,7 +141,7 @@ describe('Editor Settings: Google Analytics <GoogleAnalytics />', function () {
       <GoogleAnalyticsSettings
         googleAnalyticsId={googleAnalyticsId}
         handleUpdate={mockUpdate}
-        siteKitStatus={{ ...defaultsiteKitStatus }}
+        siteKitStatus={defaultSiteKitStatus}
       />
     );
 
@@ -155,16 +155,16 @@ describe('Editor Settings: Google Analytics <GoogleAnalytics />', function () {
   });
 
   it('should call mockUpdate when the save button is clicked', function () {
-    const { getByRole, rerender } = renderWithProviders(
+    const { rerender } = renderWithProviders(
       <GoogleAnalyticsSettings
         googleAnalyticsId={googleAnalyticsId}
         handleUpdate={mockUpdate}
-        siteKitStatus={{ ...defaultsiteKitStatus }}
+        siteKitStatus={defaultSiteKitStatus}
       />
     );
 
-    const input = getByRole('textbox');
-    const button = getByRole('button');
+    const input = screen.getByRole('textbox');
+    const button = screen.getByRole('button');
 
     fireEvent.change(input, { target: { value: 'UA-098754-33' } });
 
@@ -175,7 +175,7 @@ describe('Editor Settings: Google Analytics <GoogleAnalytics />', function () {
       <GoogleAnalyticsSettings
         googleAnalyticsId={googleAnalyticsId}
         handleUpdate={mockUpdate}
-        siteKitStatus={{ ...defaultsiteKitStatus }}
+        siteKitStatus={defaultSiteKitStatus}
       />
     );
 
@@ -190,7 +190,7 @@ describe('Editor Settings: Google Analytics <GoogleAnalytics />', function () {
       <GoogleAnalyticsSettings
         googleAnalyticsId={googleAnalyticsId}
         handleUpdate={mockUpdate}
-        siteKitStatus={{ ...defaultsiteKitStatus }}
+        siteKitStatus={defaultSiteKitStatus}
       />
     );
 

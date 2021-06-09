@@ -15,15 +15,6 @@
  */
 
 /**
- * WordPress dependencies
- */
-import {
-  activatePlugin,
-  deactivatePlugin,
-  getEditedPostContent,
-} from '@wordpress/e2e-test-utils';
-
-/**
  * External dependencies
  */
 import {
@@ -31,9 +22,14 @@ import {
   addRequestInterception,
   publishPost,
   insertStoryTitle,
+  withPlugin,
+  publishStory,
+  getEditedPostContent,
 } from '@web-stories-wp/e2e-test-utils';
 
-describe('Publishing Flow', () => {
+// Disable for https://github.com/google/web-stories-wp/issues/6238
+// eslint-disable-next-line jest/no-disabled-tests
+describe.skip('Publishing Flow', () => {
   let stopRequestInterception;
 
   beforeAll(async () => {
@@ -60,10 +56,7 @@ describe('Publishing Flow', () => {
 
     await insertStoryTitle('Publishing Flow Test');
 
-    // Publish story.
-    await expect(page).toClick('button', { text: 'Publish' });
-
-    await expect(page).toMatchElement('button', { text: 'Dismiss' });
+    await publishStory(false);
 
     // Create new post and embed story.
     await expect(page).toClick('a', { text: 'Add to new post' });
@@ -110,31 +103,23 @@ describe('Publishing Flow', () => {
     expect(postPermalink).not.toBeNull();
     expect(postPermalink).toStrictEqual(expect.any(String));
 
-    await Promise.all([page.goto(postPermalink), page.waitForNavigation()]);
+    await page.goto(postPermalink, {
+      waitUntil: 'networkidle2',
+    });
 
-    await page.waitForSelector('amp-story-player');
     await expect(page).toMatchElement('amp-story-player');
     await expect(page).toMatch('Publishing Flow Test');
   });
 
   describe('Classic Editor', () => {
-    beforeAll(async () => {
-      await activatePlugin('classic-editor');
-    });
-
-    afterAll(async () => {
-      await deactivatePlugin('classic-editor');
-    });
+    withPlugin('classic-editor');
 
     it('should guide me towards creating a new post to embed my story', async () => {
       await createNewStory();
 
       await insertStoryTitle('Publishing Flow Test (Shortcode)');
 
-      // Publish story.
-      await expect(page).toClick('button', { text: 'Publish' });
-
-      await expect(page).toMatchElement('button', { text: 'Dismiss' });
+      await publishStory(false);
 
       // Create new post and embed story.
       await expect(page).toClick('a', { text: 'Add to new post' });
@@ -163,7 +148,9 @@ describe('Publishing Flow', () => {
       expect(postPermalink).not.toBeNull();
       expect(postPermalink).toStrictEqual(expect.any(String));
 
-      await Promise.all([page.goto(postPermalink), page.waitForNavigation()]);
+      await page.goto(postPermalink, {
+        waitUntil: 'networkidle2',
+      });
 
       await page.waitForSelector('amp-story-player');
       await expect(page).toMatchElement('amp-story-player');

@@ -95,7 +95,9 @@ export default function useContextValueProvider() {
       await Promise.all(
         [...files].map(async (file) => {
           if (isValidFile(file)) {
-            const mediaData = await getResourceFromLocalFile(file);
+            const { resource: mediaData } = await getResourceFromLocalFile(
+              file
+            );
             mediaData.local = false; // this disables the UploadingIndicator
             mediaData.id = uuidv4();
             mediaData.file = file;

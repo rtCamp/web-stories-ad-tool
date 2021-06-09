@@ -17,12 +17,25 @@
 /**
  * External dependencies
  */
-import { percySnapshot } from '@percy/puppeteer';
+import percySnapshot from '@percy/puppeteer';
 import {
   createNewStory,
-  deactivateRTL,
-  activateRTL,
+  visitSettings,
+  previewStory,
+  withRTL,
 } from '@web-stories-wp/e2e-test-utils';
+
+async function toggleVideoOptimization() {
+  await visitSettings();
+  const selector = '[data-testid="media-optimization-settings-checkbox"]';
+  await page.waitForSelector(selector);
+  // Clicking will only act on the first element.
+  await expect(page).toClick(selector);
+  // Await REST API request.
+  await page.waitForResponse((response) =>
+    response.url().includes('web-stories/v1/users/me')
+  );
+}
 
 describe('Story Editor', () => {
   it('should be able to create a blank story', async () => {
@@ -33,13 +46,51 @@ describe('Story Editor', () => {
     await percySnapshot(page, 'Empty Editor');
   });
 
-  it('should be able to create a blank story on RTL', async () => {
-    await activateRTL();
+  describe('RTL', () => {
+    withRTL();
+
+    it('should be able to create a blank story on RTL', async () => {
+      await createNewStory();
+
+      await expect(page).toMatchElement('input[placeholder="Add title"]');
+
+      await percySnapshot(page, 'Empty Editor on RTL');
+    });
+  });
+
+  it('should have cross-origin isolation enabled', async () => {
     await createNewStory();
 
-    await expect(page).toMatchElement('input[placeholder="Add title"]');
+    const crossOriginIsolated = await page.evaluate(
+      () => window.crossOriginIsolated
+    );
+    expect(crossOriginIsolated).toBeTrue();
+  });
 
-    await percySnapshot(page, 'Empty Editor on RTL');
-    await deactivateRTL();
+  it('should have cross-origin isolation disabled', async () => {
+    await toggleVideoOptimization();
+    await createNewStory();
+
+    const crossOriginIsolated = await page.evaluate(
+      () => window.crossOriginIsolated
+    );
+    expect(crossOriginIsolated).toBeFalse();
+    await toggleVideoOptimization();
+  });
+
+  it('should preview story with development mode', async () => {
+    await createNewStory();
+
+    const editorPage = page;
+    const previewPage = await previewStory(editorPage);
+
+    await expect(previewPage).toMatch(/Preview/i);
+    await expect(previewPage).toMatch(/Debug/i);
+    await expect(previewPage).toMatch(/Add device/i);
+
+    await percySnapshot(previewPage, 'Preview with development mode');
+
+    await editorPage.bringToFront();
+    await previewPage.close();
   });
 });

@@ -31,7 +31,11 @@ import stripHTML from '../../../../utils/stripHTML';
 import clamp from '../../../../utils/clamp';
 import { MULTIPLE_VALUE, MULTIPLE_DISPLAY_VALUE } from '../../../../constants';
 import { Row, usePresubmitHandler } from '../../../form';
-import { getCommonValue } from '../../shared';
+import {
+  focusStyle,
+  getCommonValue,
+  inputContainerStyleOverride,
+} from '../../shared';
 import useRichTextFormatting from './useRichTextFormatting';
 import getFontWeights from './getFontWeights';
 import FontPicker from './fontPicker';
@@ -56,7 +60,12 @@ const StyledDropDown = styled(DropDown)`
   background-color: transparent;
 `;
 
-function FontControls({ selectedElements, pushUpdate }) {
+function FontControls({
+  selectedElements,
+  pushUpdate,
+  fontDropdownRef,
+  highlightStylesOverride,
+}) {
   const fontFamily = getCommonValue(
     selectedElements,
     ({ font }) => font?.family
@@ -67,7 +76,11 @@ function FontControls({ selectedElements, pushUpdate }) {
     handlers: { handleSelectFontWeight },
   } = useRichTextFormatting(selectedElements, pushUpdate);
 
-  const { fonts = [], maybeEnqueueFontStyle, getFontByName } = useFont(
+  const {
+    fonts = [],
+    maybeEnqueueFontStyle,
+    getFontByName,
+  } = useFont(
     ({
       actions: { maybeEnqueueFontStyle, getFontByName },
       state: { fonts },
@@ -78,10 +91,10 @@ function FontControls({ selectedElements, pushUpdate }) {
     })
   );
 
-  const fontWeights = useMemo(() => getFontWeights(getFontByName(fontFamily)), [
-    getFontByName,
-    fontFamily,
-  ]);
+  const fontWeights = useMemo(
+    () => getFontWeights(getFontByName(fontFamily)),
+    [getFontByName, fontFamily]
+  );
   const fontStyle = isItalic ? 'italic' : 'normal';
 
   const handleFontWeightPickerChange = useCallback(
@@ -115,6 +128,8 @@ function FontControls({ selectedElements, pushUpdate }) {
           <FontPicker
             selectedElements={selectedElements}
             pushUpdate={pushUpdate}
+            fontDropdownRef={fontDropdownRef}
+            highlightStylesOverride={highlightStylesOverride}
           />
         </Row>
       )}
@@ -127,6 +142,7 @@ function FontControls({ selectedElements, pushUpdate }) {
               options={fontWeights}
               selectedValue={MULTIPLE_VALUE === fontWeight ? '' : fontWeight}
               onMenuItemClick={handleFontWeightPickerChange}
+              selectButtonStylesOverride={focusStyle}
             />
             <Space />
           </>
@@ -142,6 +158,7 @@ function FontControls({ selectedElements, pushUpdate }) {
           placeholder={
             MULTIPLE_VALUE === fontSize ? MULTIPLE_DISPLAY_VALUE : null
           }
+          containerStyleOverride={inputContainerStyleOverride}
         />
       </Row>
     </>
@@ -151,6 +168,8 @@ function FontControls({ selectedElements, pushUpdate }) {
 FontControls.propTypes = {
   selectedElements: PropTypes.array.isRequired,
   pushUpdate: PropTypes.func.isRequired,
+  fontDropdownRef: PropTypes.object,
+  highlightStylesOverride: PropTypes.array,
 };
 
 export default FontControls;

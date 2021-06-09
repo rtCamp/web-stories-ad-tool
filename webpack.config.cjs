@@ -134,7 +134,10 @@ const sharedConfig = {
     ].filter(Boolean),
   },
   plugins: [
-    process.env.BUNDLE_ANALYZER && new BundleAnalyzerPlugin(),
+    process.env.BUNDLE_ANALYZER &&
+      new BundleAnalyzerPlugin({
+        analyzerPort: 'auto',
+      }),
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].css',
     }),
@@ -144,6 +147,7 @@ const sharedConfig = {
     new webpack.EnvironmentPlugin({
       DISABLE_PREVENT: false,
       DISABLE_ERROR_BOUNDARIES: false,
+      DISABLE_QUICK_TIPS: false,
     }),
   ].filter(Boolean),
   optimization: {

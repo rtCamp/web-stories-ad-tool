@@ -17,10 +17,11 @@
 /**
  * External dependencies
  */
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useVirtual } from 'react-virtual';
 import { __ } from '@web-stories-wp/i18n';
+import { trackEvent } from '@web-stories-wp/tracking';
 
 /**
  * Internal dependencies
@@ -34,25 +35,49 @@ import {
   PANEL_GRID_ROW_GAP,
   VirtualizedWrapper,
 } from '../shared/virtualizedPanelGrid';
+import { duplicatePage } from '../../../../elements';
+import { useStory } from '../../../../app/story';
+import { useSnackbar } from '../../../../../design-system';
 import PageTemplate from './pageTemplate';
-import ConfirmPageTemplateDialog from './confirmPageTemplateDialog';
-import useTemplateActions from './useTemplateActions';
 
-function TemplateList({ pages, parentRef, pageSize }) {
+const THRESHOLD = 6;
+function TemplateList({
+  pages,
+  parentRef,
+  pageSize,
+  handleDelete,
+  fetchTemplates,
+  ...rest
+}) {
+  const { addPage } = useStory(({ actions }) => ({
+    addPage: actions.addPage,
+  }));
+  const { showSnackbar } = useSnackbar();
+
   const containerRef = useRef();
   const pageRefs = useRef({});
 
   const pageIds = useMemo(() => pages.map((page) => page.id), [pages]);
 
-  const {
-    isConfirming,
-    handleCloseDialog,
-    handleConfirmDialog,
-    handlePageClick,
-  } = useTemplateActions();
+  const handlePageClick = useCallback(
+    (page) => {
+      const duplicatedPage = duplicatePage(page);
+      addPage({ page: duplicatedPage });
+      trackEvent('insert_page_template', {
+        name: page.title,
+      });
+      showSnackbar({
+        message: __('Page template added.', 'web-stories'),
+        dismissable: true,
+      });
+    },
+    [addPage, showSnackbar]
+  );
+
+  const rowsTotal = useMemo(() => Math.ceil((pages || []).length / 2), [pages]);
 
   const rowVirtualizer = useVirtual({
-    size: Math.ceil((pages || []).length / 2),
+    size: rowsTotal,
     parentRef,
     estimateSize: useCallback(
       () => pageSize.containerHeight + PANEL_GRID_ROW_GAP,
@@ -61,13 +86,26 @@ function TemplateList({ pages, parentRef, pageSize }) {
     overscan: 4,
   });
 
+  useEffect(() => {
+    if (
+      rowVirtualizer.virtualItems.length &&
+      rowsTotal &&
+      rowsTotal - THRESHOLD <
+        rowVirtualizer.virtualItems[rowVirtualizer.virtualItems.length - 1]
+          .index
+    ) {
+      fetchTemplates?.();
+    }
+  }, [rowVirtualizer, rowsTotal, fetchTemplates]);
+
   const columnVirtualizer = useVirtual({
     horizontal: true,
     size: 2,
     parentRef,
-    estimateSize: useCallback(() => pageSize.width + PANEL_GRID_ROW_GAP, [
-      pageSize.width,
-    ]),
+    estimateSize: useCallback(
+      () => pageSize.width + PANEL_GRID_ROW_GAP,
+      [pageSize.width]
+    ),
     overscan: 0,
   });
 
@@ -84,14 +122,16 @@ function TemplateList({ pages, parentRef, pageSize }) {
   });
 
   const handleKeyboardPageClick = useCallback(
-    ({ key }, page) => {
-      if (key === 'Enter') {
-        if (isGridFocused) {
+    ({ code }, page) => {
+      if (isGridFocused) {
+        if (code === 'Enter') {
           handlePageClick(page);
+        } else if (code === 'Space') {
+          handleDelete?.(page);
         }
       }
     },
-    [isGridFocused, handlePageClick]
+    [isGridFocused, handlePageClick, handleDelete]
   );
 
   return (
@@ -139,17 +179,13 @@ function TemplateList({ pages, parentRef, pageSize }) {
                   onFocus={() => handleGridItemFocus(page.id)}
                   onClick={() => handlePageClick(page)}
                   onKeyUp={(event) => handleKeyboardPageClick(event, page)}
+                  handleDelete={handleDelete}
+                  {...rest}
                 />
               );
             })
           )}
         </VirtualizedContainer>
-        {isConfirming && (
-          <ConfirmPageTemplateDialog
-            onConfirm={handleConfirmDialog}
-            onClose={handleCloseDialog}
-          />
-        )}
       </VirtualizedWrapper>
     </UnitsProvider>
   );
@@ -163,6 +199,8 @@ TemplateList.propTypes = {
     })
   ),
   pageSize: PropTypes.object.isRequired,
+  handleDelete: PropTypes.func,
+  fetchTemplates: PropTypes.func,
 };
 
 export default TemplateList;

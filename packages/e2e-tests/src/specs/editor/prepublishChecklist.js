@@ -17,32 +17,35 @@
 /**
  * External dependencies
  */
-import { createNewStory } from '@web-stories-wp/e2e-test-utils';
+import { createNewStory, publishStory } from '@web-stories-wp/e2e-test-utils';
+import percySnapshot from '@percy/puppeteer';
 
-// todo enable tests when feature flag is on
-// eslint-disable-next-line jest/no-disabled-tests
-describe.skip('prepublish checklist', () => {
+describe('Pre-Publish Checklist', () => {
   it('should show the checklist', async () => {
     await createNewStory();
-    await expect(page).toMatchElement('#inspector-tab-prepublish[hidden=""]');
     await expect(page).toClick('li', { text: 'Checklist' });
     await expect(page).not.toMatchElement(
       '#inspector-tab-prepublish[hidden=""]'
     );
     await expect(page).toMatchElement('#inspector-tab-prepublish');
   });
-  it('should show that there is no cover attached to the story', async () => {
+
+  it('should show that there is no poster attached to the story', async () => {
     await createNewStory();
     await expect(page).toClick('[data-testid^="mediaElement"]');
+    await expect(page).toMatchElement('[data-testid="imageElement"]');
+
+    await publishStory();
+
+    await page.reload();
+    await expect(page).toMatchElement('input[placeholder="Add title"]');
+
     await expect(page).toClick('li', { text: 'Checklist' });
-    const missingStoryCover = await page.$$eval(
-      '#inspector-tab-prepublish > section > div',
-      (elements) => {
-        return elements.some((el) =>
-          el.textContent.includes('Missing story cover image')
-        );
-      }
+    await expect(page).not.toMatchElement(
+      '#inspector-tab-prepublish[hidden=""]'
     );
-    expect(missingStoryCover).toBeTrue();
+    await expect(page).toMatchElement('#inspector-tab-prepublish');
+    await expect(page).toMatch('Add poster image');
+    await percySnapshot(page, 'Prepublish checklist');
   });
 });

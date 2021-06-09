@@ -23,7 +23,7 @@ import PropTypes from 'prop-types';
  * Internal dependencies
  */
 import { AnimationProps } from '../animation/parts/types';
-import { OverlayType } from './utils/backgroundOverlay';
+import { OverlayType } from './utils/overlay';
 import { BACKGROUND_TEXT_MODE, MULTIPLE_VALUE } from './constants';
 
 export const HexPropType = PropTypes.shape({
@@ -60,7 +60,7 @@ export const PatternPropType = PropTypes.shape({
   }),
   size: PropTypes.shape({
     w: PropTypes.number.isRequired,
-    y: PropTypes.number.isRequired,
+    h: PropTypes.number.isRequired,
   }),
 });
 
@@ -111,7 +111,7 @@ StoryPropTypes.page = PropTypes.shape({
   id: PropTypes.string.isRequired,
   animations: PropTypes.arrayOf(PropTypes.shape(AnimationProps)),
   elements: PropTypes.arrayOf(PropTypes.shape(StoryPropTypes.element)),
-  backgroundOverlay: PropTypes.oneOf(Object.values(OverlayType)),
+  overlay: PropTypes.oneOf(Object.values(OverlayType)),
 });
 
 StoryPropTypes.resourceSize = PropTypes.shape({

@@ -18,6 +18,7 @@
  * Internal dependencies
  */
 import { Container } from './container';
+import { QuickActionMenu } from './quickActionMenu';
 
 /**
  * The editor's canvas. Includes: display, frames, editor layers,
@@ -57,6 +58,14 @@ export class Canvas extends Container {
       this.getAllByRole('group', { name: 'Story canvas header' })[0],
       'header',
       Header
+    );
+  }
+
+  get quickActionMenu() {
+    return this._get(
+      this.getByRole('menu'),
+      'quickActionMenu',
+      QuickActionMenu
     );
   }
 }

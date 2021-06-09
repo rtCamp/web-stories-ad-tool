@@ -40,13 +40,13 @@ export const basicAnimationProps = {
   duration: {
     label: __('Duration', 'web-stories'),
     type: FIELD_TYPES.NUMBER,
-    unit: _x('ms', 'Time in milliseconds ', 'web-stories'),
+    unit: _x('ms', 'Time in milliseconds', 'web-stories'),
     defaultValue: 1000,
   },
   delay: {
     label: __('Delay', 'web-stories'),
     type: FIELD_TYPES.NUMBER,
-    unit: _x('ms', 'Time in milliseconds ', 'web-stories'),
+    unit: _x('ms', 'Time in milliseconds', 'web-stories'),
     defaultValue: 0,
   },
 };
@@ -56,7 +56,7 @@ export default {
     type: FIELD_TYPES.HIDDEN,
   },
   type: {
-    label: 'Animation Type',
+    label: __('Animation Type', 'web-stories'),
     type: FIELD_TYPES.DROPDOWN,
     values: [
       ...Object.values(ANIMATION_TYPES),
@@ -70,7 +70,7 @@ export default {
     defaultValue: 'normal',
   },
   easingPreset: {
-    label: 'Easing Presets',
+    label: __('Easing Presets', 'web-stories'),
     type: FIELD_TYPES.DROPDOWN,
     values: ['Use Default', ...Object.keys(BEZIER)],
     defaultValue: Object.keys(BEZIER)[0],
@@ -84,7 +84,10 @@ export default {
     defaultValue: 'forwards',
   },
   iterations: {
-    tooltip: 'Valid values are numerical or the word "infinity"',
+    tooltip: __(
+      'Valid values are numerical or the word "infinity"',
+      'web-stories'
+    ),
     type: FIELD_TYPES.TEXT,
   },
 };

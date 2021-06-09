@@ -13,12 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Internal dependencies
  */
+import { styles, useHighlights } from '../../app/highlights';
 import useLibrary from './useLibrary';
 import { getTabId } from './panes/shared';
+import {
+  MEDIA,
+  MEDIA3P,
+  SHAPES,
+  TEXT,
+  ELEMS,
+  PAGE_TEMPLATES,
+} from './constants';
+import { MediaPane } from './panes/media/local';
+import { Media3pPane } from './panes/media/media3p';
+import { ShapesPane } from './panes/shapes';
+import { TextPane } from './panes/text';
+import { ElementsPane } from './panes/elements';
+import { PageTemplatesPane } from './panes/pageTemplates';
 
 function LibraryPanes() {
   const { tab, tabs } = useLibrary((state) => ({
@@ -26,12 +40,51 @@ function LibraryPanes() {
     tabs: state.data.tabs,
   }));
 
-  return tabs.map(
-    ({ id, Pane }) =>
-      Pane && (
-        <Pane key={id} isActive={id === tab} aria-labelledby={getTabId(id)} />
-      )
-  );
+  const highlighted = useHighlights(({ ...highlighted }) => highlighted);
+
+  const mediaHighlights = highlighted[MEDIA.id];
+  const media3pHighlights = highlighted[MEDIA3P.id];
+  const textHighlights = highlighted[TEXT.id];
+
+  return tabs.map(({ id }) => {
+    const paneProps = {
+      key: id,
+      isActive: id === tab,
+      'aria-labelledby': getTabId(id),
+    };
+
+    switch (id) {
+      case MEDIA.id:
+        return (
+          <MediaPane
+            css={mediaHighlights?.showEffect && styles.FLASH}
+            {...paneProps}
+          />
+        );
+      case MEDIA3P.id:
+        return (
+          <Media3pPane
+            {...paneProps}
+            css={media3pHighlights?.showEffect && styles.FLASH}
+          />
+        );
+      case SHAPES.id:
+        return <ShapesPane {...paneProps} />;
+      case TEXT.id:
+        return (
+          <TextPane
+            css={textHighlights?.showEffect && styles.FLASH}
+            {...paneProps}
+          />
+        );
+      case ELEMS.id:
+        return <ElementsPane {...paneProps} />;
+      case PAGE_TEMPLATES.id:
+        return <PageTemplatesPane {...paneProps} />;
+      default:
+        return null;
+    }
+  });
 }
 
 export default LibraryPanes;

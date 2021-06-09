@@ -28,7 +28,6 @@ import { useCallback, useEffect, useRef } from 'react';
  * Please only provide users with just a simple, concise message.
  *
  * @param {?string} politeness Optional. Politeness. Either 'polite', or 'assertive'. Default 'polite'.
- *
  * @return {Function} Function to speak a message.
  */
 function useLiveRegion(politeness = 'polite') {
@@ -86,17 +85,26 @@ function useLiveRegion(politeness = 'polite') {
 
   useEffect(ensureContainerExists, [ensureContainerExists]);
 
-  const speak = (message) => {
-    ensureContainerExists();
+  /**
+   * Add message to aria live region so it can be announced by
+   * a screen reader.
+   */
+  const speak = useCallback(
+    (message) => {
+      ensureContainerExists();
 
-    // Clear any existing messages.
-    const regions = document.querySelectorAll('.web-stories-aria-live-region');
-    for (const region of regions) {
-      region.textContent = '';
-    }
+      // Clear any existing messages.
+      const regions = document.querySelectorAll(
+        '.web-stories-aria-live-region'
+      );
+      for (const region of regions) {
+        region.textContent = '';
+      }
 
-    elementRef.current.textContent = message;
-  };
+      elementRef.current.textContent = message;
+    },
+    [ensureContainerExists]
+  );
 
   return speak;
 }

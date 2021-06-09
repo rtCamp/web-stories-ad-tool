@@ -45,7 +45,9 @@ function usePersistentAssets({ addLocalFiles, media }) {
             ['image', 'video'].includes(element?.type) &&
             element.resource.title === fileItem.title
           ) {
-            const mediaData = await getResourceFromLocalFile(fileItem.file);
+            const { resource: mediaData } = await getResourceFromLocalFile(
+              fileItem.file
+            );
             const resourceId = element.resource.id;
             const mediaResource = {
               id: resourceId,

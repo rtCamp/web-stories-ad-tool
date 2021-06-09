@@ -108,7 +108,9 @@ function OptimisationMessage() {
       const index = mediaElements.findIndex((mediaItem) => mediaItem.id === id);
       const currentMediaData = { ...mediaElements[index] };
 
-      const mediaData = await getResourceFromLocalFile(optimizedFile);
+      const { resource: mediaData } = await getResourceFromLocalFile(
+        optimizedFile
+      );
       mediaData.local = false;
       mediaData.id = currentMediaData.id;
       mediaData.file = optimizedFile;

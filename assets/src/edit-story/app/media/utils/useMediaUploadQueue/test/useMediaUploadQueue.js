@@ -45,6 +45,7 @@ const mockAttachment = {
     width: 1080,
     height: 720,
   },
+  source_url: 'http://localhost:9876/__static__/asteroid.ogg',
   title: {
     raw: 'Title',
   },
@@ -122,6 +123,7 @@ describe('useMediaUploadQueue', () => {
 
     await waitForNextUpdate();
 
+    expect(result.current.state.failures).toHaveLength(0);
     expect(result.current.state.processed).toHaveLength(1);
 
     act(() =>
