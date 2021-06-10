@@ -17,7 +17,11 @@
 		}
 
 		iframe {
-			width: 100%;
+			/**
+			* This is a hack to make the local video appear in preview even after the error.
+			* We will set it back to 100%
+			**/
+			width: 99.7%;
 			height: 100%;
 			border: none;
 		}
@@ -172,10 +176,14 @@
     },
 
     loadPreview: function() {
-      this.iframe.setAttribute( 'id', 'iframe' );
-      this.frameContainer.appendChild( this.iframe );
+      const iframe = this.iframe;
+      iframe.setAttribute( 'id', 'iframe' );
+      this.frameContainer.appendChild( iframe );
       this.frameContainer.appendChild( this.adBadge );
       this.adBadge.classList.remove( 'hidden' );
+      setTimeout( function() {
+        iframe.style.width = '100%';
+      }, 1000 );
     },
 
     isAdBlockerEnabled: function() {
