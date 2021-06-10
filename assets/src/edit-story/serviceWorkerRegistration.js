@@ -34,7 +34,9 @@ export default function registerServiceWorker() {
        * this message on the very first service worker installation, only on update.
        */
       if (event.isUpdate) {
-        if (confirm(`New app update is available!. Click OK to refresh`)) {
+        if (
+          confirm(`New app update is available, would you like to refresh?`)
+        ) {
           window.location.reload();
         }
       }
