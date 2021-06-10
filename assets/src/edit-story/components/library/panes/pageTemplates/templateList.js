@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { useCallback, useMemo, useRef, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useVirtual } from 'react-virtual';
 import { __ } from '@web-stories-wp/i18n';
@@ -30,14 +30,13 @@ import { UnitsProvider } from '../../../../units';
 import { PANE_PADDING } from '../shared';
 import {
   getVirtualizedItemIndex,
+  PANEL_GRID_ROW_GAP,
   useVirtualizedGridNavigation,
   VirtualizedContainer,
-  PANEL_GRID_ROW_GAP,
   VirtualizedWrapper,
 } from '../shared/virtualizedPanelGrid';
 import { duplicatePage } from '../../../../elements';
 import { useStory } from '../../../../app/story';
-import { useSnackbar } from '../../../../../design-system';
 import PageTemplate from './pageTemplate';
 
 const THRESHOLD = 6;
@@ -52,7 +51,6 @@ function TemplateList({
   const { addPage } = useStory(({ actions }) => ({
     addPage: actions.addPage,
   }));
-  const { showSnackbar } = useSnackbar();
 
   const containerRef = useRef();
   const pageRefs = useRef({});
@@ -66,12 +64,8 @@ function TemplateList({
       trackEvent('insert_page_template', {
         name: page.title,
       });
-      showSnackbar({
-        message: __('Page template added.', 'web-stories'),
-        dismissable: true,
-      });
     },
-    [addPage, showSnackbar]
+    [addPage]
   );
 
   const rowsTotal = useMemo(() => Math.ceil((pages || []).length / 2), [pages]);
