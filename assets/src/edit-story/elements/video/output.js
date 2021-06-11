@@ -42,8 +42,15 @@ function VideoOutput({ element, box }) {
     loop: loop ? 'loop' : undefined,
   };
 
+  const hasLocalURL = sourceProps.src.startsWith('blob:');
+
   return (
-    <MediaOutput element={element} box={box} data-leaf-element="true">
+    <MediaOutput
+      element={element}
+      box={box}
+      data-leaf-element="true"
+      data-video-has-local-url={hasLocalURL}
+    >
       <amp-video {...videoProps} id={`el-${element.id}-media`}>
         <source {...sourceProps} />
         {tracks &&
