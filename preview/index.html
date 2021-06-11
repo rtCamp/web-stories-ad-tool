@@ -20,6 +20,7 @@
 			width: 100%;
 			height: 100%;
 			border: none;
+			opacity: 0;
 		}
 
 		.preview-container {
@@ -34,6 +35,15 @@
 			height: 100vh;
 			max-width: 630px;
 			position: relative;
+		}
+
+		.loading-text {
+			display: flex;
+			color: white;
+			font-size: 30px;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
 		}
 
 		@media screen and ( min-width: 960px ) {
@@ -122,7 +132,11 @@
 </head>
 <body>
 <div id="preview-container" class="preview-container">
-	<div id="frame-container" class="frame-container"></div>
+	<div id="frame-container" class="frame-container">
+		<div class="loading-text" id="loading-text">
+			Generating Preview...
+		</div>
+	</div>
 </div>
 <div class="overlay">
 	<div class="overlay__icon"></div>
@@ -150,13 +164,17 @@
 </aside>
 
 <script>
-  const Preview = {
+  var Preview = {
     init: function() {
       this.previewContainer = document.getElementById( 'preview-container' );
       this.frameContainer = document.getElementById( 'frame-container' );
       this.adBadge = document.getElementById( 'ad-badge' );
+      this.loadingText = document.getElementById( 'loading-text' );
       this.iframe = document.createElement( 'iframe' );
 
+      this.previewMarkup = localStorage.getItem( 'preview_markup' );
+
+      this.delayPreviewLoad = this.hasLocalVideo();
       this.loadPreview = this.loadPreview.bind( this );
       this.warnAboutAdBlocker = this.warnAboutAdBlocker.bind( this );
 
@@ -165,17 +183,41 @@
     },
 
     updateIframeRelativePath: function() {
-      const url = window.location.origin + window.location.pathname;
-      const slash = url.endsWith( '/' ) ? '' : '/';
+      var url = window.location.origin + window.location.pathname;
+      var slash = url.endsWith( '/' ) ? '' : '/';
 
       this.iframe.src = url + slash + 'preview-frame.html';
     },
 
     loadPreview: function() {
       this.iframe.setAttribute( 'id', 'iframe' );
+
+      if ( ! this.delayPreviewLoad ) {
+        this.showIframe();
+      } else {
+        this.showIframeWithLocalVideoWorkAround();
+      }
+
       this.frameContainer.appendChild( this.iframe );
       this.frameContainer.appendChild( this.adBadge );
+    },
+
+    /**
+     * @see https://github.com/rtCamp/web-stories-ad-tool/issues/33
+     */
+    showIframeWithLocalVideoWorkAround: function() {
+      this.iframe.style.width = '99.6%';
+
+      setTimeout( () => {
+        this.iframe.style.width = '100%';
+        setTimeout( () => this.showIframe(), 100 );
+      }, 1000 );
+    },
+
+    showIframe: function() {
+      this.iframe.style.opacity = '1';
       this.adBadge.classList.remove( 'hidden' );
+      this.loadingText.classList.add( 'hidden' );
     },
 
     isAdBlockerEnabled: function() {
@@ -196,6 +238,10 @@
 				<h1 class="detect-notice">Please disable ad blocker and refresh the page to view the ad.</h1>
 			</div>
 		`;
+    },
+
+    hasLocalVideo: function() {
+      return this.previewMarkup && this.previewMarkup.includes( 'data-video-has-local-url="true"' );
     },
   };
 
