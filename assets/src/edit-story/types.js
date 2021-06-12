@@ -122,11 +122,14 @@ StoryPropTypes.resourceSize = PropTypes.shape({
   height: PropTypes.number.isRequired,
 });
 
-StoryPropTypes.imageResourceSizes = PropTypes.shape({
-  full: StoryPropTypes.resourceSize,
-  large: StoryPropTypes.resourceSize,
-  web_stories_thumbnail: StoryPropTypes.resourceSize,
-});
+StoryPropTypes.imageResourceSizes = PropTypes.oneOfType([
+  PropTypes.array,
+  PropTypes.shape({
+    full: StoryPropTypes.resourceSize,
+    large: StoryPropTypes.resourceSize,
+    web_stories_thumbnail: StoryPropTypes.resourceSize,
+  }),
+]);
 
 StoryPropTypes.videoResourceSizes = PropTypes.oneOfType([
   PropTypes.array,
@@ -166,7 +169,7 @@ StoryPropTypes.videoResource = PropTypes.shape({
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   poster: PropTypes.string,
-  posterId: PropTypes.number,
+  posterId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   tracks: PropTypes.arrayOf(StoryPropTypes.trackResource),
   alt: PropTypes.string,
   title: PropTypes.string,
