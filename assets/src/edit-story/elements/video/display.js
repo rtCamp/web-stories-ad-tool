@@ -57,6 +57,7 @@ function VideoDisplay({ previewMode, box: { width, height }, element }) {
     focalX,
     focalY,
     loop,
+    isMuted,
   } = element;
   const ref = useRef();
   let style = {};
@@ -105,6 +106,7 @@ function VideoDisplay({ previewMode, box: { width, height }, element }) {
           {...videoProps}
           preload="metadata"
           loop={loop}
+          muted={isMuted}
           ref={ref}
           data-testid="videoElement"
           data-leaf-element="true"

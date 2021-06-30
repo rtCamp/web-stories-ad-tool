@@ -25,7 +25,7 @@ function defaultForUndefined(value, def) {
 }
 
 function VideoOutput({ element, box }) {
-  const { resource, loop, tracks } = element;
+  const { resource, loop, tracks, isMuted } = element;
 
   const sourceProps = {
     type: resource.mimeType,
@@ -40,6 +40,7 @@ function VideoOutput({ element, box }) {
     alt: defaultForUndefined(element.alt, resource.alt),
     layout: 'fill',
     loop: loop ? 'loop' : undefined,
+    noaudio: isMuted ? 'noaudio' : undefined,
   };
 
   const hasLocalURL = sourceProps.src.startsWith('blob:');
