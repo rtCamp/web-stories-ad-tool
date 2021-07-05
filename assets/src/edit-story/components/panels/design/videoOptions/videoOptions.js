@@ -53,6 +53,7 @@ const StyledCheckbox = styled(Checkbox)`
 
 function VideoOptionsPanel({ selectedElements, pushUpdate }) {
   const loop = getCommonValue(selectedElements, 'loop');
+  const isMuted = getCommonValue(selectedElements, 'isMuted');
 
   const checkboxId = `cb-${uuidv4()}`;
   return (
@@ -69,6 +70,18 @@ function VideoOptionsPanel({ selectedElements, pushUpdate }) {
         <Label htmlFor={checkboxId}>
           <Text as="span" size={THEME_CONSTANTS.TYPOGRAPHY.PRESET_SIZES.SMALL}>
             {__('Loop', 'web-stories')}
+          </Text>
+        </Label>
+      </Row>
+      <Row spaceBetween={false}>
+        <StyledCheckbox
+          id={checkboxId}
+          checked={isMuted}
+          onChange={(evt) => pushUpdate({ isMuted: evt.target.checked }, true)}
+        />
+        <Label htmlFor={checkboxId}>
+          <Text as="span" size={THEME_CONSTANTS.TYPOGRAPHY.PRESET_SIZES.SMALL}>
+            {__('isMuted', 'web-stories')}
           </Text>
         </Label>
       </Row>
