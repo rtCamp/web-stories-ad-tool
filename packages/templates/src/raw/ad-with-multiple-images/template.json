@@ -2,7 +2,7 @@
   "current": null,
   "selection": [],
   "story": {},
-  "version": 28,
+  "version": 31,
   "pages": [
     {
       "elements": [
@@ -21,33 +21,40 @@
               "b": 255
             }
           },
-          "x": 48,
-          "y": 0,
-          "width": 330,
-          "height": 586,
+          "x": -154,
+          "y": -331,
+          "width": 720,
+          "height": 1280,
           "mask": {
             "type": "rectangle"
           },
           "isBackground": true,
-          "type": "image",
-          "id": "4dbcbae9-a6a0-440b-8373-9b270230e667",
+          "type": "video",
+          "id": "2ca69a0f-d633-4cf7-8c76-fc943f33c7c8",
           "scale": 100,
           "focalX": 50,
           "focalY": 50,
           "resource": {
-            "type": "image",
-            "mimeType": "image/gif",
-            "creationDate": "2021-06-10T13:22:29",
-            "src": "__WEB_STORIES_TEMPLATE_BASE_URL__/images/templates/ad-with-multiple-images/page01_bg.gif",
-            "width": 828,
-            "height": 1472,
+            "type": "video",
+            "mimeType": "video/mp4",
+            "creationDate": "2021-07-26T06:16:07",
+            "src": "__WEB_STORIES_TEMPLATE_BASE_URL__/images/templates/ad-with-multiple-images/page01_bg.mp4",
+            "width": 720,
+            "height": 1280,
+            "poster": "__WEB_STORIES_TEMPLATE_BASE_URL__/images/templates/ad-with-multiple-images/page01_bg-poster.jpg",
+            "posterId": 0,
             "id": 0,
-            "title": "page01_bg",
-            "alt": "page01_bg",
+            "length": 8,
+            "lengthFormatted": "0:08",
+            "title": "Representation of a carry bag with cat",
+            "alt": "Representation of a carry bag with cat",
             "sizes": [],
             "local": false,
-            "isOptimized": false
-          }
+            "isPlaceholder": false,
+            "isOptimized": true,
+            "isMuted": true
+          },
+          "tracks": []
         },
         {
           "opacity": 100,
@@ -163,7 +170,7 @@
         "isBackground": true,
         "isDefaultBackground": true,
         "type": "shape",
-        "id": "2ca69a0f-d633-4cf7-8c76-fc943f33c7c8"
+        "id": "be006e27-0b55-4dc2-b7b3-91b9b777ff0b"
       },
       "animations": [],
       "pageTemplateType": "app"
