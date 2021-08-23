@@ -46,7 +46,7 @@
 		"@web-stories-wp/text-sets": "*",
 		"@web-stories-wp/tracking": "*",
 		"@wordpress/api-fetch": "^3.23.0",
-		"@wordpress/components": "^13.0.1",
+		"@wordpress/components": "^16.0.0",
 		"@wordpress/compose": "^3.23.0",
 		"@wordpress/data": "^4.27.1",
 		"@wordpress/date": "^3.15.0",
