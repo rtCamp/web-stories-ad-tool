@@ -111,7 +111,7 @@ jobs:
           github.event.pull_request.user.login != 'dependabot[bot]'
 
       - name: Upload CUJ coverage
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: cuj-coverage-edit-story
           path: build/cuj-coverage-edit-story.md
