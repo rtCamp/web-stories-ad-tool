@@ -32,7 +32,7 @@ jobs:
           access_token: ${{ github.token }}
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
 
       # TODO: Switch to WP-CLI stable (wp-cli.phar) once 2.5.0 is out.
       - name: Install WP-CLI
