@@ -14,7 +14,6 @@ on:
       - 'tests/**'
     branches:
       - main
-      - update/artifact-version
 
 jobs:
   build-storybook:
