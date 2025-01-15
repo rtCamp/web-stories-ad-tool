@@ -16,6 +16,7 @@ on:
     branches:
       - main
       - release/*
+      - update/artifact-version
   pull_request:
     # Only run if dashboard-related files changed.
     paths:
@@ -90,7 +91,7 @@ jobs:
           flags: karmatests
 
       - name: Upload CUJ coverage
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: cuj-coverage-dashboard
           path: build/cuj-coverage-dashboard.md
@@ -109,7 +110,7 @@ jobs:
           ref: gh-pages
 
       - name: Download coverage file
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: cuj-coverage-dashboard
 

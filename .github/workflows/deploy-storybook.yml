@@ -14,6 +14,7 @@ on:
       - 'tests/**'
     branches:
       - main
+      - update/artifact-version
 
 jobs:
   build-storybook:
@@ -61,7 +62,7 @@ jobs:
         run: npm run storybook:build
 
       - name: Upload storybook
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: storybook-files
           path: build/storybook
@@ -83,7 +84,7 @@ jobs:
           ref: gh-pages
 
       - name: Download storybook files
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: storybook-files
           path: storybook-files
